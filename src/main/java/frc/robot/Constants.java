@@ -4,16 +4,37 @@
 
 package frc.robot;
 
-/**
- * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
- * constants. This class should not be used for any other purpose. All constants should be declared
- * globally (i.e. public static). Do not put anything functional in this class.
- *
- * <p>It is advised to statically import this class (or one of its inner classes) wherever the
- * constants are needed, to reduce verbosity.
- */
+import java.util.*;
+
 public final class Constants {
-  public static class OperatorConstants {
-    public static final int kDriverControllerPort = 0;
-  }
+    public static final double PERIOD = 0.02;
+    public static enum ROBOT_MODE {
+        REAL,
+        SIM,
+        REPLAY
+    }
+    public static final ROBOT_MODE CURRENT_MODE = ROBOT_MODE.REAL;
+    
+    // controllers
+    public static final int CONTROLLER_PORT_1 = 0;
+    public static final int CONTROLLER_PORT_2 = 1;
+    public static final double JOYSTICK_DEADZONE = 0.1;
+    public static final double LINEAR_SPEED_EXPONENT = 2;
+    public static final double ANGULAR_SPEED_EXPONENT = 2;
+    
+    public static class AutoConstants {
+        // times
+        public static final double INIT_MOVEMENTS_TIME = 0;
+
+        // path data
+        public static final String TWO_STRAIGHT_1 = "2Straight.1";
+        public static final String TWO_STRAIGHT_2 = "2Straight.2";
+
+        public static final ArrayList<String> twoStraight = new ArrayList<String>();
+
+        static {
+            twoStraight.add(TWO_STRAIGHT_1);
+            twoStraight.add(TWO_STRAIGHT_2);
+        }
+    }
 }
