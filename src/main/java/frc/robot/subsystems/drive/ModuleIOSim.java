@@ -11,23 +11,24 @@ import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.Constants;
+import frc.robot.utils.TunableNumber;
 
 public class ModuleIOSim implements ModuleIO {
 
-    public double driveKp = 0.00015; // 0.00015
-    public double driveKd = 0.0;
-    public double driveKi = 0.000000; // 0.000008
-    public double driveKs = 0.0; // .19
-    public double driveKv = 0.1362; // From NEO datasheet (473kV): 0.136194 V/(rad/s) -
-                                    // https://www.wolframalpha.com/input?i=1%2F%28473+*+2pi%2F60%29+*+%2850.0+%2F+14.0%29+*+%2817.0+%2F+27.0%29+*+%2845.0+%2F+15.0%29
-    public double driveKa = 0.0148;
+    public final TunableNumber driveKp = new TunableNumber("driveKp", 0.00015);
+    public final TunableNumber driveKi = new TunableNumber("driveKi", 0.0);
+    public final TunableNumber driveKd = new TunableNumber("driveKd", 0.0);
+    public final TunableNumber driveKs = new TunableNumber("driveKs", 0.0);
+    public final TunableNumber driveKv = new TunableNumber("driveKv", 0.1362);
+    public final TunableNumber driveKa = new TunableNumber("driveKa", 0.0148);
 
-    public double turnKp = 8;
-    public double turnKd = 1.5;
+    public final TunableNumber turnKp = new TunableNumber("turnKp", 8);
+    public final TunableNumber turnKi = new TunableNumber("turnKi", 0.0);
+    public final TunableNumber turnKd = new TunableNumber("turnKd", 1.5);
 
-    PIDController drivePID = new PIDController(driveKp, driveKi, driveKd);
-    PIDController turnPID = new PIDController(turnKp, 0, turnKd);
-    SimpleMotorFeedforward driveFF = new SimpleMotorFeedforward(driveKs, driveKv, driveKa);
+    PIDController drivePID = new PIDController(driveKp.get(), driveKi.get(), driveKd.get());
+    PIDController turnPID = new PIDController(turnKp.get(), turnKi.get(), turnKd.get());
+    SimpleMotorFeedforward driveFF = new SimpleMotorFeedforward(driveKs.get(), driveKv.get(), driveKa.get());
 
     AngularVelocity prevVelocity = RadiansPerSecond.of(0.0);
 
@@ -52,13 +53,10 @@ public class ModuleIOSim implements ModuleIO {
         System.out.println("[Init] Creating ModuleIOSim");
 
         turnPID.enableContinuousInput(0, 1);
-
-        // ! this is fucked up
-        driveSim = new DCMotorSim(LinearSystemId.createDCMotorSystem(driveKv, driveKa), DCMotor.getNEO(1), 1);
+        driveSim = new DCMotorSim(LinearSystemId.createDCMotorSystem(driveKv.get(), driveKa.get()), DCMotor.getNEO(1), 1);
     }
 
     public void updateInputs(ModuleIOInputs inputs) {
-        // System.out.println("test");
         driveSim.update(Constants.PERIOD);
         turnSim.update(Constants.PERIOD);
 
@@ -75,6 +73,12 @@ public class ModuleIOSim implements ModuleIO {
         inputs.turnAppliedVolts = Volts.of(turnAppliedVolts);
         inputs.turnAverageBusVoltage = Volts.of(12);
         inputs.turnCurrentAmps = Amps.of(Math.abs(turnSim.getCurrentDrawAmps()));
+
+        if (driveKp.hasChanged() || driveKi.hasChanged() || driveKd.hasChanged()
+            || turnKp.hasChanged() || turnKi.hasChanged() || turnKd.hasChanged()) {
+                drivePID.setPID(driveKp.get(), driveKi.get(), driveKd.get());
+                turnPID.setPID(turnKp.get(), turnKi.get(), turnKd.get());
+            }
     }
 
     public void setDriveVoltage(Voltage volts) {

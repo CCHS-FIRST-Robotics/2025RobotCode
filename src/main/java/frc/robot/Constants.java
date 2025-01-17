@@ -8,6 +8,7 @@ import java.util.*;
 
 public final class Constants {
     public static final double PERIOD = 0.02;
+    public static final boolean tuningMode = false;
     public static enum ROBOT_MODE {
         REAL,
         SIM,
