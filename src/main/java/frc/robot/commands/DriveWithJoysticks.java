@@ -21,7 +21,7 @@ public class DriveWithJoysticks extends Command {
     double prevHeadingSetpoint;
     double prevHeadingSpeed;
     
-    ChassisSpeeds prevSpeeds;
+    ChassisSpeeds prevSpeeds = new ChassisSpeeds();
 
     public DriveWithJoysticks(
         Drive drive,
@@ -46,7 +46,7 @@ public class DriveWithJoysticks extends Command {
             Constants.JOYSTICK_DEADZONE, 
             Constants.LINEAR_SPEED_EXPONENT
         );
-        Rotation2d linearDirection = new Rotation2d(linearXSpeed, linearYSpeed); // kinda weird lol
+        Rotation2d linearDirection = new Rotation2d(linearXSpeed, linearYSpeed);
         Translation2d linearVelocity = new Translation2d(
             linearSpeed, 
             linearDirection
