@@ -54,7 +54,7 @@ public class ModuleIOSim implements ModuleIO {
         turnPID.enableContinuousInput(0, 1);
 
         // ! this is fucked up
-        driveSim = new DCMotorSim(LinearSystemId.createDCMotorSystem(driveKv, driveKa), DCMotor.getNEO(1), 1);
+        driveSim = new DCMotorSim(LinearSystemId.createDCMotorSystem(driveKv, driveKa), DCMotor.getNEO(1), 1, 1);
     }
 
     public void updateInputs(ModuleIOInputs inputs) {
@@ -93,7 +93,7 @@ public class ModuleIOSim implements ModuleIO {
         double volts = drivePID.calculate(
                 RadiansPerSecond.of(driveSim.getAngularVelocityRadPerSec()).in(Rotations.per(Minute)),
                 velocity.in(Rotations.per(Minute)))
-                + driveFF.calculate(prevVelocity.in(RadiansPerSecond), velocity.in(RadiansPerSecond));
+                + driveFF.calculateWithVelocities(prevVelocity.in(RadiansPerSecond), velocity.in(RadiansPerSecond));
 
         prevVelocity = velocity;
         setDriveVoltage(Volts.of(volts));

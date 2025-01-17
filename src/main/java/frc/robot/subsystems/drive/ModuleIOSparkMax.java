@@ -114,7 +114,7 @@ public class ModuleIOSparkMax implements ModuleIO {
             velocity.in(Rotations.per(Minute)) * driveAfterEncoderReduction,
             SparkMax.ControlType.kVelocity,
             ClosedLoopSlot.kSlot0,
-            driveFeedforward.calculate(
+            driveFeedforward.calculateWithVelocities(
                 prevDriveVelocity.in(RadiansPerSecond),
                 velocity.in(RadiansPerSecond)
             )

@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.RobotBase;
  * to do: 
  * 
  * go through imports at some point
+ * change hardwareconstants
  * look into how the drive trajectories are actually generated
  */
 
