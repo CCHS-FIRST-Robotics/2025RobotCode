@@ -10,6 +10,7 @@ import choreo.Choreo;
 import choreo.trajectory.SwerveSample;
 import choreo.trajectory.Trajectory;
 
+// ! does this really need to be its own class
 public final class DriveTrajectoryGenerator {
     public static DriveTrajectory generateChoreoTrajectory(String path) {
         Optional<Trajectory<SwerveSample>> choreoTrajectory = Choreo.loadTrajectory(path);

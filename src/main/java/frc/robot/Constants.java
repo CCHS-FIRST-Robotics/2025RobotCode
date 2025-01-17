@@ -27,14 +27,12 @@ public final class Constants {
         public static final double INIT_MOVEMENTS_TIME = 0;
 
         // path data
-        public static final String TWO_STRAIGHT_1 = "2Straight.1";
-        public static final String TWO_STRAIGHT_2 = "2Straight.2";
+        public static final String TWO_STRAIGHT_1 = "2Straight";
 
         public static final ArrayList<String> twoStraight = new ArrayList<String>();
 
         static {
             twoStraight.add(TWO_STRAIGHT_1);
-            twoStraight.add(TWO_STRAIGHT_2);
         }
     }
 }
