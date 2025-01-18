@@ -7,12 +7,9 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.math.geometry.*;
-import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import frc.robot.commands.*;
-import frc.robot.utils.PoseEstimator;
 import frc.robot.subsystems.drive.*;
-import frc.robot.utils.AutoCommandSequenceBuilder;
-import static frc.robot.Constants.*;
+import frc.robot.utils.*;
 
 public class RobotContainer {
     private final Drive drive;
@@ -20,8 +17,7 @@ public class RobotContainer {
 
     private final CommandXboxController controller1 = new CommandXboxController(Constants.CONTROLLER_PORT_1);
 
-    // ! yeah do something with this
-    private final LoggedDashboardChooser<Command> autoChooser = new LoggedDashboardChooser<>("Auto Choices");
+    // ! auto chooser
 
     public RobotContainer() {
         switch (Constants.CURRENT_MODE) {
@@ -65,8 +61,6 @@ public class RobotContainer {
 
         drive.setPoseEstimator(poseEstimator);
 
-        autoChooser.addDefaultOption("Do Nothing", new InstantCommand());
-
         configureButtonBindings();
     }
 
@@ -83,7 +77,7 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         return new AutoCommandSequenceBuilder(
-            AutoConstants.twoStraight, // specifies the auto to run
+            Constants.AutoConstants.twoStraight, // specifies the auto to run
             drive
         ).getAutoCommandSequence();
     }
