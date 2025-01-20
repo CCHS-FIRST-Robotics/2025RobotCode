@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.RobotBase;
  * to do: 
  * 
  * maybe constants folder
- * maybe rethink the auto framework
  * go through imports at some point, make stuff private final
  * change hardwareconstants
  * look into how the drive trajectories are actually generated

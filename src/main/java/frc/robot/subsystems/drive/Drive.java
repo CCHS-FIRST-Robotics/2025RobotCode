@@ -1,18 +1,27 @@
 package frc.robot.subsystems.drive;
 
-import static edu.wpi.first.units.Units.*;
+import static edu.wpi.first.units.Units.Radians;
 
-import edu.wpi.first.wpilibj2.command.*;
-import edu.wpi.first.wpilibj.Timer;
+import java.util.ArrayList;
+
+import org.littletonrobotics.junction.Logger;
+
+import choreo.trajectory.SwerveSample;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Twist2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.kinematics.*;
-import edu.wpi.first.math.geometry.*;
-import java.util.*;
-import org.littletonrobotics.junction.Logger;
-import frc.robot.*;
-import frc.robot.utils.*;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.HardwareConstants;
+import frc.robot.utils.PoseEstimator;
 
 public class Drive extends SubsystemBase {
     private final GyroIO gyroIO;
@@ -216,11 +225,20 @@ public class Drive extends SubsystemBase {
         }
     }
 
-    public void runPosition(DriveTrajectory driveTrajectory) {
-        controlMode = CONTROL_MODE.POSITION_SETPOINT;
-        this.positionTrajectory = driveTrajectory.positionTrajectory;
-        this.twistTrajectory = driveTrajectory.velocityTrajectory;
-        trajectoryCounter = 0;
+    public void followTrajectory(SwerveSample sample){
+        // Get the current pose of the robot
+        Pose2d pose = getPose();
+
+        // Generate the next speeds for the robot
+        ChassisSpeeds speeds = new ChassisSpeeds(
+            sample.vx + xController.calculate(pose.getX(), sample.x),
+            sample.vy + yController.calculate(pose.getY(), sample.y),
+            sample.omega + thetaaaaaController.calculate(pose.getRotation().getRadians(), sample.heading)
+        );
+    }
+
+    public void resetOdometry(Pose2d pose){
+        
     }
 
     public void runVelocity(ChassisSpeeds speeds) {
@@ -306,16 +324,5 @@ public class Drive extends SubsystemBase {
 
     public Pose2d getPose() {
         return poseEstimator.getPoseEstimate();
-    }
-
-    // ! figure out how this works
-    // ! is a separate function even needed
-    public Command followTrajectory(DriveTrajectory traj) {
-        return runOnce(
-            () -> {
-                Logger.recordOutput("Auto/GeneratedTrajectory", traj.positionTrajectory.toArray(new Pose2d[traj.positionTrajectory.size()]));
-                runPosition(traj);
-            }
-        );
     }
 }

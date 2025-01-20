@@ -33,7 +33,7 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     private StatusSignal<AngularVelocity> velocitySignal;
     private StatusSignal<Temperature> temperatureSignal;
     
-    public ElevatorIOTalonFX(int id){
+    public ElevatorIOTalonFX(int id) {
         motor = new TalonFX(id);
 
         PIDF.kP = kP;
