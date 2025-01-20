@@ -1,4 +1,4 @@
-package frc.robot.subsystems.algaeIO;
+package frc.robot.subsystems.algaIO;
 
 import static edu.wpi.first.units.Units.*;
 

@@ -1,4 +1,4 @@
-package frc.robot.subsystems.algaeIO;
+package frc.robot.subsystems.algaIO;
 
 import static edu.wpi.first.units.Units.*;
 
@@ -16,6 +16,12 @@ public class Alga extends SubsystemBase {
         this.io = io;
     }
 
+    @Override
+    public void periodic() {
+        io.updateInputs(inputs);
+        Logger.processInputs("algaIO", inputs);
+    }
+
     public void start(Voltage volts) {
         io.setVoltage(volts);
         // startTime = Timer.getFPGATimestamp();
@@ -25,19 +31,10 @@ public class Alga extends SubsystemBase {
         io.setVoltage(Volts.of(0));
     }
 
-    @Override
-    public void periodic() {
-        io.updateInputs(inputs);
-        Logger.processInputs("algaIO", inputs);
-    }
-
     public boolean detectNote() {
-        // return inputs.motorCurrent > 28 && Timer.getFPGATimestamp() - startTime > 0.1; // ! magic numbers
         return false;
-        // ! honestly just use a fucking ir sensor
     }
 
-    // turns motor on until note detected
     public Command getIntakeCommand() {
         return startEnd(() -> start(Volts.of(8)), this::stop).until(() -> detectNote());
     }

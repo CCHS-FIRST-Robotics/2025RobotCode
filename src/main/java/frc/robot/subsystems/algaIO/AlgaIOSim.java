@@ -1,3 +1,3 @@
-package frc.robot.subsystems.algaeIO;
+package frc.robot.subsystems.algaIO;
 
 public class AlgaIOSim implements AlgaIO {}
