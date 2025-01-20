@@ -10,10 +10,11 @@ import edu.wpi.first.wpilibj.RobotBase;
  * to do: 
  * 
  * maybe rethink the auto framework
- * go through imports at some point
+ * go through imports at some point, make stuff private final
  * change hardwareconstants
  * look into how the drive trajectories are actually generated
  * maybe event markers are good this year
+ * what the fuck is sysid
  */
 
 public final class Main {

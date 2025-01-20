@@ -77,7 +77,7 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         return new AutoCommandSequenceBuilder(
-            Constants.AutoConstants.twoStraight, // specifies the auto to run
+            AutoConstants.twoStraight, // specifies the auto to run
             drive
         ).getAutoCommandSequence();
     }

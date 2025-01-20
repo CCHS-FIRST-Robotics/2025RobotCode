@@ -8,9 +8,9 @@ import edu.wpi.first.units.measure.*;
 import org.littletonrobotics.junction.Logger;
 
 public class Alga extends SubsystemBase {
-    AlgaIO io;
+    private final AlgaIO io;
     // private double startTime; // makes sure that the initial current spike from turning on the motor is ignored //! could be really problematic actually
-    AlgaIOInputsAutoLogged inputs = new AlgaIOInputsAutoLogged();
+    private final AlgaIOInputsAutoLogged inputs = new AlgaIOInputsAutoLogged();
 
     public Alga(AlgaIO io) {
         this.io = io;

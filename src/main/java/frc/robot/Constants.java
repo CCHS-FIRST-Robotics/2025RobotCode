@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import java.util.*;
-
 public final class Constants {
     public static final double PERIOD = 0.02;
     public static enum ROBOT_MODE {
@@ -23,18 +21,4 @@ public final class Constants {
     public static final double JOYSTICK_DEADZONE = 0.1;
     public static final double LINEAR_SPEED_EXPONENT = 2;
     public static final double ANGULAR_SPEED_EXPONENT = 2;
-    
-    public static class AutoConstants {
-        // times
-        public static final double INIT_MOVEMENTS_TIME = 0;
-
-        // path data
-        public static final String TWO_STRAIGHT_1 = "2Straight";
-
-        public static final ArrayList<String> twoStraight = new ArrayList<String>();
-
-        static {
-            twoStraight.add(TWO_STRAIGHT_1);
-        }
-    }
 }

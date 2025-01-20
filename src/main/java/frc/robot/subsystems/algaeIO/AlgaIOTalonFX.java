@@ -8,13 +8,12 @@ import edu.wpi.first.units.measure.*;
 
 
 public class AlgaIOTalonFX implements AlgaIO {
-    private TalonFX motor;
+    private final TalonFX motor;
 
-    private StatusSignal<Voltage> voltageSignal;
-    private StatusSignal<Current> currentSignal;
-    private StatusSignal<Angle> positionSignal;
-    private StatusSignal<AngularVelocity> velocitySignal;
-    private StatusSignal<Temperature> temperatureSignal;
+    private final StatusSignal<Voltage> voltageSignal;
+    private final StatusSignal<Current> currentSignal;
+    private final StatusSignal<AngularVelocity> velocitySignal;
+    private final StatusSignal<Temperature> temperatureSignal;
 
     public AlgaIOTalonFX(int id) {
         motor = new TalonFX(id);
@@ -22,7 +21,6 @@ public class AlgaIOTalonFX implements AlgaIO {
         voltageSignal = motor.getMotorVoltage();
         currentSignal = motor.getStatorCurrent();
         currentSignal.setUpdateFrequency(1 / 0.01); // second number is seconds
-        positionSignal = motor.getPosition();
         velocitySignal = motor.getVelocity();
         temperatureSignal = motor.getDeviceTemp();
 
@@ -36,7 +34,7 @@ public class AlgaIOTalonFX implements AlgaIO {
 
     @Override
     public void updateInputs(AlgaIOInputs inputs) {
-        BaseStatusSignal.refreshAll(voltageSignal, currentSignal, positionSignal, velocitySignal, temperatureSignal);
+        BaseStatusSignal.refreshAll(voltageSignal, currentSignal, velocitySignal, temperatureSignal);
 
         inputs.motorVoltage = voltageSignal.getValue().in(Volts);
         inputs.motorCurrent = currentSignal.getValue().in(Amps);
