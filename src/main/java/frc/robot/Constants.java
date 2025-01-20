@@ -21,4 +21,14 @@ public final class Constants {
     public static final double JOYSTICK_DEADZONE = 0.1;
     public static final double LINEAR_SPEED_EXPONENT = 2;
     public static final double ANGULAR_SPEED_EXPONENT = 2;
+
+    // ids
+    public static final int ELEVATOR_ID_1 = 0;
+
+    public static final int CORAL_CLAW_ID_1 = 0;
+    public static final int CORAL_WRIST_ID_1 = 0;
+    public static final int CORAL_SENSOR_PORT = 0;
+
+    public static final int ALGA_ID_1 = 0;
+    public static final int ALGA_SENSOR_PORT = 1;
 }

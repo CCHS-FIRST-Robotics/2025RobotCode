@@ -9,6 +9,7 @@ import org.littletonrobotics.junction.Logger;
 public class Coral extends SubsystemBase {
     private final CoralIO io;
     private final CoralIOInputsAutoLogged inputs = new CoralIOInputsAutoLogged();
+    // ! should also include the motor that rotates the arm around
 
     public Coral(CoralIO io) {
         this.io = io;
