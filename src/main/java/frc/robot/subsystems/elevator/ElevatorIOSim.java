@@ -18,8 +18,8 @@ public class ElevatorIOSim implements ElevatorIO {
     private final double kI = 0;
     private final double kD = 0;
     private final double kS = 0;
-    private final double kV = 0;
-    private final double kA = 0;
+    private final double kV = 3.01; // V/(m/s) // ! uhhh meters?????
+    private final double kA = 0.1; // V/(m/s^2)
 
     Voltage appliedVolts = Volts.of(0);
     Angle currentSetpoint = Rotations.of(0);
