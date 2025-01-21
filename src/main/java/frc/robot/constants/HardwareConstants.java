@@ -28,6 +28,7 @@ public class HardwareConstants {
 
     // elevator
     public static enum ElevatorPosition{
+        STATION,
         L1, 
         L2, 
         L3, 

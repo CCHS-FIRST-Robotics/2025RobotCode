@@ -2,18 +2,24 @@ package frc.robot.subsystems.elevator;
 
 import static edu.wpi.first.units.Units.*;
 
+import edu.wpi.first.wpilibj2.command.*;
 import org.littletonrobotics.junction.Logger;
-
 import frc.robot.constants.HardwareConstants;
 import frc.robot.constants.HardwareConstants.*;
 
-public class Elevator {
+public class Elevator extends SubsystemBase{
     private final ElevatorIO io;
     ElevatorPosition targetPosition;
     private final ElevatorIOInputsAutoLogged inputs = new ElevatorIOInputsAutoLogged();
 
     public Elevator(ElevatorIO io) {
         this.io = io;
+    }
+
+    @Override
+    public void periodic(){
+        io.updateInputs(inputs);
+        Logger.processInputs("elevator", inputs);
     }
 
     public void setPosition(ElevatorPosition position){
@@ -26,8 +32,7 @@ public class Elevator {
         ) < 0.5; // ! magic number, change this later
     }
 
-    public void updateInputs(){
-        io.updateInputs(inputs);
-        Logger.processInputs("elevator", inputs);
+    public Command getSetPositionCommand(ElevatorPosition position){
+        return new InstantCommand(() -> setPosition(position)).until(() -> atGoal());
     }
 }

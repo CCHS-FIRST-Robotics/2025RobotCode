@@ -9,12 +9,15 @@ import edu.wpi.first.wpilibj.RobotBase;
 /**
  * to do: 
  * 
+ * write coral class
+ * write sim classes
+ * write drive functions
+ * 
+ * 
  * decide on controllers for the year
- * maybe constants folder
+ * move periodic functions to top
  * go through imports at some point, make stuff private final
  * change hardwareconstants
- * look into how the drive trajectories are actually generated
- * maybe event markers are good this year
  * what the fuck is sysid
  */
 
