@@ -3,10 +3,10 @@ package frc.robot.subsystems.algaIO;
 import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.wpilibj2.command.*;
+import frc.robot.constants.Constants;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.units.measure.*;
 import org.littletonrobotics.junction.Logger;
-import frc.robot.Constants;
 
 public class Alga extends SubsystemBase {
     private final AlgaIO io;

@@ -4,10 +4,14 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj2.command.*;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import choreo.auto.AutoChooser;
 import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
+import frc.robot.constants.Constants;
+import frc.robot.constants.HardwareConstants;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.elevator.*;
 import frc.robot.subsystems.coralIO.*;
@@ -23,10 +27,10 @@ public class RobotContainer {
 
     private final Elevator elevator;
     private final Coral coral;
-    @SuppressWarnings("unused") // ! delete this later
     private final Alga alga;
 
-    // ! auto chooser
+    private final AutoRoutineGenerator autoGenerator;
+    private final AutoChooser autoChooser;
 
     public RobotContainer() {
         switch (Constants.CURRENT_MODE) {
@@ -79,7 +83,15 @@ public class RobotContainer {
 
         drive.setPoseEstimator(poseEstimator);
 
+        autoGenerator = new AutoRoutineGenerator(
+            drive, 
+            elevator,
+            coral 
+        );
+        autoChooser = new AutoChooser();
+        
         configureButtonBindings();
+        configureAutos();
     }
 
     private void configureButtonBindings() {
@@ -91,13 +103,18 @@ public class RobotContainer {
                 () -> controller1.getRightX()
             )
         );
+
+        controller1.b().onTrue(coral.getIntakeCommand());
+        controller1.a().onTrue(alga.getIntakeCommand());
+    }
+
+    private void configureAutos(){
+        autoChooser.addRoutine("2Coral", () -> autoGenerator.twoCoral());
+
+        SmartDashboard.putData(autoChooser);
     }
 
     public Command getAutonomousCommand(){
-        return new AutoRoutineGenerator(
-            drive, 
-            elevator,
-            coral
-        ).twoCoral().cmd();
+        return autoChooser.selectedCommand();
     }
 }

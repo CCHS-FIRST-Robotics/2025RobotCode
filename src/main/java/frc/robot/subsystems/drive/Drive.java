@@ -19,8 +19,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.HardwareConstants;
+import frc.robot.constants.Constants;
+import frc.robot.constants.HardwareConstants;
 import frc.robot.utils.PoseEstimator;
 
 public class Drive extends SubsystemBase {
@@ -225,20 +225,11 @@ public class Drive extends SubsystemBase {
         }
     }
 
+    // ! so both of these actually need to do something
     public void followTrajectory(SwerveSample sample){
-        // Get the current pose of the robot
-        Pose2d pose = getPose();
-
-        // Generate the next speeds for the robot
-        ChassisSpeeds speeds = new ChassisSpeeds(
-            sample.vx + xController.calculate(pose.getX(), sample.x),
-            sample.vy + yController.calculate(pose.getY(), sample.y),
-            sample.omega + thetaaaaaController.calculate(pose.getRotation().getRadians(), sample.heading)
-        );
     }
 
     public void resetOdometry(Pose2d pose){
-        
     }
 
     public void runVelocity(ChassisSpeeds speeds) {

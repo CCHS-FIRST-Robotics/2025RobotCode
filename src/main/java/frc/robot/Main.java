@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.RobotBase;
 /**
  * to do: 
  * 
+ * decide on controllers for the year
  * maybe constants folder
  * go through imports at some point, make stuff private final
  * change hardwareconstants

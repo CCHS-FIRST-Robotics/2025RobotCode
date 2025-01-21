@@ -3,8 +3,9 @@ package frc.robot.subsystems.elevator;
 import static edu.wpi.first.units.Units.*;
 
 import org.littletonrobotics.junction.Logger;
-import frc.robot.HardwareConstants;
-import frc.robot.HardwareConstants.*;
+
+import frc.robot.constants.HardwareConstants;
+import frc.robot.constants.HardwareConstants.*;
 
 public class Elevator {
     private final ElevatorIO io;
