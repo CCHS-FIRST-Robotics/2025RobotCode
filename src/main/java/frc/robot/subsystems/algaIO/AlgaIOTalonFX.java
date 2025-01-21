@@ -6,7 +6,6 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.*;
 import edu.wpi.first.units.measure.*;
 
-
 public class AlgaIOTalonFX implements AlgaIO {
     private final TalonFX motor;
 
