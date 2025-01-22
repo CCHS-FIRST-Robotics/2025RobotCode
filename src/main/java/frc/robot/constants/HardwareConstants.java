@@ -35,6 +35,8 @@ public class HardwareConstants {
         L4
     }
 
+    // maybe just have a big hashmap of elevator positions, arm positions, wrist positions
+
     // ! add rotation values
     public static final HashMap<ElevatorPosition, Entry<Distance, Angle>> ELEVATOR_POSITIONS = new HashMap<ElevatorPosition, Entry<Distance, Angle>>(
         Map.of(

@@ -5,9 +5,9 @@ import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.subsystems.coralIOTEMPTEMPTEMPTEMP.Coral;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.elevator.Elevator;
-import frc.robot.subsystems.coralIO.Coral;
 import frc.robot.constants.HardwareConstants.*;
 
 public class AutoRoutineGenerator {
@@ -55,7 +55,7 @@ public class AutoRoutineGenerator {
             )
         );
         // at eventmarker output1, run the coral output
-        trajectory0.atTime("output1").onTrue(coral.getOutputCommand());
+        trajectory0.atTime("output1").onTrue(null);
         
         // start the next trajectory
         trajectory0.done().onTrue(
@@ -63,7 +63,7 @@ public class AutoRoutineGenerator {
             .alongWith(elevator.getSetPositionCommand(ElevatorPosition.STATION))
         );
         // at eventmarker intake1, run the coral intake
-        trajectory1.atTime("intake1").onTrue(coral.getIntakeCommand());
+        trajectory1.atTime("intake1").onTrue(null);
 
         // start the next trajectory
         trajectory1.done().onTrue(
@@ -71,7 +71,7 @@ public class AutoRoutineGenerator {
             .alongWith(elevator.getSetPositionCommand(ElevatorPosition.L2))
         );
         // when the trajectory is done, run the coral output (instead of having an extra eventmarker)
-        trajectory2.done().onTrue(coral.getOutputCommand());
+        trajectory2.done().onTrue(null);
 
         return routine;
     }

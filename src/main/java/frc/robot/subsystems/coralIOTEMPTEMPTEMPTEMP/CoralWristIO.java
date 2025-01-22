@@ -1,18 +1,21 @@
-package frc.robot.subsystems.coralIO;
+package frc.robot.subsystems.coralIOTEMPTEMPTEMPTEMP;
 
 import edu.wpi.first.units.measure.*;
 import org.littletonrobotics.junction.AutoLog;
 
-public interface CoralIO {
+public interface CoralWristIO {
     @AutoLog
-    public static class CoralIOInputs {
+    public static class CoralWristIOInputs {
         public double motorVoltage;
         public double motorCurrent;
+        public double motorPosition;
         public double motorVelocity;
         public double motorTemperature;
     }
 
     public default void setVoltage(Voltage volts) {}
 
-    public default void updateInputs(CoralIOInputs inputs) {}
+    public default void setPosition(Angle position) {}
+
+    public default void updateInputs(CoralWristIOInputs inputs) {}
 }
