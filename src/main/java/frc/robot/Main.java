@@ -31,6 +31,7 @@ import edu.wpi.first.wpilibj.RobotBase;
  * move periodic functions to top
  * go through imports at some point, make stuff private final
  * thetaa in drive.java
+ * maybe rename arm to pivot, axle, or axis
  */
 
 public final class Main {
