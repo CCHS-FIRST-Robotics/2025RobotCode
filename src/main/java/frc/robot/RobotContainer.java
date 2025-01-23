@@ -7,20 +7,16 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import choreo.auto.AutoChooser;
-import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
 import frc.robot.constants.Constants;
-import frc.robot.constants.HardwareConstants;
 import frc.robot.subsystems.drive.*;
 import frc.robot.utils.AutoRoutineGenerator;
-import frc.robot.utils.PoseEstimator;
 
 public class RobotContainer {
     private final CommandXboxController controller1 = new CommandXboxController(Constants.CONTROLLER_PORT_1);
 
     private final Drive drive;
-    private final PoseEstimator poseEstimator;
 
     private final AutoRoutineGenerator autoGenerator;
     private final AutoChooser autoChooser;
@@ -55,17 +51,6 @@ public class RobotContainer {
                 );
                 break;
         }
-
-        // ! wow this looks like it should be automized
-        // change pose here for autos!!!
-        poseEstimator = new PoseEstimator(
-            HardwareConstants.KINEMATICS,
-            new Rotation2d(),
-            drive.getModulePositions(),
-            new Pose2d(0, 0, new Rotation2d())
-        );
-
-        drive.setPoseEstimator(poseEstimator);
 
         autoGenerator = new AutoRoutineGenerator(
             drive, 

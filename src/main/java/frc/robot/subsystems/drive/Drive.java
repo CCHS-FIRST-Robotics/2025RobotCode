@@ -6,6 +6,7 @@ import org.littletonrobotics.junction.Logger;
 
 import choreo.trajectory.SwerveSample;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Twist2d;
@@ -19,7 +20,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Constants;
 import frc.robot.constants.HardwareConstants;
-import frc.robot.utils.PoseEstimator;
 
 public class Drive extends SubsystemBase {
     public enum CONTROL_MODE {
@@ -49,7 +49,7 @@ public class Drive extends SubsystemBase {
     // odometry
     private final GyroIO gyroIO;
     private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
-    private PoseEstimator poseEstimator;
+    private SwerveDrivePoseEstimator poseEstimator;
     
     private double[] lastModulePositionsMeters = new double[] {0.0, 0.0, 0.0, 0.0};
     private Pose2d fieldPosition = new Pose2d(); // used if gyro isn't connected
@@ -100,7 +100,6 @@ public class Drive extends SubsystemBase {
                 getModulePositions()
             );
         }
-
         //! make this better
 
 
@@ -196,44 +195,28 @@ public class Drive extends SubsystemBase {
         }
     }
 
-    public void followTrajectory(SwerveSample sample){
+    public void stop() {
+        runVelocity(new ChassisSpeeds()); // ! why not set controlmode to disabled
+    }
+
+    public void runPosition(SwerveSample sample){
         controlMode = CONTROL_MODE.POSITION_SETPOINT;
         positionSetpoint = sample.getPose();
         twistSetpoint = sample.getChassisSpeeds().toTwist2d(1); // ! pay attention to this
     }
 
-    public void resetOdometry(Pose2d pose){
-        poseEstimator.resetPosition(pose.getRotation(), new SwerveModulePosition[4], pose);
-    }
-
     public void runVelocity(ChassisSpeeds speeds) {
-        // Since DriveWithJoysticks is the default command and MoveToPose runs once
-        // Keep drive running the position trajectory unless overridden (driver sets a
-        // nonzero speed with joysticks)
-        if (controlMode == CONTROL_MODE.POSITION_SETPOINT && speedsEqual(speeds, new ChassisSpeeds())) {
-            return;
-        }
         controlMode = CONTROL_MODE.CHASSIS_SETPOINT;
         chassisSetpoint = speeds;
     }
 
-    public static boolean speedsEqual(ChassisSpeeds speeds, ChassisSpeeds other) {
-        return (speeds.vxMetersPerSecond == other.vxMetersPerSecond &&
-                speeds.vyMetersPerSecond == other.vyMetersPerSecond &&
-                speeds.omegaRadiansPerSecond == other.omegaRadiansPerSecond);
+    // ! this throws an error
+    public void resetPoseEstimator(Pose2d pose){
+        poseEstimator.resetPosition(pose.getRotation(), new SwerveModulePosition[4], pose);
     }
 
-    public void stop() {
-        runVelocity(new ChassisSpeeds());
-        // ! why not set controlmode to disabled
-    }
-
-    public Rotation2d getRoll() {
-        return new Rotation2d(gyroInputs.rollPosition.in(Radians));
-    }
-
-    public Rotation2d getPitch() {
-        return new Rotation2d(gyroInputs.pitchPosition.in(Radians));
+    public Pose2d getPose() { //! there are too many of these methods
+        return poseEstimator.getEstimatedPosition();
     }
 
     public Rotation2d getYaw() {
@@ -249,6 +232,7 @@ public class Drive extends SubsystemBase {
         ); 
     }
 
+    // ! these could definetely be moved to hardwareConstants
     public SwerveModulePosition[] getModuleDeltas() {
         SwerveModulePosition[] wheelDeltas = new SwerveModulePosition[4];
         for (int i = 0; i < 4; i++) {
@@ -268,26 +252,5 @@ public class Drive extends SubsystemBase {
                     modules[i].getAngle());
         }
         return wheelPos;
-    }
-
-    // ! are these seriously needed
-    public PIDController getXController() {
-        return xController;
-    }
-
-    public PIDController getYController() {
-        return yController;
-    }
-
-    public PIDController getthetaaaaaController() {
-        return thetaaaaaController;
-    }
-
-    public void setPoseEstimator(PoseEstimator poseEstimator) {
-        this.poseEstimator = poseEstimator;
-    }
-
-    public Pose2d getPose() { //! there are too many of these methods
-        return poseEstimator.getPoseEstimate();
     }
 }
