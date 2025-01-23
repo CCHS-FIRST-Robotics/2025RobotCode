@@ -3,9 +3,6 @@ package frc.robot.subsystems.coralIOTEMPTEMPTEMPTEMP;
 import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.wpilibj2.command.*;
-import frc.robot.subsystems.coralIO.CoralArmIOInputsAutoLogged;
-import frc.robot.subsystems.coralIO.CoralClawIOInputsAutoLogged;
-import frc.robot.subsystems.coralIO.CoralWristIOInputsAutoLogged;
 import edu.wpi.first.units.measure.*;
 import org.littletonrobotics.junction.Logger;
 

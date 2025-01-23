@@ -5,9 +5,9 @@ import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.subsystems.coralIO.Elevator;
 import frc.robot.subsystems.coralIOTEMPTEMPTEMPTEMP.Coral;
 import frc.robot.subsystems.drive.Drive;
-import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.constants.HardwareConstants.*;
 
 public class AutoRoutineGenerator {
