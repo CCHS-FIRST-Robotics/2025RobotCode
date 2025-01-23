@@ -10,9 +10,7 @@ import edu.wpi.first.wpilibj.RobotBase;
  * to do: 
  * 
  * daily: 
- * understand module id convention
- * make the resetposeestimator work
- * test autochooser again
+ * 
  * 
  * — at robotics daily: 
  * —— flash the rio for 2025

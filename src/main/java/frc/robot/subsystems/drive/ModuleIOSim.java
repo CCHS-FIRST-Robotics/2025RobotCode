@@ -49,8 +49,6 @@ public class ModuleIOSim implements ModuleIO {
     private double turnAppliedVolts = 0.0;
 
     public ModuleIOSim() {
-        System.out.println("[Init] Creating ModuleIOSim");
-
         turnPID.enableContinuousInput(0, 1);
 
         // ! this is fucked up
@@ -58,7 +56,6 @@ public class ModuleIOSim implements ModuleIO {
     }
 
     public void updateInputs(ModuleIOInputs inputs) {
-        // System.out.println("test");
         driveSim.update(Constants.PERIOD);
         turnSim.update(Constants.PERIOD);
 

@@ -19,7 +19,6 @@ public class Module {
     private SwerveModuleState prevSetpoint = new SwerveModuleState(0, new Rotation2d(0));
 
     public Module(ModuleIO io, int index) {
-        System.out.println("[Init] Creating Module " + Integer.toString(index));
         this.io = io;
         this.index = index;
 
@@ -61,7 +60,6 @@ public class Module {
                             ModuleIO.driveKa) * wheelRadius.in(Meters));
 
             // Run drive controller
-            // System.out.println(wheelRadius.in(Meters));
             double velocityRadPerSec = optimizedState.speedMetersPerSecond / wheelRadius.in(Meters);
             io.setDriveVelocity(RadiansPerSecond.of(velocityRadPerSec));
         
@@ -77,7 +75,6 @@ public class Module {
         double A_d = Math.exp(A * dt);
         double B_d = (1 / A) * (A_d - 1) * B;
 
-        // System.out.println("true max (m/s): " + 1/(1 - A_d) * B_d * maxControlInput * 0.0508);
         return (A_d * currentVelocity + B_d * maxControlInput);
     }
 
