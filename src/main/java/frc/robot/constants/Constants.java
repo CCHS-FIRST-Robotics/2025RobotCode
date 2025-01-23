@@ -12,8 +12,6 @@ public final class Constants {
         REPLAY
     }
     public static final ROBOT_MODE CURRENT_MODE = ROBOT_MODE.SIM;
-    // ! have a dashboard where all of these constants including team color appear, 
-    // ! and then that changes a constant in here, so then we can do all config and auto config from one location
     
     // controllers
     public static final int CONTROLLER_PORT_1 = 0;

@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.RobotBase;
  * 
  * longer term: 
  * go through module classes
+ * pid tunable constants
  * navx logs in degrees (might be a problem)
  * go through all units and conversions in general
  * understand advantagescope positions of everything and where everything is logged
