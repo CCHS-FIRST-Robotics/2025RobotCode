@@ -9,23 +9,25 @@ import edu.wpi.first.wpilibj.RobotBase;
 /**
  * to do: 
  * 
- * Talon for elevator
- * one kraken for rotating the arm (I mean like realistically it'll be two)
- * neos for coral claw and wrist
+ * daily: 
+ * understand module id convention
+ * make the resetposeestimator work
+ * test autochooser again
  * 
+ * — at robotics daily: 
+ * —— flash the rio for 2025
+ * —— change hardwareconstants and id numbers
+ * —— test driving with joysticks
+ * —— test autos
  * 
- * write coral class
- * write sim classes
- * write drive functions
- * 
+ * longer term: 
+ * understand advantagescope positions of everything and where everything is logged
  * decide on controllers for the year
+ * 
+ * cosmetic / housekeeping: 
  * move periodic functions to top
  * go through imports at some point, make stuff private final
- * change hardwareconstants
- * what the fuck is sysid
- * 
- * maybe combine coral subsystem with elevator? they're basically one subsystem 
- * (coral needs to be able to knock algae off)
+ * thetaa in drive.java
  */
 
 public final class Main {

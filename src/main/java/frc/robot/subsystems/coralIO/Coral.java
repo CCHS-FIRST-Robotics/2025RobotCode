@@ -22,4 +22,6 @@ public class Coral extends SubsystemBase {
     // set position to station intake and then intake
 
     // set position to any level and then outtake
+
+    // knock algae off
 }

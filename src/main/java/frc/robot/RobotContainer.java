@@ -14,7 +14,7 @@ import frc.robot.subsystems.drive.*;
 import frc.robot.utils.AutoRoutineGenerator;
 
 public class RobotContainer {
-    private final CommandXboxController controller1 = new CommandXboxController(Constants.CONTROLLER_PORT_1);
+    private final CommandXboxController controller = new CommandXboxController(Constants.CONTROLLER_PORT_1);
 
     private final Drive drive;
 
@@ -25,29 +25,29 @@ public class RobotContainer {
         switch (Constants.CURRENT_MODE) {
             case REAL:
                 drive = new Drive(
-                    new GyroIONavX(),
                     new ModuleIOSparkMax(0),
                     new ModuleIOSparkMax(1),
                     new ModuleIOSparkMax(2),
-                    new ModuleIOSparkMax(3)
+                    new ModuleIOSparkMax(3), 
+                    new GyroIONavX()
                 );
                 break;
             case SIM:
                 drive = new Drive(
-                    new GyroIO() {},
                     new ModuleIOSim(),
                     new ModuleIOSim(),
                     new ModuleIOSim(),
-                    new ModuleIOSim()
+                    new ModuleIOSim(),
+                    new GyroIO() {}
                 );
                 break;
             default:
                 drive = new Drive(
-                    new GyroIONavX(),
                     new ModuleIOSparkMax(0),
                     new ModuleIOSparkMax(1),
                     new ModuleIOSparkMax(2),
-                    new ModuleIOSparkMax(3)
+                    new ModuleIOSparkMax(3),
+                    new GyroIONavX()
                 );
                 break;
         }
@@ -67,9 +67,9 @@ public class RobotContainer {
         drive.setDefaultCommand(
             new DriveWithJoysticks(
                 drive,
-                () -> controller1.getLeftX(), 
-                () -> -controller1.getLeftY(), // xboxcontroller is flipped
-                () -> controller1.getRightX()
+                () -> controller.getLeftX(), 
+                () -> -controller.getLeftY(), // xboxcontroller is flipped
+                () -> controller.getRightX()
             )
         );
 

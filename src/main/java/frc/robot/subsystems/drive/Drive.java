@@ -2,35 +2,43 @@ package frc.robot.subsystems.drive;
 
 import static edu.wpi.first.units.Units.*;
 
-import org.littletonrobotics.junction.Logger;
-
-import choreo.trajectory.SwerveSample;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Twist2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveModulePosition;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.math.kinematics.*;
+import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.constants.Constants;
-import frc.robot.constants.HardwareConstants;
+import choreo.trajectory.SwerveSample;
+import org.littletonrobotics.junction.Logger;
+import frc.robot.constants.*;
 
 public class Drive extends SubsystemBase {
     public enum CONTROL_MODE {
         DISABLED,
-        CHASSIS_SETPOINT,
+        VELOCITY_SETPOINT,
         POSITION_SETPOINT,
     };
     CONTROL_MODE controlMode = CONTROL_MODE.DISABLED;
 
-    // velocity control
     private final Module[] modules = new Module[4]; // FL, FR, BL, BR
+
+    // odometry
+    private final GyroIO gyroIO;
+    private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
+    private final SwerveDrivePoseEstimator poseEstimator;
+    private Pose2d fieldPosition = new Pose2d();
+    private double[] lastModulePositionsMeters = new double[] {0.0, 0.0, 0.0, 0.0};
+    
+    // position control
+    private Pose2d positionSetpoint = new Pose2d();
+    private Twist2d twistSetpoint = new Twist2d();
+    private PIDController xController = new PIDController(2.7, 0.05, 0.12);
+    private PIDController yController = new PIDController(2.7, 0.05, 0.12);
+    private PIDController thetaaController = new PIDController(3, 0, 0.3);
+    
+    // velocity control
     private ChassisSpeeds chassisSetpoint = new ChassisSpeeds();
     private SwerveModuleState[] lastSetpointStates = new SwerveModuleState[] {
         new SwerveModuleState(),
@@ -39,80 +47,62 @@ public class Drive extends SubsystemBase {
         new SwerveModuleState()
     };
 
-    // position control
-    private Pose2d positionSetpoint = new Pose2d();
-    private Twist2d twistSetpoint = new Twist2d();
-    private PIDController xController = new PIDController(2.7, 0.05, 0.12);
-    private PIDController yController = new PIDController(2.7, 0.05, 0.12);
-    private PIDController thetaaaaaController = new PIDController(3, 0, 0.3);
-
-    // odometry
-    private final GyroIO gyroIO;
-    private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
-    private SwerveDrivePoseEstimator poseEstimator;
-    
-    private double[] lastModulePositionsMeters = new double[] {0.0, 0.0, 0.0, 0.0};
-    private Pose2d fieldPosition = new Pose2d(); // used if gyro isn't connected
-
     public Drive(
-        GyroIO gyroIO,
         ModuleIO flModuleIO,
         ModuleIO frModuleIO,
         ModuleIO blModuleIO,
-        ModuleIO brModuleIO
+        ModuleIO brModuleIO, 
+        GyroIO gyroIO
     ) {
-        this.gyroIO = gyroIO;
-
         modules[0] = new Module(flModuleIO, 0);
         modules[1] = new Module(frModuleIO, 1);
         modules[2] = new Module(blModuleIO, 2);
         modules[3] = new Module(brModuleIO, 3);
-        
+
         for (Module module : modules) {
             module.setBrakeMode();
         }
-        
+
         xController.setTolerance(.035);
         yController.setTolerance(.035);
-        thetaaaaaController.setTolerance(.025);
-        thetaaaaaController.enableContinuousInput(-Math.PI, Math.PI);
+        thetaaController.setTolerance(.025);
+        thetaaController.enableContinuousInput(-Math.PI, Math.PI);
+
+        this.gyroIO = gyroIO;
+        poseEstimator = new SwerveDrivePoseEstimator(
+            HardwareConstants.KINEMATICS, 
+            new Rotation2d(), 
+            getModulePositions(), 
+            new Pose2d()
+        );
     }
 
+    @Override
     public void periodic() {
         if (DriverStation.isDisabled()) {
             controlMode = CONTROL_MODE.DISABLED;
         }
 
-        // odometry
+        // update odometry
         gyroIO.updateInputs(gyroInputs);
         Logger.processInputs("gyro", gyroInputs);
-        if (gyroInputs.connected) { // ! Mode.SIM
-            poseEstimator.updateWithTime(
-                Timer.getFPGATimestamp(),
-                new Rotation2d(gyroInputs.yawPosition.in(Radians)),
-                getModulePositions()
-            );
-        } else { // use fieldposition if gyro isn't connected
-            fieldPosition = fieldPosition.exp(HardwareConstants.KINEMATICS.toTwist2d(getModuleDeltas()));
-            poseEstimator.updateWithTime(
-                Timer.getFPGATimestamp(),
-                fieldPosition.getRotation(),
-                getModulePositions()
-            );
-        }
-        //! make this better
-
-
+        fieldPosition = fieldPosition.exp(HardwareConstants.KINEMATICS.toTwist2d(getModuleDeltas()));
+        poseEstimator.updateWithTime(
+            Timer.getFPGATimestamp(),
+            gyroInputs.connected ? new Rotation2d(gyroInputs.yawPosition.in(Radians)) : fieldPosition.getRotation(),
+            getModulePositions()
+        );
         Logger.recordOutput("Odometry/FieldPosition", getPose());   
         
-        // run modules
+        // update module inputs
         for (Module module : modules) {
             module.periodic();
         }
         
+        // run modules
         switch (controlMode) {
             case DISABLED:
-                for (var module : modules) {
+                for (Module module : modules) {
                     module.stop();
                 }
                 Logger.recordOutput("SwerveStates/Setpoints", new SwerveModuleState[] {});
@@ -122,13 +112,13 @@ public class Drive extends SubsystemBase {
                 // get and add PID outputs
                 double xPID = xController.atSetpoint() ? 0 : xController.calculate(getPose().getX(), positionSetpoint.getX());
                 double yPID = yController.atSetpoint() ? 0 : yController.calculate(getPose().getY(), positionSetpoint.getY());
-                double thetaaaaaPID = thetaaaaaController.atSetpoint() ? 0 : thetaaaaaController.calculate(getPose().getRotation().getRadians(),
+                double thetaaPID = thetaaController.atSetpoint() ? 0 : thetaaController.calculate(getPose().getRotation().getRadians(),
                     positionSetpoint.getRotation().getRadians()
                 );
                 chassisSetpoint = new ChassisSpeeds(
                     twistSetpoint.dx + xPID,
                     twistSetpoint.dy + yPID,
-                    twistSetpoint.dtheta + thetaaaaaPID
+                    twistSetpoint.dtheta + thetaaPID
                 );
 
                 // FOC
@@ -140,7 +130,7 @@ public class Drive extends SubsystemBase {
                 );
 
                 // fallthrough to CHASSIS_SETPOINT case, no break statement needed
-            case CHASSIS_SETPOINT: // chassis is just the drivebase
+            case VELOCITY_SETPOINT: // chassis is just the drivebase
                 // Brief explanation here:
                 // https://docs.wpilib.org/en/stable/docs/software/advanced-controls/geometry/transformations.html
                 // For more detail, see chapter 10 here:
@@ -195,6 +185,8 @@ public class Drive extends SubsystemBase {
         }
     }
 
+    // ————— functions for running modules ————— //
+
     public void stop() {
         runVelocity(new ChassisSpeeds()); // ! why not set controlmode to disabled
     }
@@ -202,20 +194,21 @@ public class Drive extends SubsystemBase {
     public void runPosition(SwerveSample sample){
         controlMode = CONTROL_MODE.POSITION_SETPOINT;
         positionSetpoint = sample.getPose();
-        twistSetpoint = sample.getChassisSpeeds().toTwist2d(1); // ! pay attention to this
+        twistSetpoint = sample.getChassisSpeeds().toTwist2d(1); // ! pay attention to this (dtSeconds)
     }
 
     public void runVelocity(ChassisSpeeds speeds) {
-        controlMode = CONTROL_MODE.CHASSIS_SETPOINT;
+        controlMode = CONTROL_MODE.VELOCITY_SETPOINT;
         chassisSetpoint = speeds;
     }
 
-    // ! this throws an error
+    // ————— functions for odometry ————— //
+
     public void resetPoseEstimator(Pose2d pose){
-        poseEstimator.resetPosition(pose.getRotation(), new SwerveModulePosition[4], pose);
+        poseEstimator.resetPosition(pose.getRotation(), getModulePositions(), pose);
     }
 
-    public Pose2d getPose() { //! there are too many of these methods
+    public Pose2d getPose() {
         return poseEstimator.getEstimatedPosition();
     }
 
@@ -224,33 +217,33 @@ public class Drive extends SubsystemBase {
     }
 
     public Rotation2d getYawWithAllianceRotation() {
-        // make field relative to red if on red team
         return getYaw().plus(
             DriverStation.getAlliance().get() == Alliance.Red ? 
             new Rotation2d(Math.PI) : 
             new Rotation2d(0)
         ); 
     }
+    
+    public SwerveModulePosition[] getModulePositions() {
+        SwerveModulePosition[] wheelPositions = new SwerveModulePosition[4];
+        for (int i = 0; i < 4; i++) {
+            wheelPositions[i] = new SwerveModulePosition(
+                modules[i].getPositionMeters(),
+                modules[i].getAngle()
+            );
+        }
+        return wheelPositions;
+    }
 
-    // ! these could definetely be moved to hardwareConstants
     public SwerveModulePosition[] getModuleDeltas() {
         SwerveModulePosition[] wheelDeltas = new SwerveModulePosition[4];
         for (int i = 0; i < 4; i++) {
             wheelDeltas[i] = new SwerveModulePosition(
-                    (modules[i].getPositionMeters() - lastModulePositionsMeters[i]),
-                    modules[i].getAngle());
+                modules[i].getPositionMeters() - lastModulePositionsMeters[i],
+                modules[i].getAngle()
+            );
             lastModulePositionsMeters[i] = modules[i].getPositionMeters();
         }
         return wheelDeltas;
-    }
-
-    public SwerveModulePosition[] getModulePositions() {
-        SwerveModulePosition[] wheelPos = new SwerveModulePosition[4];
-        for (int i = 0; i < 4; i++) {
-            wheelPos[i] = new SwerveModulePosition(
-                    (modules[i].getPositionMeters()),
-                    modules[i].getAngle());
-        }
-        return wheelPos;
     }
 }
