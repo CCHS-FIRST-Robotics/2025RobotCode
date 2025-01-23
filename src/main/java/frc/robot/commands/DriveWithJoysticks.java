@@ -46,7 +46,7 @@ public class DriveWithJoysticks extends Command {
             Constants.JOYSTICK_DEADZONE, 
             Constants.LINEAR_SPEED_EXPONENT
         );
-        Rotation2d linearDirection = new Rotation2d(linearXSpeed, linearYSpeed);
+        Rotation2d linearDirection = new Rotation2d(linearXSpeed, linearYSpeed); // ! this thing won't shut the fuck up
         Translation2d linearVelocity = new Translation2d(
             linearSpeed, 
             linearDirection

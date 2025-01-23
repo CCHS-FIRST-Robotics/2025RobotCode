@@ -13,8 +13,6 @@ import frc.robot.commands.*;
 import frc.robot.constants.Constants;
 import frc.robot.constants.HardwareConstants;
 import frc.robot.subsystems.drive.*;
-import frc.robot.subsystems.coralIO.*;
-import frc.robot.subsystems.algaIO.*;
 import frc.robot.utils.AutoRoutineGenerator;
 import frc.robot.utils.PoseEstimator;
 
@@ -23,9 +21,6 @@ public class RobotContainer {
 
     private final Drive drive;
     private final PoseEstimator poseEstimator;
-
-    private final Elevator elevator;
-    private final Alga alga;
 
     private final AutoRoutineGenerator autoGenerator;
     private final AutoChooser autoChooser;
@@ -40,8 +35,6 @@ public class RobotContainer {
                     new ModuleIOSparkMax(2),
                     new ModuleIOSparkMax(3)
                 );
-                elevator = new Elevator(new ElevatorIOTalonFX(Constants.ELEVATOR_ID_1));
-                alga = new Alga(new AlgaIOTalonFX(Constants.ALGA_ID_1));
                 break;
             case SIM:
                 drive = new Drive(
@@ -51,8 +44,6 @@ public class RobotContainer {
                     new ModuleIOSim(),
                     new ModuleIOSim()
                 );
-                elevator = new Elevator(new ElevatorIOSim());
-                alga = new Alga(new AlgaIOSim());
                 break;
             default:
                 drive = new Drive(
@@ -62,8 +53,6 @@ public class RobotContainer {
                     new ModuleIOSparkMax(2),
                     new ModuleIOSparkMax(3)
                 );
-                elevator = new Elevator(new ElevatorIOTalonFX(Constants.ELEVATOR_ID_1));
-                alga = new Alga(new AlgaIOTalonFX(Constants.ALGA_ID_1));
                 break;
         }
 
@@ -80,7 +69,7 @@ public class RobotContainer {
 
         autoGenerator = new AutoRoutineGenerator(
             drive, 
-            elevator,
+            null,
             null 
         );
         autoChooser = new AutoChooser();
@@ -100,13 +89,13 @@ public class RobotContainer {
         );
 
         // controller1.b().onTrue(coral.getIntakeCommand());
-        controller1.a().onTrue(alga.getIntakeCommand());
+        // controller1.a().onTrue(alga.getIntakeCommand());
     }
 
     private void configureAutos(){
         autoChooser.addRoutine("2Coral", () -> autoGenerator.twoCoral());
 
-        SmartDashboard.putData(autoChooser);
+        SmartDashboard.putData("AutoChooser", autoChooser);
     }
 
     public Command getAutonomousCommand(){

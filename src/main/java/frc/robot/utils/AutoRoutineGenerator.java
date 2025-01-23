@@ -17,8 +17,7 @@ public class AutoRoutineGenerator {
     Elevator elevator;
     Coral coral;
 
-    // it would be really painful to have to write what to do at each eventmarker for every single auto I write
-    
+    // ! it would be really painful to have to write what to do at each eventmarker for every single auto I write
     public AutoRoutineGenerator(
         Drive drive, 
         Elevator elevator, 
@@ -28,7 +27,7 @@ public class AutoRoutineGenerator {
             drive::getPose,
             drive::resetOdometry,
             drive::followTrajectory,
-            DriverStation.getAlliance().get() == DriverStation.Alliance.Red,
+            false, // DriverStation.getAlliance().get() == DriverStation.Alliance.Red
             drive
         );
 
@@ -49,29 +48,29 @@ public class AutoRoutineGenerator {
         // when routine begins, reset odometry, start first trajectory, begin moving the elevator
         routine.active().onTrue(
             Commands.sequence(
-                trajectory0.resetOdometry(), 
+                // trajectory0.resetOdometry(), 
                 trajectory0.cmd()
-                .alongWith(elevator.getSetPositionCommand(ElevatorPosition.L1))
+                // .alongWith(elevator.getSetPositionCommand(ElevatorPosition.L1))
             )
         );
         // at eventmarker output1, run the coral output
-        trajectory0.atTime("output1").onTrue(null);
+        // trajectory0.atTime("output1").onTrue(null);
         
         // start the next trajectory
         trajectory0.done().onTrue(
             trajectory1.cmd()
-            .alongWith(elevator.getSetPositionCommand(ElevatorPosition.STATION))
+            // .alongWith(elevator.getSetPositionCommand(ElevatorPosition.STATION))
         );
         // at eventmarker intake1, run the coral intake
-        trajectory1.atTime("intake1").onTrue(null);
+        // trajectory1.atTime("intake1").onTrue(null);
 
         // start the next trajectory
         trajectory1.done().onTrue(
             trajectory2.cmd()
-            .alongWith(elevator.getSetPositionCommand(ElevatorPosition.L2))
+            // .alongWith(elevator.getSetPositionCommand(ElevatorPosition.L2))
         );
         // when the trajectory is done, run the coral output (instead of having an extra eventmarker)
-        trajectory2.done().onTrue(null);
+        // trajectory2.done().onTrue(null);
 
         return routine;
     }
