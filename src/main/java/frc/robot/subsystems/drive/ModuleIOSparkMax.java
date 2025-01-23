@@ -50,8 +50,8 @@ public class ModuleIOSparkMax implements ModuleIO {
 
     // ! probably scuffed in translation
     public ModuleIOSparkMax(int index) {
-        driveMotor = new SparkMax(2 + 2 * index, MotorType.kBrushless);
-        turnMotor = new SparkMax(1 + 2 * index, MotorType.kBrushless);
+        driveMotor = new SparkMax(10 * index + 1, MotorType.kBrushless);
+        turnMotor = new SparkMax(10 * index + 2, MotorType.kBrushless);
         this.index = index;
 
         // start config
@@ -124,8 +124,7 @@ public class ModuleIOSparkMax implements ModuleIO {
     }
 
     public void setTurnPosition(Angle position) {
-        // Adjust from [-PI, PI] -> [0, 2PI]
-        position = Radians.of(MathUtil.inputModulus(position.in(Radians), 0, 2 * Math.PI));
+        position = Radians.of(MathUtil.inputModulus(position.in(Radians), 0, 2 * Math.PI)); // adjust from [-PI, PI] to [0, 2PI]
             
         turnMotor.getClosedLoopController().setReference(
             position.in(Rotations),

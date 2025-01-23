@@ -17,8 +17,8 @@ import frc.robot.constants.*;
 public class Drive extends SubsystemBase {
     public enum CONTROL_MODE {
         DISABLED,
-        VELOCITY_SETPOINT,
-        POSITION_SETPOINT,
+        POSITION,
+        VELOCITY
     };
     CONTROL_MODE controlMode = CONTROL_MODE.DISABLED;
 
@@ -108,8 +108,8 @@ public class Drive extends SubsystemBase {
                 Logger.recordOutput("SwerveStates/Setpoints", new SwerveModuleState[] {});
                 Logger.recordOutput("SwerveStates/SetpointsOptimized", new SwerveModuleState[] {});
                 return;
-            case POSITION_SETPOINT:
-                // get and add PID outputs
+            case POSITION:
+                // get and add PID outputs // ! review these lines
                 double xPID = xController.atSetpoint() ? 0 : xController.calculate(getPose().getX(), positionSetpoint.getX());
                 double yPID = yController.atSetpoint() ? 0 : yController.calculate(getPose().getY(), positionSetpoint.getY());
                 double thetaaPID = thetaaController.atSetpoint() ? 0 : thetaaController.calculate(getPose().getRotation().getRadians(),
@@ -130,7 +130,7 @@ public class Drive extends SubsystemBase {
                 );
 
                 // fallthrough to CHASSIS_SETPOINT case, no break statement needed
-            case VELOCITY_SETPOINT: // chassis is just the drivebase
+            case VELOCITY: // chassis is just the drivebase // ! review this whole section
                 // Brief explanation here:
                 // https://docs.wpilib.org/en/stable/docs/software/advanced-controls/geometry/transformations.html
                 // For more detail, see chapter 10 here:
@@ -192,13 +192,13 @@ public class Drive extends SubsystemBase {
     }
 
     public void runPosition(SwerveSample sample){
-        controlMode = CONTROL_MODE.POSITION_SETPOINT;
+        controlMode = CONTROL_MODE.POSITION;
         positionSetpoint = sample.getPose();
         twistSetpoint = sample.getChassisSpeeds().toTwist2d(1); // ! pay attention to this (dtSeconds)
     }
 
     public void runVelocity(ChassisSpeeds speeds) {
-        controlMode = CONTROL_MODE.VELOCITY_SETPOINT;
+        controlMode = CONTROL_MODE.VELOCITY;
         chassisSetpoint = speeds;
     }
 

@@ -18,9 +18,13 @@ import edu.wpi.first.wpilibj.RobotBase;
  * —— flash the rio for 2025
  * —— change hardwareconstants and id numbers
  * —— test driving with joysticks
+ * —— update choreo with new hardwareconstants, regenerate auto
  * —— test autos
  * 
  * longer term: 
+ * go through module classes
+ * navx logs in degrees (might be a problem)
+ * go through all units and conversions in general
  * understand advantagescope positions of everything and where everything is logged
  * decide on controllers for the year
  * 

@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.units.measure.*;
 import org.littletonrobotics.junction.Logger;
 
+@SuppressWarnings("unused")
 public class Coral extends SubsystemBase {
     private final Elevator elevator;
     private final Arm arm;

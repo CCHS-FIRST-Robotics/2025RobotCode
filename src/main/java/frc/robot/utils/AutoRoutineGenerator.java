@@ -3,9 +3,9 @@ package frc.robot.utils;
 import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
 import choreo.auto.AutoTrajectory;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.subsystems.coralIO.Elevator;
-import frc.robot.subsystems.coralIOTEMPTEMPTEMPTEMP.Coral;
+import frc.robot.subsystems.coralIO.*;
 import frc.robot.subsystems.drive.Drive;
 
 public class AutoRoutineGenerator {
@@ -25,7 +25,7 @@ public class AutoRoutineGenerator {
             drive::getPose,
             drive::resetPoseEstimator,
             drive::runPosition,
-            false, // DriverStation.getAlliance().get() == DriverStation.Alliance.Red
+            DriverStation.getAlliance().isPresent() ? DriverStation.getAlliance().get() == DriverStation.Alliance.Red : false,
             drive
         );
 
@@ -46,7 +46,7 @@ public class AutoRoutineGenerator {
         // when routine begins, reset odometry, start first trajectory, begin moving the elevator
         routine.active().onTrue(
             Commands.sequence(
-                // trajectory0.resetOdometry(), 
+                trajectory0.resetOdometry(), 
                 trajectory0.cmd()
                 // .alongWith(elevator.getSetPositionCommand(ElevatorPosition.L1))
             )

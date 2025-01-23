@@ -25,10 +25,10 @@ public class RobotContainer {
         switch (Constants.CURRENT_MODE) {
             case REAL:
                 drive = new Drive(
-                    new ModuleIOSparkMax(0),
                     new ModuleIOSparkMax(1),
                     new ModuleIOSparkMax(2),
-                    new ModuleIOSparkMax(3), 
+                    new ModuleIOSparkMax(3),
+                    new ModuleIOSparkMax(4), 
                     new GyroIONavX()
                 );
                 break;
@@ -43,10 +43,10 @@ public class RobotContainer {
                 break;
             default:
                 drive = new Drive(
-                    new ModuleIOSparkMax(0),
                     new ModuleIOSparkMax(1),
                     new ModuleIOSparkMax(2),
                     new ModuleIOSparkMax(3),
+                    new ModuleIOSparkMax(4),
                     new GyroIONavX()
                 );
                 break;
@@ -72,9 +72,6 @@ public class RobotContainer {
                 () -> controller.getRightX()
             )
         );
-
-        // controller1.b().onTrue(coral.getIntakeCommand());
-        // controller1.a().onTrue(alga.getIntakeCommand());
     }
 
     private void configureAutos(){
