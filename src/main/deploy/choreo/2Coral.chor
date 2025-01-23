@@ -9,27 +9,27 @@
  "config":{
   "frontLeft":{
    "x":{
-    "exp":"11 in",
-    "val":0.2794
+    "exp":"13.5 in",
+    "val":0.3429
    },
    "y":{
-    "exp":"11 in",
-    "val":0.2794
+    "exp":"11.75 in",
+    "val":0.29845
    }
   },
   "backLeft":{
    "x":{
-    "exp":"-11 in",
-    "val":-0.2794
+    "exp":"-13.5 in",
+    "val":-0.3429
    },
    "y":{
-    "exp":"11 in",
-    "val":0.2794
+    "exp":"11.75 in",
+    "val":0.29845
    }
   },
   "mass":{
-   "exp":"80 lbs",
-   "val":36.2873896
+   "exp":"120 lbs",
+   "val":54.4310844
   },
   "inertia":{
    "exp":"6 kg m ^ 2",

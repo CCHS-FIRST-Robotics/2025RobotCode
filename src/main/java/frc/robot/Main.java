@@ -10,13 +10,11 @@ import edu.wpi.first.wpilibj.RobotBase;
  * to do: 
  * 
  * daily: 
- * coralIO
  * 
  * — at robotics daily: 
  * —— flash the rio for 2025
  * —— change hardwareconstants and id numbers
  * —— test driving with joysticks
- * —— update choreo with new hardwareconstants, regenerate auto
  * —— test autos
  * 
  * longer term: 

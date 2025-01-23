@@ -23,7 +23,7 @@ import edu.wpi.first.units.measure.*;
 
 public class ArmIOReal implements ArmIO{
     private final TalonFX armMotor;
-    private final SparkMax wristMotor;
+    private final SparkMax wristMotor; // ! maybe servos
     private final SparkMax clawMotor;
 
     private final TalonFXConfiguration armConfig = new TalonFXConfiguration();
