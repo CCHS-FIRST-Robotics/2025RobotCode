@@ -32,8 +32,8 @@ public interface CameraIO {
         @Override
         public void toLog(LogTable table) {
             table.put("closestTag/Id", closestTagId);
-            table.put("closestTag/X", closestTagXdist);
-            table.put("closestTag/Y", closestTagYdist);
+            table.put("closestTag/Xdist", closestTagXdist);
+            table.put("closestTag/Ydist", closestTagYdist);
             table.put("closestTag/Heading", closestTagHeading);
 
             table.put("numTags", tags.size());
@@ -48,16 +48,16 @@ public interface CameraIO {
         @Override
         public void fromLog(LogTable table) {
             closestTagId = table.get("closestTag/Id", closestTagId);
-            closestTagXdist = table.get("closestTag/X", closestTagXdist);
-            closestTagYdist = table.get("closestTag/Y", closestTagYdist);
+            closestTagXdist = table.get("closestTag/Xdist", closestTagXdist);
+            closestTagYdist = table.get("closestTag/Ydist", closestTagYdist);
             closestTagHeading = table.get("closestTag/Heading", closestTagHeading);
 
             numTags = table.get("numTags", numTags);
             for (int i = 0; i < numTags; i++) {
                 int id = table.get("tag" + i + "/Id", -1);
-                double xDist = table.get("tag" + i + "/xDist", -1);
-                double yDist = table.get("tag" + i + "/yDist", -1);
-                double heading = table.get("tag" + i + "/heading", -1);
+                double xDist = table.get("tag" + i + "/Xdist", -1);
+                double yDist = table.get("tag" + i + "/Ydist", -1);
+                double heading = table.get("tag" + i + "/Heading", -1);
 
                 tags.add(new AprilTag(id, xDist, yDist, heading));
             }
