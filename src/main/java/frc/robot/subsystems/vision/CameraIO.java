@@ -1,20 +1,19 @@
 package frc.robot.subsystems.vision;
 
-import java.util.ArrayList;
-
 import org.littletonrobotics.junction.LogTable;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
-import edu.wpi.first.apriltag.AprilTag;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
+import java.util.ArrayList;
+
+import frc.robot.utils.AprilTag;
+
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
-import frc.robot.utils.TimestampedPose2d;
-import frc.robot.utils.TimestampedPose3d;
+
 
 public interface CameraIO {
     public static class CameraIOInputs implements LoggableInputs {
@@ -22,7 +21,7 @@ public interface CameraIO {
         public int closestTagId = -1;
         public Measure<Distance> closestTagXdist = Meters.of(-1);
         public Measure<Distance> closestTagYdist = Meters.of(-1);
-        public Measure<Angle> closestTagHeading = Radians.of(-1);
+        public Measure<Angle> closestTagHeading = Degrees.of(-1);
 
         // Values for all tags found by the camera
         int numTags = 0;
@@ -38,6 +37,7 @@ public interface CameraIO {
             table.put("closestTag/Heading", closestTagHeading);
 
             table.put("numTags", tags.size());
+
             for (int i = 0; i < tags.size(); i++) {
                 AprilTag tag = tags.get(i);
                 table.put("tag" + i + "/Id", tag.getId());
@@ -55,8 +55,11 @@ public interface CameraIO {
             numTags = table.get("numTags", numTags);
             for (int i = 0; i < numTags; i++) {
                 int id = table.get("tag" + i + "/Id", -1);
-                double xDist = table.get("tag" + i + "")
-                tags.add(new AprilTag(id, ));
+                double xDist = table.get("tag" + i + "/xDist", -1);
+                double yDist = table.get("tag" + i + "/yDist", -1);
+                double heading = table.get("tag" + i + "/heading", -1);
+
+                tags.add(new AprilTag(id, xDist, yDist, heading));
             }
 
         }
