@@ -41,4 +41,8 @@ public interface ModuleIO {
     public default void setDriveBrakeMode(boolean enable) {}
 
     public default void setTurnBrakeMode(boolean enable) {}
+
+    default void setDrivePID(double kP, double kI, double kD) {}
+
+    default void setTurnPID(double kP, double kI, double kD) {}
 }
