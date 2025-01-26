@@ -50,11 +50,13 @@ public class ModuleIOSim implements ModuleIO {
     private double driveAppliedVolts = 0.0;
     private double turnAppliedVolts = 0.0;
 
-    public ModuleIOSim() {
+    public ModuleIOSim(ModuleIO io) {
+        this.io = io;
         System.out.println("[Init] Creating ModuleIOSim");
 
         turnPID.enableContinuousInput(0, 1);
         driveSim = new DCMotorSim(LinearSystemId.createDCMotorSystem(driveKv.get(), driveKa.get()), DCMotor.getNEO(1), 1);
+        
     }
 
     public void updateInputs(ModuleIOInputs inputs) {
@@ -82,15 +84,15 @@ public class ModuleIOSim implements ModuleIO {
             }
                 */
 
-                TunableNumber.ifChanged(
-                    hashCode(),
-                    () -> driveFF = new SimpleMotorFeedforward(driveKs.get(), driveKv.get(), driveKa.get()),
-                    driveKs,
-                    driveKv);
-                TunableNumber.ifChanged(
-                    hashCode(), () -> io.setDrivePID(driveKp.get(), 0, driveKd.get()), driveKp, driveKd);
-                TunableNumber.ifChanged(
-                    hashCode(), () -> io.setTurnPID(turnKp.get(), 0, turnKd.get()), turnKp, turnKd);
+        TunableNumber.ifChanged(
+            hashCode(),
+            () -> driveFF = new SimpleMotorFeedforward(driveKs.get(), driveKv.get(), driveKa.get()),
+            driveKs,
+            driveKv);
+        TunableNumber.ifChanged(
+            hashCode(), () -> io.setDrivePID(driveKp.get(), 0, driveKd.get()), driveKp, driveKd);
+        TunableNumber.ifChanged(
+            hashCode(), () -> io.setTurnPID(turnKp.get(), 0, turnKd.get()), turnKp, turnKd);
     }
 
     public void setDriveVoltage(Voltage volts) {
