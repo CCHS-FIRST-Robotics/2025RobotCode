@@ -17,7 +17,6 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 
 public class ModuleIOSparkMax implements ModuleIO {
-    // ! change to d and t lol
     private final SparkMax driveMotor;
     private final SparkMax turnMotor;
 
@@ -39,6 +38,7 @@ public class ModuleIOSparkMax implements ModuleIO {
     private double driveKa = 0.020864;
 
     private double turnKp = 8;
+    private double turnKi = 0;
     private double turnKd = 0;
 
     // ! check colin's math! 
@@ -70,7 +70,7 @@ public class ModuleIOSparkMax implements ModuleIO {
         // pid 
         driveConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder).pid(driveKp, driveKi, driveKd, ClosedLoopSlot.kSlot0);
         driveFeedforward = new SimpleMotorFeedforward(driveKs, driveKv, driveKa);
-        turnConfig.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder).pid(turnKp, 0, turnKd, ClosedLoopSlot.kSlot0);
+        turnConfig.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder).pid(turnKp, turnKi, turnKd, ClosedLoopSlot.kSlot0);
         turnConfig.closedLoop.positionWrappingEnabled(true);
         turnConfig.closedLoop.positionWrappingMinInput(0);
         turnConfig.closedLoop.positionWrappingMaxInput(1);
@@ -154,11 +154,8 @@ public class ModuleIOSparkMax implements ModuleIO {
             MathUtil.angleModulus(
                 new Rotation2d(turnAbsoluteEncoder.getPosition() * 2 * Math.PI)
                                 .getRadians());
-
-        inputs.turnPositionRad = turnRelativeEncoder.getPosition()
-                / turnAfterEncoderReduction;
-        inputs.turnVelocityRadPerSec = Rotations.per(Minute).of(turnRelativeEncoder.getVelocity()
-                / turnAfterEncoderReduction).in(RotationsPerSecond);
+        inputs.turnPositionRad = turnRelativeEncoder.getPosition() / turnAfterEncoderReduction;
+        inputs.turnVelocityRadPerSec = Rotations.per(Minute).of(turnRelativeEncoder.getVelocity() / turnAfterEncoderReduction).in(RotationsPerSecond);
         inputs.turnAppliedVolts = turnMotor.getAppliedOutput() * turnMotor.getBusVoltage();
         inputs.turnCurrentAmps = turnMotor.getOutputCurrent();
         inputs.turnTempCelcius = turnMotor.getMotorTemperature();

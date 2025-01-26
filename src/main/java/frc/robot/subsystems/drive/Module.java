@@ -25,32 +25,10 @@ public class Module {
         Logger.processInputs("drive/module" + Integer.toString(index), inputs);
     }
 
-    public SwerveModuleState runState(SwerveModuleState state) {
-        state.optimize(getAngle()); // optimize which way the wheel turns
+    public void runState(SwerveModuleState state) {
+        state.optimize(getAngle());
         io.setTurnPosition(Rotations.of(state.angle.getRotations()));
-
-        // state.speedMetersPerSecond *= Math.cos( // dot product of the state speed and the turn error
-        //     inputs.turnAbsolutePositionRad - state.angle.getRadians() // ! idrk how necessary this is
-        // );
-        
-        // ! uhhh see if this is important
-        // // constrain velocity based on voltage and previous velocity using motor dynamics
-        // state.speedMetersPerSecond = MathUtil.clamp(
-        //     state.speedMetersPerSecond,
-        //     getMaxVelocity(-inputs.driveAverageBusVoltage,
-        //         prevState.speedMetersPerSecond / HardwareConstants.WHEEL_RADIUS.in(Meters), Constants.PERIOD,
-        //         ModuleIO.driveKv, 
-        //         ModuleIO.driveKa
-        //     ) * HardwareConstants.WHEEL_RADIUS.in(Meters),
-        //     getMaxVelocity(inputs.driveAverageBusVoltage,
-        //         prevState.speedMetersPerSecond / HardwareConstants.WHEEL_RADIUS.in(Meters), Constants.PERIOD,
-        //         ModuleIO.driveKv, 
-        //         ModuleIO.driveKa
-        //     ) * HardwareConstants.WHEEL_RADIUS.in(Meters)
-        // );
-
         io.setDriveVelocity(RadiansPerSecond.of(state.speedMetersPerSecond / HardwareConstants.WHEEL_RADIUS.in(Meters)));
-        return state;
     }
 
     public void stop() {

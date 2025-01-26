@@ -11,29 +11,25 @@ import edu.wpi.first.wpilibj.RobotBase;
  * 
  * daily: 
  * write coral commands and hashmap
- * go through module classes
  * maybe pid tunable constants
  * 
  * — at robotics daily: 
- * —— change id numbers
+ * —— change CAN id numbers
  * —— test driving with joysticks
  * —— test autos
  * 
  * longer term: 
- * sysid (or just use recalc)
+ * sysid (or just use recalc) for good choreo constants
  * ! rotating while translating doesn't work at all in sim
- * volts, amps, rotations, rotations per second, celcius
- * good choreo constants
+ * volts, amps, rotations, rotations per second, celcius (go through all unit conversions)
  * navx logs in degrees (might be a problem)
- * go through all units and conversions in general
  * understand advantagescope positions of everything and where everything is logged
  * decide on controllers for the year
- * make sure the position setpoint is actually informed by the poseestimator
  * 
  * cosmetic / housekeeping: 
  * move periodic functions to top
- * go through imports at some point, make stuff private final
- * thetaa in drive.java
+ * go through imports, make stuff private final
+ * heading in drive.java
  * maybe rename arm to pivot, axle, or axis
  */
 
