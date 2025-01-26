@@ -1,8 +1,7 @@
 package frc.robot.subsystems.drive;
 
 import static edu.wpi.first.units.Units.*;
-import edu.wpi.first.units.measure.*;
-import frc.robot.constants.Constants;
+import frc.robot.constants.HardwareConstants;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.*;
@@ -10,77 +9,48 @@ import org.littletonrobotics.junction.Logger;
 
 public class Module {
     private final ModuleIO io;
-    private final ModuleIOInputsAutoLogged inputs = new ModuleIOInputsAutoLogged();
     private final int index;
-
-    // TODO: switch to tunable numbers w/ smartdash
-    private static final Distance wheelRadius = Inches.of(2); // ! motherfucker
-
-    private SwerveModuleState prevSetpoint = new SwerveModuleState(0, new Rotation2d(0));
+    private final ModuleIOInputsAutoLogged inputs = new ModuleIOInputsAutoLogged();
 
     public Module(ModuleIO io, int index) {
         this.io = io;
         this.index = index;
 
-        // turnFeedback.enableContinuousInput(-Math.PI, Math.PI);
+        io.setDriveBrakeMode(true);
+        io.setTurnBrakeMode(false);
     }
 
     public void periodic() {
-        // double prevVel = getVelocityMetersPerSec();
         io.updateInputs(inputs);
-        Logger.processInputs("Drive/Module" + Integer.toString(index), inputs);
+        Logger.processInputs("drive/module" + Integer.toString(index), inputs);
     }
 
-    public SwerveModuleState runSetpoint(SwerveModuleState targetState) {
-        // Optimize state based on current angle
-        targetState.optimize(getAngle());
-        SwerveModuleState optimizedState = targetState;
+    public SwerveModuleState runState(SwerveModuleState state) {
+        state.optimize(getAngle()); // optimize which way the wheel turns
+        io.setTurnPosition(Rotations.of(state.angle.getRotations()));
 
-        io.setTurnPosition(Radians.of(optimizedState.angle.getRadians()));
-        // io.setTurnVoltage(Volts.of(1));
-
-        // Update velocity based on turn error
-        // does some fancy things to move only in the direction you want while theres an error
-        // draw out the current/desired vectors, and remember that cos is like the dot product,
-        // it projects one vector onto the other, idk I cant make sense of it rn im tired asf
-        optimizedState.speedMetersPerSecond *= Math
-                .cos(inputs.turnAbsolutePositionRad.in(Radians) - optimizedState.angle.getRadians());
-
+        // state.speedMetersPerSecond *= Math.cos( // dot product of the state speed and the turn error
+        //     inputs.turnAbsolutePositionRad - state.angle.getRadians() // ! idrk how necessary this is
+        // );
         
-            // constrian velocity based on voltage and previous velocity using motor dynamics
-            optimizedState.speedMetersPerSecond = MathUtil.clamp(
-                    optimizedState.speedMetersPerSecond,
-                    getMaxVelocity(-inputs.driveAverageBusVoltage.in(Volts),
-                            prevSetpoint.speedMetersPerSecond / wheelRadius.in(Meters), Constants.PERIOD,
-                            ModuleIO.driveKv,
-                            ModuleIO.driveKa) * wheelRadius.in(Meters),
-                    getMaxVelocity(inputs.driveAverageBusVoltage.in(Volts),
-                            prevSetpoint.speedMetersPerSecond / wheelRadius.in(Meters), Constants.PERIOD,
-                            ModuleIO.driveKv,
-                            ModuleIO.driveKa) * wheelRadius.in(Meters));
+        // ! uhhh see if this is important
+        // // constrain velocity based on voltage and previous velocity using motor dynamics
+        // state.speedMetersPerSecond = MathUtil.clamp(
+        //     state.speedMetersPerSecond,
+        //     getMaxVelocity(-inputs.driveAverageBusVoltage,
+        //         prevState.speedMetersPerSecond / HardwareConstants.WHEEL_RADIUS.in(Meters), Constants.PERIOD,
+        //         ModuleIO.driveKv, 
+        //         ModuleIO.driveKa
+        //     ) * HardwareConstants.WHEEL_RADIUS.in(Meters),
+        //     getMaxVelocity(inputs.driveAverageBusVoltage,
+        //         prevState.speedMetersPerSecond / HardwareConstants.WHEEL_RADIUS.in(Meters), Constants.PERIOD,
+        //         ModuleIO.driveKv, 
+        //         ModuleIO.driveKa
+        //     ) * HardwareConstants.WHEEL_RADIUS.in(Meters)
+        // );
 
-            // Run drive controller
-            double velocityRadPerSec = optimizedState.speedMetersPerSecond / wheelRadius.in(Meters);
-            io.setDriveVelocity(RadiansPerSecond.of(velocityRadPerSec));
-        
-
-        prevSetpoint = optimizedState;
-        return optimizedState;
-    }
-
-    public static double getMaxVelocity(double maxControlInput, double currentVelocity, double dt, double kV,
-            double kA) {
-        double A = -kV / kA;
-        double B = 1 / kA;
-        double A_d = Math.exp(A * dt);
-        double B_d = (1 / A) * (A_d - 1) * B;
-
-        return (A_d * currentVelocity + B_d * maxControlInput);
-    }
-
-    public void runCharacterization(Voltage volts) {
-        io.setTurnPosition(Radians.of(0.0));
-        io.setDriveVoltage(volts);
+        io.setDriveVelocity(RadiansPerSecond.of(state.speedMetersPerSecond / HardwareConstants.WHEEL_RADIUS.in(Meters)));
+        return state;
     }
 
     public void stop() {
@@ -88,33 +58,12 @@ public class Module {
         io.setDriveVoltage(Volts.of(0.0));
     }
 
-    // ! why is this necessary
-    public void setBrakeMode() {
-        io.setDriveBrakeMode(true);
-        io.setTurnBrakeMode(false);
+    // ! make this its own separate input
+    public double getDistanceTraveled() {
+        return inputs.drivePositionRad * HardwareConstants.WHEEL_RADIUS.in(Meters);
     }
 
-    /** Returns the current turn angle of the module. */
     public Rotation2d getAngle() {
-        return new Rotation2d(MathUtil.angleModulus(inputs.turnAbsolutePositionRad.in(Radians)));
-    }
-
-    /** Returns the current drive position of the module in meters. */
-    public double getRawPositionMeters() {
-        return inputs.driveRawPositionRad.in(Radians) * wheelRadius.in(Meters);
-    }
-
-    public double getPositionMeters() {
-        return inputs.drivePositionRad.in(Radians) * wheelRadius.in(Meters);
-    }
-
-    /** Returns the current drive velocity of the module in meters per second. */
-    public double getVelocityMetersPerSec() {
-        return inputs.driveVelocityRadPerSec.in(RadiansPerSecond) * wheelRadius.in(Meters);
-    }
-
-    /** Returns the module state (turn angle and drive velocity). */
-    public SwerveModuleState getState() {
-        return new SwerveModuleState(getVelocityMetersPerSec(), getAngle());
+        return new Rotation2d(MathUtil.angleModulus(inputs.turnAbsolutePositionRad));
     }
 }

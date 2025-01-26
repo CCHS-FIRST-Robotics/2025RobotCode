@@ -1,7 +1,5 @@
 package frc.robot.subsystems.drive;
 
-import static edu.wpi.first.units.Units.*;
-
 import edu.wpi.first.units.measure.*;
 import org.littletonrobotics.junction.AutoLog;
 
@@ -11,21 +9,19 @@ public interface ModuleIO {
 
     @AutoLog
     public static class ModuleIOInputs {
-        public Angle driveRawPositionRad = Radians.of(0.0);
-        public Angle drivePositionRad = Radians.of(0.0);
-        public AngularVelocity driveVelocityRadPerSec = RadiansPerSecond.of(0.0);
-        public Voltage driveAppliedVolts = Volts.of(0.0);
-        public Voltage driveAverageBusVoltage = Volts.of(12);
-        public Current driveCurrentAmps = Amps.of(0);
-        public Temperature driveTempCelcius = Celsius.of(0);
+        public double driveVoltage;
+        public double driveCurrent;
+        public double drivePositionRad;
+        public double driveVelocityRadPerSec;
+        public double driveTemperature;
 
-        public Angle turnAbsolutePositionRad = Radians.of(0.0);
-        public Angle turnPositionRad = Radians.of(0.0);
-        public AngularVelocity turnVelocityRadPerSec = RadiansPerSecond.of(0.0);
-        public Voltage turnAppliedVolts = Volts.of(0.0);
-        public Voltage turnAverageBusVoltage = Volts.of(12);
-        public Current turnCurrentAmps = Amps.of(0.0);
-        public Temperature turnTempCelcius = Celsius.of(0.0);
+        public double turnAppliedVolts;
+        public double turnAverageBusVoltage;
+        public double turnAbsolutePositionRad;
+        public double turnPositionRad;
+        public double turnVelocityRadPerSec;
+        public double turnCurrentAmps;
+        public double turnTempCelcius;
     }
 
     public default void updateInputs(ModuleIOInputs inputs) {}

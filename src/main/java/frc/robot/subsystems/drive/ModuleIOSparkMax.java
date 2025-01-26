@@ -101,14 +101,17 @@ public class ModuleIOSparkMax implements ModuleIO {
         turnMotor.configure(turnConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
     
+    @Override
     public void setDriveVoltage(Voltage volts) {
         driveMotor.setVoltage(volts.in(Volts));
     }
     
+    @Override
     public void setTurnVoltage(Voltage volts) {
         turnMotor.setVoltage(volts.in(Volts));
     }
     
+    @Override
     public void setDriveVelocity(AngularVelocity velocity) {
         driveMotor.getClosedLoopController().setReference( // ! probably scuffed in translation
             velocity.in(Rotations.per(Minute)) * driveAfterEncoderReduction,
@@ -123,55 +126,41 @@ public class ModuleIOSparkMax implements ModuleIO {
         prevDriveVelocity = velocity;
     }
 
+    @Override
     public void setTurnPosition(Angle position) {
         position = Radians.of(MathUtil.inputModulus(position.in(Radians), 0, 2 * Math.PI)); // adjust from [-PI, PI] to [0, 2PI]
             
         turnMotor.getClosedLoopController().setReference(
-            position.in(Rotations),
+            position.in(Rotations), // ! erm what
             SparkMax.ControlType.kPosition,
             ClosedLoopSlot.kSlot0
         );
     }
-
-    // ! idk if these are necessary
-    public void setDriveBrakeMode(boolean enable) {
-        driveConfig.idleMode(enable ? IdleMode.kBrake : IdleMode.kCoast);
-    }
-
-    public void setTurnBrakeMode(boolean enable) {
-        turnConfig.idleMode(enable ? IdleMode.kBrake : IdleMode.kCoast);
-    }
     
+    @Override
     public void updateInputs(ModuleIOInputs inputs) {
-        inputs.driveRawPositionRad = // doesnt account for coupling
-            Rotations.of(driveEncoder.getPosition() / driveAfterEncoderReduction
-        );
-        inputs.drivePositionRad = 
-            Rotations.of((driveEncoder.getPosition()
+        inputs.driveVoltage = driveMotor.getAppliedOutput() * driveMotor.getBusVoltage(); // ! what 
+        inputs.driveCurrent = driveMotor.getOutputCurrent();
+        inputs.drivePositionRad = // ! what the fuck
+            (driveEncoder.getPosition()
             + turnRelativeEncoder.getPosition() / turnAfterEncoderReduction * couplingRatio)
-            / driveAfterEncoderReduction
-        );
-        inputs.driveVelocityRadPerSec = 
-            Rotations.per(Minute).of(driveEncoder.getVelocity()
-            / driveAfterEncoderReduction
-        );
-        inputs.driveAppliedVolts = Volts.of(driveMotor.getAppliedOutput() * driveMotor.getBusVoltage());
-        inputs.driveCurrentAmps = Amps.of(driveMotor.getOutputCurrent());
-        inputs.driveTempCelcius = Celsius.of(driveMotor.getMotorTemperature());
+            / driveAfterEncoderReduction;
 
-        inputs.turnAbsolutePositionRad = Radians.of(
-                MathUtil.angleModulus(
-                        new Rotation2d(
-                                turnAbsoluteEncoder.getPosition() // POSITION IN ROTATIONS
-                                        * 2 * Math.PI)
-                                .getRadians()));
+        inputs.driveVelocityRadPerSec = Rotations.per(Minute).of(driveEncoder.getVelocity() / driveAfterEncoderReduction).in(RotationsPerSecond);
+        
+        inputs.driveTemperature = driveMotor.getMotorTemperature();
 
-        inputs.turnPositionRad = Rotations.of(turnRelativeEncoder.getPosition()
-                / turnAfterEncoderReduction);
+        inputs.turnAbsolutePositionRad = 
+            MathUtil.angleModulus(
+                new Rotation2d(turnAbsoluteEncoder.getPosition() * 2 * Math.PI)
+                                .getRadians());
+
+        inputs.turnPositionRad = turnRelativeEncoder.getPosition()
+                / turnAfterEncoderReduction;
         inputs.turnVelocityRadPerSec = Rotations.per(Minute).of(turnRelativeEncoder.getVelocity()
-                / turnAfterEncoderReduction);
-        inputs.turnAppliedVolts = Volts.of(turnMotor.getAppliedOutput() * turnMotor.getBusVoltage());
-        inputs.turnCurrentAmps = Amps.of(turnMotor.getOutputCurrent());
-        inputs.turnTempCelcius = Celsius.of(turnMotor.getMotorTemperature());
+                / turnAfterEncoderReduction).in(RotationsPerSecond);
+        inputs.turnAppliedVolts = turnMotor.getAppliedOutput() * turnMotor.getBusVoltage();
+        inputs.turnCurrentAmps = turnMotor.getOutputCurrent();
+        inputs.turnTempCelcius = turnMotor.getMotorTemperature();
     }
 }

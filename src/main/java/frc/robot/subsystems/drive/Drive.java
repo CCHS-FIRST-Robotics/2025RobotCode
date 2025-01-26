@@ -39,13 +39,13 @@ public class Drive extends SubsystemBase {
     private PIDController thetaaController = new PIDController(3, 0, 0.3);
     
     // velocity control
-    private ChassisSpeeds chassisSetpoint = new ChassisSpeeds();
-    private SwerveModuleState[] lastSetpointStates = new SwerveModuleState[] {
-        new SwerveModuleState(),
-        new SwerveModuleState(),
-        new SwerveModuleState(),
-        new SwerveModuleState()
-    };
+    private ChassisSpeeds speeds = new ChassisSpeeds();
+    // private SwerveModuleState[] lastModuleStates = new SwerveModuleState[] {
+    //     new SwerveModuleState(),
+    //     new SwerveModuleState(),
+    //     new SwerveModuleState(),
+    //     new SwerveModuleState()
+    // };
 
     public Drive(
         ModuleIO flModuleIO,
@@ -58,10 +58,6 @@ public class Drive extends SubsystemBase {
         modules[1] = new Module(frModuleIO, 1);
         modules[2] = new Module(blModuleIO, 2);
         modules[3] = new Module(brModuleIO, 3);
-
-        for (Module module : modules) {
-            module.setBrakeMode();
-        }
 
         xController.setTolerance(.035);
         yController.setTolerance(.035);
@@ -115,72 +111,32 @@ public class Drive extends SubsystemBase {
                 double thetaaPID = thetaaController.atSetpoint() ? 0 : thetaaController.calculate(getPose().getRotation().getRadians(),
                     positionSetpoint.getRotation().getRadians()
                 );
-                chassisSetpoint = new ChassisSpeeds(
+                speeds = new ChassisSpeeds(
                     twistSetpoint.dx + xPID,
                     twistSetpoint.dy + yPID,
                     twistSetpoint.dtheta + thetaaPID
                 );
 
                 // FOC
-                chassisSetpoint = ChassisSpeeds.fromFieldRelativeSpeeds(
-                    chassisSetpoint.vxMetersPerSecond,
-                    chassisSetpoint.vyMetersPerSecond,
-                    chassisSetpoint.omegaRadiansPerSecond,
+                speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+                    speeds.vxMetersPerSecond,
+                    speeds.vyMetersPerSecond,
+                    speeds.omegaRadiansPerSecond,
                     getYaw() // not with field relative, because the setpoint is already generated with it in mind
                 );
+            case VELOCITY: // fallthrough to VELOCITY case, no break statement needed above
+                ChassisSpeeds.discretize(speeds, Constants.PERIOD); // more detail: https://www.chiefdelphi.com/t/whitepaper-swerve-drive-skew-and-second-order-kinematics/416964/30
+                SwerveModuleState[] moduleStates = HardwareConstants.KINEMATICS.toSwerveModuleStates(speeds); // convert to module states
+                SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates, HardwareConstants.MAX_LINEAR_SPEED); // ! what is max linear speed the speed of
 
-                // fallthrough to CHASSIS_SETPOINT case, no break statement needed
-            case VELOCITY: // chassis is just the drivebase // ! review this whole section
-                // Brief explanation here:
-                // https://docs.wpilib.org/en/stable/docs/software/advanced-controls/geometry/transformations.html
-                // For more detail, see chapter 10 here:
-                // https://file.tavsys.net/control/controls-engineering-in-frc.pdf
-                // Purpose: accounts for continuous movement along an arc instead of a discrete
-                // straight line, avoids skew
-                // More detail here:
-                // https://www.chiefdelphi.com/t/whitepaper-swerve-drive-skew-and-second-order-kinematics/416964/47
-                Twist2d setpointTwist = new Pose2d().log( // ! why use a new Pose2d every time
-                    new Pose2d(
-                        chassisSetpoint.vxMetersPerSecond * Constants.PERIOD,
-                        chassisSetpoint.vyMetersPerSecond * Constants.PERIOD,
-                        new Rotation2d(chassisSetpoint.omegaRadiansPerSecond * Constants.PERIOD)
-                    )
-                );
-
-                // Takes the twist deltas and converts them to velocities
-                ChassisSpeeds adjustedSpeeds = new ChassisSpeeds(
-                    setpointTwist.dx / Constants.PERIOD,
-                    setpointTwist.dy / Constants.PERIOD,
-                    setpointTwist.dtheta / Constants.PERIOD
-                );
-
-                // Uses the IK to convert from chassis velocities to individual swerve module positions/velocities
-                Logger.recordOutput("Target Velocity", adjustedSpeeds);
-                SwerveModuleState[] setpointStates = HardwareConstants.KINEMATICS.toSwerveModuleStates(adjustedSpeeds);
-
-                // Ensure a module isnt trying to go faster than max // ! is max_linear_speed the max speed of a module or of the wheel???
-                SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, HardwareConstants.MAX_LINEAR_SPEED);
-
-                // Set to last angles if zero
-                if (adjustedSpeeds.vxMetersPerSecond == 0
-                    && adjustedSpeeds.vyMetersPerSecond == 0
-                    && adjustedSpeeds.omegaRadiansPerSecond == 0)
-                 {
-                    for (int i = 0; i < 4; i++) {
-                        setpointStates[i] = new SwerveModuleState(0.0, lastSetpointStates[i].angle);
-                    }
-                }
-
-                lastSetpointStates = setpointStates;
-
-                // Send setpoints to modules
+                // send setpoints to modules
                 SwerveModuleState[] optimizedStates = new SwerveModuleState[4];
                 for (int i = 0; i < 4; i++) {
-                    optimizedStates[i] = modules[i].runSetpoint(setpointStates[i]);
+                    optimizedStates[i] = modules[i].runState(moduleStates[i]);
                 }
 
-                Logger.recordOutput("SwerveStates/Setpoints", setpointStates);
-                Logger.recordOutput("SwerveStates/SetpointsOptimized", optimizedStates);
+                Logger.recordOutput("SwerveStates/ModuleStates", moduleStates);
+                Logger.recordOutput("SwerveStates/ModuleStatesOptimized", optimizedStates);
                 break;
         }
     }
@@ -199,7 +155,7 @@ public class Drive extends SubsystemBase {
 
     public void runVelocity(ChassisSpeeds speeds) {
         controlMode = CONTROL_MODE.VELOCITY;
-        chassisSetpoint = speeds;
+        this.speeds = speeds;
     }
 
     // ————— functions for odometry ————— //
@@ -228,7 +184,7 @@ public class Drive extends SubsystemBase {
         SwerveModulePosition[] wheelPositions = new SwerveModulePosition[4];
         for (int i = 0; i < 4; i++) {
             wheelPositions[i] = new SwerveModulePosition(
-                modules[i].getPositionMeters(),
+                modules[i].getDistanceTraveled(),
                 modules[i].getAngle()
             );
         }
@@ -239,10 +195,10 @@ public class Drive extends SubsystemBase {
         SwerveModulePosition[] wheelDeltas = new SwerveModulePosition[4];
         for (int i = 0; i < 4; i++) {
             wheelDeltas[i] = new SwerveModulePosition(
-                modules[i].getPositionMeters() - lastModulePositionsMeters[i],
+                modules[i].getDistanceTraveled() - lastModulePositionsMeters[i],
                 modules[i].getAngle()
             );
-            lastModulePositionsMeters[i] = modules[i].getPositionMeters();
+            lastModulePositionsMeters[i] = modules[i].getDistanceTraveled();
         }
         return wheelDeltas;
     }

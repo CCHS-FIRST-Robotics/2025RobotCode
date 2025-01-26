@@ -10,20 +10,25 @@ import edu.wpi.first.wpilibj.RobotBase;
  * to do: 
  * 
  * daily: 
+ * write coral commands and hashmap
+ * go through module classes
+ * maybe pid tunable constants
  * 
  * — at robotics daily: 
- * —— flash the rio for 2025
- * —— change hardwareconstants and id numbers
+ * —— change id numbers
  * —— test driving with joysticks
  * —— test autos
  * 
  * longer term: 
- * go through module classes
- * pid tunable constants
+ * sysid (or just use recalc)
+ * ! rotating while translating doesn't work at all in sim
+ * volts, amps, rotations, rotations per second, celcius
+ * good choreo constants
  * navx logs in degrees (might be a problem)
  * go through all units and conversions in general
  * understand advantagescope positions of everything and where everything is logged
  * decide on controllers for the year
+ * make sure the position setpoint is actually informed by the poseestimator
  * 
  * cosmetic / housekeeping: 
  * move periodic functions to top
