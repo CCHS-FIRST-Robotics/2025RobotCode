@@ -53,9 +53,7 @@ public class RobotContainer {
         }
 
         autoGenerator = new AutoRoutineGenerator(
-            drive, 
-            null,
-            null 
+            drive
         );
         autoChooser = new AutoChooser();
         

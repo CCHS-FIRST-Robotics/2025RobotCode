@@ -15,9 +15,6 @@ public class Module {
     public Module(ModuleIO io, int index) {
         this.io = io;
         this.index = index;
-
-        io.setDriveBrakeMode(true);
-        io.setTurnBrakeMode(false);
     }
 
     public void periodic() {

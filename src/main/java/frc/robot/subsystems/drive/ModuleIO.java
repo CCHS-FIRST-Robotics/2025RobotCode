@@ -4,9 +4,6 @@ import edu.wpi.first.units.measure.*;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface ModuleIO {
-    public double driveKv = 0.136898; // ! tf
-    public double driveKa = 0.020864;
-
     @AutoLog
     public static class ModuleIOInputs {
         public double driveVoltage;
@@ -33,8 +30,4 @@ public interface ModuleIO {
     public default void setDriveVelocity(AngularVelocity velocityRadPerSec) {}
 
     public default void setTurnPosition(Angle positionRad) {}
-
-    public default void setDriveBrakeMode(boolean enable) {}
-
-    public default void setTurnBrakeMode(boolean enable) {}
 }

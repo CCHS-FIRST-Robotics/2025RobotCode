@@ -28,7 +28,7 @@ public class ModuleIOSparkMax implements ModuleIO {
     private final RelativeEncoder turnRelativeEncoder; // NEO
     private final AbsoluteEncoder turnAbsoluteEncoder; // CANandcoder
     
-    int index;
+    public int index;
 
     private double driveKp = 0.00001;
     private double driveKi = 0;
@@ -128,7 +128,8 @@ public class ModuleIOSparkMax implements ModuleIO {
 
     @Override
     public void setTurnPosition(Angle position) {
-        position = Radians.of(MathUtil.inputModulus(position.in(Radians), 0, 2 * Math.PI)); // adjust from [-PI, PI] to [0, 2PI]
+        // adjust from [-PI, PI] to [0, 2PI]
+        position = Radians.of(MathUtil.inputModulus(position.in(Radians), 0, 2 * Math.PI)); 
             
         turnMotor.getClosedLoopController().setReference(
             position.in(Rotations), // ! erm what

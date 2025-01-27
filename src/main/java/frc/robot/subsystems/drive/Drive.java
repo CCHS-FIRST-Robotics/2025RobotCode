@@ -22,7 +22,7 @@ public class Drive extends SubsystemBase {
     };
     CONTROL_MODE controlMode = CONTROL_MODE.DISABLED;
 
-    private final Module[] modules = new Module[4]; // FL, FR, BL, BR
+    private final Module[] modules = new Module[4];
 
     // odometry
     private final GyroIO gyroIO;
@@ -48,10 +48,10 @@ public class Drive extends SubsystemBase {
         ModuleIO brModuleIO, 
         GyroIO gyroIO
     ) {
-        modules[0] = new Module(flModuleIO, 0);
-        modules[1] = new Module(frModuleIO, 1);
-        modules[2] = new Module(blModuleIO, 2);
-        modules[3] = new Module(brModuleIO, 3);
+        modules[0] = new Module(flModuleIO, 1);
+        modules[1] = new Module(frModuleIO, 2);
+        modules[2] = new Module(blModuleIO, 3);
+        modules[3] = new Module(brModuleIO, 4);
 
         xController.setTolerance(.035);
         yController.setTolerance(.035);
@@ -79,10 +79,10 @@ public class Drive extends SubsystemBase {
         fieldPosition = fieldPosition.exp(HardwareConstants.KINEMATICS.toTwist2d(getModuleDeltas()));
         poseEstimator.updateWithTime(
             Timer.getFPGATimestamp(),
-            gyroInputs.connected ? new Rotation2d(gyroInputs.yawPosition.in(Radians)) : fieldPosition.getRotation(),
+            gyroInputs.connected ? new Rotation2d(Rotations.of(gyroInputs.yaw).in(Radians)) : fieldPosition.getRotation(),
             getModulePositions()
         );
-        Logger.recordOutput("Odometry/FieldPosition", getPose());   
+        Logger.recordOutput("robotPose", getPose());   
         
         // update module inputs
         for (Module module : modules) {
@@ -92,11 +92,10 @@ public class Drive extends SubsystemBase {
         // run modules
         switch (controlMode) {
             case DISABLED:
-                // set all module's voltage to 0
+                // set all modules' voltage to 0
                 for (Module module : modules) {
                     module.stop();
                 }
-                Logger.recordOutput("SwerveStates/ModuleStates", new SwerveModuleState[] {});
                 break;
             case POSITION:
                 // get PIDs
@@ -104,7 +103,8 @@ public class Drive extends SubsystemBase {
                 double yPID = yController.calculate(getPose().getY(), positionSetpoint.getY());
                 double headingPID = headingController.calculate(getPose().getRotation().getRotations(), positionSetpoint.getRotation().getRotations());
                 
-                speeds = ChassisSpeeds.fromFieldRelativeSpeeds( // create chassisspeeds object with FOC
+                // create chassisspeeds object with FOC
+                speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                     twistSetpoint.dx + xPID,
                     twistSetpoint.dy + yPID,
                     twistSetpoint.dtheta + headingPID,
@@ -119,8 +119,6 @@ public class Drive extends SubsystemBase {
                 for (int i = 0; i < 4; i++) {
                     modules[i].runState(moduleStates[i]);
                 }
-
-                Logger.recordOutput("SwerveStates/ModuleStates", moduleStates);
                 break;
         }
     }

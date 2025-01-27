@@ -12,14 +12,10 @@ import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 
 public class DriveWithJoysticks extends Command {
-    Drive drive;
-    Supplier<Double> linearXSpeedSupplier;
-    Supplier<Double> linearYSpeedSupplier;
-    Supplier<Double> angularVelocitySupplier;
-
-    double headingGoal;
-    double prevHeadingSetpoint;
-    double prevHeadingSpeed;
+    private final Drive drive;
+    private final Supplier<Double> linearXSpeedSupplier;
+    private final Supplier<Double> linearYSpeedSupplier;
+    private final Supplier<Double> angularVelocitySupplier;
     
     ChassisSpeeds prevSpeeds = new ChassisSpeeds();
 
@@ -54,12 +50,12 @@ public class DriveWithJoysticks extends Command {
 
         // get angularVelocity
         double angularVelocity = applyPreferences(
-            -angularVelocitySupplier.get(), 
+            -angularVelocitySupplier.get(), // chassisspeeds is flipped
             Constants.JOYSTICK_DEADZONE, 
             Constants.ANGULAR_SPEED_EXPONENT
         );
 
-        // FOC
+        // denormalize speeds and FOC
         ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
             linearVelocity.getX() * HardwareConstants.MAX_LINEAR_SPEED.in(MetersPerSecond),
             linearVelocity.getY() * HardwareConstants.MAX_LINEAR_SPEED.in(MetersPerSecond),
@@ -67,7 +63,7 @@ public class DriveWithJoysticks extends Command {
             drive.getYawWithAllianceRotation()
         );
 
-        // clamp everything between max and min possible velocities
+        // clamp everything between max and min possible accels
         speeds = new ChassisSpeeds(
             clampVelocity(
                 speeds.vxMetersPerSecond, 

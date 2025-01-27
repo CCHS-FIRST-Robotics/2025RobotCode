@@ -7,11 +7,10 @@ package frc.robot;
 import org.littletonrobotics.junction.LoggedRobot;
 
 import edu.wpi.first.wpilibj2.command.*;
-import frc.robot.constants.Constants;
-
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+import frc.robot.constants.Constants;
 
 public class Robot extends LoggedRobot {
     private RobotContainer robotContainer;
@@ -21,7 +20,7 @@ public class Robot extends LoggedRobot {
     public void robotInit() {
         robotContainer = new RobotContainer();
 
-        Logger.recordMetadata("ProjectName", "2024RobotCode");
+        Logger.recordMetadata("ProjectName", "2025RobotCode");
         switch (Constants.CURRENT_MODE) {
             case REAL:
                 Logger.addDataReceiver(new NT4Publisher());
