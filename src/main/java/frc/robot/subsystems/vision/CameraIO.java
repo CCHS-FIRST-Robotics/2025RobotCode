@@ -3,14 +3,12 @@ package frc.robot.subsystems.vision;
 import org.littletonrobotics.junction.LogTable;
 import org.littletonrobotics.junction.inputs.LoggableInputs;
 
+import static edu.wpi.first.units.Units.*;
+
 import java.util.ArrayList;
 
 import frc.robot.utils.AprilTag;
 
-import edu.wpi.first.math.numbers.N1;
-import edu.wpi.first.math.numbers.N3;
-
-import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 
@@ -19,9 +17,9 @@ public interface CameraIO {
     public static class CameraIOInputs implements LoggableInputs {
 
         public int closestTagId = -1;
-        public Measure<Distance> closestTagXdist = Meters.of(-1);
-        public Measure<Distance> closestTagYdist = Meters.of(-1);
-        public Measure<Angle> closestTagHeading = Degrees.of(-1);
+        public Distance closestTagXdist = Meters.of(-1);
+        public Distance closestTagYdist = Meters.of(-1);
+        public Angle closestTagHeading = Degrees.of(-1);
 
         // Values for all tags found by the camera
         int numTags = 0;

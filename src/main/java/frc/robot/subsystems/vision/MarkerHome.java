@@ -21,7 +21,7 @@ public class MarkerHome {
     DoubleArraySubscriber otherTagY = tagsTable.getDoubleArrayTopic("other_tags_y").subscribe(new double[] {});
     DoubleArraySubscriber otherTagHeadings = tagsTable.getDoubleArrayTopic("other_tag_headings").subscribe(new double[] {});
 
-    public void updateInputs(CameraIOInputs inputs) {
+    public void updateInputs() {
     double[] tagIds = otherTagIds.get();
     double[] tagXs = otherTagX.get();
     double[] tagYs = otherTagY.get();
