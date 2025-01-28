@@ -30,7 +30,7 @@ public class AutoCommand extends Command {
         untriggeredEvents.clear();
         untriggeredEvents.addAll(events);
 
-        timer.reset(); // ! might be redundant
+        timer.reset();
         timer.start();
     }
 

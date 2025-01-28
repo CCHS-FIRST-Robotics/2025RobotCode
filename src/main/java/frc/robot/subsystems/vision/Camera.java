@@ -2,8 +2,6 @@ package frc.robot.subsystems.vision;
 
 import java.util.HashMap;
 
-import com.google.flatbuffers.FlexBuffers.Map;
-
 import edu.wpi.first.networktables.DoubleArraySubscriber;
 import edu.wpi.first.networktables.IntegerArraySubscriber;
 import edu.wpi.first.networktables.NetworkTable;
@@ -11,7 +9,6 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class Camera {
     NetworkTable tagsTable = NetworkTableInstance.getDefault().getTable("tag");
-    //IntegerArrayTopic thing = tagsTable.getIntegerArrayTopic("tags");
 
     IntegerArraySubscriber tagIdsSub = tagsTable.getIntegerArrayTopic("tagID").subscribe(new long[] {});
     DoubleArraySubscriber tag_anglesSub = tagsTable.getDoubleArrayTopic("tag_angle").subscribe(new double[] {});
@@ -41,7 +38,6 @@ public class Camera {
         return null;
     }
     */
-
 
     public void updateInputs() {
         long[] tagids = tagIdsSub.get();
