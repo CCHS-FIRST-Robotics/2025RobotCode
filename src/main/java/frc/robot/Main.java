@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.RobotBase;
  * —— change CAN id numbers
  * —— test driving with joysticks (remember to change the robot mode)
  * ——— test replacing drive.java stop function
+ * ——— check where module rotation 0 is
  * —— test autos
  * 
  * longer term: 

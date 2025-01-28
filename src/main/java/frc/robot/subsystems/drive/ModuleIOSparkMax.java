@@ -117,8 +117,8 @@ public class ModuleIOSparkMax implements ModuleIO {
             SparkMax.ControlType.kVelocity,
             ClosedLoopSlot.kSlot0,
             driveFeedforward.calculateWithVelocities(
-                prevDriveVelocity.in(RadiansPerSecond),
-                velocity.in(RadiansPerSecond)
+                prevDriveVelocity.in(RotationsPerSecond),
+                velocity.in(RotationsPerSecond)
             )
         );
 
@@ -126,12 +126,12 @@ public class ModuleIOSparkMax implements ModuleIO {
     }
 
     @Override
-    public void setTurnPosition(Angle position) { // ! look at this
-        // adjust from [-PI, PI] to [0, 2PI]
-        position = Radians.of(MathUtil.inputModulus(position.in(Radians), 0, 2 * Math.PI)); 
-            
+    public void setTurnPosition(Angle position) {
+        // adjust from [-PI, PI] to [0, 2PI]  // ! out of curiosity, why
+        position = Rotations.of(MathUtil.inputModulus(position.in(Radians), 0, 2 * Math.PI)); 
+        
         turnMotor.getClosedLoopController().setReference(
-            position.in(Rotations), // ! erm what
+            position.in(Rotations), 
             SparkMax.ControlType.kPosition,
             ClosedLoopSlot.kSlot0
         );

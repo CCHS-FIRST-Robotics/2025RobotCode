@@ -33,7 +33,8 @@ public class Module {
         io.setDriveVoltage(Volts.of(0.0));
     }
 
-    // ! make this its own separate input
+    // ————— functions for odometry ————— //
+
     public double getDistanceTraveled() {
         return inputs.drivePosition * HardwareConstants.WHEEL_RADIUS.in(Meters);
     }
