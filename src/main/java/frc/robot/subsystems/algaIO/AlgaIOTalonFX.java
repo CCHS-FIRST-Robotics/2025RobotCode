@@ -19,11 +19,8 @@ public class AlgaIOTalonFX implements AlgaIO {
 
         voltageSignal = motor.getMotorVoltage();
         currentSignal = motor.getStatorCurrent();
-        currentSignal.setUpdateFrequency(1 / 0.01); // second number is seconds
         velocitySignal = motor.getVelocity();
         temperatureSignal = motor.getDeviceTemp();
-
-        // ! might wanna do current limiting or whatever configs later
     }
 
     @Override

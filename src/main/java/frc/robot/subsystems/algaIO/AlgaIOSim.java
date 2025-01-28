@@ -10,7 +10,7 @@ import frc.robot.constants.Constants;
 public class AlgaIOSim implements AlgaIO {
     private final DCMotorSim motor;
     
-    private final double MOI = 0; // MOI of a rod = (M(R^2))/2
+    private final double MOI = 0; // ! MOI of a rod = (M(R^2))/2
 
     Voltage appliedVolts = Volts.of(0);
     Angle currentSetpoint = Rotations.of(0);

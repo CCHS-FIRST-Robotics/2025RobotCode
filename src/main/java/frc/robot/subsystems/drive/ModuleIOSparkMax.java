@@ -40,7 +40,7 @@ public class ModuleIOSparkMax implements ModuleIO {
     private double turnKi = 0;
     private double turnKd = 0;
 
-    // ! check colin's math! 
+    // ! check colin's math!
     private final double driveAfterEncoderReduction = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0);
     private final double turnAfterEncoderReduction = 150.0 / 7.0;
     private final double couplingRatio = 50.0 / 14.0;

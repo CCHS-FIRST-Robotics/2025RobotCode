@@ -34,9 +34,9 @@ public class Drive extends SubsystemBase {
     // position control
     private Pose2d positionSetpoint = new Pose2d();
     private Twist2d twistSetpoint = new Twist2d();
-    private PIDController xController = new PIDController(2.7, 0.05, 0.12);
-    private PIDController yController = new PIDController(2.7, 0.05, 0.12);
-    private PIDController headingController = new PIDController(3, 0, 0.3);
+    private final PIDController xController = new PIDController(2.7, 0.05, 0.12);
+    private final PIDController yController = new PIDController(2.7, 0.05, 0.12);
+    private final PIDController headingController = new PIDController(3, 0, 0.3);
     
     // velocity control
     private ChassisSpeeds speeds = new ChassisSpeeds();

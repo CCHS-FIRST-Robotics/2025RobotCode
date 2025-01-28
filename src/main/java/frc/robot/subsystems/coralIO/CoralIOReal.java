@@ -57,17 +57,17 @@ public class CoralIOReal implements CoralIO{
     private double kIWrist = 0;
     private double kDWrist = 0;
 
-    private StatusSignal<Voltage> voltageSignalElevator;
-    private StatusSignal<Current> currentSignalElevator;
-    private StatusSignal<Angle> positionSignalElevator;
-    private StatusSignal<AngularVelocity> velocitySignalElevator;
-    private StatusSignal<Temperature> temperatureSignalElevator;
+    private final StatusSignal<Voltage> voltageSignalElevator;
+    private final StatusSignal<Current> currentSignalElevator;
+    private final StatusSignal<Angle> positionSignalElevator;
+    private final StatusSignal<AngularVelocity> velocitySignalElevator;
+    private final StatusSignal<Temperature> temperatureSignalElevator;
 
-    private StatusSignal<Voltage> voltageSignalArm;
-    private StatusSignal<Current> currentSignalArm;
-    private StatusSignal<Angle> positionSignalArm;
-    private StatusSignal<AngularVelocity> velocitySignalArm;
-    private StatusSignal<Temperature> temperatureSignalArm;
+    private final StatusSignal<Voltage> voltageSignalArm;
+    private final StatusSignal<Current> currentSignalArm;
+    private final StatusSignal<Angle> positionSignalArm;
+    private final StatusSignal<AngularVelocity> velocitySignalArm;
+    private final StatusSignal<Temperature> temperatureSignalArm;
     
     public CoralIOReal(int elevatorId, int armId, int wristId, int clawId) {
         elevatorMotor = new TalonFX(elevatorId);

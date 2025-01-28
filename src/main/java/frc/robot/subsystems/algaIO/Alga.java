@@ -10,7 +10,7 @@ import org.littletonrobotics.junction.Logger;
 
 public class Alga extends SubsystemBase {
     private final AlgaIO io;
-    DigitalInput irSensor = new DigitalInput(Constants.ALGA_SENSOR_PORT);
+    private final DigitalInput irSensor = new DigitalInput(Constants.ALGA_SENSOR_PORT);
     private final AlgaIOInputsAutoLogged inputs = new AlgaIOInputsAutoLogged();
 
     Voltage IOVolts = Volts.of(8);

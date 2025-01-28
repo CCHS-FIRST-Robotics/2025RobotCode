@@ -5,9 +5,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.subsystems.drive.Drive;
 
 public class AutoRoutineGenerator {
-    AutoFactory autoFactory;
-
-    Drive drive;
+    private final AutoFactory autoFactory;
 
     // ! it would be really painful to have to write what to do at each eventmarker for every single auto I write
     public AutoRoutineGenerator(
@@ -20,8 +18,6 @@ public class AutoRoutineGenerator {
             DriverStation.getAlliance().isPresent() ? DriverStation.getAlliance().get() == DriverStation.Alliance.Red : false,
             drive
         );
-
-        this.drive = drive;
     }
     
     // ! in the future put preloaded coral on the reef, get another coral from the station, put that on the reef too
