@@ -11,7 +11,7 @@ public final class Constants {
         SIM,
         REPLAY
     }
-    public static final ROBOT_MODE CURRENT_MODE = ROBOT_MODE.SIM;
+    public static final ROBOT_MODE CURRENT_MODE = ROBOT_MODE.REAL;
     
     // controllers
     public static final int CONTROLLER_PORT_1 = 0;

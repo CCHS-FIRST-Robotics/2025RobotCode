@@ -4,9 +4,16 @@ import org.littletonrobotics.junction.AutoLog;
 
 import edu.wpi.first.units.measure.*;
 
-public interface ArmIO {
+public interface CoralIO {
     @AutoLog
-    public static class ArmIOInputs {
+    public static class CoralIOInputs {
+        // ! decide which ones of these to actually log
+        public double elevatorVoltage;
+        public double elevatorCurrent;
+        public double elevatorPosition;
+        public double elevatorVelocity;
+        public double elevatorTemperature;
+
         public double armVoltage;
         public double armCurrent;
         public double armPosition;
@@ -26,11 +33,13 @@ public interface ArmIO {
         public double clawTemperature;
     }
 
+    public default void setElevatorPosition(Angle position){}
+
     public default void setArmPosition(Angle position){}
 
     public default void setWristPosition(Angle position){}
 
-    public default void setClawPosition(Angle position){}
+    public default void setClawPosition(boolean open){}
 
-    public default void updateInputs(ArmIOInputs inputs) {}
+    public default void updateInputs(CoralIOInputs inputs) {}
 }

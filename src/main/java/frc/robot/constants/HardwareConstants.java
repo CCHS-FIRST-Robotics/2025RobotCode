@@ -27,8 +27,7 @@ public class HardwareConstants {
     };
     public static final SwerveDriveKinematics KINEMATICS = new SwerveDriveKinematics(MODULE_TRANSLATIONS);
 
-    // elevator
-    public static enum ElevatorPosition{
+    public static enum coralPosition{
         STATION,
         L1, 
         L2, 
@@ -36,15 +35,33 @@ public class HardwareConstants {
         L4
     }
 
-    // ! maybe just have a big hashmap of elevator positions, arm positions, wrist positions
-
     // ! add rotation values
-    public static final HashMap<ElevatorPosition, Entry<Distance, Angle>> ELEVATOR_POSITIONS = new HashMap<ElevatorPosition, Entry<Distance, Angle>>(
-        Map.of(
-            ElevatorPosition.L1, new SimpleEntry<Distance, Angle>(Inches.of(18), Rotations.of(0)), 
-            ElevatorPosition.L2, new SimpleEntry<Distance, Angle>(Inches.of(31.875), Rotations.of(0)),
-            ElevatorPosition.L3, new SimpleEntry<Distance, Angle>(Inches.of(47.625), Rotations.of(0)),
-            ElevatorPosition.L4, new SimpleEntry<Distance, Angle>(Inches.of(72), Rotations.of(0))
+    public static final HashMap<coralPosition, Entry<Distance, Angle>> ELEVATOR_POSITIONS = new HashMap<coralPosition, Entry<Distance, Angle>>(
+        Map.of( 
+            coralPosition.L1, new SimpleEntry<Distance, Angle>(Inches.of(18), Rotations.of(0)), 
+            coralPosition.L2, new SimpleEntry<Distance, Angle>(Inches.of(31.875), Rotations.of(0)),
+            coralPosition.L3, new SimpleEntry<Distance, Angle>(Inches.of(47.625), Rotations.of(0)),
+            coralPosition.L4, new SimpleEntry<Distance, Angle>(Inches.of(72), Rotations.of(0))
         )
     );
+
+    public static class CoralPosition{
+        SimpleEntry<Distance, Angle> elevatorPosition;
+        Angle armPosition;
+        boolean wristPosition;
+        boolean clawPosition;
+
+        public CoralPosition(
+            Distance elevatorDistance, 
+            Angle elevatorAngle, 
+            Angle armAngle, 
+            boolean wristPosition, 
+            boolean clawPosition
+        ){
+            this.elevatorPosition = new SimpleEntry<Distance, Angle>(elevatorDistance, elevatorAngle);
+            this.armPosition = armAngle;
+            this.wristPosition = wristPosition;
+            this.clawPosition = clawPosition;
+        }
+    }
 }

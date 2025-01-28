@@ -14,19 +14,17 @@ import edu.wpi.first.wpilibj.RobotBase;
  * maybe pid tunable constants
  * 
  * — at robotics daily: 
- * —— change CAN id numbers
+ * —— change CAN id numbers (CAN wiring is so fun)
  * —— test driving with joysticks (remember to change the robot mode)
- * ——— test replacing drive.java stop function
  * ——— check where module rotation 0 is
+ * ——— test replacing drive.java stop function
  * —— test autos
  * 
  * longer term: 
  * sysid (or just use recalc) for good choreo constants
  * ! rotating while translating doesn't work at all in sim
- * volts, amps, rotations, rotations per second, celcius (go through all unit conversions) // ! maybe radians is better for module drivemotor specifically (multiplying by radians is nice)
- * navx logs in degrees (might be a problem)
- * understand advantagescope positions of everything and where everything is logged
- * decide on controllers for the year
+ * go through all unit conversions
+ * controllers for the year
  * movetoapriltag command(assume you can get an angle and distance from the camera)
  * 
  * cosmetic / housekeeping: 
