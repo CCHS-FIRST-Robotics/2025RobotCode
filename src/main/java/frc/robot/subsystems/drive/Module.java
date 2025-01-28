@@ -23,7 +23,7 @@ public class Module {
     }
 
     public void runState(SwerveModuleState state) {
-        state.optimize(getAngle());
+        state.optimize(getWrappedAngle()); // ! what angle does it actually want
         io.setTurnPosition(Rotations.of(state.angle.getRotations()));
         io.setDriveVelocity(RadiansPerSecond.of(state.speedMetersPerSecond / HardwareConstants.WHEEL_RADIUS.in(Meters)));
     }
@@ -35,10 +35,10 @@ public class Module {
 
     // ! make this its own separate input
     public double getDistanceTraveled() {
-        return inputs.drivePositionRad * HardwareConstants.WHEEL_RADIUS.in(Meters);
+        return inputs.drivePosition * HardwareConstants.WHEEL_RADIUS.in(Meters);
     }
 
-    public Rotation2d getAngle() {
-        return new Rotation2d(MathUtil.angleModulus(inputs.turnAbsolutePositionRad));
+    public Rotation2d getWrappedAngle() {
+        return new Rotation2d(MathUtil.angleModulus(Rotations.of(inputs.turnPosition).in(Radians)));
     }
 }

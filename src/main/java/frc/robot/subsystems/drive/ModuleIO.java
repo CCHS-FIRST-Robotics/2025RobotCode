@@ -8,17 +8,14 @@ public interface ModuleIO {
     public static class ModuleIOInputs {
         public double driveVoltage;
         public double driveCurrent;
-        public double drivePositionRad;
-        public double driveVelocityRadPerSec;
+        public double drivePosition; // radians
+        public double driveVelocity; // radians per second
         public double driveTemperature;
 
-        public double turnAppliedVolts;
-        public double turnAverageBusVoltage;
-        public double turnAbsolutePositionRad;
-        public double turnPositionRad;
-        public double turnVelocityRadPerSec;
-        public double turnCurrentAmps;
-        public double turnTempCelcius;
+        public double turnVoltage;
+        public double turnCurrent;
+        public double turnPosition;
+        public double turnTemperature;
     }
 
     public default void updateInputs(ModuleIOInputs inputs) {}

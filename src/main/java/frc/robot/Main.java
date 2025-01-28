@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.RobotBase;
  * — at robotics daily: 
  * —— change CAN id numbers
  * —— test driving with joysticks (remember to change the robot mode)
+ * ——— test replacing drive.java stop function
  * —— test autos
  * 
  * longer term: 
@@ -25,7 +26,7 @@ import edu.wpi.first.wpilibj.RobotBase;
  * navx logs in degrees (might be a problem)
  * understand advantagescope positions of everything and where everything is logged
  * decide on controllers for the year
- * consider a posetracking subsystem
+ * movetoapriltag command(assume you can get an angle and distance from the camera)
  * 
  * cosmetic / housekeeping: 
  * move periodic functions to top

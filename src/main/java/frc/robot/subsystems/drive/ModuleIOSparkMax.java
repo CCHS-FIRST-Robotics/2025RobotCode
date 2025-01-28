@@ -14,7 +14,6 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.units.measure.*;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Rotation2d;
 
 public class ModuleIOSparkMax implements ModuleIO {
     private final SparkMax driveMotor;
@@ -127,7 +126,7 @@ public class ModuleIOSparkMax implements ModuleIO {
     }
 
     @Override
-    public void setTurnPosition(Angle position) {
+    public void setTurnPosition(Angle position) { // ! look at this
         // adjust from [-PI, PI] to [0, 2PI]
         position = Radians.of(MathUtil.inputModulus(position.in(Radians), 0, 2 * Math.PI)); 
             
@@ -142,23 +141,16 @@ public class ModuleIOSparkMax implements ModuleIO {
     public void updateInputs(ModuleIOInputs inputs) {
         inputs.driveVoltage = driveMotor.getAppliedOutput() * driveMotor.getBusVoltage(); // ! what 
         inputs.driveCurrent = driveMotor.getOutputCurrent();
-        inputs.drivePositionRad = // ! what the fuck
+        inputs.drivePosition = // ! what the fuck
             (driveEncoder.getPosition()
             + turnRelativeEncoder.getPosition() / turnAfterEncoderReduction * couplingRatio)
             / driveAfterEncoderReduction;
-
-        inputs.driveVelocityRadPerSec = Rotations.per(Minute).of(driveEncoder.getVelocity() / driveAfterEncoderReduction).in(RotationsPerSecond);
-        
+        inputs.driveVelocity = Rotations.per(Minute).of(driveEncoder.getVelocity() / driveAfterEncoderReduction).in(RotationsPerSecond);
         inputs.driveTemperature = driveMotor.getMotorTemperature();
-
-        inputs.turnAbsolutePositionRad = 
-            MathUtil.angleModulus(
-                new Rotation2d(turnAbsoluteEncoder.getPosition() * 2 * Math.PI)
-                                .getRadians());
-        inputs.turnPositionRad = turnRelativeEncoder.getPosition() / turnAfterEncoderReduction;
-        inputs.turnVelocityRadPerSec = Rotations.per(Minute).of(turnRelativeEncoder.getVelocity() / turnAfterEncoderReduction).in(RotationsPerSecond);
-        inputs.turnAppliedVolts = turnMotor.getAppliedOutput() * turnMotor.getBusVoltage();
-        inputs.turnCurrentAmps = turnMotor.getOutputCurrent();
-        inputs.turnTempCelcius = turnMotor.getMotorTemperature();
+        
+        inputs.turnVoltage = turnMotor.getAppliedOutput() * turnMotor.getBusVoltage(); // ! what
+        inputs.turnCurrent = turnMotor.getOutputCurrent();
+        inputs.turnPosition = turnAbsoluteEncoder.getPosition();
+        inputs.turnTemperature = turnMotor.getMotorTemperature();
     }
 }

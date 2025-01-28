@@ -126,13 +126,14 @@ public class Drive extends SubsystemBase {
     // ————— functions for running modules ————— //
 
     public void stop() {
-        runVelocity(new ChassisSpeeds()); // ! test with replacing this with just controlMode = CONTROL_MODE.DISABLED
+        // runVelocity(new ChassisSpeeds()); // ! test with replacing this with just controlMode = CONTROL_MODE.DISABLED
+        controlMode = CONTROL_MODE.DISABLED; // ! doesn't seem to make much difference in sim
     }
 
     public void runPosition(SwerveSample sample){
         controlMode = CONTROL_MODE.POSITION;
         positionSetpoint = sample.getPose();
-        twistSetpoint = sample.getChassisSpeeds().toTwist2d(1); // ! pay attention to this (dtSeconds)
+        twistSetpoint = sample.getChassisSpeeds().toTwist2d(1);
     }
 
     public void runVelocity(ChassisSpeeds speeds) {
@@ -167,7 +168,7 @@ public class Drive extends SubsystemBase {
         for (int i = 0; i < 4; i++) {
             wheelPositions[i] = new SwerveModulePosition(
                 modules[i].getDistanceTraveled(),
-                modules[i].getAngle()
+                modules[i].getWrappedAngle()
             );
         }
         return wheelPositions;
@@ -178,7 +179,7 @@ public class Drive extends SubsystemBase {
         for (int i = 0; i < 4; i++) {
             wheelDeltas[i] = new SwerveModulePosition(
                 modules[i].getDistanceTraveled() - lastModulePositionsMeters[i],
-                modules[i].getAngle()
+                modules[i].getWrappedAngle()
             );
             lastModulePositionsMeters[i] = modules[i].getDistanceTraveled();
         }

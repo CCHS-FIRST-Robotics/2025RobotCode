@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import choreo.auto.AutoChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -70,6 +71,8 @@ public class RobotContainer {
                 () -> controller.getRightX()
             )
         );
+
+        controller.b().onTrue(new InstantCommand(() -> drive.stop()));
     }
 
     private void configureAutos(){
