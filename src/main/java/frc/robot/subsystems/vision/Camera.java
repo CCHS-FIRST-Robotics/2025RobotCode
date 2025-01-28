@@ -1,17 +1,61 @@
 package frc.robot.subsystems.vision;
 
-import edu.wpi.first.networktables.DoubleSubscriber;
+import java.util.HashMap;
+
+import com.google.flatbuffers.FlexBuffers.Map;
+
+import edu.wpi.first.networktables.DoubleArraySubscriber;
+import edu.wpi.first.networktables.IntegerArraySubscriber;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class Camera {
-    NetworkTable tagsTable = NetworkTableInstance.getDefault().getTable("tags");
+    NetworkTable tagsTable = NetworkTableInstance.getDefault().getTable("tag");
+    //IntegerArrayTopic thing = tagsTable.getIntegerArrayTopic("tags");
 
-    DoubleSubscriber tagId = tagsTable.getDoubleTopic("tagID").subscribe(-1);
-    DoubleSubscriber tag_angle = tagsTable.getDoubleTopic("tag_angle").subscribe(-1);
+    IntegerArraySubscriber tagIdsSub = tagsTable.getIntegerArrayTopic("tagID").subscribe(new long[] {});
+    DoubleArraySubscriber tag_anglesSub = tagsTable.getDoubleArrayTopic("tag_angle").subscribe(new double[] {});
+    DoubleArraySubscriber tag_distancesSub = tagsTable.getDoubleArrayTopic("tag_distance").subscribe(new double[] {});
+    HashMap<Long, Tag> tags = new HashMap<Long, Tag>();
 
-    public double getTagAngle() {
-        return tag_angle.get();
+    public Tag getTag(long ID) {
+        if (tags.containsKey(ID)) {
+            return tags.get(ID);
+        }
+        return null;
     }
 
+    /*public double[] getTagAngles() {
+
+        if (tagsTable.containsKey("tag_angle")) {
+            return tag_angles.get();
+        }
+        return null;
+    }
+
+    public double[] getDistances() {
+
+        if (tagsTable.containsKey("tag_distance")) {
+            return tag_distances.get();
+        }
+        return null;
+    }
+    */
+
+
+    public void updateInputs() {
+        long[] tagids = tagIdsSub.get();
+        double[] tag_distances = tag_distancesSub.get();
+        double[] tag_angles = tag_anglesSub.get();
+
+        if (tagids.length != tag_angles.length && 
+            tagids.length != tag_distances.length) {
+            return;
+        }
+        tags.clear();
+        for (int i = 0; i < tagids.length; i++) {
+            long id = tagids[i];
+            tags.put(id, new Tag(id, tag_distances[i], tag_angles[i]));
+        }
+    }
 }

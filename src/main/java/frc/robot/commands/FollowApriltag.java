@@ -1,47 +1,65 @@
 package frc.robot.commands;
 
-import static edu.wpi.first.units.Units.*;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.drive.*;
-import java.util.function.Supplier;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.units.measure.Velocity;
 import frc.robot.Constants;
-import frc.robot.HardwareConstants;
 
 import frc.robot.subsystems.vision.*;
 
 public class FollowApriltag extends Command {
     Drive drive;
     Camera camera;
+    int followID = 0;
+    FollowApriltagStates state;
 
-    
-    ChassisSpeeds prevSpeeds;
+    enum FollowApriltagStates {
+        IDLE,
+        FOLLOWING
+    }
 
-    public FollowApriltag(
-        Drive drive
-    ) {
+
+    public FollowApriltag(Drive drive) {
+        state = FollowApriltagStates.IDLE;
         addRequirements(drive);
         this.drive = drive;
     }
 
+    public FollowApriltagStates getState() {
+        return state;
+    }
+
+    public void startFollow(int followID) {
+        state = FollowApriltagStates.FOLLOWING;
+        this.followID = followID;
+        execute();
+    }
+
     @Override
     public void execute() {
-        double angle = camera.getTagAngle();
-
+        Tag tag = camera.getTag(followID);
         ChassisSpeeds speeds = new ChassisSpeeds();
-        if(angle > 0){
-            speeds = new ChassisSpeeds(0, -0.5, 0);
+
+        if (tag == null) {
+            state = FollowApriltagStates.IDLE;
+            return;
+        }
+
+        if(tag.getDistance() < Constants.STOP_TAG_DISTANCE){
+            speeds = new ChassisSpeeds(0, 0, 0);
+            state = FollowApriltagStates.IDLE;
+            return;
+        }
+
+        if(tag.getAngle() > 0){
+            speeds = new ChassisSpeeds(0, 0, -0.5);
         }
         else{
-            speeds = new ChassisSpeeds(0, 0.5, 0);
+            speeds = new ChassisSpeeds(0, 0, 0.5);
         }
         
         drive.runVelocity(speeds);
-        prevSpeeds = speeds;
     }
 
     @Override

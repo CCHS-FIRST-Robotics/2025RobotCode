@@ -22,6 +22,7 @@ public final class Constants {
     public static final double JOYSTICK_DEADZONE = 0.1;
     public static final double LINEAR_SPEED_EXPONENT = 2;
     public static final double ANGULAR_SPEED_EXPONENT = 2;
+    public static final double STOP_TAG_DISTANCE = 0.5; //meters
     
     public static class AutoConstants {
         // times
