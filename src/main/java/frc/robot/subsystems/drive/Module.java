@@ -14,7 +14,7 @@ public class Module {
     private final int index;
 
     // TODO: switch to tunable numbers w/ smartdash
-    private static final Distance wheelRadius = Inches.of(2); // ! motherfucker
+    private static final Distance wheelRadius = Inches.of(2);
 
     private SwerveModuleState prevSetpoint = new SwerveModuleState(0, new Rotation2d(0));
 
@@ -23,7 +23,7 @@ public class Module {
         this.io = io;
         this.index = index;
 
-        // turnFeedback.enableContinuousInput(-Math.PI, Math.PI);
+        //turnFeedback.enableContinuousInput(-Math.PI, Math.PI);
     }
 
     public void periodic() {
@@ -34,6 +34,7 @@ public class Module {
 
     public SwerveModuleState runSetpoint(SwerveModuleState targetState) {
         // Optimize state based on current angle
+        @SuppressWarnings("deprecation")
         var optimizedState = SwerveModuleState.optimize(targetState, getAngle());
 
         io.setTurnPosition(Radians.of(optimizedState.angle.getRadians()));

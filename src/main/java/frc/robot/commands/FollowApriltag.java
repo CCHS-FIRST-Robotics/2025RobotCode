@@ -67,13 +67,6 @@ public class FollowApriltag extends Command {
         drive.stop();
     }
 
-    private double applyPreferences(double input, double deadzone, double exponent) {
-        if (Math.abs(input) < deadzone) {
-            return 0;
-        }
-        return Math.pow(Math.abs(input), exponent) * Math.signum(input);
-    }
-
     public double clampVelocity(double velocity, double prevVelocity, double maxAcceleration){
         return MathUtil.clamp(velocity, prevVelocity - maxAcceleration, prevVelocity + maxAcceleration);
     }
