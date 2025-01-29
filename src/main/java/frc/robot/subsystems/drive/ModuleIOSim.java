@@ -40,7 +40,7 @@ public class ModuleIOSim implements ModuleIO {
         driveSim = new DCMotorSim(
             LinearSystemId.createDCMotorSystem(driveKv, driveKa), 
             DCMotor.getNEO(1), 
-            1
+            1, 1
         );
         
         turnPID.enableContinuousInput(0, 1);

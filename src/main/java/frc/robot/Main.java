@@ -27,10 +27,6 @@ import edu.wpi.first.wpilibj.RobotBase;
  * movetoapriltag command(assume you can get an angle and distance from the camera)
  * pid tunable constants
  * maybe leds for telling the coral station person whether the robot can intake
- * 
- * cosmetic / housekeeping: 
- * move periodic functions to top
- * heading in drive.java
  */
 
 public final class Main {

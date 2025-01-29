@@ -36,7 +36,7 @@ public class Drive extends SubsystemBase {
     private Twist2d twistSetpoint = new Twist2d();
     private final PIDController xController = new PIDController(2.7, 0.05, 0.12);
     private final PIDController yController = new PIDController(2.7, 0.05, 0.12);
-    private final PIDController headingController = new PIDController(3, 0, 0.3);
+    private final PIDController thetaController = new PIDController(3, 0, 0.3);
     
     // velocity control
     private ChassisSpeeds speeds = new ChassisSpeeds();
@@ -53,10 +53,10 @@ public class Drive extends SubsystemBase {
         modules[2] = new Module(blModuleIO, 3);
         modules[3] = new Module(brModuleIO, 4);
 
-        xController.setTolerance(.035);
+        xController.setTolerance(.035); // ! experiment with these
         yController.setTolerance(.035);
-        headingController.setTolerance(.025);
-        headingController.enableContinuousInput(-Math.PI, Math.PI);
+        thetaController.setTolerance(.025);
+        thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
         this.gyroIO = gyroIO;
         poseEstimator = new SwerveDrivePoseEstimator(
@@ -101,13 +101,13 @@ public class Drive extends SubsystemBase {
                 // get PIDs
                 double xPID = xController.calculate(getPose().getX(), positionSetpoint.getX()); // ! (xController.atSetpoint() ? 0 :) was removed
                 double yPID = yController.calculate(getPose().getY(), positionSetpoint.getY());
-                double headingPID = headingController.calculate(getPose().getRotation().getRotations(), positionSetpoint.getRotation().getRotations());
+                double thetaPID = thetaController.calculate(getPose().getRotation().getRotations(), positionSetpoint.getRotation().getRotations());
                 
                 // create chassisspeeds object with FOC
                 speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                     twistSetpoint.dx + xPID,
                     twistSetpoint.dy + yPID,
-                    twistSetpoint.dtheta + headingPID,
+                    twistSetpoint.dtheta + thetaPID,
                     getYaw() // not getYawWithAllianceRotation(), because the setpoint is already generated with it in mind
                 );
             case VELOCITY: // fallthrough to VELOCITY case, no break statement needed above
