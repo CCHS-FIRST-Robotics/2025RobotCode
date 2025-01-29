@@ -2,29 +2,26 @@ package frc.robot.subsystems.coralIO;
 
 import static edu.wpi.first.units.Units.*;
     
-import com.ctre.phoenix6.BaseStatusSignal;
-import com.ctre.phoenix6.StatusSignal;
-import com.ctre.phoenix6.configs.MotionMagicConfigs;
-import com.ctre.phoenix6.configs.Slot0Configs;
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.configs.*;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.ClosedLoopSlot;
-import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.*;
+import com.revrobotics.spark.*;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.SparkBase.*;
 
 import edu.wpi.first.units.measure.*;
 
 public class CoralIOReal implements CoralIO{
-    private final TalonFX elevatorMotor;
+    private final TalonFX elevatorMotor; // ! absolute encoder
     private final TalonFX armMotor;
-    private final SparkMax wristMotor; // ! maybe servos
+    private final SparkMax wristMotor; 
+    // ! maybe servos for claw
 
     private final TalonFXConfiguration elevatorConfig = new TalonFXConfiguration();
     private final Slot0Configs elevatorPIDF = elevatorConfig.Slot0;

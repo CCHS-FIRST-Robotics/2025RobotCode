@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.RobotBase;
  * ——— check where module rotation 0 is
  * ——— test replacing drive.java stop function
  * —— test autos
+ * —— add coral code to autos
  * 
  * longer term: 
  * sysid (or just use recalc) for good choreo constants
@@ -31,10 +32,6 @@ import edu.wpi.first.wpilibj.RobotBase;
  * move periodic functions to top
  * go through imports, make stuff private final
  * heading in drive.java
- * maybe rename arm to pivot, axle, or axis
- * 
- * ! ideas for making coralposition enum less wordy: 
- * ! make one class/struct per position and just save everything in there, in hardwareConstants
  */
 
 public final class Main {

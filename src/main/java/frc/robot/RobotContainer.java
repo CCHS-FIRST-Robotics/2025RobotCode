@@ -10,9 +10,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import choreo.auto.AutoChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
-import frc.robot.constants.VirtualConstants;
 import frc.robot.subsystems.drive.*;
 import frc.robot.utils.AutoRoutineGenerator;
+import frc.robot.constants.VirtualConstants;
 
 public class RobotContainer {
     private final CommandXboxController controller = new CommandXboxController(VirtualConstants.CONTROLLER_PORT_1);
