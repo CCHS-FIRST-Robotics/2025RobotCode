@@ -9,7 +9,8 @@ import edu.wpi.first.wpilibj.RobotBase;
 /**
  * to do: 
  * 
- * daily: 
+ *  daily: 
+ *   recalculate pid constants for sim classes
  * 
  * — at robotics daily: 
  * —— change CAN id numbers (CAN wiring is so fun)
@@ -19,14 +20,14 @@ import edu.wpi.first.wpilibj.RobotBase;
  * —— test autos
  * —— add coral code to autos
  * 
- * longer term: 
- * sysid (or just use recalc) for good choreo constants
- * ! rotating while translating doesn't work at all in sim
- * go through all unit conversions
- * controllers for the year
- * movetoapriltag command(assume you can get an angle and distance from the camera)
- * pid tunable constants
- * maybe leds for telling the coral station person whether the robot can intake
+ *  longer term: 
+ *   sysid (or just use recalc) for good choreo constants
+ *   ! rotating while translating doesn't work at all in sim
+ *   go through all unit conversions
+ *   controllers for the year
+ *   movetoapriltag command(assume you can get an angle and distance from the camera)
+ *   pid tunable constants
+ *   maybe leds for telling the coral station person whether the robot can intake
  */
 
 public final class Main {

@@ -48,14 +48,12 @@ public class ModuleIOSim implements ModuleIO {
 
     @Override
     public void setDriveVoltage(Voltage volts) {
-        driveAppliedVolts = MathUtil.clamp(volts.in(Volts), -12.0, 12.0); // ! why is clamp there
-        driveSim.setInputVoltage(driveAppliedVolts);
+        driveSim.setInputVoltage(volts.in(Volts));
     }
 
     @Override
     public void setTurnVoltage(Voltage volts) {
-        turnAppliedVolts = MathUtil.clamp(volts.in(Volts), -12.0, 12.0); // ! why is clamp there
-        turnSim.setInputVoltage(turnAppliedVolts);
+        turnSim.setInputVoltage(volts.in(Volts));
     }
 
     @Override
