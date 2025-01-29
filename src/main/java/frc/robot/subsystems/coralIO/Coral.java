@@ -1,18 +1,18 @@
 package frc.robot.subsystems.coralIO;
 
-import static edu.wpi.first.units.Units.*;
-
 import edu.wpi.first.wpilibj2.command.*;
-import frc.robot.constants.Constants;
-import edu.wpi.first.units.measure.*;
 import edu.wpi.first.wpilibj.DigitalInput;
-
 import org.littletonrobotics.junction.Logger;
+import frc.robot.constants.VirtualConstants;
+import frc.robot.constants.PhysicalConstants;
+import frc.robot.constants.PhysicalConstants.*;
 
 public class Coral extends SubsystemBase {
     private final CoralIO io;
-    private final DigitalInput irSensor = new DigitalInput(Constants.CORAL_SENSOR_PORT);
+    private final DigitalInput troughSensor = new DigitalInput(VirtualConstants.TROUGH_SENSOR_PORT);
     private final CoralIOInputsAutoLogged inputs = new CoralIOInputsAutoLogged();
+
+    // ! the arm can only rotate above the elevator
 
     public Coral(CoralIO io) {
         this.io = io;
@@ -24,15 +24,39 @@ public class Coral extends SubsystemBase {
         Logger.processInputs("coralIO", inputs);
     }
 
-    // to intake coral: 
-    //  press button, check if ir sensor beam is broken, open claw, then move the arm down, set wrist position, close claw, then swing to L4 (by default)
+    // open claw, then move the arm down while setting wrist position
+    public Command getPrepIntakeCommand(){
+        return new InstantCommand(() -> io.setClawPosition(true))
+            .andThen(
+                new InstantCommand(() -> io.setArmPosition(PhysicalConstants.INTAKE.armPosition))
+                .alongWith(new InstantCommand(() -> io.setWristPosition(PhysicalConstants.INTAKE.wristPosition)))
+            );
+    }
+    
+    // check if ir sensor beam is broken, close claw, then swing to L4
+    public Command getIntakeCommand(){
+        if(!troughSensor.get()){
+            return null; // ! idk if this'll throw an error
+        }
 
-    // to set arm position: 
-    //  press button, move the arm, set wrist position
+        return new InstantCommand(() -> io.setClawPosition(false))
+            .andThen(new InstantCommand(() -> io.setArmPosition(PhysicalConstants.L4.armPosition)));
+        // ! maybe move the wrist too?
+    }
 
-    // to outtake: 
-    //  press button, open the claw
+    // move the arm, set wrist position
+    public Command getSetArmPositionCommand(CoralPosition position){
+        return new InstantCommand(() -> io.setArmPosition(position.armPosition))
+            .andThen(new InstantCommand(() -> io.setWristPosition(position.wristPosition)));
+    }
 
-    // to knock algae off: 
-    //  press button, set arm to some position, drive forward, move it to some other position
+    // press button, open the claw
+    public Command getOuttakeCommand(){
+        return new InstantCommand(() -> io.setClawPosition(true));
+    }
+
+    // press button, set arm to some position, drive forward, move it to some other position
+    public Command getDealgifyComamand(){
+        return null; // ! code this at some point
+    }
 }

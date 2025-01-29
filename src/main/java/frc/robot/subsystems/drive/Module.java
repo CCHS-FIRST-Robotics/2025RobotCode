@@ -1,7 +1,7 @@
 package frc.robot.subsystems.drive;
 
 import static edu.wpi.first.units.Units.*;
-import frc.robot.constants.HardwareConstants;
+import frc.robot.constants.PhysicalConstants;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.*;
@@ -25,7 +25,7 @@ public class Module {
     public void runState(SwerveModuleState state) {
         state.optimize(getWrappedAngle()); // ! what angle does it actually want
         io.setTurnPosition(Rotations.of(state.angle.getRotations()));
-        io.setDriveVelocity(RadiansPerSecond.of(state.speedMetersPerSecond / HardwareConstants.WHEEL_RADIUS.in(Meters)));
+        io.setDriveVelocity(RadiansPerSecond.of(state.speedMetersPerSecond / PhysicalConstants.WHEEL_RADIUS.in(Meters)));
     }
 
     public void stop() {
@@ -36,7 +36,7 @@ public class Module {
     // ————— functions for odometry ————— //
 
     public double getDistanceTraveled() {
-        return inputs.drivePosition * HardwareConstants.WHEEL_RADIUS.in(Meters);
+        return inputs.drivePosition * PhysicalConstants.WHEEL_RADIUS.in(Meters);
     }
 
     public Rotation2d getWrappedAngle() {

@@ -10,8 +10,6 @@ import edu.wpi.first.wpilibj.RobotBase;
  * to do: 
  * 
  * daily: 
- * write coral commands and hashmap
- * maybe pid tunable constants
  * 
  * — at robotics daily: 
  * —— change CAN id numbers (CAN wiring is so fun)
@@ -26,12 +24,17 @@ import edu.wpi.first.wpilibj.RobotBase;
  * go through all unit conversions
  * controllers for the year
  * movetoapriltag command(assume you can get an angle and distance from the camera)
+ * pid tunable constants
+ * maybe leds for telling the coral station person whether the robot can intake
  * 
  * cosmetic / housekeeping: 
  * move periodic functions to top
  * go through imports, make stuff private final
  * heading in drive.java
  * maybe rename arm to pivot, axle, or axis
+ * 
+ * ! ideas for making coralposition enum less wordy: 
+ * ! make one class/struct per position and just save everything in there, in hardwareConstants
  */
 
 public final class Main {

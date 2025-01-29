@@ -60,7 +60,7 @@ public class Drive extends SubsystemBase {
 
         this.gyroIO = gyroIO;
         poseEstimator = new SwerveDrivePoseEstimator(
-            HardwareConstants.KINEMATICS, 
+            PhysicalConstants.KINEMATICS, 
             new Rotation2d(), 
             getModulePositions(), 
             new Pose2d()
@@ -76,7 +76,7 @@ public class Drive extends SubsystemBase {
         // update odometry
         gyroIO.updateInputs(gyroInputs);
         Logger.processInputs("gyro", gyroInputs);
-        fieldPosition = fieldPosition.exp(HardwareConstants.KINEMATICS.toTwist2d(getModuleDeltas()));
+        fieldPosition = fieldPosition.exp(PhysicalConstants.KINEMATICS.toTwist2d(getModuleDeltas()));
         poseEstimator.updateWithTime(
             Timer.getFPGATimestamp(),
             gyroInputs.connected ? new Rotation2d(Rotations.of(gyroInputs.yaw).in(Radians)) : fieldPosition.getRotation(),
@@ -111,9 +111,9 @@ public class Drive extends SubsystemBase {
                     getYaw() // not getYawWithAllianceRotation(), because the setpoint is already generated with it in mind
                 );
             case VELOCITY: // fallthrough to VELOCITY case, no break statement needed above
-                ChassisSpeeds.discretize(speeds, Constants.PERIOD); // more detail: https://www.chiefdelphi.com/t/whitepaper-swerve-drive-skew-and-second-order-kinematics/416964/30
-                SwerveModuleState[] moduleStates = HardwareConstants.KINEMATICS.toSwerveModuleStates(speeds); // convert speeds to module states
-                SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates, HardwareConstants.MAX_LINEAR_SPEED); // renormalize wheel speeds
+                ChassisSpeeds.discretize(speeds, VirtualConstants.PERIOD); // more detail: https://www.chiefdelphi.com/t/whitepaper-swerve-drive-skew-and-second-order-kinematics/416964/30
+                SwerveModuleState[] moduleStates = PhysicalConstants.KINEMATICS.toSwerveModuleStates(speeds); // convert speeds to module states
+                SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates, PhysicalConstants.MAX_LINEAR_SPEED); // renormalize wheel speeds
                 
                 // run modules
                 for (int i = 0; i < 4; i++) {

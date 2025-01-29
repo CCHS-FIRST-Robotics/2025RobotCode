@@ -5,12 +5,10 @@ import static edu.wpi.first.units.Units.*;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.units.measure.*;
-import java.util.*;
-import java.util.Map.*;
 import java.util.AbstractMap.SimpleEntry;
 
-public class HardwareConstants {
-    // swerve stats // ! recalculate these
+public final class PhysicalConstants {
+    // ————— swerve constants ————— // // ! recalculate these
     public static final LinearVelocity MAX_LINEAR_SPEED = MetersPerSecond.of(4.5);
     public static final LinearAcceleration MAX_LINEAR_ACCEL = MetersPerSecondPerSecond.of(9.0);
     public static final AngularVelocity MAX_ANGULAR_SPEED = RadiansPerSecond.of(8 * Math.PI);
@@ -27,41 +25,56 @@ public class HardwareConstants {
     };
     public static final SwerveDriveKinematics KINEMATICS = new SwerveDriveKinematics(MODULE_TRANSLATIONS);
 
-    public static enum coralPosition{
-        STATION,
-        L1, 
-        L2, 
-        L3, 
-        L4
-    }
-
-    // ! add rotation values
-    public static final HashMap<coralPosition, Entry<Distance, Angle>> ELEVATOR_POSITIONS = new HashMap<coralPosition, Entry<Distance, Angle>>(
-        Map.of( 
-            coralPosition.L1, new SimpleEntry<Distance, Angle>(Inches.of(18), Rotations.of(0)), 
-            coralPosition.L2, new SimpleEntry<Distance, Angle>(Inches.of(31.875), Rotations.of(0)),
-            coralPosition.L3, new SimpleEntry<Distance, Angle>(Inches.of(47.625), Rotations.of(0)),
-            coralPosition.L4, new SimpleEntry<Distance, Angle>(Inches.of(72), Rotations.of(0))
-        )
-    );
-
-    public static class CoralPosition{
-        SimpleEntry<Distance, Angle> elevatorPosition;
-        Angle armPosition;
-        boolean wristPosition;
-        boolean clawPosition;
+    // ————— coral constants ————— //
+    public static class CoralPosition{ // coralIO position struct
+        public final SimpleEntry<Distance, Angle> elevatorPosition;
+        public final Angle armPosition;
+        public final Angle wristPosition;
 
         public CoralPosition(
             Distance elevatorDistance, 
             Angle elevatorAngle, 
             Angle armAngle, 
-            boolean wristPosition, 
-            boolean clawPosition
+            Angle wristPosition
         ){
             this.elevatorPosition = new SimpleEntry<Distance, Angle>(elevatorDistance, elevatorAngle);
             this.armPosition = armAngle;
             this.wristPosition = wristPosition;
-            this.clawPosition = clawPosition;
         }
     }
+
+    public static final CoralPosition INTAKE = new CoralPosition(
+        Inches.of(0), // elevator height
+        Rotations.of(0), // elevator angle
+        Rotations.of(0), // arm angle
+        Rotations.of(0) // wrist angle
+    );
+
+    public static final CoralPosition L1 = new CoralPosition(
+        Inches.of(18), 
+        Rotations.of(0),
+        Rotations.of(0),
+        Rotations.of(0)
+    ); 
+
+    public static final CoralPosition L2 = new CoralPosition(
+        Inches.of(31.875), 
+        Rotations.of(0),
+        Rotations.of(0),
+        Rotations.of(0)
+    ); 
+
+    public static final CoralPosition L3 = new CoralPosition(
+        Inches.of(47.625), 
+        Rotations.of(0),
+        Rotations.of(0),
+        Rotations.of(0)
+    ); 
+    
+    public static final CoralPosition L4 = new CoralPosition(
+        Inches.of(72), 
+        Rotations.of(0),
+        Rotations.of(0),
+        Rotations.of(0)
+    );
 }

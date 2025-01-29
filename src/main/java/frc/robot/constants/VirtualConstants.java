@@ -4,7 +4,7 @@
 
 package frc.robot.constants;
 
-public final class Constants {
+public final class VirtualConstants {
     public static final double PERIOD = 0.02;
     public static enum ROBOT_MODE {
         REAL,
@@ -21,12 +21,12 @@ public final class Constants {
     public static final double ANGULAR_SPEED_EXPONENT = 2;
 
     // ids
-    public static final int ELEVATOR_ID_1 = 0;
-
-    public static final int CORAL_CLAW_ID_1 = 0;
-    public static final int CORAL_WRIST_ID_1 = 0;
-    public static final int CORAL_SENSOR_PORT = 0;
+    public static final int ELEVATOR_ID = 0;
+    public static final int ARM_ID = 0;
+    public static final int WRIST_ID = 0;
+    public static final int CLAW_ID = 0;
+    public static final int TROUGH_SENSOR_PORT = 0;
 
     public static final int ALGA_ID_1 = 0;
-    public static final int ALGA_SENSOR_PORT = 1;
+    public static final int ALGA_SENSOR_PORT = 0;
 }

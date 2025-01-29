@@ -10,12 +10,12 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import choreo.auto.AutoChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
-import frc.robot.constants.Constants;
+import frc.robot.constants.VirtualConstants;
 import frc.robot.subsystems.drive.*;
 import frc.robot.utils.AutoRoutineGenerator;
 
 public class RobotContainer {
-    private final CommandXboxController controller = new CommandXboxController(Constants.CONTROLLER_PORT_1);
+    private final CommandXboxController controller = new CommandXboxController(VirtualConstants.CONTROLLER_PORT_1);
 
     private final Drive drive;
 
@@ -23,7 +23,7 @@ public class RobotContainer {
     private final AutoChooser autoChooser;
 
     public RobotContainer() {
-        switch (Constants.CURRENT_MODE) {
+        switch (VirtualConstants.CURRENT_MODE) {
             case REAL:
                 drive = new Drive(
                     new ModuleIOSparkMax(1),

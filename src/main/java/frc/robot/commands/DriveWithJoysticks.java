@@ -3,8 +3,8 @@ package frc.robot.commands;
 import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.constants.Constants;
-import frc.robot.constants.HardwareConstants;
+import frc.robot.constants.VirtualConstants;
+import frc.robot.constants.PhysicalConstants;
 import frc.robot.subsystems.drive.*;
 import java.util.function.Supplier;
 import edu.wpi.first.math.MathUtil;
@@ -39,8 +39,8 @@ public class DriveWithJoysticks extends Command {
         double linearYSpeed = linearYSpeedSupplier.get();
         double linearSpeed = applyPreferences(
             Math.hypot(linearXSpeed, linearYSpeed), 
-            Constants.JOYSTICK_DEADZONE, 
-            Constants.LINEAR_SPEED_EXPONENT
+            VirtualConstants.JOYSTICK_DEADZONE, 
+            VirtualConstants.LINEAR_SPEED_EXPONENT
         );
         Rotation2d linearDirection = new Rotation2d(linearXSpeed, linearYSpeed); // ! this thing won't shut the fuck up
         Translation2d linearVelocity = new Translation2d(
@@ -51,15 +51,15 @@ public class DriveWithJoysticks extends Command {
         // get angularVelocity
         double angularVelocity = applyPreferences(
             -angularVelocitySupplier.get(), // chassisspeeds is flipped
-            Constants.JOYSTICK_DEADZONE, 
-            Constants.ANGULAR_SPEED_EXPONENT
+            VirtualConstants.JOYSTICK_DEADZONE, 
+            VirtualConstants.ANGULAR_SPEED_EXPONENT
         );
 
         // denormalize speeds and FOC
         ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-            linearVelocity.getX() * HardwareConstants.MAX_LINEAR_SPEED.in(MetersPerSecond),
-            linearVelocity.getY() * HardwareConstants.MAX_LINEAR_SPEED.in(MetersPerSecond),
-            angularVelocity * HardwareConstants.MAX_ANGULAR_SPEED.in(RadiansPerSecond),
+            linearVelocity.getX() * PhysicalConstants.MAX_LINEAR_SPEED.in(MetersPerSecond),
+            linearVelocity.getY() * PhysicalConstants.MAX_LINEAR_SPEED.in(MetersPerSecond),
+            angularVelocity * PhysicalConstants.MAX_ANGULAR_SPEED.in(RadiansPerSecond),
             drive.getYawWithAllianceRotation()
         );
 
@@ -68,17 +68,17 @@ public class DriveWithJoysticks extends Command {
             clampVelocity(
                 speeds.vxMetersPerSecond, 
                 prevSpeeds.vxMetersPerSecond, 
-                HardwareConstants.MAX_LINEAR_ACCEL.in(MetersPerSecondPerSecond) * Constants.PERIOD
+                PhysicalConstants.MAX_LINEAR_ACCEL.in(MetersPerSecondPerSecond) * VirtualConstants.PERIOD
             ),
             clampVelocity(
                 speeds.vyMetersPerSecond, 
                 prevSpeeds.vyMetersPerSecond, 
-                HardwareConstants.MAX_LINEAR_ACCEL.in(MetersPerSecondPerSecond) * Constants.PERIOD
+                PhysicalConstants.MAX_LINEAR_ACCEL.in(MetersPerSecondPerSecond) * VirtualConstants.PERIOD
             ),
             clampVelocity(
                 speeds.omegaRadiansPerSecond, 
                 prevSpeeds.omegaRadiansPerSecond, 
-                HardwareConstants.MAX_ANGULAR_ACCEL.in(RadiansPerSecond.per(Second)) * Constants.PERIOD
+                PhysicalConstants.MAX_ANGULAR_ACCEL.in(RadiansPerSecond.per(Second)) * VirtualConstants.PERIOD
             )
         );
         

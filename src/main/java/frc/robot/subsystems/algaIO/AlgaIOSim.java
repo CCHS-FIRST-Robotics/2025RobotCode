@@ -5,7 +5,7 @@ import static edu.wpi.first.units.Units.*;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.math.system.plant.*;
 import edu.wpi.first.units.measure.*;
-import frc.robot.constants.Constants;
+import frc.robot.constants.VirtualConstants;
 
 public class AlgaIOSim implements AlgaIO {
     private final DCMotorSim motor;
@@ -31,7 +31,7 @@ public class AlgaIOSim implements AlgaIO {
 
     @Override
     public void updateInputs(AlgaIOInputs inputs) {
-        motor.update(Constants.PERIOD);
+        motor.update(VirtualConstants.PERIOD);
 
         inputs.motorVoltage = appliedVolts.in(Volts);
         inputs.motorCurrent = motor.getCurrentDrawAmps();

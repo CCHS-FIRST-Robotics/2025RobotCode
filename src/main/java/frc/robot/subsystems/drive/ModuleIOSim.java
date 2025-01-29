@@ -9,7 +9,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.units.measure.*;
 import edu.wpi.first.math.MathUtil;
-import frc.robot.constants.Constants;
+import frc.robot.constants.VirtualConstants;
 
 public class ModuleIOSim implements ModuleIO {
     private final DCMotorSim driveSim;
@@ -87,8 +87,8 @@ public class ModuleIOSim implements ModuleIO {
 
     @Override
     public void updateInputs(ModuleIOInputs inputs) {
-        driveSim.update(Constants.PERIOD);
-        turnSim.update(Constants.PERIOD);
+        driveSim.update(VirtualConstants.PERIOD);
+        turnSim.update(VirtualConstants.PERIOD);
 
         inputs.driveVoltage = driveAppliedVolts;
         inputs.driveCurrent = driveSim.getCurrentDrawAmps();
