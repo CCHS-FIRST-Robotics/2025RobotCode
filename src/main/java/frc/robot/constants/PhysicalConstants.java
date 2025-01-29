@@ -2,9 +2,9 @@ package frc.robot.constants;
 
 import static edu.wpi.first.units.Units.*;
 
+import edu.wpi.first.units.measure.*;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.units.measure.*;
 import java.util.AbstractMap.SimpleEntry;
 
 public final class PhysicalConstants {

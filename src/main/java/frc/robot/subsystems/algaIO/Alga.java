@@ -3,17 +3,17 @@ package frc.robot.subsystems.algaIO;
 import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.wpilibj2.command.*;
-import frc.robot.constants.VirtualConstants;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.units.measure.*;
 import org.littletonrobotics.junction.Logger;
+import frc.robot.constants.VirtualConstants;
 
 public class Alga extends SubsystemBase {
     private final AlgaIO io;
     private final DigitalInput irSensor = new DigitalInput(VirtualConstants.ALGA_SENSOR_PORT);
     private final AlgaIOInputsAutoLogged inputs = new AlgaIOInputsAutoLogged();
 
-    Voltage IOVolts = Volts.of(8);
+    private Voltage IOVolts = Volts.of(8);
 
     public Alga(AlgaIO io) {
         this.io = io;

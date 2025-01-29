@@ -1,8 +1,7 @@
 package frc.robot.subsystems.coralIO;
 
-import org.littletonrobotics.junction.AutoLog;
-
 import edu.wpi.first.units.measure.*;
+import org.littletonrobotics.junction.AutoLog;
 
 public interface CoralIO {
     @AutoLog

@@ -1,11 +1,12 @@
 package frc.robot.subsystems.drive;
 
 import static edu.wpi.first.units.Units.*;
-import frc.robot.constants.PhysicalConstants;
-import edu.wpi.first.math.MathUtil;
+
+import edu.wpi.first.math.*;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.*;
 import org.littletonrobotics.junction.Logger;
+import frc.robot.constants.PhysicalConstants;
 
 public class Module {
     private final ModuleIO io;

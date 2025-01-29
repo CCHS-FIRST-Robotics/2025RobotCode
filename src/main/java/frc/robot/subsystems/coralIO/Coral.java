@@ -3,8 +3,7 @@ package frc.robot.subsystems.coralIO;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj.DigitalInput;
 import org.littletonrobotics.junction.Logger;
-import frc.robot.constants.VirtualConstants;
-import frc.robot.constants.PhysicalConstants;
+import frc.robot.constants.*;
 import frc.robot.constants.PhysicalConstants.*;
 
 public class Coral extends SubsystemBase {

@@ -3,17 +3,15 @@ package frc.robot.subsystems.drive;
 import static edu.wpi.first.units.Units.*;
 
 import com.revrobotics.*;
-import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.*;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.ClosedLoopSlot;
-import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.SparkBase.*;
+import edu.wpi.first.math.*;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.units.measure.*;
-import edu.wpi.first.math.MathUtil;
 
 public class ModuleIOSparkMax implements ModuleIO {
     private final SparkMax driveMotor;
@@ -27,7 +25,7 @@ public class ModuleIOSparkMax implements ModuleIO {
     private final RelativeEncoder turnRelativeEncoder; // NEO
     private final AbsoluteEncoder turnAbsoluteEncoder; // CANandcoder
     
-    public int index;
+    public final int index;
 
     private double driveKp = 0.00001;
     private double driveKi = 0;

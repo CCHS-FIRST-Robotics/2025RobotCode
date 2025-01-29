@@ -12,9 +12,7 @@ public class AlgaIOSim implements AlgaIO {
     
     private final double MOI = 0; // ! MOI of a rod = (M(R^2))/2
 
-    Voltage appliedVolts = Volts.of(0);
-    Angle currentSetpoint = Rotations.of(0);
-    AlgaIOInputs inputs = new AlgaIOInputs();
+    private Voltage appliedVolts = Volts.of(0);
     
     public AlgaIOSim(){
         motor = new DCMotorSim(
@@ -37,7 +35,5 @@ public class AlgaIOSim implements AlgaIO {
         inputs.motorCurrent = motor.getCurrentDrawAmps();
         inputs.motorVelocity = motor.getOutput(1); // gets the velocity in the units of the gains you give it
         inputs.motorTemperature = 0;
-
-        this.inputs = inputs;
     }
 }

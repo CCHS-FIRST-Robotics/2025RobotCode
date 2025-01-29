@@ -3,9 +3,9 @@ package frc.robot.subsystems.drive;
 import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -20,7 +20,7 @@ public class Drive extends SubsystemBase {
         POSITION,
         VELOCITY
     };
-    CONTROL_MODE controlMode = CONTROL_MODE.DISABLED;
+    private CONTROL_MODE controlMode = CONTROL_MODE.DISABLED;
 
     private final Module[] modules = new Module[4];
 

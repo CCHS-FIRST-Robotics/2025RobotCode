@@ -14,7 +14,7 @@ import frc.robot.constants.VirtualConstants;
 
 public class Robot extends LoggedRobot {
     private RobotContainer robotContainer;
-    Command autonomousCommand;
+    private Command autonomousCommand;
 
     @Override
     public void robotInit() {

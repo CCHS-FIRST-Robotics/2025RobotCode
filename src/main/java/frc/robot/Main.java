@@ -30,7 +30,6 @@ import edu.wpi.first.wpilibj.RobotBase;
  * 
  * cosmetic / housekeeping: 
  * move periodic functions to top
- * go through imports, make stuff private final
  * heading in drive.java
  */
 
