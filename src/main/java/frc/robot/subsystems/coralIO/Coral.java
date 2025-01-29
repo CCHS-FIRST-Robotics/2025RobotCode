@@ -23,11 +23,12 @@ public class Coral extends SubsystemBase {
         Logger.processInputs("coralIO", inputs);
     }
 
-    // open claw, then move the arm down while setting wrist position
+    // open claw, then move the elevator and arm down while setting wrist position
     public Command getPrepIntakeCommand(){
         return new InstantCommand(() -> io.setClawPosition(true))
             .andThen(
-                new InstantCommand(() -> io.setArmPosition(PhysicalConstants.INTAKE.armPosition))
+                new InstantCommand(() -> io.setElevatorPosition(PhysicalConstants.INTAKE.elevatorPosition.getValue()))
+                .alongWith(new InstantCommand(() -> io.setArmPosition(PhysicalConstants.INTAKE.armPosition)))
                 .alongWith(new InstantCommand(() -> io.setWristPosition(PhysicalConstants.INTAKE.wristPosition)))
             );
     }
@@ -39,14 +40,17 @@ public class Coral extends SubsystemBase {
         }
 
         return new InstantCommand(() -> io.setClawPosition(false))
-            .andThen(new InstantCommand(() -> io.setArmPosition(PhysicalConstants.L4.armPosition)));
-        // ! maybe move the wrist too?
+            .andThen(
+                new InstantCommand(() -> io.setElevatorPosition(PhysicalConstants.L4.elevatorPosition.getValue()))
+                .alongWith(new InstantCommand(() -> io.setArmPosition(PhysicalConstants.L4.armPosition)))
+            );
     }
 
-    // move the arm, set wrist position
-    public Command getSetArmPositionCommand(CoralPosition position){
-        return new InstantCommand(() -> io.setArmPosition(position.armPosition))
-            .andThen(new InstantCommand(() -> io.setWristPosition(position.wristPosition)));
+    // move elevator and arm, set wrist position
+    public Command getSetCoralIOPositionCommand(CoralPosition position){
+        return new InstantCommand(() -> io.setElevatorPosition(position.elevatorPosition.getValue()))
+            .alongWith(new InstantCommand(() -> io.setArmPosition(position.armPosition)))
+            .alongWith(new InstantCommand(() -> io.setWristPosition(position.wristPosition)));
     }
 
     // press button, open the claw
