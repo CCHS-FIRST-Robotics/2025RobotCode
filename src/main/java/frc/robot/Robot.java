@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.*;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
-import frc.robot.constants.VirtualConstants;
+import frc.robot.VirtualConstants;
 
 public class Robot extends LoggedRobot {
     private RobotContainer robotContainer;

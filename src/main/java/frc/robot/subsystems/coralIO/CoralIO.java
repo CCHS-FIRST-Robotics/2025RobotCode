@@ -25,11 +25,7 @@ public interface CoralIO {
         public double wristVelocity;
         public double wristTemperature;
         
-        public double clawVoltage;
-        public double clawCurrent;
-        public double clawPosition;
-        public double clawVelocity;
-        public double clawTemperature;
+        public boolean clawState;
     }
 
     public default void setElevatorPosition(Angle position){}

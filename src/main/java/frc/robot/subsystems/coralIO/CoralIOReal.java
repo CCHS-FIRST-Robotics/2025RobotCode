@@ -171,5 +171,8 @@ public class CoralIOReal implements CoralIO{
         inputs.wristPosition = wristEncoder.getPosition(); // ! units
         inputs.wristVelocity = wristEncoder.getVelocity();
         inputs.wristTemperature = wristMotor.getMotorTemperature();
+
+
+        inputs.clawState = true;// get this when we hook it up
     }
 }
