@@ -12,8 +12,8 @@ public class Coral extends SubsystemBase {
     // positive voltage is down for the elevator, maybe invert it
     private final CoralIO io;
     private final DigitalInput troughSensor = new DigitalInput(VirtualConstants.TROUGH_SENSOR_PORT);
-    private final DigitalInput elevatorSwitch1 = new DigitalInput(VirtualConstants.ELEVATOR_SWITCH_1_PORT);
-    private final DigitalInput elevatorSwitch2 = new DigitalInput(VirtualConstants.ELEVATOR_SWITCH_2_PORT);
+    // private final DigitalInput elevatorSwitch1 = new DigitalInput(VirtualConstants.ELEVATOR_SWITCH_1_PORT);
+    // private final DigitalInput elevatorSwitch2 = new DigitalInput(VirtualConstants.ELEVATOR_SWITCH_2_PORT);
     private final CoralIOInputsAutoLogged inputs = new CoralIOInputsAutoLogged();
 
     // ! the arm can only rotate above the elevator
