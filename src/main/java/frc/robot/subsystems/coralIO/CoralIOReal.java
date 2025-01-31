@@ -7,14 +7,14 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.configs.*;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.*;
-import com.revrobotics.*;
-import com.revrobotics.spark.*;
-import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import com.revrobotics.spark.SparkBase.*;
+// import com.revrobotics.*;
+// import com.revrobotics.spark.*;
+// import com.revrobotics.spark.SparkMax;
+// import com.revrobotics.spark.config.SparkMaxConfig;
+// import com.revrobotics.spark.SparkLowLevel.MotorType;
+// import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+// import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+// import com.revrobotics.spark.SparkBase.*;
 import edu.wpi.first.units.measure.*;
 
 public class CoralIOReal implements CoralIO{

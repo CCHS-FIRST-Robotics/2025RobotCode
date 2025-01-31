@@ -7,6 +7,7 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import edu.wpi.first.units.measure.*;
 
+// ! look over william's code
 public class AlgalOSparkMax implements AlgaIO {
     private final SparkMax motor;
 
