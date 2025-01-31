@@ -8,7 +8,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import java.util.AbstractMap.SimpleEntry;
 
 public final class PhysicalConstants {
-    // ————— swerve constants ————— // // ! recalculate these
+    // ————— swerve constants ————— // 
+    // ! recalculate these
     public static final LinearVelocity MAX_LINEAR_SPEED = MetersPerSecond.of(4.5);
     public static final LinearAcceleration MAX_LINEAR_ACCEL = MetersPerSecondPerSecond.of(9.0);
     public static final AngularVelocity MAX_ANGULAR_SPEED = RadiansPerSecond.of(8 * Math.PI);
@@ -24,6 +25,10 @@ public final class PhysicalConstants {
         new Translation2d(-TRACK_WIDTH_X.in(Meters) / 2.0, TRACK_WIDTH_Y.in(Meters) / 2.0)
     };
     public static final SwerveDriveKinematics KINEMATICS = new SwerveDriveKinematics(MODULE_TRANSLATIONS);
+
+    public static final double DRIVE_AFTER_ENCODER_REDUCTION = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0);
+    public static final double TURN_AFTER_ENCODER_REDUCTION = 150.0 / 7.0;
+    public static final double COUPLING_RATIO = 50.0 / 14.0;
 
     // ————— coral constants ————— //
     public static class CoralPosition{ // coralIO position struct

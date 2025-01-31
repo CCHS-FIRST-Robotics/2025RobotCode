@@ -12,6 +12,7 @@ import com.revrobotics.spark.SparkBase.*;
 import edu.wpi.first.math.*;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.units.measure.*;
+import frc.robot.constants.PhysicalConstants;
 
 public class ModuleIOSparkMax implements ModuleIO {
     private final SparkMax driveMotor;
@@ -34,14 +35,13 @@ public class ModuleIOSparkMax implements ModuleIO {
     private double driveKv = 0.136898;
     private double driveKa = 0.020864;
 
-    private double turnKp = 8;
+    private double turnKp = 0.1;
     private double turnKi = 0;
     private double turnKd = 0;
 
     // ! check colin's math!
-    private final double driveAfterEncoderReduction = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0);
-    private final double turnAfterEncoderReduction = 150.0 / 7.0;
-    private final double couplingRatio = 50.0 / 14.0;
+    // ! move these to hardwareConstants
+
 
     private AngularVelocity prevDriveVelocity = RadiansPerSecond.of(0.0);
 
@@ -111,7 +111,7 @@ public class ModuleIOSparkMax implements ModuleIO {
     @Override
     public void setDriveVelocity(AngularVelocity velocity) {
         driveMotor.getClosedLoopController().setReference( // ! probably scuffed in translation
-            velocity.in(Rotations.per(Minute)) * driveAfterEncoderReduction,
+            velocity.in(Rotations.per(Minute)) * PhysicalConstants.DRIVE_AFTER_ENCODER_REDUCTION,
             SparkMax.ControlType.kVelocity,
             ClosedLoopSlot.kSlot0,
             driveFeedforward.calculateWithVelocities(
@@ -141,9 +141,9 @@ public class ModuleIOSparkMax implements ModuleIO {
         inputs.driveCurrent = driveMotor.getOutputCurrent();
         inputs.drivePosition = // ! what the fuck
             (driveEncoder.getPosition()
-            + turnRelativeEncoder.getPosition() / turnAfterEncoderReduction * couplingRatio)
-            / driveAfterEncoderReduction;
-        inputs.driveVelocity = Rotations.per(Minute).of(driveEncoder.getVelocity() / driveAfterEncoderReduction).in(RotationsPerSecond);
+            + turnRelativeEncoder.getPosition() / PhysicalConstants.TURN_AFTER_ENCODER_REDUCTION * PhysicalConstants.COUPLING_RATIO)
+            / PhysicalConstants.DRIVE_AFTER_ENCODER_REDUCTION;
+        inputs.driveVelocity = Rotations.per(Minute).of(driveEncoder.getVelocity() / PhysicalConstants.DRIVE_AFTER_ENCODER_REDUCTION).in(RotationsPerSecond);
         inputs.driveTemperature = driveMotor.getMotorTemperature();
         
         inputs.turnVoltage = turnMotor.getAppliedOutput() * turnMotor.getBusVoltage(); // ! what

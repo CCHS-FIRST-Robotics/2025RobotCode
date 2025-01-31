@@ -9,6 +9,8 @@ import edu.wpi.first.math.*;
 import edu.wpi.first.units.measure.*;
 import frc.robot.constants.VirtualConstants;
 
+import org.littletonrobotics.junction.Logger;
+
 public class ModuleIOSim implements ModuleIO {
     private final DCMotorSim driveSim;
     private final DCMotorSim turnSim = new DCMotorSim(
@@ -16,16 +18,22 @@ public class ModuleIOSim implements ModuleIO {
         DCMotor.getNEO(1)
     );
 
-    private double driveKp = 0.00015;
-    private double driveKi = 0;
-    private double driveKd = 0.0;
-    private double driveKs = 0;
-    private double driveKv = 0.1362; // From NEO datasheet (473kV): 0.136194 V/(rad/s) - https://www.wolframalpha.com/input?i=1%2F%28473+*+2pi%2F60%29+*+%2850.0+%2F+14.0%29+*+%2817.0+%2F+27.0%29+*+%2845.0+%2F+15.0%29
-    private double driveKa = 0.0148;
+    private int index;
 
-    private double turnKp = 8;
-    private double turnKi = 0; 
-    private double turnKd = 1.5;
+    private double driveKp = 0;
+    private double driveKi = 0;
+    private double driveKd = 0;
+    private double driveKs = 0;
+    // 0.8557
+
+
+
+    private double driveKv = 0.8557; // neo kV = 473 rpm/V (from datasheet), then adjust for gearing
+    private double driveKa = 0.0929911425; // 0.0148; V/(rad/s^2), Vs^2/rad
+
+    private double turnKp = 2 * 2 * Math.PI; // !
+    private double turnKi = 0 * 2 * Math.PI; 
+    private double turnKd = 0 * 2 * Math.PI; // !
 
     private final PIDController drivePID = new PIDController(driveKp, driveKi, driveKd);
     private final SimpleMotorFeedforward driveFF = new SimpleMotorFeedforward(driveKs, driveKv, driveKa);
@@ -34,14 +42,15 @@ public class ModuleIOSim implements ModuleIO {
     private double driveAppliedVolts = 0.0;
     private double turnAppliedVolts = 0.0;
     
-    AngularVelocity prevVelocity = RadiansPerSecond.of(0.0);
+    AngularVelocity prevVelocity = RotationsPerSecond.of(0.0);
 
-    public ModuleIOSim() {
+    public ModuleIOSim(int index) {
         driveSim = new DCMotorSim(
             LinearSystemId.createDCMotorSystem(driveKv, driveKa), 
             DCMotor.getNEO(1), 
             1, 1
         );
+        this.index = index;
         
         turnPID.enableContinuousInput(0, 1);
     }
@@ -66,6 +75,9 @@ public class ModuleIOSim implements ModuleIO {
 
         setDriveVoltage(Volts.of(volts));
         prevVelocity = velocity;
+
+        Logger.recordOutput("modules/ModuleSimVelocitySetpoint" + Integer.toString(index), velocity.in(RotationsPerSecond));
+        Logger.recordOutput("modules/ModuleSimVoltageSetpoint" + Integer.toString(index), volts);
     }
 
     @Override

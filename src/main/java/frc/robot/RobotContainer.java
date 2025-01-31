@@ -10,6 +10,7 @@ import choreo.auto.AutoChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
 import frc.robot.subsystems.drive.*;
+import frc.robot.subsystems.coralIO.*;
 import frc.robot.utils.AutoRoutineGenerator;
 import frc.robot.constants.VirtualConstants;
 
@@ -17,6 +18,7 @@ public class RobotContainer {
     private final CommandXboxController controller = new CommandXboxController(VirtualConstants.CONTROLLER_PORT_1);
 
     private final Drive drive;
+    private final Coral coral;
 
     private final AutoRoutineGenerator autoGenerator;
     private final AutoChooser autoChooser;
@@ -31,15 +33,26 @@ public class RobotContainer {
                     new ModuleIOSparkMax(4), 
                     new GyroIONavX()
                 );
+
+                coral = new Coral(
+                    new CoralIOReal(
+                        VirtualConstants.ELEVATOR_ID, 
+                        VirtualConstants.ARM_ID, 
+                        VirtualConstants.WRIST_ID, 
+                        VirtualConstants.CLAW_ID
+                    )
+                );
                 break;
             case SIM:
                 drive = new Drive(
-                    new ModuleIOSim(),
-                    new ModuleIOSim(),
-                    new ModuleIOSim(),
-                    new ModuleIOSim(),
+                    new ModuleIOSim(1),
+                    new ModuleIOSim(2),
+                    new ModuleIOSim(3),
+                    new ModuleIOSim(4),
                     new GyroIO() {}
                 );
+
+                coral = new Coral(new CoralIO() {});
                 break;
             default:
                 drive = new Drive(
@@ -48,6 +61,15 @@ public class RobotContainer {
                     new ModuleIOSparkMax(3),
                     new ModuleIOSparkMax(4),
                     new GyroIONavX()
+                );
+
+                coral = new Coral(
+                    new CoralIOReal(
+                        VirtualConstants.ELEVATOR_ID, 
+                        VirtualConstants.ARM_ID, 
+                        VirtualConstants.WRIST_ID, 
+                        VirtualConstants.CLAW_ID
+                    )
                 );
                 break;
         }
@@ -61,6 +83,8 @@ public class RobotContainer {
         configureAutos();
     }
 
+
+
     private void configureButtonBindings() {
         drive.setDefaultCommand(
             new DriveWithJoysticks(
@@ -71,7 +95,10 @@ public class RobotContainer {
             )
         );
 
-        controller.b().onTrue(new InstantCommand(() -> drive.stop()));
+        controller.x().onTrue(coral.getArmOnCommand());
+        controller.y().onTrue(coral.getElevatorUpCommand());
+        controller.a().onTrue(coral.getElevatorDownCommand());
+        controller.b().onTrue(coral.getStopElevatorCommand());
     }
 
     private void configureAutos(){

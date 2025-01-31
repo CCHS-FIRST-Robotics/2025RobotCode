@@ -14,6 +14,8 @@ import choreo.trajectory.SwerveSample;
 import org.littletonrobotics.junction.Logger;
 import frc.robot.constants.*;
 
+//! trapezoidal accelleration
+
 public class Drive extends SubsystemBase {
     public enum CONTROL_MODE {
         DISABLED,
@@ -119,6 +121,8 @@ public class Drive extends SubsystemBase {
                 for (int i = 0; i < 4; i++) {
                     modules[i].runState(moduleStates[i]);
                 }
+
+                Logger.recordOutput("DriveStates", moduleStates);
                 break;
         }
     }

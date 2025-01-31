@@ -10,14 +10,14 @@ import edu.wpi.first.wpilibj.RobotBase;
  * to do: 
  * 
  *  daily: 
- *   recalculate pid constants for sim classes
+ *   fix sim classes
+ * 
+ *   try position control
  * 
  * — at robotics daily: 
- * —— change CAN id numbers (CAN wiring is so fun)
- * —— test driving with joysticks (remember to change the robot mode)
+ * ——— get DIOs for elevator working
  * ——— check where module rotation 0 is
  * ——— test replacing drive.java stop function
- * —— test autos
  * —— add coral code to autos
  * 
  *  longer term: 

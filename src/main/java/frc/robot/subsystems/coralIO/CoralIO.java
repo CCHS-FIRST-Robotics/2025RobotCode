@@ -32,12 +32,20 @@ public interface CoralIO {
         public double clawTemperature;
     }
 
+    public default void setElevatorVoltage(Voltage volts){}
+
     public default void setElevatorPosition(Angle position){}
+
+    public default void setArmVoltage(Voltage volts){}
 
     public default void setArmPosition(Angle position){}
 
+    public default void setWristVoltage(Voltage volts){}
+
     public default void setWristPosition(Angle position){}
 
+    public default void setClawVoltage(Voltage volts){}
+    
     public default void setClawPosition(boolean open){}
 
     public default void updateInputs(CoralIOInputs inputs) {}

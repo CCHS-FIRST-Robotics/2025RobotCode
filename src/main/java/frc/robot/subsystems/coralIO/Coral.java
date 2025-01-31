@@ -1,5 +1,7 @@
 package frc.robot.subsystems.coralIO;
 
+import static edu.wpi.first.units.Units.*;
+
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj.DigitalInput;
 import org.littletonrobotics.junction.Logger;
@@ -7,8 +9,11 @@ import frc.robot.constants.*;
 import frc.robot.constants.PhysicalConstants.*;
 
 public class Coral extends SubsystemBase {
+    // positive voltage is down for the elevator, maybe invert it
     private final CoralIO io;
     private final DigitalInput troughSensor = new DigitalInput(VirtualConstants.TROUGH_SENSOR_PORT);
+    private final DigitalInput elevatorSwitch1 = new DigitalInput(VirtualConstants.ELEVATOR_SWITCH_1_PORT);
+    private final DigitalInput elevatorSwitch2 = new DigitalInput(VirtualConstants.ELEVATOR_SWITCH_2_PORT);
     private final CoralIOInputsAutoLogged inputs = new CoralIOInputsAutoLogged();
 
     // ! the arm can only rotate above the elevator
@@ -21,6 +26,32 @@ public class Coral extends SubsystemBase {
     public void periodic() {
         io.updateInputs(inputs);
         Logger.processInputs("coralIO", inputs);
+    }
+
+    public Command getElevatorUpCommand(){
+        // return new StartEndCommand(
+        //     () -> io.setElevatorVoltage(Volts.of(2)), 
+        //     () -> io.setElevatorVoltage(Volts.of(0))
+        //     // .until(() -> elevatorSwitch1.get()
+        // );
+        return new InstantCommand(() -> io.setElevatorVoltage(Volts.of(2)));
+    }
+
+    public Command getElevatorDownCommand(){
+        // return new StartEndCommand(
+        //     () -> io.setElevatorVoltage(Volts.of(-2)), 
+        //     () -> io.setElevatorVoltage(Volts.of(0))
+        //     // .until(() -> elevatorSwitch2.get()
+        // );
+        return new InstantCommand(() -> io.setElevatorVoltage(Volts.of(-2)));
+    }
+
+    public Command getStopElevatorCommand(){
+        return new InstantCommand(() -> io.setElevatorVoltage(Volts.of(0)));
+    }
+
+    public Command getArmOnCommand(){
+        return new InstantCommand(() -> io.setArmVoltage(Volts.of(2)));
     }
 
     // open claw, then move the elevator and arm down while setting wrist position
