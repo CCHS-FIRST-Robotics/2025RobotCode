@@ -11,8 +11,8 @@ import edu.wpi.first.units.measure.*;
 public class AlgalOSparkMax implements AlgaIO {
     private final SparkMax motor;
 
-    private final RelativeEncoder encoder; // this is wrong unless we have a exterior encoder which i doubt
-                                        // idk how to get motors intergrated enocder data
+    private final RelativeEncoder encoder; // hold up this actually might be right chat
+                                        
 
     // private final StatusSignal<Voltage> voltageSignal;
     // private final StatusSignal<Current> currentSignal;
