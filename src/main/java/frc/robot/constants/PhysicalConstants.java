@@ -16,7 +16,7 @@ public final class PhysicalConstants {
     public static final AngularAcceleration MAX_ANGULAR_ACCEL = RadiansPerSecond.per(Seconds).of(10 * Math.PI);
     
     public static final Distance WHEEL_RADIUS = Inches.of(2);
-    public static final Distance TRACK_WIDTH_X = Inches.of(23); // shorter side // ! might be the wrong way (Should be right)
+    public static final Distance TRACK_WIDTH_X = Inches.of(23); // shorter side // ! might be the wrong way
     public static final Distance TRACK_WIDTH_Y = Inches.of(27);
     public static final Translation2d[] MODULE_TRANSLATIONS = new Translation2d[] {
         new Translation2d(-TRACK_WIDTH_X.in(Meters) / 2.0, -TRACK_WIDTH_Y.in(Meters) / 2.0),
