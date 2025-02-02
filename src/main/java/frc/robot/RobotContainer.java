@@ -4,7 +4,7 @@
 
 package frc.robot;
 
-// import static edu.wpi.first.units.Units.*;
+import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
@@ -105,10 +105,10 @@ public class RobotContainer {
         // controller.b().onTrue(coral.getStopElevatorCommand());
 
         // ————— arm ————— //
-        // controller.x().onTrue(coral.getSetArmCommand(Rotations.of(1)));
-        // controller.y().onTrue(coral.getArmUpCommand());
-        // controller.a().onTrue(coral.getArmDownCommand());
-        // controller.b().onTrue(coral.getStopArmCommand());
+        controller.x().onTrue(coral.getSetArmCommand(Rotations.of(1)));
+        controller.y().onTrue(coral.getArmUpCommand());
+        controller.a().onTrue(coral.getArmDownCommand());
+        controller.b().onTrue(coral.getStopArmCommand());
     }
 
     private void configureAutos(){

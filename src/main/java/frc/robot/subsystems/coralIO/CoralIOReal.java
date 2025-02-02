@@ -86,7 +86,7 @@ public class CoralIOReal implements CoralIO{
         armMotionMagicConfig.MotionMagicJerk = 1;
         armConfig.MotorOutput.withInverted(InvertedValue.CounterClockwise_Positive);
         armMotor.setPosition(Rotations.of(0)); // ! position isn't reset every time, check if this works
-        elevatorConfig.Feedback.withRotorToSensorRatio(armGearingReduction); // ! actually configure the cancoder
+        armConfig.Feedback.withRotorToSensorRatio(armGearingReduction); // ! actually configure the cancoder
         armMotor.getConfigurator().apply(armConfig);
 
         // wristMotor.setCANTimeout(500);

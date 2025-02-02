@@ -25,7 +25,8 @@ public class Module {
 
     public void runState(SwerveModuleState state) {
         state.optimize(getWrappedAngle());
-        io.setTurnPosition(Rotations.of(state.angle.getRotations()));
+        // io.setTurnPosition(Rotations.of(state.angle.getRotations()));
+        io.setTurnPosition(Rotations.of(0)); // ! temp
         io.setDriveVelocity(RadiansPerSecond.of(state.speedMetersPerSecond / PhysicalConstants.WHEEL_RADIUS.in(Meters)));
     }
 

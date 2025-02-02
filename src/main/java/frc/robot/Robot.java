@@ -11,6 +11,7 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.constants.VirtualConstants;
 
 public class Robot extends LoggedRobot {
@@ -36,8 +37,9 @@ public class Robot extends LoggedRobot {
                 break;
         }
         Logger.start();
-
+        
         SmartDashboard.putString("Mode", VirtualConstants.CURRENT_MODE.toString());
+        SmartDashboard.putString("Alliance", DriverStation.getAlliance().isPresent() ? DriverStation.getAlliance().get().toString() : "None");
     }
 
     @Override
