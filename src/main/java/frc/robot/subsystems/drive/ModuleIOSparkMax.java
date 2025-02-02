@@ -35,7 +35,7 @@ public class ModuleIOSparkMax implements ModuleIO {
     private double driveKv = 0.136898;
     private double driveKa = 0.020864;
 
-    private double turnKp = 0.1;
+    private double turnKp = 0;
     private double turnKi = 0;
     private double turnKd = 0;
 

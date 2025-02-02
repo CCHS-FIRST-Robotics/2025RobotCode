@@ -7,6 +7,7 @@ import edu.wpi.first.math.system.plant.*;
 import edu.wpi.first.math.controller.*;
 import edu.wpi.first.math.*;
 import edu.wpi.first.units.measure.*;
+import frc.robot.constants.PhysicalConstants;
 import frc.robot.constants.VirtualConstants;
 
 import org.littletonrobotics.junction.Logger;
@@ -24,16 +25,12 @@ public class ModuleIOSim implements ModuleIO {
     private double driveKi = 0;
     private double driveKd = 0;
     private double driveKs = 0;
-    // 0.8557
-
-
-
-    private double driveKv = 0.8557; // neo kV = 473 rpm/V (from datasheet), then adjust for gearing
-    private double driveKa = 0.0929911425; // 0.0148; V/(rad/s^2), Vs^2/rad
+    private double driveKv = 1 / (473 / 60) * PhysicalConstants.DRIVE_AFTER_ENCODER_REDUCTION; // neo kV = 473 rpm/V (datasheet)
+    private double driveKa = 0; // ! change this later when sysID exists
 
     private double turnKp = 2 * 2 * Math.PI; // !
-    private double turnKi = 0 * 2 * Math.PI; 
-    private double turnKd = 0 * 2 * Math.PI; // !
+    private double turnKi = 0; 
+    private double turnKd = 0;
 
     private final PIDController drivePID = new PIDController(driveKp, driveKi, driveKd);
     private final SimpleMotorFeedforward driveFF = new SimpleMotorFeedforward(driveKs, driveKv, driveKa);

@@ -11,7 +11,7 @@ public final class VirtualConstants {
         SIM,
         REPLAY
     }
-    public static final ROBOT_MODE CURRENT_MODE = ROBOT_MODE.REAL; // ! publish this to networktables
+    public static final ROBOT_MODE CURRENT_MODE = ROBOT_MODE.SIM;
     
     // controllers
     public static final int CONTROLLER_PORT_1 = 0;
@@ -22,8 +22,8 @@ public final class VirtualConstants {
 
     // ids
     public static final int ELEVATOR_ID = 0;
-    public static final int ELEVATOR_SWITCH_1_PORT = 0;
-    public static final int ELEVATOR_SWITCH_2_PORT = 1;
+    public static final int ELEVATOR_SWITCH_0_PORT = 0;
+    public static final int ELEVATOR_SWITCH_1_PORT = 1;
     
     public static final int ARM_ID = 1;
     public static final int WRIST_ID = 2;

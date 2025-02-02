@@ -9,13 +9,15 @@ import edu.wpi.first.wpilibj.RobotBase;
 /**
  * to do: 
  * 
+ * ! how did the arm on 2024 robot go to posiion 0 on startup
+ * 
+ * 
  *  daily: 
  *   fix sim classes
- * 
- *   try position control
+ *   pid tunable constants
  * 
  * — at robotics daily: 
- * ——— get DIOs for elevator working
+ * ——— test the arm
  * ——— check where module rotation 0 is
  * ——— test replacing drive.java stop function
  * —— add coral code to autos
@@ -26,7 +28,6 @@ import edu.wpi.first.wpilibj.RobotBase;
  *   go through all unit conversions
  *   controllers for the year
  *   movetoapriltag command(assume you can get an angle and distance from the camera)
- *   pid tunable constants
  *   maybe leds for telling the coral station person whether the robot can intake
  */
 

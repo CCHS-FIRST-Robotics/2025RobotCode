@@ -101,7 +101,7 @@ public class Drive extends SubsystemBase {
                 break;
             case POSITION:
                 // get PIDs
-                double xPID = xController.calculate(getPose().getX(), positionSetpoint.getX()); // ! (xController.atSetpoint() ? 0 :) was removed
+                double xPID = xController.calculate(getPose().getX(), positionSetpoint.getX());
                 double yPID = yController.calculate(getPose().getY(), positionSetpoint.getY());
                 double thetaPID = thetaController.calculate(getPose().getRotation().getRotations(), positionSetpoint.getRotation().getRotations());
                 

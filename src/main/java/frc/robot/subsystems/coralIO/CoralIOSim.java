@@ -1,4 +1,37 @@
+package frc.robot.subsystems.coralIO;
 
+import edu.wpi.first.units.measure.*;
+
+public class CoralIOSim implements CoralIO{
+    public CoralIOSim() {}
+
+    @Override
+    public void setElevatorVoltage(Voltage volts){}
+
+    @Override
+    public void setElevatorPosition(Angle position){}
+
+    @Override
+    public void setArmVoltage(Voltage volts){}
+
+    @Override
+    public void setArmPosition(Angle position){}
+
+    // @Override
+    // public void setWristVoltage(Voltage volts){}
+
+    // @Override
+    // public void setWristPosition(Angle position){}
+
+    @Override
+    public void setClawVoltage(Voltage volts){}
+
+    @Override
+    public void setClawPosition(boolean open){}
+
+    @Override
+    public void updateInputs(CoralIOInputs inputs) {}
+}
 
 // ! old elevator sim code
 

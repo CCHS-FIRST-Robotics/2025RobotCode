@@ -4,8 +4,10 @@
 
 package frc.robot;
 
+// import static edu.wpi.first.units.Units.*;
+
 import edu.wpi.first.wpilibj2.command.*;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.*;
 import choreo.auto.AutoChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
@@ -52,7 +54,7 @@ public class RobotContainer {
                     new GyroIO() {}
                 );
 
-                coral = new Coral(new CoralIO() {});
+                coral = new Coral(new CoralIOSim());
                 break;
             default:
                 drive = new Drive(
@@ -86,6 +88,7 @@ public class RobotContainer {
 
 
     private void configureButtonBindings() {
+        // ————— driving ————— //
         drive.setDefaultCommand(
             new DriveWithJoysticks(
                 drive,
@@ -95,10 +98,17 @@ public class RobotContainer {
             )
         );
 
-        controller.x().onTrue(coral.getArmOnCommand());
-        controller.y().onTrue(coral.getElevatorUpCommand());
-        controller.a().onTrue(coral.getElevatorDownCommand());
-        controller.b().onTrue(coral.getStopElevatorCommand());
+        // ————— elevator ————— //
+        // controller.x().onTrue(coral.getSetElevatorCommand(Rotations.of(1)));
+        // controller.y().onTrue(coral.getElevatorUpCommand());
+        // controller.a().onTrue(coral.getElevatorDownCommand());
+        // controller.b().onTrue(coral.getStopElevatorCommand());
+
+        // ————— arm ————— //
+        // controller.x().onTrue(coral.getSetArmCommand(Rotations.of(1)));
+        // controller.y().onTrue(coral.getArmUpCommand());
+        // controller.a().onTrue(coral.getArmDownCommand());
+        // controller.b().onTrue(coral.getStopArmCommand());
     }
 
     private void configureAutos(){
