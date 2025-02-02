@@ -11,10 +11,7 @@ import edu.wpi.first.wpilibj.RobotBase;
  * 
  * ! how did the arm on 2024 robot go to posiion 0 on startup
  * 
- * 
  *  daily: 
- *   fix real classes
- *   fix hickey's code
  *   pid tunable constants
  * 
  * — at robotics daily: 
