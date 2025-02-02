@@ -17,12 +17,12 @@ import frc.robot.constants.*;
 //! trapezoidal accelleration
 
 public class Drive extends SubsystemBase {
-    public enum CONTROL_MODE {
+    public enum DRIVE_MODE {
         DISABLED,
         POSITION,
         VELOCITY
     };
-    private CONTROL_MODE controlMode = CONTROL_MODE.DISABLED;
+    private DRIVE_MODE controlMode = DRIVE_MODE.DISABLED;
 
     private final Module[] modules = new Module[4];
 
@@ -72,7 +72,7 @@ public class Drive extends SubsystemBase {
     @Override
     public void periodic() {
         if (DriverStation.isDisabled()) {
-            controlMode = CONTROL_MODE.DISABLED;
+            controlMode = DRIVE_MODE.DISABLED;
         }
 
         // update odometry
@@ -131,17 +131,17 @@ public class Drive extends SubsystemBase {
 
     public void stop() {
         // runVelocity(new ChassisSpeeds()); // ! test with replacing this with just controlMode = CONTROL_MODE.DISABLED
-        controlMode = CONTROL_MODE.DISABLED; // ! doesn't seem to make much difference in sim
+        controlMode = DRIVE_MODE.DISABLED; // ! doesn't seem to make much difference in sim
     }
 
     public void runPosition(SwerveSample sample){
-        controlMode = CONTROL_MODE.POSITION;
+        controlMode = DRIVE_MODE.POSITION;
         positionSetpoint = sample.getPose();
         twistSetpoint = sample.getChassisSpeeds().toTwist2d(1);
     }
 
     public void runVelocity(ChassisSpeeds speeds) {
-        controlMode = CONTROL_MODE.VELOCITY;
+        controlMode = DRIVE_MODE.VELOCITY;
         this.speeds = speeds;
     }
 
