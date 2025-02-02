@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.RobotBase;
  * 
  *  daily: 
  *   fix sim classes
+ *   fix hickey's code
  *   pid tunable constants
  * 
  * — at robotics daily: 

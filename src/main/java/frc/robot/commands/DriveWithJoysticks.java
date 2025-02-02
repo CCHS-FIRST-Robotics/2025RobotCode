@@ -10,6 +10,8 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.subsystems.drive.*;
 import frc.robot.constants.*;
 
+import org.littletonrobotics.junction.Logger;
+
 public class DriveWithJoysticks extends Command {
     private final Drive drive;
     private final Supplier<Double> linearXSpeedSupplier;
@@ -80,7 +82,7 @@ public class DriveWithJoysticks extends Command {
                 PhysicalConstants.MAX_ANGULAR_ACCEL.in(RadiansPerSecond.per(Second)) * VirtualConstants.PERIOD
             )
         );
-        
+
         drive.runVelocity(speeds);
         prevSpeeds = speeds;
     }

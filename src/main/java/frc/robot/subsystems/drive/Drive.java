@@ -113,16 +113,16 @@ public class Drive extends SubsystemBase {
                     getYaw() // not getYawWithAllianceRotation(), because the setpoint is already generated with it in mind
                 );
             case VELOCITY: // fallthrough to VELOCITY case, no break statement needed above
-                ChassisSpeeds.discretize(speeds, VirtualConstants.PERIOD); // more detail: https://www.chiefdelphi.com/t/whitepaper-swerve-drive-skew-and-second-order-kinematics/416964/30
+                ChassisSpeeds.discretize(speeds, VirtualConstants.PERIOD); // more detail: https://www.chiefdelphi.com/t/whitepaper-swerve-drive-skew-and-second-order-kinematics/416964/30                
                 SwerveModuleState[] moduleStates = PhysicalConstants.KINEMATICS.toSwerveModuleStates(speeds); // convert speeds to module states
                 SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates, PhysicalConstants.MAX_LINEAR_SPEED); // renormalize wheel speeds
-                
+
+                Logger.recordOutput("ModuleStates", moduleStates);
+
                 // run modules
                 for (int i = 0; i < 4; i++) {
                     modules[i].runState(moduleStates[i]);
                 }
-
-                Logger.recordOutput("DriveStates", moduleStates);
                 break;
         }
     }
