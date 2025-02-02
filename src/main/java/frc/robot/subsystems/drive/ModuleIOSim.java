@@ -21,16 +21,24 @@ public class ModuleIOSim implements ModuleIO {
 
     private int index;
 
-    private double driveKp = 0.5;
-    private double driveKi = 0;
-    private double driveKd = 0;
-    private double driveKs = 0;
-    private double driveKv = (1 / (473d / 60d)) * PhysicalConstants.DRIVE_AFTER_ENCODER_REDUCTION; // neo kV = 473 rpm/V (datasheet)
-    private double driveKa = 0.0929; // ! change this later when sysID exists
+    // private double driveKp = 0.00015;
+    // private double driveKi = 0;
+    // private double driveKd = 0;
+    // private double driveKs = 0;
+    // private double driveKv = (1 / (473d / 60d)) * PhysicalConstants.DRIVE_AFTER_ENCODER_REDUCTION; // neo kV = 473 rpm/V (datasheet)
+    // private double driveKa = 0.0929; // ! change this later when sysID exists
 
-    private double turnKp = 2;
+    public double driveKp = 0.00015; // 0.00015
+    public double driveKd = 0.0;
+    public double driveKi = 0.000000; // 0.000008
+    public double driveKs = 0.0; // .19
+    public double driveKv = 0.1362; // From NEO datasheet (473kV): 0.136194 V/(rad/s) -
+                                    // https://www.wolframalpha.com/input?i=1%2F%28473+*+2pi%2F60%29+*+%2850.0+%2F+14.0%29+*+%2817.0+%2F+27.0%29+*+%2845.0+%2F+15.0%29
+    public double driveKa = 0.0148;
+
+    private double turnKp = 8 / (2 * Math.PI);
     private double turnKi = 0;
-    private double turnKd = 0;
+    private double turnKd = 1.5 / (2 * Math.PI);
 
     private final PIDController drivePID = new PIDController(driveKp, driveKi, driveKd);
     private final SimpleMotorFeedforward driveFF = new SimpleMotorFeedforward(driveKs, driveKv, driveKa);
@@ -65,15 +73,13 @@ public class ModuleIOSim implements ModuleIO {
     @Override
     public void setDriveVelocity(AngularVelocity velocity) {
         double volts = drivePID.calculate(
-            driveSim.getAngularVelocityRPM() / 60,
-            velocity.in(RotationsPerSecond))
-            + driveFF.calculateWithVelocities(prevVelocity.in(RotationsPerSecond), velocity.in(RotationsPerSecond)
+            driveSim.getAngularVelocityRadPerSec(),
+            velocity.in(RadiansPerSecond))
+            + driveFF.calculateWithVelocities(prevVelocity.in(RadiansPerSecond), velocity.in(RadiansPerSecond)
         );
-        Logger.recordOutput("Thing1", driveSim.getAngularVelocityRPM() / 60);
-        Logger.recordOutput("Thing2", velocity.in(RotationsPerSecond));
-        Logger.recordOutput("Thing3", driveFF.calculateWithVelocities(prevVelocity.in(RotationsPerSecond), velocity.in(RotationsPerSecond)));
 
         setDriveVoltage(Volts.of(volts));
+        driveAppliedVolts = volts;
         prevVelocity = velocity;
 
         Logger.recordOutput("modules/" + Integer.toString(index) + "DriveVelocitySetpoint", velocity.in(RotationsPerSecond));
@@ -91,6 +97,7 @@ public class ModuleIOSim implements ModuleIO {
         );
 
         setTurnVoltage(Volts.of(volts));
+        turnAppliedVolts = volts;
 
         Logger.recordOutput("modules/" + Integer.toString(index) + "TurnPositionSetpoint", position.in(Rotations));
     }
