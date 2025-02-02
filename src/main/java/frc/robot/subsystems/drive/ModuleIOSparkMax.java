@@ -26,22 +26,16 @@ public class ModuleIOSparkMax implements ModuleIO {
     private final RelativeEncoder turnRelativeEncoder; // NEO
     private final AbsoluteEncoder turnAbsoluteEncoder; // CANandcoder
     
-    public final int index;
-
-    private double driveKp = 0.00001;
+    private double driveKp = 0.00015; // ! are pid units in rpm???
     private double driveKi = 0;
     private double driveKd = 0;
     private double driveKs = 0;
-    private double driveKv = 0.136898;
+    private double driveKv = 1/(473d * Math.PI / 60d) * PhysicalConstants.DRIVE_AFTER_ENCODER_REDUCTION; // neo kV = 473 rpm/V (from datasheet)    
     private double driveKa = 0.020864;
 
-    private double turnKp = 0;
+    private double turnKp = 8 / (2 * Math.PI);
     private double turnKi = 0;
-    private double turnKd = 0;
-
-    // ! check colin's math!
-    // ! move these to hardwareConstants
-
+    private double turnKd = 1.5 / (2 * Math.PI);
 
     private AngularVelocity prevDriveVelocity = RadiansPerSecond.of(0.0);
 
@@ -49,7 +43,6 @@ public class ModuleIOSparkMax implements ModuleIO {
     public ModuleIOSparkMax(int index) {
         driveMotor = new SparkMax(10 * index + 1, MotorType.kBrushless);
         turnMotor = new SparkMax(10 * index + 2, MotorType.kBrushless);
-        this.index = index;
 
         // start config
         driveMotor.setCANTimeout(500);
@@ -73,8 +66,8 @@ public class ModuleIOSparkMax implements ModuleIO {
         turnConfig.closedLoop.positionWrappingMaxInput(1);
         
         // miscellaneous settings
-        driveConfig.signals.primaryEncoderPositionPeriodMs(10);
-        turnConfig.signals.primaryEncoderVelocityPeriodMs(20); // ! maybe wrong
+        driveConfig.signals.primaryEncoderVelocityPeriodMs(10);
+        turnConfig.signals.absoluteEncoderPositionPeriodMs(20);
         
         driveConfig.encoder.quadratureMeasurementPeriod(10); // ! could be not quadrature
         driveConfig.encoder.quadratureAverageDepth(2);
@@ -96,6 +89,13 @@ public class ModuleIOSparkMax implements ModuleIO {
         turnMotor.setCANTimeout(0);
         driveMotor.configure(driveConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         turnMotor.configure(turnConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+        // ! HRMMMMMMM
+        // driveConfig.encoder.positionConversionFactor(1 / PhysicalConstants.DRIVE_AFTER_ENCODER_REDUCTION);
+        // driveConfig.encoder.velocityConversionFactor(1 / PhysicalConstants.DRIVE_AFTER_ENCODER_REDUCTION);
+
+        // turnConfig.encoder.positionConversionFactor(1 / PhysicalConstants.TURN_AFTER_ENCODER_REDUCTION);
+        // turnConfig.encoder.velocityConversionFactor(1 / PhysicalConstants.TURN_AFTER_ENCODER_REDUCTION);
     }
     
     @Override
@@ -110,13 +110,13 @@ public class ModuleIOSparkMax implements ModuleIO {
     
     @Override
     public void setDriveVelocity(AngularVelocity velocity) {
-        driveMotor.getClosedLoopController().setReference( // ! probably scuffed in translation
+        driveMotor.getClosedLoopController().setReference(
             velocity.in(Rotations.per(Minute)) * PhysicalConstants.DRIVE_AFTER_ENCODER_REDUCTION,
             SparkMax.ControlType.kVelocity,
             ClosedLoopSlot.kSlot0,
             driveFeedforward.calculateWithVelocities(
-                prevDriveVelocity.in(RotationsPerSecond),
-                velocity.in(RotationsPerSecond)
+                prevDriveVelocity.in(RadiansPerSecond),
+                velocity.in(RadiansPerSecond)
             )
         );
 
@@ -126,10 +126,10 @@ public class ModuleIOSparkMax implements ModuleIO {
     @Override
     public void setTurnPosition(Angle position) {
         // adjust from [-PI, PI] to [0, 2PI]  // ! out of curiosity, why
-        position = Rotations.of(MathUtil.inputModulus(position.in(Radians), 0, 2 * Math.PI)); 
+        position = Radians.of(MathUtil.inputModulus(position.in(Radians), 0, 2 * Math.PI)); 
         
         turnMotor.getClosedLoopController().setReference(
-            position.in(Rotations), 
+            position.in(Rotations), // ! shouldn't there be a * PhysicalConstants.TURN_AFTER_ENCODER_REDUCTION here???
             SparkMax.ControlType.kPosition,
             ClosedLoopSlot.kSlot0
         );
@@ -139,16 +139,16 @@ public class ModuleIOSparkMax implements ModuleIO {
     public void updateInputs(ModuleIOInputs inputs) {
         inputs.driveVoltage = driveMotor.getAppliedOutput() * driveMotor.getBusVoltage(); // ! what 
         inputs.driveCurrent = driveMotor.getOutputCurrent();
-        inputs.drivePosition = // ! what the fuck
-            (driveEncoder.getPosition()
+        inputs.drivePosition = Rotations.of((driveEncoder.getPosition() // ! try to understand the coupling stuff colin mentioned
             + turnRelativeEncoder.getPosition() / PhysicalConstants.TURN_AFTER_ENCODER_REDUCTION * PhysicalConstants.COUPLING_RATIO)
-            / PhysicalConstants.DRIVE_AFTER_ENCODER_REDUCTION;
-        inputs.driveVelocity = Rotations.per(Minute).of(driveEncoder.getVelocity() / PhysicalConstants.DRIVE_AFTER_ENCODER_REDUCTION).in(RotationsPerSecond);
+            / PhysicalConstants.DRIVE_AFTER_ENCODER_REDUCTION
+        ).in(Radians);
+        inputs.driveVelocity = Rotations.per(Minute).of(driveEncoder.getVelocity() / PhysicalConstants.DRIVE_AFTER_ENCODER_REDUCTION).in(RadiansPerSecond);
         inputs.driveTemperature = driveMotor.getMotorTemperature();
         
         inputs.turnVoltage = turnMotor.getAppliedOutput() * turnMotor.getBusVoltage(); // ! what
         inputs.turnCurrent = turnMotor.getOutputCurrent();
-        inputs.turnPosition = turnAbsoluteEncoder.getPosition();
+        inputs.turnPosition = turnAbsoluteEncoder.getPosition() / PhysicalConstants.TURN_AFTER_ENCODER_REDUCTION;
         inputs.turnTemperature = turnMotor.getMotorTemperature();
     }
 }

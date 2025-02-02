@@ -12,10 +12,10 @@ import frc.robot.constants.PhysicalConstants.*;
 public class Coral extends SubsystemBase {
     private final CoralIO io;
     private final DigitalInput troughSensor = new DigitalInput(VirtualConstants.TROUGH_SENSOR_PORT);
-    private final DigitalInput elevatorSwitch0 = new DigitalInput(VirtualConstants.ELEVATOR_SWITCH_0_PORT); // bottom
-    // private final DigitalInput elevatorSwitch1 = new DigitalInput(VirtualConstants.ELEVATOR_SWITCH_1_PORT); // top
+    private final DigitalInput elevatorSwitchBottom = new DigitalInput(VirtualConstants.ELEVATOR_SWITCH_BOTTOM_PORT); // bottom
+    // private final DigitalInput elevatorSwitchTop = new DigitalInput(VirtualConstants.ELEVATOR_SWITCH_TOP_PORT); // top
     private final CoralIOInputsAutoLogged inputs = new CoralIOInputsAutoLogged();
-    // ! the arm can only rotate above the elevator
+    // ! the arm can only rotate above the elevator (use inputmodulus or whatever the last arm used)
 
     public Coral(CoralIO io) {
         this.io = io;
@@ -34,7 +34,7 @@ public class Coral extends SubsystemBase {
         //     () -> io.setElevatorVoltage(Volts.of(2)), 
         //     () -> io.setElevatorVoltage(Volts.of(0))
             
-        // ).until(() -> elevatorSwitch1.get());
+        // ).until(() -> elevatorSwitchTop.get());
         return new InstantCommand(() -> io.setElevatorVoltage(Volts.of(2)));
     }
 
@@ -43,7 +43,7 @@ public class Coral extends SubsystemBase {
             () -> io.setElevatorVoltage(Volts.of(-2)), 
             () -> io.setElevatorVoltage(Volts.of(0))
         )
-        .until(() -> elevatorSwitch0.get());
+        .until(() -> elevatorSwitchBottom.get());
         // return new InstantCommand(() -> io.setElevatorVoltage(Volts.of(-2)));
     }
 

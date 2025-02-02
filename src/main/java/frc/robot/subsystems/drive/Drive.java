@@ -117,12 +117,12 @@ public class Drive extends SubsystemBase {
                 SwerveModuleState[] moduleStates = PhysicalConstants.KINEMATICS.toSwerveModuleStates(speeds); // convert speeds to module states
                 SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates, PhysicalConstants.MAX_LINEAR_SPEED); // renormalize wheel speeds
 
-                Logger.recordOutput("ModuleStates", moduleStates);
-
+                
                 // run modules
                 for (int i = 0; i < 4; i++) {
                     modules[i].runState(moduleStates[i]);
                 }
+                Logger.recordOutput("moduleStates", moduleStates);
                 break;
         }
     }

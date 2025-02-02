@@ -10,8 +10,6 @@ import edu.wpi.first.units.measure.*;
 import frc.robot.constants.PhysicalConstants;
 import frc.robot.constants.VirtualConstants;
 
-import org.littletonrobotics.junction.Logger;
-
 public class ModuleIOSim implements ModuleIO {
     private final DCMotorSim driveSim;
     private final DCMotorSim turnSim = new DCMotorSim( // 
@@ -19,22 +17,12 @@ public class ModuleIOSim implements ModuleIO {
         DCMotor.getNEO(1)
     );
 
-    private int index;
-
-    // private double driveKp = 0.00015;
-    // private double driveKi = 0;
-    // private double driveKd = 0;
-    // private double driveKs = 0;
-    // private double driveKv = (1 / (473d / 60d)) * PhysicalConstants.DRIVE_AFTER_ENCODER_REDUCTION; // neo kV = 473 rpm/V (datasheet)
-    // private double driveKa = 0.0929; // ! change this later when sysID exists
-
-    public double driveKp = 0.00015; // 0.00015
-    public double driveKd = 0.0;
-    public double driveKi = 0.000000; // 0.000008
-    public double driveKs = 0.0; // .19
-    public double driveKv = 0.1362; // From NEO datasheet (473kV): 0.136194 V/(rad/s) -
-                                    // https://www.wolframalpha.com/input?i=1%2F%28473+*+2pi%2F60%29+*+%2850.0+%2F+14.0%29+*+%2817.0+%2F+27.0%29+*+%2845.0+%2F+15.0%29
-    public double driveKa = 0.0148;
+    private double driveKp = 0.00015;
+    private double driveKi = 0;
+    private double driveKd = 0;
+    private double driveKs = 0;
+    private double driveKv = 1/(473d * Math.PI / 60d) * PhysicalConstants.DRIVE_AFTER_ENCODER_REDUCTION; // neo kV = 473 rpm/V (from datasheet)
+    private double driveKa = 0.0148;
 
     private double turnKp = 8 / (2 * Math.PI);
     private double turnKi = 0;
@@ -46,16 +34,14 @@ public class ModuleIOSim implements ModuleIO {
 
     private double driveAppliedVolts = 0.0;
     private double turnAppliedVolts = 0.0;
-    
-    AngularVelocity prevVelocity = RotationsPerSecond.of(0.0);
+    private AngularVelocity prevVelocity = RotationsPerSecond.of(0.0);
 
-    public ModuleIOSim(int index) {
+    public ModuleIOSim() {
         driveSim = new DCMotorSim(
             LinearSystemId.createDCMotorSystem(driveKv, driveKa), 
             DCMotor.getNEO(1), 
             1, 1
         );
-        this.index = index;
         
         turnPID.enableContinuousInput(0, 1);
     }
@@ -81,9 +67,6 @@ public class ModuleIOSim implements ModuleIO {
         setDriveVoltage(Volts.of(volts));
         driveAppliedVolts = volts;
         prevVelocity = velocity;
-
-        Logger.recordOutput("modules/" + Integer.toString(index) + "DriveVelocitySetpoint", velocity.in(RotationsPerSecond));
-        Logger.recordOutput("modules/" + Integer.toString(index) + "DriveVoltageSetpoint", volts);
     }
 
     @Override
@@ -98,8 +81,6 @@ public class ModuleIOSim implements ModuleIO {
 
         setTurnVoltage(Volts.of(volts));
         turnAppliedVolts = volts;
-
-        Logger.recordOutput("modules/" + Integer.toString(index) + "TurnPositionSetpoint", position.in(Rotations));
     }
 
     @Override

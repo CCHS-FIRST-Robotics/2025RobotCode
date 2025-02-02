@@ -17,7 +17,7 @@ import frc.robot.utils.AutoRoutineGenerator;
 import frc.robot.constants.VirtualConstants;
 
 public class RobotContainer {
-    private final CommandXboxController controller = new CommandXboxController(VirtualConstants.CONTROLLER_PORT_1);
+    private final CommandXboxController controller = new CommandXboxController(VirtualConstants.CONTROLLER_PORT);
 
     private final Drive drive;
     private final Coral coral;
@@ -47,10 +47,10 @@ public class RobotContainer {
                 break;
             case SIM:
                 drive = new Drive(
-                    new ModuleIOSim(1),
-                    new ModuleIOSim(2),
-                    new ModuleIOSim(3),
-                    new ModuleIOSim(4),
+                    new ModuleIOSim(),
+                    new ModuleIOSim(),
+                    new ModuleIOSim(),
+                    new ModuleIOSim(),
                     new GyroIO() {}
                 );
 

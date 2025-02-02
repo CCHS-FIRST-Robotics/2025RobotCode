@@ -8,7 +8,6 @@ public interface AlgaIO {
     public static class AlgaIOInputs {
         public double motorVoltage;
         public double motorCurrent;
-        public double motorVelocity;
         public double motorTemperature;
     }
 

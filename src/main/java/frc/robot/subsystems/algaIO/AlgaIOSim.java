@@ -33,7 +33,6 @@ public class AlgaIOSim implements AlgaIO {
 
         inputs.motorVoltage = appliedVolts.in(Volts);
         inputs.motorCurrent = motor.getCurrentDrawAmps();
-        inputs.motorVelocity = motor.getOutput(1); // gets the velocity in the units of the gains you give it
         inputs.motorTemperature = 0;
     }
 }

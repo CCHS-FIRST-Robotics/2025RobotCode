@@ -13,18 +13,16 @@ public final class VirtualConstants {
     }
     public static final ROBOT_MODE CURRENT_MODE = ROBOT_MODE.SIM;
     
-    // controllers
-    public static final int CONTROLLER_PORT_1 = 0;
-    public static final int CONTROLLER_PORT_2 = 1;
+    // controller
+    public static final int CONTROLLER_PORT = 0;
     public static final double JOYSTICK_DEADZONE = 0.1;
     public static final double LINEAR_SPEED_EXPONENT = 2;
     public static final double ANGULAR_SPEED_EXPONENT = 2;
 
     // ids
     public static final int ELEVATOR_ID = 0;
-    public static final int ELEVATOR_SWITCH_0_PORT = 0;
-    public static final int ELEVATOR_SWITCH_1_PORT = 1;
-    
+    public static final int ELEVATOR_SWITCH_BOTTOM_PORT = 0;
+    public static final int ELEVATOR_SWITCH_TOP_PORT = 1;
     public static final int ARM_ID = 1;
     public static final int WRIST_ID = 2;
     public static final int CLAW_ID = 3;

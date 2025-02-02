@@ -11,7 +11,6 @@ public class AlgaIOTalonFX implements AlgaIO {
 
     private final StatusSignal<Voltage> voltageSignal;
     private final StatusSignal<Current> currentSignal;
-    private final StatusSignal<AngularVelocity> velocitySignal;
     private final StatusSignal<Temperature> temperatureSignal;
 
     public AlgaIOTalonFX(int id) {
@@ -19,7 +18,6 @@ public class AlgaIOTalonFX implements AlgaIO {
 
         voltageSignal = motor.getMotorVoltage();
         currentSignal = motor.getStatorCurrent();
-        velocitySignal = motor.getVelocity();
         temperatureSignal = motor.getDeviceTemp();
     }
 
@@ -30,11 +28,10 @@ public class AlgaIOTalonFX implements AlgaIO {
 
     @Override
     public void updateInputs(AlgaIOInputs inputs) {
-        BaseStatusSignal.refreshAll(voltageSignal, currentSignal, velocitySignal, temperatureSignal);
+        BaseStatusSignal.refreshAll(voltageSignal, currentSignal, temperatureSignal);
 
         inputs.motorVoltage = voltageSignal.getValue().in(Volts);
         inputs.motorCurrent = currentSignal.getValue().in(Amps);
-        inputs.motorVelocity = velocitySignal.getValue().in(RotationsPerSecond); // ! might wanna change units later
         inputs.motorTemperature = temperatureSignal.getValue().in(Celsius);
     }
 }
