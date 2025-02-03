@@ -116,7 +116,6 @@ public class Drive extends SubsystemBase {
                 ChassisSpeeds.discretize(speeds, VirtualConstants.PERIOD); // more detail: https://www.chiefdelphi.com/t/whitepaper-swerve-drive-skew-and-second-order-kinematics/416964/30                
                 SwerveModuleState[] moduleStates = PhysicalConstants.KINEMATICS.toSwerveModuleStates(speeds); // convert speeds to module states
                 SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates, PhysicalConstants.MAX_LINEAR_SPEED); // renormalize wheel speeds
-
                 
                 // run modules
                 for (int i = 0; i < 4; i++) {
@@ -171,8 +170,8 @@ public class Drive extends SubsystemBase {
         SwerveModulePosition[] wheelPositions = new SwerveModulePosition[4];
         for (int i = 0; i < 4; i++) {
             wheelPositions[i] = new SwerveModulePosition(
-                modules[i].getDistanceTraveled(),
-                modules[i].getWrappedAngle()
+                modules[i].getDistance(),
+                modules[i].getAngle()
             );
         }
         return wheelPositions;
@@ -182,10 +181,10 @@ public class Drive extends SubsystemBase {
         SwerveModulePosition[] wheelDeltas = new SwerveModulePosition[4];
         for (int i = 0; i < 4; i++) {
             wheelDeltas[i] = new SwerveModulePosition(
-                modules[i].getDistanceTraveled() - lastModulePositionsMeters[i],
-                modules[i].getWrappedAngle()
+                modules[i].getDistance() - lastModulePositionsMeters[i],
+                modules[i].getAngle()
             );
-            lastModulePositionsMeters[i] = modules[i].getDistanceTraveled();
+            lastModulePositionsMeters[i] = modules[i].getDistance();
         }
         return wheelDeltas;
     }

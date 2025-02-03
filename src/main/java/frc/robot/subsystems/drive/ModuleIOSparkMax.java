@@ -9,7 +9,6 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.SparkBase.*;
-import edu.wpi.first.math.*;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.units.measure.*;
 import frc.robot.constants.PhysicalConstants;
@@ -124,9 +123,6 @@ public class ModuleIOSparkMax implements ModuleIO {
 
     @Override
     public void setTurnPosition(Angle position) {
-        // adjust from [-PI, PI] to [0, 2PI]  // ! out of curiosity, why
-        position = Radians.of(MathUtil.inputModulus(position.in(Radians), 0, 2 * Math.PI)); 
-        
         turnMotor.getClosedLoopController().setReference(
             position.in(Rotations), // ! shouldn't there be a * PhysicalConstants.TURN_AFTER_ENCODER_REDUCTION here???
             SparkMax.ControlType.kPosition,

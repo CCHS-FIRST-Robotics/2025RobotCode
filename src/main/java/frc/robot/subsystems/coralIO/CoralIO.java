@@ -32,6 +32,8 @@ public interface CoralIO {
 
     public default void setElevatorPosition(Angle position){}
 
+    public default void zeroElevator(){}
+
     public default void setArmVoltage(Voltage volts){}
 
     public default void setArmPosition(Angle position){}

@@ -2,7 +2,6 @@ package frc.robot.subsystems.drive;
 
 import static edu.wpi.first.units.Units.*;
 
-import edu.wpi.first.math.*;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.*;
 import org.littletonrobotics.junction.Logger;
@@ -24,9 +23,8 @@ public class Module {
     }
 
     public void runState(SwerveModuleState state) {
-        state.optimize(getWrappedAngle());
-        // io.setTurnPosition(Rotations.of(state.angle.getRotations()));
-        io.setTurnPosition(Rotations.of(0)); // ! temp
+        state.optimize(getAngle());
+        io.setTurnPosition(Rotations.of(state.angle.getRotations()));
         io.setDriveVelocity(RadiansPerSecond.of(state.speedMetersPerSecond / PhysicalConstants.WHEEL_RADIUS.in(Meters)));
     }
 
@@ -37,11 +35,11 @@ public class Module {
 
     // ————— functions for odometry ————— //
 
-    public double getDistanceTraveled() {
+    public double getDistance() {
         return inputs.drivePosition * PhysicalConstants.WHEEL_RADIUS.in(Meters);
     }
 
-    public Rotation2d getWrappedAngle() {
-        return new Rotation2d(MathUtil.angleModulus(Rotations.of(inputs.turnPosition).in(Radians)));
+    public Rotation2d getAngle() {
+        return new Rotation2d(Rotations.of(inputs.turnPosition).in(Radians));
     }
 }

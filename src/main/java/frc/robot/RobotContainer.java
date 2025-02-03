@@ -92,22 +92,20 @@ public class RobotContainer {
         drive.setDefaultCommand(
             new DriveWithJoysticks(
                 drive,
-                () -> controller.getLeftX(), 
                 () -> -controller.getLeftY(), // xboxcontroller is flipped
+                () -> controller.getLeftX(), 
                 () -> controller.getRightX()
             )
         );
 
-        // ————— elevator ————— //
-        // controller.x().onTrue(coral.getSetElevatorCommand(Rotations.of(1)));
-        // controller.y().onTrue(coral.getElevatorUpCommand());
-        // controller.a().onTrue(coral.getElevatorDownCommand());
-        // controller.b().onTrue(coral.getStopElevatorCommand());
+        // controller.b().onTrue(new InstantCommand(() -> drive.stop()));
 
+        // ————— elevator ————— //
+        controller.y().onTrue(coral.getSetElevatorCommand(Rotations.of(1)));
+        controller.a().onTrue(coral.getElevatorDownCommand());
+        
         // ————— arm ————— //
-        controller.x().onTrue(coral.getSetArmCommand(Rotations.of(1)));
-        controller.y().onTrue(coral.getArmUpCommand());
-        controller.a().onTrue(coral.getArmDownCommand());
+        controller.x().onTrue(coral.getSetArmCommand(Rotations.of(0.25)));
         controller.b().onTrue(coral.getStopArmCommand());
     }
 

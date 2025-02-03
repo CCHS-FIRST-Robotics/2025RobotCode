@@ -27,8 +27,9 @@ public class CoralIOReal implements CoralIO{
     private final MotionMagicConfigs elevatorMotionMagicConfig = elevatorConfig.MotionMagic;
     private final MotionMagicVoltage elevatorMotionMagicVoltage = new MotionMagicVoltage(0);
     private final double elevatorGearingReduction = 100;
+    // ! we probably need a cancoder
 
-    private double kPElevator = 2;
+    private double kPElevator = 10;
     private double kIElevator = 0;
     private double kDElevator = 0;
 
@@ -37,8 +38,9 @@ public class CoralIOReal implements CoralIO{
     private final MotionMagicConfigs armMotionMagicConfig = armConfig.MotionMagic;
     private final MotionMagicVoltage armMotionMagicVoltage = new MotionMagicVoltage(0);
     private final double armGearingReduction = 100;
+    // ! configure the encoder
 
-    private double kPArm = 2;
+    private double kPArm = 4;
     private double kIArm = 0;
     private double kDArm = 0;
     // ! needs kG
@@ -74,8 +76,8 @@ public class CoralIOReal implements CoralIO{
         elevatorMotionMagicConfig.MotionMagicAcceleration = 1;
         elevatorMotionMagicConfig.MotionMagicJerk = 1;
         elevatorConfig.MotorOutput.withInverted(InvertedValue.Clockwise_Positive);
-        elevatorMotor.setPosition(Rotations.of(0)); // ! position isn't reset every time, check if this works
-        elevatorConfig.Feedback.withSensorToMechanismRatio(elevatorGearingReduction); // ! check if this is correct
+        elevatorMotor.setPosition(Rotations.of(0));
+        elevatorConfig.Feedback.withSensorToMechanismRatio(elevatorGearingReduction);
         elevatorMotor.getConfigurator().apply(elevatorConfig);
     
         armPIDF.kP = kPArm;
@@ -85,8 +87,8 @@ public class CoralIOReal implements CoralIO{
         armMotionMagicConfig.MotionMagicAcceleration = 1;
         armMotionMagicConfig.MotionMagicJerk = 1;
         armConfig.MotorOutput.withInverted(InvertedValue.CounterClockwise_Positive);
-        armMotor.setPosition(Rotations.of(0)); // ! position isn't reset every time, check if this works
-        armConfig.Feedback.withRotorToSensorRatio(armGearingReduction); // ! actually configure the cancoder
+        armMotor.setPosition(Rotations.of(0));
+        armConfig.Feedback.withSensorToMechanismRatio(armGearingReduction);
         armMotor.getConfigurator().apply(armConfig);
 
         // wristMotor.setCANTimeout(500);
@@ -122,6 +124,11 @@ public class CoralIOReal implements CoralIO{
     @Override
     public void setElevatorPosition(Angle position){
         elevatorMotor.setControl(elevatorMotionMagicVoltage.withPosition(position).withSlot(0));
+    }
+
+    @Override
+    public void zeroElevator(){
+        elevatorMotor.setPosition(Rotations.of(0));
     }
 
     @Override
@@ -171,7 +178,7 @@ public class CoralIOReal implements CoralIO{
 
         inputs.elevatorVoltage = voltageSignalElevator.getValue().in(Volts);
         inputs.elevatorCurrent = currentSignalElevator.getValue().in(Amps);
-        inputs.elevatorPosition = positionSignalElevator.getValue().in(Rotations) / 100;
+        inputs.elevatorPosition = positionSignalElevator.getValue().in(Rotations);
         inputs.elevatorVelocity = velocitySignalElevator.getValue().in(RotationsPerSecond);
         inputs.elevatorTemperature = temperatureSignalElevator.getValue().in(Celsius);
 

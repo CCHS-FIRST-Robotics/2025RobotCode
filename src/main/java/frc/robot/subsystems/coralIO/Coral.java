@@ -25,50 +25,30 @@ public class Coral extends SubsystemBase {
     public void periodic() {
         io.updateInputs(inputs);
         Logger.processInputs("coralIO", inputs);
+        Logger.recordOutput("elevatorSwitchBottom", elevatorSwitchBottom.get());
     }
 
     // ————— testing command factories ————— //
 
-    public Command getElevatorUpCommand(){
-        // return new StartEndCommand(
-        //     () -> io.setElevatorVoltage(Volts.of(2)), 
-        //     () -> io.setElevatorVoltage(Volts.of(0))
-            
-        // ).until(() -> elevatorSwitchTop.get());
-        return new InstantCommand(() -> io.setElevatorVoltage(Volts.of(2)));
+    public Command getSetElevatorCommand(Angle angle){
+        return new InstantCommand(() -> io.setElevatorPosition(angle));
     }
-
+    
     public Command getElevatorDownCommand(){
         return new StartEndCommand(
             () -> io.setElevatorVoltage(Volts.of(-2)), 
             () -> io.setElevatorVoltage(Volts.of(0))
         )
-        .until(() -> elevatorSwitchBottom.get());
-        // return new InstantCommand(() -> io.setElevatorVoltage(Volts.of(-2)));
+        .until(() -> elevatorSwitchBottom.get())
+        .andThen(new InstantCommand(() -> io.zeroElevator()));
     }
 
-    public Command getStopElevatorCommand(){
-        return new InstantCommand(() -> io.setElevatorVoltage(Volts.of(0)));
-    }
-    
-    public Command getSetElevatorCommand(Angle angle){
-        return new InstantCommand(() -> io.setElevatorPosition(angle));
-    }
-
-    public Command getArmUpCommand(){
-        return new InstantCommand(() -> io.setArmVoltage(Volts.of(2)));
-    }
-
-    public Command getArmDownCommand(){
-        return new InstantCommand(() -> io.setArmVoltage(Volts.of(-2)));
+    public Command getSetArmCommand(Angle angle){
+        return new InstantCommand(() -> io.setArmPosition(angle));
     }
 
     public Command getStopArmCommand(){
         return new InstantCommand(() -> io.setArmVoltage(Volts.of(0)));
-    }
-    
-    public Command getSetArmCommand(Angle angle){
-        return new InstantCommand(() -> io.setArmPosition(angle));
     }
 
     // ————— final command factories ————— //
