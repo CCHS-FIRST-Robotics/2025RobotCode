@@ -44,6 +44,13 @@ public class Robot extends LoggedRobot {
     @Override
     public void robotPeriodic() {
         camera.updateInputs();
+
+        Tag tag = camera.getTag(1);
+
+        /*if (tag != null) {
+            System.out.println(tag.getID());
+        }*/
+
         CommandScheduler.getInstance().run();
     }
 

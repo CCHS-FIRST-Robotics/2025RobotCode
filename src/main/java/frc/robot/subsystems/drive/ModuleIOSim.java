@@ -43,8 +43,6 @@ public class ModuleIOSim implements ModuleIO {
         DCMotor.getNEO(1)
     );
 
-    // private Rotation2d turnAbsoluteInitPosition = new Rotation2d(Math.random() *
-    // 2.0 * Math.PI);
     private Rotation2d turnAbsoluteInitPosition = new Rotation2d(0);
     private double driveAppliedVolts = 0.0;
     private double turnAppliedVolts = 0.0;

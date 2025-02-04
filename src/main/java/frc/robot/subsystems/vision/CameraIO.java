@@ -18,6 +18,6 @@ public interface CameraIO {
 
     }
 
-    /** Updates the set of loggable inputs. */
+    //Updates loggable inputs
     public default void updateInputs(CameraIOInputs inputs) {}
 }

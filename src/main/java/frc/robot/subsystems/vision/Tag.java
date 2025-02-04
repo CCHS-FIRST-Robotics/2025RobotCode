@@ -29,5 +29,4 @@ public class Tag {
         return m_angle * Math.PI/180;
     }
 
-
 }
