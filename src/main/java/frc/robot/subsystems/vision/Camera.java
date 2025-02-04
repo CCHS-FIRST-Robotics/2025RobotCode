@@ -22,23 +22,6 @@ public class Camera {
         return null;
     }
 
-    /*public double[] getTagAngles() {
-
-        if (tagsTable.containsKey("tag_angle")) {
-            return tag_angles.get();
-        }
-        return null;
-    }
-
-    public double[] getDistances() {
-
-        if (tagsTable.containsKey("tag_distance")) {
-            return tag_distances.get();
-        }
-        return null;
-    }
-    */
-
     public void updateInputs() {
         long[] tagids = tagIdsSub.get();
         double[] tag_distances = tag_distancesSub.get();
