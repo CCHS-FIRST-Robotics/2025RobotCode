@@ -44,7 +44,7 @@ public class DriveWithJoysticks extends Command {
         );
         Rotation2d linearDirection = new Rotation2d(linearXSpeed, linearYSpeed);
         Translation2d linearVelocity = new Translation2d(
-            linearSpeed, 
+            linearSpeed,
             linearDirection
         );
 
@@ -60,7 +60,7 @@ public class DriveWithJoysticks extends Command {
             linearVelocity.getX() * PhysicalConstants.MAX_LINEAR_SPEED.in(MetersPerSecond),
             linearVelocity.getY() * PhysicalConstants.MAX_LINEAR_SPEED.in(MetersPerSecond),
             angularVelocity * PhysicalConstants.MAX_ANGULAR_SPEED.in(RadiansPerSecond),
-            drive.getYawWithAllianceRotation()
+            drive.getYawWithAllianceRotation() // ! bugged
         );
 
         // clamp everything between max and min possible accels

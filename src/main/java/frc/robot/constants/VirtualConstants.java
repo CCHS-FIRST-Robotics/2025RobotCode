@@ -11,7 +11,7 @@ public final class VirtualConstants {
         SIM,
         REPLAY
     }
-    public static final ROBOT_MODE CURRENT_MODE = ROBOT_MODE.SIM;
+    public static final ROBOT_MODE CURRENT_MODE = ROBOT_MODE.REAL;
     
     // controller
     public static final int CONTROLLER_PORT = 0;
@@ -27,8 +27,8 @@ public final class VirtualConstants {
     public static final int ALGA_ID_1 = 4;
 
     // cancoder ids
-    public static final int ELEVATOR_CANCODER_ID = 10;
-    public static final int ARM_CANCODER_ID = 11;
+    public static final int ELEVATOR_CANCODER_ID = 50;
+    public static final int ARM_CANCODER_ID = 51;
 
     // DIO ports
     public static final int ELEVATOR_SWITCH_BOTTOM_PORT = 0;

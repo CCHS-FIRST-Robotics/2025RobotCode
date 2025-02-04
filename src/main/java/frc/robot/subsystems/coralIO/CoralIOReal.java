@@ -49,7 +49,7 @@ public class CoralIOReal implements CoralIO{
     private double kPArm = 4;
     private double kIArm = 0;
     private double kDArm = 0;
-    private double kGArm = 0;
+    private double kGArm = 0.07;
 
     // private final SparkMaxConfig wristConfig = new SparkMaxConfig();
     // private final RelativeEncoder wristEncoder;
@@ -84,7 +84,7 @@ public class CoralIOReal implements CoralIO{
         elevatorCancoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
         elevatorCancoderConfig.MagnetSensor.MagnetOffset = elevatorEncoderOffset.in(Rotations); 
         elevatorCancoder.getConfigurator().apply(elevatorCancoderConfig);
-        elevatorConfig.Feedback.withRemoteCANcoder(elevatorCancoder);
+        // elevatorConfig.Feedback.withRemoteCANcoder(elevatorCancoder);
         elevatorPIDF.kP = kPElevator;
         elevatorPIDF.kI = kIElevator;
         elevatorPIDF.kD = kDElevator;

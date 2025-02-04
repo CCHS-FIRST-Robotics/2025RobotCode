@@ -29,10 +29,10 @@ public class RobotContainer {
         switch (VirtualConstants.CURRENT_MODE) {
             case REAL:
                 drive = new Drive(
-                    new ModuleIOSparkMax(0),
                     new ModuleIOSparkMax(1),
                     new ModuleIOSparkMax(2),
-                    new ModuleIOSparkMax(3), 
+                    new ModuleIOSparkMax(3),
+                    new ModuleIOSparkMax(4), 
                     new GyroIONavX()
                 );
 
@@ -60,10 +60,10 @@ public class RobotContainer {
                 break;
             default:
                 drive = new Drive(
-                    new ModuleIOSparkMax(0),
                     new ModuleIOSparkMax(1),
                     new ModuleIOSparkMax(2),
                     new ModuleIOSparkMax(3),
+                    new ModuleIOSparkMax(4),
                     new GyroIONavX()
                 );
 
@@ -99,8 +99,6 @@ public class RobotContainer {
                 () -> controller.getRightX()
             )
         );
-
-        // controller.b().onTrue(new InstantCommand(() -> drive.stop()));
 
         // ————— elevator ————— //
         controller.y().onTrue(coral.getSetElevatorCommand(Rotations.of(1)));

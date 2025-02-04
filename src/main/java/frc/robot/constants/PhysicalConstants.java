@@ -10,10 +10,10 @@ import java.util.AbstractMap.SimpleEntry;
 public final class PhysicalConstants {
     // ————— swerve constants ————— // 
     // ! recalculate these
-    public static final LinearVelocity MAX_LINEAR_SPEED = MetersPerSecond.of(4.5);
-    public static final LinearAcceleration MAX_LINEAR_ACCEL = MetersPerSecondPerSecond.of(9.0);
-    public static final AngularVelocity MAX_ANGULAR_SPEED = RadiansPerSecond.of(8 * Math.PI);
-    public static final AngularAcceleration MAX_ANGULAR_ACCEL = RadiansPerSecond.per(Seconds).of(10 * Math.PI);
+    public static final LinearVelocity MAX_LINEAR_SPEED = MetersPerSecond.of(2); // 4.5
+    public static final LinearAcceleration MAX_LINEAR_ACCEL = MetersPerSecondPerSecond.of(3); // 9
+    public static final AngularVelocity MAX_ANGULAR_SPEED = RadiansPerSecond.of(Math.PI); // 8 * pi
+    public static final AngularAcceleration MAX_ANGULAR_ACCEL = RadiansPerSecond.per(Seconds).of(2 * Math.PI); // 10 * pi
     
     public static final Distance WHEEL_RADIUS = Inches.of(2);
     public static final Distance TRACK_WIDTH_X = Inches.of(23); // shorter side // ! might be the wrong way

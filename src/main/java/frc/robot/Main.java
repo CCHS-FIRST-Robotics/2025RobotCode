@@ -9,16 +9,21 @@ import edu.wpi.first.wpilibj.RobotBase;
 /**
  * to do: 
  *  daily at home: 
- *   figure out this list's color scheme
- *   sysid (or just use recalc) for good choreo constants
+ *   sysid for good choreo constants
  *   write coralIOSim
  *   pid tunable constants
  * 
  * — daily at robotics: 
- * —— re-id all the swerve modules lol (100, 101, 110, 111, 120, 121, 130, 131)
  * —— driving: 
  * *—— test driving on the ground (rotating too)
- * ——— test replacing drive.java stop function
+ * —— coral: 
+ * ——— test position control
+ * ——— get cancoder offsets
+ * ——— make coral code based on absolute encoders instead of relative
+ * 
+ * !ask colin why the inputmodulus exists
+ * 
+ * ! alliance problems, change to blue in drive.java probably
  * 
  *  longer term: 
  *   put coralIO inputs in separate folders

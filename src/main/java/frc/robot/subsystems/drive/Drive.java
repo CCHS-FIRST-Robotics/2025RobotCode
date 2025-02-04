@@ -50,10 +50,10 @@ public class Drive extends SubsystemBase {
         ModuleIO brModuleIO, 
         GyroIO gyroIO
     ) {
-        modules[0] = new Module(flModuleIO, 0);
-        modules[1] = new Module(frModuleIO, 1);
-        modules[2] = new Module(blModuleIO, 2);
-        modules[3] = new Module(brModuleIO, 3);
+        modules[0] = new Module(flModuleIO, 1);
+        modules[1] = new Module(frModuleIO, 2);
+        modules[2] = new Module(blModuleIO, 3);
+        modules[3] = new Module(brModuleIO, 4);
 
         xController.setTolerance(.035); // ! experiment with these
         yController.setTolerance(.035);
@@ -117,7 +117,7 @@ public class Drive extends SubsystemBase {
                 ChassisSpeeds.discretize(speeds, VirtualConstants.PERIOD); // more detail: https://www.chiefdelphi.com/t/whitepaper-swerve-drive-skew-and-second-order-kinematics/416964/30                
                 SwerveModuleState[] moduleStates = PhysicalConstants.KINEMATICS.toSwerveModuleStates(speeds); // convert speeds to module states
                 SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates, PhysicalConstants.MAX_LINEAR_SPEED); // renormalize wheel speeds
-                
+
                 // run modules
                 for (int i = 0; i < 4; i++) {
                     modules[i].runState(moduleStates[i]);
@@ -130,8 +130,7 @@ public class Drive extends SubsystemBase {
     // ————— functions for running modules ————— //
 
     public void stop() {
-        // runVelocity(new ChassisSpeeds()); // ! test with replacing this with just controlMode = CONTROL_MODE.DISABLED
-        controlMode = DRIVE_MODE.DISABLED; // ! doesn't seem to make much difference in sim
+        controlMode = DRIVE_MODE.DISABLED;
     }
 
     public void runPosition(SwerveSample sample){
@@ -156,7 +155,8 @@ public class Drive extends SubsystemBase {
     }
 
     public Rotation2d getYaw() {
-        return getPose().getRotation();
+        // return getPose().getRotation();
+        return new Rotation2d(Rotations.of(gyroInputs.yaw).in(Radians));
     }
 
     public Rotation2d getYawWithAllianceRotation() {
