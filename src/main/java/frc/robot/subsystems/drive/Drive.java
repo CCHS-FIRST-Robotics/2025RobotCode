@@ -50,10 +50,10 @@ public class Drive extends SubsystemBase {
         ModuleIO brModuleIO, 
         GyroIO gyroIO
     ) {
-        modules[0] = new Module(flModuleIO, 1);
-        modules[1] = new Module(frModuleIO, 2);
-        modules[2] = new Module(blModuleIO, 3);
-        modules[3] = new Module(brModuleIO, 4);
+        modules[0] = new Module(flModuleIO, 0);
+        modules[1] = new Module(frModuleIO, 1);
+        modules[2] = new Module(blModuleIO, 2);
+        modules[3] = new Module(brModuleIO, 3);
 
         xController.setTolerance(.035); // ! experiment with these
         yController.setTolerance(.035);
@@ -112,7 +112,8 @@ public class Drive extends SubsystemBase {
                     twistSetpoint.dtheta + thetaPID,
                     getYaw() // not getYawWithAllianceRotation(), because the setpoint is already generated with it in mind
                 );
-            case VELOCITY: // fallthrough to VELOCITY case, no break statement needed above
+                // fallthrough to VELOCITY case; no break statement needed
+            case VELOCITY: 
                 ChassisSpeeds.discretize(speeds, VirtualConstants.PERIOD); // more detail: https://www.chiefdelphi.com/t/whitepaper-swerve-drive-skew-and-second-order-kinematics/416964/30                
                 SwerveModuleState[] moduleStates = PhysicalConstants.KINEMATICS.toSwerveModuleStates(speeds); // convert speeds to module states
                 SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates, PhysicalConstants.MAX_LINEAR_SPEED); // renormalize wheel speeds

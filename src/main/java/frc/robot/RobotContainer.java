@@ -29,17 +29,19 @@ public class RobotContainer {
         switch (VirtualConstants.CURRENT_MODE) {
             case REAL:
                 drive = new Drive(
+                    new ModuleIOSparkMax(0),
                     new ModuleIOSparkMax(1),
                     new ModuleIOSparkMax(2),
-                    new ModuleIOSparkMax(3),
-                    new ModuleIOSparkMax(4), 
+                    new ModuleIOSparkMax(3), 
                     new GyroIONavX()
                 );
 
                 coral = new Coral(
                     new CoralIOReal(
                         VirtualConstants.ELEVATOR_ID, 
+                        VirtualConstants.ELEVATOR_CANCODER_ID, 
                         VirtualConstants.ARM_ID, 
+                        VirtualConstants.ARM_CANCODER_ID, 
                         VirtualConstants.WRIST_ID, 
                         VirtualConstants.CLAW_ID
                     )
@@ -58,17 +60,19 @@ public class RobotContainer {
                 break;
             default:
                 drive = new Drive(
+                    new ModuleIOSparkMax(0),
                     new ModuleIOSparkMax(1),
                     new ModuleIOSparkMax(2),
                     new ModuleIOSparkMax(3),
-                    new ModuleIOSparkMax(4),
                     new GyroIONavX()
                 );
 
                 coral = new Coral(
                     new CoralIOReal(
                         VirtualConstants.ELEVATOR_ID, 
+                        VirtualConstants.ELEVATOR_CANCODER_ID, 
                         VirtualConstants.ARM_ID, 
+                        VirtualConstants.ARM_CANCODER_ID, 
                         VirtualConstants.WRIST_ID, 
                         VirtualConstants.CLAW_ID
                     )
@@ -84,8 +88,6 @@ public class RobotContainer {
         configureButtonBindings();
         configureAutos();
     }
-
-
 
     private void configureButtonBindings() {
         // ————— driving ————— //

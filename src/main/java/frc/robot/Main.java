@@ -8,25 +8,17 @@ import edu.wpi.first.wpilibj.RobotBase;
 
 /**
  * to do: 
- * 
- * ! how did the arm on 2024 robot go to posiion 0 on startup
- * 
- * ! so rotating in drivebase seems to not work still; test that
- * // ! re zero everything because I flipped xboxcontroller 
- * 
- *  daily: 
- *   read up on kG for the arm
- *   pid tunable constants
+ *  daily at home: 
+ *   figure out this list's color scheme
  *   sysid (or just use recalc) for good choreo constants
- *   write elevator and arm cancoder code
  *   write coralIOSim
+ *   pid tunable constants
  * 
- * — at robotics daily: 
+ * — daily at robotics: 
+ * —— re-id all the swerve modules lol (100, 101, 110, 111, 120, 121, 130, 131)
  * —— driving: 
- * ——— test driving on the ground
+ * *—— test driving on the ground (rotating too)
  * ——— test replacing drive.java stop function
- * —— arm: 
- * ——— tighten the belt
  * 
  *  longer term: 
  *   put coralIO inputs in separate folders

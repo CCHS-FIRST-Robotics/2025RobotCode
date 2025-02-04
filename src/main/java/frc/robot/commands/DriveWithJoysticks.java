@@ -18,6 +18,7 @@ public class DriveWithJoysticks extends Command {
     
     ChassisSpeeds prevSpeeds = new ChassisSpeeds();
 
+    // note that x is away from the alliance wall and y is to the left
     public DriveWithJoysticks(
         Drive drive,
         Supplier<Double> linearXSpeedSupplier,
@@ -41,7 +42,7 @@ public class DriveWithJoysticks extends Command {
             VirtualConstants.JOYSTICK_DEADZONE, 
             VirtualConstants.LINEAR_SPEED_EXPONENT
         );
-        Rotation2d linearDirection = new Rotation2d(linearXSpeed, linearYSpeed); // ! this thing won't shut the fuck up
+        Rotation2d linearDirection = new Rotation2d(linearXSpeed, linearYSpeed);
         Translation2d linearVelocity = new Translation2d(
             linearSpeed, 
             linearDirection

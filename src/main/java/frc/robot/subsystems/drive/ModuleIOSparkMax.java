@@ -40,8 +40,8 @@ public class ModuleIOSparkMax implements ModuleIO {
     private AngularVelocity prevDriveVelocity = RadiansPerSecond.of(0.0);
 
     public ModuleIOSparkMax(int index) {
-        driveMotor = new SparkMax(10 * index + 1, MotorType.kBrushless);
-        turnMotor = new SparkMax(10 * index + 2, MotorType.kBrushless);
+        driveMotor = new SparkMax(100 + 10 * index + 0, MotorType.kBrushless);
+        turnMotor = new SparkMax(100 + 10 * index + 1, MotorType.kBrushless);
 
         // start config
         driveMotor.setCANTimeout(500);

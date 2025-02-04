@@ -11,9 +11,9 @@ import frc.robot.constants.PhysicalConstants.*;
 
 public class Coral extends SubsystemBase {
     private final CoralIO io;
-    private final DigitalInput troughSensor = new DigitalInput(VirtualConstants.TROUGH_SENSOR_PORT);
     private final DigitalInput elevatorSwitchBottom = new DigitalInput(VirtualConstants.ELEVATOR_SWITCH_BOTTOM_PORT); // bottom
     // private final DigitalInput elevatorSwitchTop = new DigitalInput(VirtualConstants.ELEVATOR_SWITCH_TOP_PORT); // top
+    private final DigitalInput troughSensor = new DigitalInput(VirtualConstants.TROUGH_SENSOR_PORT);
     private final CoralIOInputsAutoLogged inputs = new CoralIOInputsAutoLogged();
     // ! the arm can only rotate above the elevator (use inputmodulus or whatever the last arm used)
 

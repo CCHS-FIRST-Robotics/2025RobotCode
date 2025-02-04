@@ -1,9 +1,10 @@
 package frc.robot.subsystems.coralIO;
 
 import static edu.wpi.first.units.Units.*;
-    
-import com.ctre.phoenix6.hardware.TalonFX;
+
+import com.ctre.phoenix6.hardware.*;
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.ctre.phoenix6.configs.*;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.*;
@@ -23,6 +24,9 @@ public class CoralIOReal implements CoralIO{
     // private final SparkMax wristMotor; 
 
     private final TalonFXConfiguration elevatorConfig = new TalonFXConfiguration();
+    private final CANcoder elevatorCancoder;
+    private final CANcoderConfiguration elevatorCancoderConfig = new CANcoderConfiguration(); 
+    private Angle elevatorEncoderOffset = Rotations.of(0); // ! get this
     private final Slot0Configs elevatorPIDF = elevatorConfig.Slot0;
     private final MotionMagicConfigs elevatorMotionMagicConfig = elevatorConfig.MotionMagic;
     private final MotionMagicVoltage elevatorMotionMagicVoltage = new MotionMagicVoltage(0);
@@ -34,16 +38,18 @@ public class CoralIOReal implements CoralIO{
     private double kDElevator = 0;
 
     private final TalonFXConfiguration armConfig = new TalonFXConfiguration();
+    private final CANcoder armCancoder;
+    private final CANcoderConfiguration armCancoderConfig = new CANcoderConfiguration(); 
+    private Angle armEncoderOffset = Rotations.of(0); // ! get this
     private final Slot0Configs armPIDF = armConfig.Slot0;
     private final MotionMagicConfigs armMotionMagicConfig = armConfig.MotionMagic;
     private final MotionMagicVoltage armMotionMagicVoltage = new MotionMagicVoltage(0);
     private final double armGearingReduction = 100;
-    // ! configure the encoder
 
     private double kPArm = 4;
     private double kIArm = 0;
     private double kDArm = 0;
-    // ! needs kG
+    private double kGArm = 0;
 
     // private final SparkMaxConfig wristConfig = new SparkMaxConfig();
     // private final RelativeEncoder wristEncoder;
@@ -56,19 +62,29 @@ public class CoralIOReal implements CoralIO{
     private final StatusSignal<Current> currentSignalElevator;
     private final StatusSignal<Angle> positionSignalElevator;
     private final StatusSignal<AngularVelocity> velocitySignalElevator;
+    private final StatusSignal<Angle> positionAbsoluteSignalElevator;
+    private final StatusSignal<AngularVelocity> velocityAbsoluteSignalElevator;
     private final StatusSignal<Temperature> temperatureSignalElevator;
+
 
     private final StatusSignal<Voltage> voltageSignalArm;
     private final StatusSignal<Current> currentSignalArm;
     private final StatusSignal<Angle> positionSignalArm;
     private final StatusSignal<AngularVelocity> velocitySignalArm;
+    private final StatusSignal<Angle> positionAbsoluteSignalArm;
+    private final StatusSignal<AngularVelocity> velocityAbsoluteSignalArm;
     private final StatusSignal<Temperature> temperatureSignalArm;
     
-    public CoralIOReal(int elevatorId, int armId, int wristId, int clawId) {
+    public CoralIOReal(int elevatorId, int elevatorCancoderId, int armId, int armCancoderId, int wristId, int clawId) {
         elevatorMotor = new TalonFX(elevatorId);
         armMotor = new TalonFX(armId);
         // wristMotor = new SparkMax(wristId, MotorType.kBrushed);
 
+        elevatorCancoder = new CANcoder(elevatorCancoderId);
+        elevatorCancoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
+        elevatorCancoderConfig.MagnetSensor.MagnetOffset = elevatorEncoderOffset.in(Rotations); 
+        elevatorCancoder.getConfigurator().apply(elevatorCancoderConfig);
+        elevatorConfig.Feedback.withRemoteCANcoder(elevatorCancoder);
         elevatorPIDF.kP = kPElevator;
         elevatorPIDF.kI = kIElevator;
         elevatorPIDF.kD = kDElevator;
@@ -80,9 +96,15 @@ public class CoralIOReal implements CoralIO{
         elevatorConfig.Feedback.withSensorToMechanismRatio(elevatorGearingReduction);
         elevatorMotor.getConfigurator().apply(elevatorConfig);
     
+        armCancoder = new CANcoder(elevatorCancoderId);
+        armCancoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+        armCancoderConfig.MagnetSensor.MagnetOffset = armEncoderOffset.in(Rotations); 
+        armCancoder.getConfigurator().apply(armCancoderConfig);
+        armConfig.Feedback.withRemoteCANcoder(armCancoder);
         armPIDF.kP = kPArm;
         armPIDF.kI = kIArm;
         armPIDF.kD = kDArm;
+        armPIDF.kG = kGArm;
         armMotionMagicConfig.MotionMagicCruiseVelocity = 100;
         armMotionMagicConfig.MotionMagicAcceleration = 1;
         armMotionMagicConfig.MotionMagicJerk = 1;
@@ -107,12 +129,16 @@ public class CoralIOReal implements CoralIO{
         currentSignalElevator = elevatorMotor.getStatorCurrent();
         positionSignalElevator = elevatorMotor.getPosition();
         velocitySignalElevator = elevatorMotor.getVelocity();
+        positionAbsoluteSignalElevator = elevatorCancoder.getPosition();
+        velocityAbsoluteSignalElevator = elevatorCancoder.getVelocity();
         temperatureSignalElevator = elevatorMotor.getDeviceTemp();
 
         voltageSignalArm = armMotor.getMotorVoltage();
         currentSignalArm = armMotor.getStatorCurrent();
         positionSignalArm = armMotor.getPosition();
         velocitySignalArm = armMotor.getVelocity();
+        positionAbsoluteSignalArm = armCancoder.getPosition();
+        velocityAbsoluteSignalArm = armCancoder.getVelocity();
         temperatureSignalArm = armMotor.getDeviceTemp();
     }
 
@@ -180,12 +206,16 @@ public class CoralIOReal implements CoralIO{
         inputs.elevatorCurrent = currentSignalElevator.getValue().in(Amps);
         inputs.elevatorPosition = positionSignalElevator.getValue().in(Rotations);
         inputs.elevatorVelocity = velocitySignalElevator.getValue().in(RotationsPerSecond);
+        inputs.elevatorAbsolutePosition = positionAbsoluteSignalElevator.getValue().in(Rotations);
+        inputs.elevatorAbsoluteVelocity = velocityAbsoluteSignalElevator.getValue().in(RotationsPerSecond);
         inputs.elevatorTemperature = temperatureSignalElevator.getValue().in(Celsius);
 
         inputs.armVoltage = voltageSignalArm.getValue().in(Volts);
         inputs.armCurrent = currentSignalArm.getValue().in(Amps);
         inputs.armPosition = positionSignalArm.getValue().in(Rotations);
         inputs.armVelocity = velocitySignalArm.getValue().in(RotationsPerSecond);
+        inputs.armAbsolutePosition = positionAbsoluteSignalArm.getValue().in(Rotations);
+        inputs.armAbsoluteVelocity = velocityAbsoluteSignalArm.getValue().in(RotationsPerSecond);
         inputs.armTemperature = temperatureSignalArm.getValue().in(Celsius);
 
         // inputs.wristCurrent = wristMotor.getOutputCurrent();

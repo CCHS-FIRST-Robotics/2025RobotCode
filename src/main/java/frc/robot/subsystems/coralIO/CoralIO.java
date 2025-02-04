@@ -11,12 +11,16 @@ public interface CoralIO {
         public double elevatorCurrent;
         public double elevatorPosition;
         public double elevatorVelocity;
+        public double elevatorAbsolutePosition;
+        public double elevatorAbsoluteVelocity;
         public double elevatorTemperature;
 
         public double armVoltage;
         public double armCurrent;
         public double armPosition;
         public double armVelocity;
+        public double armAbsolutePosition;
+        public double armAbsoluteVelocity;
         public double armTemperature;
 
         public double wristVoltage;

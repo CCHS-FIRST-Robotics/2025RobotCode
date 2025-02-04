@@ -39,6 +39,7 @@ public class Robot extends LoggedRobot {
         Logger.start();
         
         SmartDashboard.putString("Mode", VirtualConstants.CURRENT_MODE.toString());
+        // ! this should probably be updated over time, maybe use logger
         SmartDashboard.putString("Alliance", DriverStation.getAlliance().isPresent() ? DriverStation.getAlliance().get().toString() : "None");
     }
 
