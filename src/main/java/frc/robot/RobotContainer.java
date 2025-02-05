@@ -100,13 +100,15 @@ public class RobotContainer {
             )
         );
 
+        // controller.b().whileTrue(new InstantCommand(() -> drive.runCharacterization()));
+
         // ————— elevator ————— //
-        controller.y().onTrue(coral.getSetElevatorCommand(Rotations.of(1)));
-        controller.a().onTrue(coral.getElevatorDownCommand());
+        // controller.y().onTrue(coral.getSetElevatorCommand(Rotations.of(1)));
+        // controller.a().onTrue(coral.getElevatorDownCommand());
         
         // ————— arm ————— //
-        controller.x().onTrue(coral.getSetArmCommand(Rotations.of(0.25)));
-        controller.b().onTrue(coral.getStopArmCommand());
+        // controller.x().onTrue(coral.getSetArmCommand(Rotations.of(0.25)));
+        // controller.b().onTrue(coral.getStopArmCommand());
     }
 
     private void configureAutos(){

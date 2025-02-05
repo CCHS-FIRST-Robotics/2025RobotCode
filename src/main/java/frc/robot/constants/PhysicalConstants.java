@@ -16,13 +16,13 @@ public final class PhysicalConstants {
     public static final AngularAcceleration MAX_ANGULAR_ACCEL = RadiansPerSecond.per(Seconds).of(2 * Math.PI); // 10 * pi
     
     public static final Distance WHEEL_RADIUS = Inches.of(2);
-    public static final Distance TRACK_WIDTH_X = Inches.of(23); // shorter side // ! might be the wrong way
-    public static final Distance TRACK_WIDTH_Y = Inches.of(27);
-    public static final Translation2d[] MODULE_TRANSLATIONS = new Translation2d[] {
-        new Translation2d(-TRACK_WIDTH_X.in(Meters) / 2.0, -TRACK_WIDTH_Y.in(Meters) / 2.0),
-        new Translation2d(TRACK_WIDTH_X.in(Meters) / 2.0, -TRACK_WIDTH_Y.in(Meters) / 2.0),
-        new Translation2d(TRACK_WIDTH_X.in(Meters) / 2.0, TRACK_WIDTH_Y.in(Meters) / 2.0),
-        new Translation2d(-TRACK_WIDTH_X.in(Meters) / 2.0, TRACK_WIDTH_Y.in(Meters) / 2.0)
+    public static final Distance TRACK_WIDTH_X = Inches.of(23.625); // shorter side // ! might be the wrong way
+    public static final Distance TRACK_WIDTH_Y = Inches.of(27.75);
+    public static final Translation2d[] MODULE_TRANSLATIONS = new Translation2d[] { // using the chassisspeeds coordinate plane (really stupid)
+        new Translation2d(TRACK_WIDTH_X.in(Meters) / 2.0, TRACK_WIDTH_Y.in(Meters) / 2.0), // FL
+        new Translation2d(TRACK_WIDTH_X.in(Meters) / 2.0, -TRACK_WIDTH_Y.in(Meters) / 2.0), // FR
+        new Translation2d(-TRACK_WIDTH_X.in(Meters) / 2.0, TRACK_WIDTH_Y.in(Meters) / 2.0), // BL
+        new Translation2d(-TRACK_WIDTH_X.in(Meters) / 2.0, -TRACK_WIDTH_Y.in(Meters) / 2.0) // BR
     };
     public static final SwerveDriveKinematics KINEMATICS = new SwerveDriveKinematics(MODULE_TRANSLATIONS);
 

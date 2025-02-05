@@ -7,6 +7,7 @@ import java.util.function.Supplier;
 import edu.wpi.first.math.*;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import org.littletonrobotics.junction.Logger;
 import frc.robot.subsystems.drive.*;
 import frc.robot.constants.*;
 
@@ -50,7 +51,7 @@ public class DriveWithJoysticks extends Command {
 
         // get angularVelocity
         double angularVelocity = applyPreferences(
-            -angularVelocitySupplier.get(), // chassisspeeds is flipped
+            angularVelocitySupplier.get(), 
             VirtualConstants.JOYSTICK_DEADZONE, 
             VirtualConstants.ANGULAR_SPEED_EXPONENT
         );
@@ -58,8 +59,8 @@ public class DriveWithJoysticks extends Command {
         // denormalize speeds and FOC
         ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
             linearVelocity.getX() * PhysicalConstants.MAX_LINEAR_SPEED.in(MetersPerSecond),
-            linearVelocity.getY() * PhysicalConstants.MAX_LINEAR_SPEED.in(MetersPerSecond),
-            angularVelocity * PhysicalConstants.MAX_ANGULAR_SPEED.in(RadiansPerSecond),
+            -linearVelocity.getY() * PhysicalConstants.MAX_LINEAR_SPEED.in(MetersPerSecond), // chassisspeeds is flipped
+            -angularVelocity * PhysicalConstants.MAX_ANGULAR_SPEED.in(RadiansPerSecond), // chassisspeeds is flipped
             drive.getYawWithAllianceRotation() // ! bugged
         );
 
@@ -81,6 +82,8 @@ public class DriveWithJoysticks extends Command {
                 PhysicalConstants.MAX_ANGULAR_ACCEL.in(RadiansPerSecond.per(Second)) * VirtualConstants.PERIOD
             )
         );
+
+        Logger.recordOutput("outputs/speeds", speeds);
 
         drive.runVelocity(speeds);
         prevSpeeds = speeds;

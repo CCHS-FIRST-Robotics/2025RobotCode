@@ -11,6 +11,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.SparkBase.*;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.units.measure.*;
+import edu.wpi.first.math.MathUtil;
 import frc.robot.constants.PhysicalConstants;
 
 public class ModuleIOSparkMax implements ModuleIO {
@@ -75,7 +76,7 @@ public class ModuleIOSparkMax implements ModuleIO {
         
         driveConfig.smartCurrentLimit(30);
         driveConfig.voltageCompensation(12);
-        turnConfig.smartCurrentLimit(20);
+        turnConfig.smartCurrentLimit(20); 
         turnConfig.voltageCompensation(12);
 
         turnConfig.inverted(true);
@@ -143,7 +144,7 @@ public class ModuleIOSparkMax implements ModuleIO {
         
         inputs.turnVoltage = turnMotor.getAppliedOutput() * turnMotor.getBusVoltage(); // ! what
         inputs.turnCurrent = turnMotor.getOutputCurrent();
-        inputs.turnPosition = turnAbsoluteEncoder.getPosition() / PhysicalConstants.TURN_AFTER_ENCODER_REDUCTION;
+        inputs.turnPosition = turnAbsoluteEncoder.getPosition();// / PhysicalConstants.TURN_AFTER_ENCODER_REDUCTION;
         inputs.turnTemperature = turnMotor.getMotorTemperature();
     }
 }

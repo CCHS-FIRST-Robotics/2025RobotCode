@@ -21,7 +21,6 @@ import edu.wpi.first.wpilibj.RobotBase;
  * ——— get cancoder offsets
  * ——— make coral code based on absolute encoders instead of relative
  * 
- * !ask colin why the inputmodulus exists
  * 
  * ! alliance problems, change to blue in drive.java probably
  * 

@@ -20,7 +20,8 @@ public class Drive extends SubsystemBase {
     public enum DRIVE_MODE {
         DISABLED,
         POSITION,
-        VELOCITY
+        VELOCITY,
+        CHARACTERIZING
     };
     private DRIVE_MODE controlMode = DRIVE_MODE.DISABLED;
 
@@ -84,13 +85,13 @@ public class Drive extends SubsystemBase {
             gyroInputs.connected ? new Rotation2d(Rotations.of(gyroInputs.yaw).in(Radians)) : fieldPosition.getRotation(),
             getModulePositions()
         );
-        Logger.recordOutput("robotPose", getPose());   
+        Logger.recordOutput("outputs/robotPose", getPose());   
         
         // update module inputs
         for (Module module : modules) {
             module.periodic();
         }
-        
+
         // run modules
         switch (controlMode) {
             case DISABLED:
@@ -122,8 +123,12 @@ public class Drive extends SubsystemBase {
                 for (int i = 0; i < 4; i++) {
                     modules[i].runState(moduleStates[i]);
                 }
-                Logger.recordOutput("moduleStates", moduleStates);
+                Logger.recordOutput("outputs/moduleStates", moduleStates);
                 break;
+            case CHARACTERIZING:
+                for (int i = 0; i < 4; i++) {
+                    modules[i].characterize(Volts.of(1));
+                }
         }
     }
 
@@ -144,6 +149,10 @@ public class Drive extends SubsystemBase {
         this.speeds = speeds;
     }
 
+    public void runCharacterization(){
+        controlMode = DRIVE_MODE.CHARACTERIZING;
+    }
+
     // ————— functions for odometry ————— //
 
     public void resetPoseEstimator(Pose2d pose){
@@ -162,8 +171,8 @@ public class Drive extends SubsystemBase {
     public Rotation2d getYawWithAllianceRotation() {
         return getYaw().plus(
             DriverStation.getAlliance().get() == Alliance.Red ? 
-            new Rotation2d(Math.PI) : 
-            new Rotation2d(0)
+            new Rotation2d(0) : 
+            new Rotation2d(Math.PI)
         );
     }
     
