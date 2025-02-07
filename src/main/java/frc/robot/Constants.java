@@ -23,6 +23,7 @@ public final class Constants {
     public static final double LINEAR_SPEED_EXPONENT = 2;
     public static final double ANGULAR_SPEED_EXPONENT = 2;
     public static final double STOP_TAG_DISTANCE = 0.5; //meters
+    public static final int SOLENOID_PIN = 2;
     
     public static class AutoConstants {
         // times

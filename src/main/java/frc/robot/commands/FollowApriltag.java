@@ -19,7 +19,6 @@ public class FollowApriltag extends Command {
         FOLLOWING
     }
 
-
     public FollowApriltag(Drive drive) {
         state = FollowApriltagStates.IDLE;
         addRequirements(drive);

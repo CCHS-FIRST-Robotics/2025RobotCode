@@ -5,6 +5,7 @@
 package frc.robot;
 
 import org.littletonrobotics.junction.LoggedRobot;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.vision.Camera;
@@ -24,7 +25,7 @@ public class Robot extends LoggedRobot {
         robotContainer = new RobotContainer();
         camera = new Camera();
 
-        Logger.recordMetadata("ProjectName", "2024RobotCode");
+        Logger.recordMetadata("ProjectName", "2025RobotCode");
         switch (Constants.CURRENT_MODE) {
             case REAL:
                 Logger.addDataReceiver(new NT4Publisher());
@@ -45,11 +46,12 @@ public class Robot extends LoggedRobot {
     public void robotPeriodic() {
         camera.updateInputs();
 
+        /*
         Tag tag = camera.getTag(1);
-
-        /*if (tag != null) {
+        if (tag != null) {
             System.out.println(tag.getID());
-        }*/
+        }
+        */
 
         CommandScheduler.getInstance().run();
     }
