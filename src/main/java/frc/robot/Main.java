@@ -14,10 +14,7 @@ import edu.wpi.first.wpilibj.RobotBase;
  *   pid tunable constants
  * 
  * — daily at robotics: 
- * —— driving: 
  * —— coral: 
- * ——— test position control
- * ——— get cancoder offsets
  * ——— make coral code based on absolute encoders instead of relative
  * ——— test kG
  * 
