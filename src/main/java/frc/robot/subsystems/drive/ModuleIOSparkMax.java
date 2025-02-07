@@ -11,7 +11,6 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.SparkBase.*;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.units.measure.*;
-import edu.wpi.first.math.MathUtil;
 import frc.robot.constants.PhysicalConstants;
 
 public class ModuleIOSparkMax implements ModuleIO {
@@ -125,7 +124,7 @@ public class ModuleIOSparkMax implements ModuleIO {
     @Override
     public void setTurnPosition(Angle position) {
         turnMotor.getClosedLoopController().setReference(
-            position.in(Rotations), // ! shouldn't there be a * PhysicalConstants.TURN_AFTER_ENCODER_REDUCTION here???
+            position.in(Rotations),
             SparkMax.ControlType.kPosition,
             ClosedLoopSlot.kSlot0
         );

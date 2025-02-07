@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.coralIO.*;
+import frc.robot.subsystems.algaIO.*;
 import frc.robot.utils.AutoRoutineGenerator;
 import frc.robot.constants.VirtualConstants;
 
@@ -21,6 +22,7 @@ public class RobotContainer {
 
     private final Drive drive;
     private final Coral coral;
+    private final Alga alga;
 
     private final AutoRoutineGenerator autoGenerator;
     private final AutoChooser autoChooser;
@@ -46,6 +48,9 @@ public class RobotContainer {
                         VirtualConstants.CLAW_ID
                     )
                 );
+
+                alga = new Alga(new AlgaIOTalonFX(VirtualConstants.ALGA_ID_1));
+                
                 break;
             case SIM:
                 drive = new Drive(
@@ -57,6 +62,8 @@ public class RobotContainer {
                 );
 
                 coral = new Coral(new CoralIOSim());
+
+                alga = new Alga(new AlgaIOSim());
                 break;
             default:
                 drive = new Drive(
@@ -77,6 +84,9 @@ public class RobotContainer {
                         VirtualConstants.CLAW_ID
                     )
                 );
+
+                alga = new Alga(new AlgaIOTalonFX(VirtualConstants.ALGA_ID_1));
+
                 break;
         }
 
@@ -100,8 +110,6 @@ public class RobotContainer {
             )
         );
 
-        // controller.b().whileTrue(new InstantCommand(() -> drive.runCharacterization()));
-
         // ————— elevator ————— //
         // controller.y().onTrue(coral.getSetElevatorCommand(Rotations.of(1)));
         // controller.a().onTrue(coral.getElevatorDownCommand());
@@ -109,6 +117,11 @@ public class RobotContainer {
         // ————— arm ————— //
         // controller.x().onTrue(coral.getSetArmCommand(Rotations.of(0.25)));
         // controller.b().onTrue(coral.getStopArmCommand());
+
+        // ————— alga ————— // // -0.4
+        controller.x().onTrue(alga.getIntakeCommand());
+        controller.b().onTrue(alga.getOutputCommand());
+
     }
 
     private void configureAutos(){

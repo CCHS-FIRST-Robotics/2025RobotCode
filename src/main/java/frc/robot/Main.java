@@ -15,11 +15,11 @@ import edu.wpi.first.wpilibj.RobotBase;
  * 
  * — daily at robotics: 
  * —— driving: 
- * *—— test driving on the ground (rotating too)
  * —— coral: 
  * ——— test position control
  * ——— get cancoder offsets
  * ——— make coral code based on absolute encoders instead of relative
+ * ——— test kG
  * 
  * 
  * ! alliance problems, change to blue in drive.java probably

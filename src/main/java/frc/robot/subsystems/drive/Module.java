@@ -2,7 +2,6 @@ package frc.robot.subsystems.drive;
 
 import static edu.wpi.first.units.Units.*;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.units.measure.*;
@@ -25,7 +24,7 @@ public class Module {
     }
 
     public void runState(SwerveModuleState state) {
-        state.optimize(getAngle()); // ! bugged
+        state.optimize(getAngle());
         io.setTurnPosition(Rotations.of(state.angle.getRotations()));
         io.setDriveVelocity(RadiansPerSecond.of(state.speedMetersPerSecond / PhysicalConstants.WHEEL_RADIUS.in(Meters)));
     }
@@ -47,7 +46,6 @@ public class Module {
     }
 
     public Rotation2d getAngle() {
-        // ! bugged af
-        return new Rotation2d(MathUtil.angleModulus(Rotations.of(inputs.turnPosition).in(Radians)));
+        return new Rotation2d(Rotations.of(inputs.turnPosition).in(Radians));
     }
 }

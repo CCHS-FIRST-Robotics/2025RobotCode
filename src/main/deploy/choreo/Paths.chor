@@ -1,5 +1,5 @@
 {
- "name":"2Coral",
+ "name":"Paths",
  "version":1,
  "type":"Swerve",
  "variables":{
@@ -28,8 +28,8 @@
    }
   },
   "mass":{
-   "exp":"110 lbs",
-   "val":49.895160700000005
+   "exp":"80 lbs",
+   "val":36.2873896
   },
   "inertia":{
    "exp":"6 kg m ^ 2",
