@@ -14,16 +14,16 @@ import edu.wpi.first.units.measure.*;
 import frc.robot.constants.PhysicalConstants;
 
 public class ModuleIOSparkMax implements ModuleIO {
-    private final SparkMax driveMotor;
-    private final SparkMax turnMotor;
+    private final SparkMax driveMotor; // NEO
+    private final SparkMax turnMotor; // NEO
 
     private final SparkMaxConfig driveConfig = new SparkMaxConfig();
     private final SparkMaxConfig turnConfig = new SparkMaxConfig();
     private final SimpleMotorFeedforward driveFeedforward;
 
-    private final RelativeEncoder driveEncoder; // NEO
-    private final RelativeEncoder turnRelativeEncoder; // NEO
-    private final AbsoluteEncoder turnAbsoluteEncoder; // CANandcoder
+    private final RelativeEncoder driveEncoder;
+    private final RelativeEncoder turnRelativeEncoder;
+    private final AbsoluteEncoder turnAbsoluteEncoder; // CANandMag
     
     // for drive, pid units are in V/rpm, ff units are the normal V/(rad per second)
     private double driveKp = 0.00015 * 2d * Math.PI / 60d ; 
@@ -64,7 +64,7 @@ public class ModuleIOSparkMax implements ModuleIO {
         turnConfig.closedLoop.positionWrappingMinInput(0);
         turnConfig.closedLoop.positionWrappingMaxInput(1);
         
-        // miscellaneous settings // ! go through these at some point
+        // miscellaneous settings
         driveConfig.signals.primaryEncoderVelocityPeriodMs(10);
         turnConfig.signals.absoluteEncoderPositionPeriodMs(20);
         
@@ -88,12 +88,6 @@ public class ModuleIOSparkMax implements ModuleIO {
         turnMotor.setCANTimeout(0);
         driveMotor.configure(driveConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         turnMotor.configure(turnConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
-        // ! see about using this
-        // driveConfig.encoder.positionConversionFactor(1 / PhysicalConstants.DRIVE_AFTER_ENCODER_REDUCTION);
-        // driveConfig.encoder.velocityConversionFactor(1 / PhysicalConstants.DRIVE_AFTER_ENCODER_REDUCTION);
-        // turnConfig.encoder.positionConversionFactor(1 / PhysicalConstants.TURN_AFTER_ENCODER_REDUCTION);
-        // turnConfig.encoder.velocityConversionFactor(1 / PhysicalConstants.TURN_AFTER_ENCODER_REDUCTION);
     }
     
     @Override
@@ -132,18 +126,16 @@ public class ModuleIOSparkMax implements ModuleIO {
     
     @Override
     public void updateInputs(ModuleIOInputs inputs) {
-        inputs.driveVoltage = driveMotor.getAppliedOutput() * driveMotor.getBusVoltage(); // ! what 
+        inputs.driveVoltage = driveMotor.getAppliedOutput() * driveMotor.getBusVoltage();
+        inputs.driveVoltage = driveMotor.getBusVoltage();
         inputs.driveCurrent = driveMotor.getOutputCurrent();
-        inputs.drivePosition = Rotations.of((driveEncoder.getPosition() // ! try to understand the coupling stuff colin mentioned
-            + turnRelativeEncoder.getPosition() / PhysicalConstants.TURN_AFTER_ENCODER_REDUCTION * PhysicalConstants.COUPLING_RATIO)
-            / PhysicalConstants.DRIVE_AFTER_ENCODER_REDUCTION
-        ).in(Radians);
+        inputs.drivePosition = Rotations.of(driveEncoder.getPosition() / PhysicalConstants.DRIVE_AFTER_ENCODER_REDUCTION).in(Radians);
         inputs.driveVelocity = Rotations.per(Minute).of(driveEncoder.getVelocity() / PhysicalConstants.DRIVE_AFTER_ENCODER_REDUCTION).in(RadiansPerSecond);
         inputs.driveTemperature = driveMotor.getMotorTemperature();
         
-        inputs.turnVoltage = turnMotor.getAppliedOutput() * turnMotor.getBusVoltage(); // ! what
+        inputs.turnVoltage = turnMotor.getAppliedOutput() * turnMotor.getBusVoltage();
         inputs.turnCurrent = turnMotor.getOutputCurrent();
-        inputs.turnPosition = turnAbsoluteEncoder.getPosition();// / PhysicalConstants.TURN_AFTER_ENCODER_REDUCTION;
+        inputs.turnPosition = turnAbsoluteEncoder.getPosition();
         inputs.turnTemperature = turnMotor.getMotorTemperature();
     }
 }

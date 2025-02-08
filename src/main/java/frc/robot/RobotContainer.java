@@ -50,7 +50,6 @@ public class RobotContainer {
                 );
 
                 alga = new Alga(new AlgaIOTalonFX(VirtualConstants.ALGA_ID_1));
-                
                 break;
             case SIM:
                 drive = new Drive(
@@ -86,7 +85,6 @@ public class RobotContainer {
                 );
 
                 alga = new Alga(new AlgaIOTalonFX(VirtualConstants.ALGA_ID_1));
-
                 break;
         }
 
@@ -118,10 +116,9 @@ public class RobotContainer {
         // controller.x().onTrue(coral.getSetArmCommand(Rotations.of(0.25)));
         // controller.b().onTrue(coral.getStopArmCommand());
 
-        // ————— alga ————— // // -0.4
+        // ————— alga ————— //
         controller.x().onTrue(alga.getIntakeCommand());
         controller.b().onTrue(alga.getOutputCommand());
-
     }
 
     private void configureAutos(){

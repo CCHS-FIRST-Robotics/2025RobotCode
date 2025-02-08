@@ -18,8 +18,6 @@ public interface ModuleIO {
         public double turnTemperature;
     }
 
-    public default void updateInputs(ModuleIOInputs inputs) {}
-
     public default void setDriveVoltage(Voltage volts) {}
 
     public default void setTurnVoltage(Voltage volts) {}
@@ -27,4 +25,6 @@ public interface ModuleIO {
     public default void setDriveVelocity(AngularVelocity velocityRadPerSec) {}
 
     public default void setTurnPosition(Angle positionRad) {}
+
+    public default void updateInputs(ModuleIOInputs inputs) {}
 }

@@ -39,7 +39,7 @@ public class Drive extends SubsystemBase {
     private Twist2d twistSetpoint = new Twist2d();
     private final PIDController xController = new PIDController(2.7, 0.05, 0.12);
     private final PIDController yController = new PIDController(2.7, 0.05, 0.12);
-    private final PIDController thetaController = new PIDController(3, 0, 0.3);
+    private final PIDController thetaController = new PIDController(3, 0, 0.3); // ! these are in radians
     
     // velocity control
     private ChassisSpeeds speeds = new ChassisSpeeds();
@@ -76,7 +76,7 @@ public class Drive extends SubsystemBase {
             controlMode = DRIVE_MODE.DISABLED;
         }
 
-        // update odometry
+        // update odometry // ! prolly bugged somewhere
         gyroIO.updateInputs(gyroInputs);
         Logger.processInputs("gyro", gyroInputs);
         fieldPosition = fieldPosition.exp(PhysicalConstants.KINEMATICS.toTwist2d(getModuleDeltas()));
@@ -164,7 +164,7 @@ public class Drive extends SubsystemBase {
     }
 
     public Rotation2d getYaw() {
-        // return getPose().getRotation();
+        // return getPose().getRotation(); // ! get this working
         return new Rotation2d(Rotations.of(gyroInputs.yaw).in(Radians));
     }
 

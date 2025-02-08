@@ -23,15 +23,17 @@ public class Module {
         Logger.processInputs("drive/module" + Integer.toString(index), inputs);
     }
 
-    public void runState(SwerveModuleState state) {
-        state.optimize(getAngle());
-        io.setTurnPosition(Rotations.of(state.angle.getRotations()));
-        io.setDriveVelocity(RadiansPerSecond.of(state.speedMetersPerSecond / PhysicalConstants.WHEEL_RADIUS.in(Meters)));
-    }
+    // ————— functions for running modules ————— //
 
     public void stop() {
         io.setTurnVoltage(Volts.of(0.0));
         io.setDriveVoltage(Volts.of(0.0));
+    }
+
+    public void runState(SwerveModuleState state) {
+        state.optimize(getAngle());
+        io.setTurnPosition(Rotations.of(state.angle.getRotations()));
+        io.setDriveVelocity(RadiansPerSecond.of(state.speedMetersPerSecond / PhysicalConstants.WHEEL_RADIUS.in(Meters)));
     }
 
     public void characterize(Voltage volts){

@@ -9,17 +9,19 @@ import edu.wpi.first.wpilibj.RobotBase;
 /**
  * to do: 
  *  daily at home: 
+ *   drive position control
  *   sysid for good choreo constants
+ *    replace kA in ModuleIO classes
  *   write coralIOSim
  *   pid tunable constants
+ * 
+ * ! code alga release mechanism
+ * ! drive position control
  * 
  * — daily at robotics: 
  * —— coral: 
  * ——— make coral code based on absolute encoders instead of relative
  * ——— test kG
- * 
- * 
- * ! alliance problems, change to blue in drive.java probably
  * 
  *  longer term: 
  *   put coralIO inputs in separate folders

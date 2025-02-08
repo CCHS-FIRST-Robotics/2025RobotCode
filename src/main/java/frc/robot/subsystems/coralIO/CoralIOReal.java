@@ -77,8 +77,8 @@ public class CoralIOReal implements CoralIO{
     private final StatusSignal<Temperature> temperatureSignalArm;
     
     public CoralIOReal(int elevatorId, int elevatorCancoderId, int armId, int armCancoderId, int wristId, int clawId) {
-        elevatorMotor = new TalonFX(elevatorId);    
-        armMotor = new TalonFX(armId);
+        elevatorMotor = new TalonFX(elevatorId); // Falcon500
+        armMotor = new TalonFX(armId); // Falcon500
         // wristMotor = new SparkMax(wristId, MotorType.kBrushed);
 
         elevatorCancoder = new CANcoder(elevatorCancoderId);
