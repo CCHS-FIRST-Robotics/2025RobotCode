@@ -1,21 +1,25 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.Solenoid;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 import frc.robot.Constants;
 
 public class Claw {
-    Solenoid solenoid;
+    SparkMax clawDriver;
     
-    public Claw(Solenoid solenoid) {
-        this.solenoid = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.SOLENOID_PIN);
+    public Claw(SparkMax clawDriver) {
+        this.clawDriver = new SparkMax(Constants.CLAW_ID, MotorType.kBrushless);
     }
 
     public void grab() {
-        solenoid.set(true);
+        clawDriver.setVoltage(2);
     }
 
     public void release() {
-        solenoid.set(false);
+        clawDriver.setVoltage(-2);
+    }
+
+    public void stop() {
+        clawDriver.setVoltage(0);
     }
 }
