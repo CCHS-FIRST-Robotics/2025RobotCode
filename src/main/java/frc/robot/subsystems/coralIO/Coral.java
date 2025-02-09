@@ -6,15 +6,16 @@ import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.units.measure.*;
 import org.littletonrobotics.junction.Logger;
+import frc.robot.subsystems.coralIO.CoralIO.CoralIOInputs;
 import frc.robot.constants.*;
-import frc.robot.constants.PhysicalConstants.*;
+import frc.robot.constants.PhysicalConstants.CoralPositions;
 
 public class Coral extends SubsystemBase {
     private final CoralIO io;
     private final DigitalInput elevatorSwitchBottom = new DigitalInput(VirtualConstants.ELEVATOR_SWITCH_BOTTOM_PORT); // bottom
     // private final DigitalInput elevatorSwitchTop = new DigitalInput(VirtualConstants.ELEVATOR_SWITCH_TOP_PORT); // top
     private final DigitalInput troughSensor = new DigitalInput(VirtualConstants.TROUGH_SENSOR_PORT);
-    private final CoralIOInputsAutoLogged inputs = new CoralIOInputsAutoLogged();
+    private final CoralIOInputs inputs = new CoralIOInputs();
     // ! the arm can only rotate above the elevator (use inputmodulus or whatever the last arm used)
 
     public Coral(CoralIO io) {
@@ -25,7 +26,7 @@ public class Coral extends SubsystemBase {
     public void periodic() {
         io.updateInputs(inputs);
         Logger.processInputs("coralIO", inputs);
-        Logger.recordOutput("elevatorSwitchBottom", elevatorSwitchBottom.get());
+        Logger.recordOutput("outputs/elevatorSwitchBottom", elevatorSwitchBottom.get());
     }
 
     // ————— testing command factories ————— //
@@ -57,9 +58,9 @@ public class Coral extends SubsystemBase {
     public Command getPrepIntakeCommand(){
         return new InstantCommand(() -> io.setClawPosition(true))
         .andThen(
-            new InstantCommand(() -> io.setElevatorPosition(PhysicalConstants.INTAKE.elevatorPosition.getValue()))
-            .alongWith(new InstantCommand(() -> io.setArmPosition(PhysicalConstants.INTAKE.armPosition)))
-            .alongWith(new InstantCommand(() -> io.setWristPosition(PhysicalConstants.INTAKE.wristPosition)))
+            new InstantCommand(() -> io.setElevatorPosition(CoralPositions.INTAKE.elevatorPosition.getValue()))
+            .alongWith(new InstantCommand(() -> io.setArmPosition(CoralPositions.INTAKE.armPosition)))
+            .alongWith(new InstantCommand(() -> io.setWristPosition(CoralPositions.INTAKE.wristPosition)))
         );
     }
     
@@ -71,13 +72,13 @@ public class Coral extends SubsystemBase {
 
         return new InstantCommand(() -> io.setClawPosition(false))
         .andThen(
-            new InstantCommand(() -> io.setElevatorPosition(PhysicalConstants.L4.elevatorPosition.getValue()))
-            .alongWith(new InstantCommand(() -> io.setArmPosition(PhysicalConstants.L4.armPosition)))
+            new InstantCommand(() -> io.setElevatorPosition(CoralPositions.L4.elevatorPosition.getValue()))
+            .alongWith(new InstantCommand(() -> io.setArmPosition(CoralPositions.L4.armPosition)))
         );
     }
 
     // move elevator and arm, set wrist position
-    public Command getSetCoralIOPositionCommand(CoralPosition position){
+    public Command getSetCoralIOPositionCommand(CoralPositions.CoralPosition position){
         return new InstantCommand(() -> io.setElevatorPosition(position.elevatorPosition.getValue()))
         .alongWith(new InstantCommand(() -> io.setArmPosition(position.armPosition)))
         .alongWith(new InstantCommand(() -> io.setWristPosition(position.wristPosition)));

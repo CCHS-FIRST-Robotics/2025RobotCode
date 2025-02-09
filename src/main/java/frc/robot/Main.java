@@ -9,24 +9,28 @@ import edu.wpi.first.wpilibj.RobotBase;
 /**
  * to do: 
  *  daily at home: 
- *   drive position control
+ *   put coralIO inputs in separate folders
  *   sysid for good choreo constants
  *    replace kA in ModuleIO classes
- *   write coralIOSim
- *   pid tunable constants
- * 
- * ! code alga release mechanism
- * ! drive position control
+ *   check drive position control
  * 
  * — daily at robotics: 
+ * —— drive: 
+ * ——— test max speed
+ * ——— test sysid
+ * ——— update choreo
+ * *—— test autos
  * —— coral: 
- * ——— make coral code based on absolute encoders instead of relative
- * ——— test kG
+ * ——— absolute encoders
+ * ——— test kG on arm
+ * —— alga: 
+ * ——— add ir sensors
+ * ——— code release mechanism
  * 
  *  longer term: 
- *   put coralIO inputs in separate folders
+ *   write coralIOSim
+ *   pid tunable constants
  *   controllers for the year
- *   rotating while translating doesn't work at all in sim
  *   movetoapriltag command(assume you can get an angle and distance from the camera)
  *   maybe leds for telling the coral station person whether the robot can intake
  *   make poseestimator its own class, record robot pose not under realoutputs
@@ -34,7 +38,7 @@ import edu.wpi.first.wpilibj.RobotBase;
  *  current major goal: 
  *   get 2coral auto working: 
  *    driving (in general) and position control
- *    // setting elevator position
+ *    setting elevator position
  *    setting arm position
  *    setting wrist position
  *    setting claw position

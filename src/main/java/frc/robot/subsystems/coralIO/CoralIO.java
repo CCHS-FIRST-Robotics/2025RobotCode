@@ -1,12 +1,12 @@
 package frc.robot.subsystems.coralIO;
 
+
+import org.littletonrobotics.junction.inputs.LoggableInputs;
+import org.littletonrobotics.junction.LogTable;
 import edu.wpi.first.units.measure.*;
-import org.littletonrobotics.junction.AutoLog;
 
 public interface CoralIO {
-    @AutoLog
-    public static class CoralIOInputs {
-        // ! decide which ones of these to actually log
+    public static class CoralIOInputs implements LoggableInputs {
         public double elevatorVoltage;
         public double elevatorCurrent;
         public double elevatorPosition;
@@ -30,6 +30,60 @@ public interface CoralIO {
         public double wristTemperature;
         
         public boolean clawState;
+
+        @Override
+        public void toLog(LogTable table) {
+            table.put("elevator/ElevatorVoltage", elevatorVoltage);
+            table.put("elevator/ElevatorCurrent", elevatorCurrent);
+            table.put("elevator/ElevatorPosition", elevatorPosition);
+            table.put("elevator/ElevatorVelocity", elevatorVelocity);
+            table.put("elevator/ElevatorAbsolutePosition", elevatorAbsolutePosition);
+            table.put("elevator/ElevatorAbsoluteVelocity", elevatorAbsoluteVelocity);
+            table.put("elevator/ElevatorTemperature", elevatorTemperature);
+            
+            table.put("arm/ArmVoltage", armVoltage);
+            table.put("arm/ArmCurrent", armCurrent);
+            table.put("arm/ArmPosition", armPosition);
+            table.put("arm/ArmVelocity", armVelocity);
+            table.put("arm/ArmAbsolutePosition", armAbsolutePosition);
+            table.put("arm/ArmAbsoluteVelocity", armAbsoluteVelocity);
+            table.put("arm/ArmTemperature", armTemperature);
+            
+            table.put("wrist/WristVoltage", wristVoltage);
+            table.put("wrist/WristCurrent", wristCurrent);
+            table.put("wrist/WristPosition", wristPosition);
+            table.put("wrist/WristVelocity", wristVelocity);
+            table.put("wrist/WristTemperature", wristTemperature);
+            
+            table.put("claw/ClawState", clawState);
+        }
+
+        @Override
+        public void fromLog(LogTable table) {
+            elevatorVoltage = table.get("elevator/ElevatorVoltage", elevatorVoltage);
+            elevatorCurrent = table.get("elevator/ElevatorCurrent", elevatorCurrent);
+            elevatorPosition = table.get("elevator/ElevatorPosition", elevatorPosition);
+            elevatorVelocity = table.get("elevator/ElevatorVelocity", elevatorVelocity);
+            elevatorAbsolutePosition = table.get("elevator/ElevatorAbsolutePosition", elevatorAbsolutePosition);
+            elevatorAbsoluteVelocity = table.get("elevator/ElevatorAbsoluteVelocity", elevatorAbsoluteVelocity);
+            elevatorTemperature = table.get("elevator/ElevatorTemperature", elevatorTemperature);
+            
+            armVoltage = table.get("arm/ArmVoltage", armVoltage);
+            armCurrent = table.get("arm/ArmCurrent", armCurrent);
+            armPosition = table.get("arm/ArmPosition", armPosition);
+            armVelocity = table.get("arm/ArmVelocity", armVelocity);
+            armAbsolutePosition = table.get("arm/ArmAbsolutePosition", armAbsolutePosition);
+            armAbsoluteVelocity = table.get("arm/ArmAbsoluteVelocity", armAbsoluteVelocity);
+            armTemperature = table.get("arm/ArmTemperature", armTemperature);
+            
+            wristVoltage = table.get("wrist/WristVoltage", wristVoltage);
+            wristCurrent = table.get("wrist/WristCurrent", wristCurrent);
+            wristPosition = table.get("wrist/WristPosition", wristPosition);
+            wristVelocity = table.get("wrist/WristVelocity", wristVelocity);
+            wristTemperature = table.get("wrist/WristTemperature", wristTemperature);
+            
+            clawState = table.get("claw/ClawState", clawState);
+        }
     }
 
     public default void setElevatorVoltage(Voltage volts){}
