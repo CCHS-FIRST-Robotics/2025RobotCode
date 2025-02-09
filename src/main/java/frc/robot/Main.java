@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.RobotBase;
 /**
  * to do: 
  *  daily at home: 
- *   put coralIO inputs in separate folders
  *   sysid for good choreo constants
  *    replace kA in ModuleIO classes
  *   check drive position control
