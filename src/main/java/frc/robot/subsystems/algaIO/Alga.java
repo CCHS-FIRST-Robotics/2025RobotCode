@@ -20,6 +20,8 @@ public class Alga extends SubsystemBase {
     public void periodic() {
         io.updateInputs(inputs);
         Logger.processInputs("algaIO", inputs);
+
+        Logger.recordOutput("outputs/alga/irSensor", irSensor.get());
     }
 
     public void in() {
@@ -39,10 +41,12 @@ public class Alga extends SubsystemBase {
     }
 
     public boolean algaIn() {
-        return inputs.motorCurrent > 30; // ! add ir sensor as well, both is good
+        // return inputs.motorCurrent > 30 && irSensor.get();
+        return inputs.motorCurrent > 30;
     }
 
     public boolean algaOut() {
+        // return inputs.motorCurrent < 3 && !irSensor.get();
         return inputs.motorCurrent < 3;
     }
 

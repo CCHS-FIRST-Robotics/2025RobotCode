@@ -13,7 +13,7 @@ import frc.robot.constants.PhysicalConstants.CoralPositions;
 public class Coral extends SubsystemBase {
     private final CoralIO io;
     private final DigitalInput elevatorSwitchBottom = new DigitalInput(VirtualConstants.ELEVATOR_SWITCH_BOTTOM_PORT); // bottom
-    // private final DigitalInput elevatorSwitchTop = new DigitalInput(VirtualConstants.ELEVATOR_SWITCH_TOP_PORT); // top
+    private final DigitalInput elevatorSwitchTop = new DigitalInput(VirtualConstants.ELEVATOR_SWITCH_TOP_PORT); // top
     private final DigitalInput troughSensor = new DigitalInput(VirtualConstants.TROUGH_SENSOR_PORT);
     private final CoralIOInputs inputs = new CoralIOInputs();
     // ! the arm can only rotate above the elevator (use inputmodulus or whatever the last arm used)
@@ -26,7 +26,10 @@ public class Coral extends SubsystemBase {
     public void periodic() {
         io.updateInputs(inputs);
         Logger.processInputs("coralIO", inputs);
-        Logger.recordOutput("outputs/elevatorSwitchBottom", elevatorSwitchBottom.get());
+        
+        Logger.recordOutput("outputs/coral/elevatorSwitchBottom", elevatorSwitchBottom.get());
+        Logger.recordOutput("outputs/coral/elevatorSwitchTop", elevatorSwitchTop.get());
+        Logger.recordOutput("outputs/coral/troughSensor", troughSensor.get());
     }
 
     // ————— testing command factories ————— //

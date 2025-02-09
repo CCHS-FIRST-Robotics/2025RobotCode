@@ -109,8 +109,8 @@ public class RobotContainer {
         );
 
         // ————— elevator ————— //
-        // controller.y().onTrue(coral.getSetElevatorCommand(Rotations.of(1)));
-        // controller.a().onTrue(coral.getElevatorDownCommand());
+        controller.y().onTrue(coral.getSetElevatorCommand(Rotations.of(1)));
+        controller.a().onTrue(coral.getElevatorDownCommand());
         
         // ————— arm ————— //
         // controller.x().onTrue(coral.getSetArmCommand(Rotations.of(0.25)));
