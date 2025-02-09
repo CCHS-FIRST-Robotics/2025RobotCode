@@ -14,14 +14,14 @@ import edu.wpi.first.wpilibj.RobotBase;
  *   check drive position control
  * 
  * — daily at robotics: 
+ * —— coral: 
+ * *—— absolute encoders
+ * ——— test kG on arm
  * —— drive: 
  * ——— test max speed
  * ——— test sysid
  * ——— update choreo
  * *—— test autos
- * —— coral: 
- * ——— absolute encoders
- * ——— test kG on arm
  * —— alga: 
  * ——— add ir sensors
  * ——— code release mechanism
