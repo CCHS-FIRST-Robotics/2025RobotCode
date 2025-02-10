@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj.RobotBase;
  * ——— code release mechanism
  * 
  *  longer term: 
+ *   zero the drive modules correctly
  *   write coralIOSim
  *   pid tunable constants
  *   controllers for the year

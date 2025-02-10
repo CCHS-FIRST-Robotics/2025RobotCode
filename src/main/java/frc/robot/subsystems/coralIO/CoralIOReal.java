@@ -20,7 +20,7 @@ import edu.wpi.first.units.measure.*;
 public class CoralIOReal implements CoralIO{
     private final TalonFX elevatorMotor;
     private final TalonFX armMotor;
-    // private final SparkMax wristMotor; 
+    // private final SparkMax wristMotor;
 
     private final TalonFXConfiguration elevatorConfig = new TalonFXConfiguration();
     private final CANcoder elevatorCancoder;
@@ -30,7 +30,7 @@ public class CoralIOReal implements CoralIO{
     private final MotionMagicConfigs elevatorMotionMagicConfig = elevatorConfig.MotionMagic;
     private final MotionMagicVoltage elevatorMotionMagicVoltage = new MotionMagicVoltage(0);
     private final double elevatorGearingReduction = 100;
-    private Angle elevatorEncoderOffset = Rotations.of(0.40380859375); // 0.40380859375
+    private Angle elevatorEncoderOffset = Rotations.of(0.37255859375); // 0.37255859375
 
     private double kPElevator = 10;
     private double kIElevator = 0;
@@ -88,7 +88,14 @@ public class CoralIOReal implements CoralIO{
         // elevatorCancoderConfig.MagnetSensor.MagnetOffset = elevatorEncoderOffset.in(Rotations);
 
         elevatorCancoderConfig.withMagnetSensor(elevatorMagnetConfig);
-        elevatorCancoder.getConfigurator().apply(elevatorCancoderConfig, 5); // ! look at this
+        System.out.println(
+            "Status code" + 
+            elevatorCancoder.getConfigurator().apply(
+                new CANcoderConfiguration().withMagnetSensor(
+                    new MagnetSensorConfigs().withMagnetOffset(0.574)
+                )
+            )
+        );
         elevatorConfig.Feedback.withRemoteCANcoder(elevatorCancoder);
         // pid
         elevatorPIDF.kP = kPElevator;
@@ -101,7 +108,7 @@ public class CoralIOReal implements CoralIO{
         elevatorConfig.MotorOutput.withInverted(InvertedValue.Clockwise_Positive);
         elevatorMotor.setPosition(Rotations.of(0));
         elevatorConfig.Feedback.withSensorToMechanismRatio(elevatorGearingReduction);
-        elevatorMotor.getConfigurator().apply(elevatorConfig, 5); // ! look at this
+        elevatorMotor.getConfigurator().apply(elevatorConfig);
     
         // cancoder
         armCancoder = new CANcoder(elevatorCancoderId);
