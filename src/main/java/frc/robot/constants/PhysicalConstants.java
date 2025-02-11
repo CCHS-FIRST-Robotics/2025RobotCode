@@ -87,4 +87,13 @@ public final class PhysicalConstants {
             }
         }
     }
+
+    public static final Angle ELEVATOR_ENCODER_OFFSET = Rotations.of(0.39599609375);
+    public static final Angle ELEVATOR_MAX_ROTATIONS = Rotations.of(3.612548828125);
+    public static final Angle ELEVATOR_MIN_ROTATIONS = Rotations.of(0);
+
+    public static final Angle ARM_ENCODER_OFFSET = Rotations.of(0);
+    public static final Angle ARM_MAX_ROTATIONS = Rotations.of(0);
+    public static final Angle ARM_MIN_ROTATIONS = Rotations.of(0);
+    // arm recalc: https://www.reca.lc/arm?armMass=%7B%22s%22%3A15%2C%22u%22%3A%22lbs%22%7D&comLength=%7B%22s%22%3A20%2C%22u%22%3A%22in%22%7D&currentLimit=%7B%22s%22%3A40%2C%22u%22%3A%22A%22%7D&efficiency=100&endAngle=%7B%22s%22%3A90%2C%22u%22%3A%22deg%22%7D&iterationLimit=10000&motor=%7B%22quantity%22%3A2%2C%22name%22%3A%22Kraken%20X60%20%28FOC%29%2A%22%7D&ratio=%7B%22magnitude%22%3A100%2C%22ratioType%22%3A%22Reduction%22%7D&startAngle=%7B%22s%22%3A0%2C%22u%22%3A%22deg%22%7D
 }

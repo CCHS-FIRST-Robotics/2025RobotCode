@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj.RobotBase;
  * ——— add ir sensors
  * ——— code release mechanism
  * 
+ *  ! I did change the drivePosition logging code
  *  longer term: 
  *   zero the drive modules correctly
  *   write coralIOSim

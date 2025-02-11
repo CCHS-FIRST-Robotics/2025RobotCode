@@ -16,6 +16,7 @@ import com.ctre.phoenix6.*;
 // import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 // import com.revrobotics.spark.SparkBase.*;
 import edu.wpi.first.units.measure.*;
+import frc.robot.constants.PhysicalConstants;
 
 public class CoralIOReal implements CoralIO{
     private final TalonFX elevatorMotor;
@@ -24,15 +25,12 @@ public class CoralIOReal implements CoralIO{
 
     private final TalonFXConfiguration elevatorConfig = new TalonFXConfiguration();
     private final CANcoder elevatorCancoder;
-    private final CANcoderConfiguration elevatorCancoderConfig = new CANcoderConfiguration(); 
-    private final MagnetSensorConfigs elevatorMagnetConfig = new MagnetSensorConfigs();
+    private final CANcoderConfiguration elevatorCancoderConfig  = new CANcoderConfiguration();
     private final Slot0Configs elevatorPIDF = elevatorConfig.Slot0;
     private final MotionMagicConfigs elevatorMotionMagicConfig = elevatorConfig.MotionMagic;
     private final MotionMagicVoltage elevatorMotionMagicVoltage = new MotionMagicVoltage(0);
-    private final double elevatorGearingReduction = 100;
-    private Angle elevatorEncoderOffset = Rotations.of(0.37255859375); // 0.37255859375
 
-    private double kPElevator = 10;
+    private double kPElevator = 15;
     private double kIElevator = 0;
     private double kDElevator = 0;
 
@@ -42,8 +40,6 @@ public class CoralIOReal implements CoralIO{
     private final Slot0Configs armPIDF = armConfig.Slot0;
     private final MotionMagicConfigs armMotionMagicConfig = armConfig.MotionMagic;
     private final MotionMagicVoltage armMotionMagicVoltage = new MotionMagicVoltage(0);
-    private final double armGearingReduction = 100;
-    private Angle armEncoderOffset = Rotations.of(0); // ! get this
 
     private double kPArm = 4;
     private double kIArm = 0;
@@ -80,22 +76,9 @@ public class CoralIOReal implements CoralIO{
 
         // cancoder
         elevatorCancoder = new CANcoder(elevatorCancoderId);
-
-        elevatorMagnetConfig.withSensorDirection(SensorDirectionValue.Clockwise_Positive);
-        elevatorMagnetConfig.withMagnetOffset(elevatorEncoderOffset);
-
-        // elevatorCancoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
-        // elevatorCancoderConfig.MagnetSensor.MagnetOffset = elevatorEncoderOffset.in(Rotations);
-
-        elevatorCancoderConfig.withMagnetSensor(elevatorMagnetConfig);
-        System.out.println(
-            "Status code" + 
-            elevatorCancoder.getConfigurator().apply(
-                new CANcoderConfiguration().withMagnetSensor(
-                    new MagnetSensorConfigs().withMagnetOffset(0.574)
-                )
-            )
-        );
+        elevatorCancoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+        elevatorCancoderConfig.MagnetSensor.MagnetOffset = PhysicalConstants.ELEVATOR_ENCODER_OFFSET.in(Rotations);
+        elevatorCancoder.getConfigurator().apply(elevatorCancoderConfig);
         elevatorConfig.Feedback.withRemoteCANcoder(elevatorCancoder);
         // pid
         elevatorPIDF.kP = kPElevator;
@@ -106,14 +89,12 @@ public class CoralIOReal implements CoralIO{
         elevatorMotionMagicConfig.MotionMagicJerk = 1;
         // misc
         elevatorConfig.MotorOutput.withInverted(InvertedValue.Clockwise_Positive);
-        elevatorMotor.setPosition(Rotations.of(0));
-        elevatorConfig.Feedback.withSensorToMechanismRatio(elevatorGearingReduction);
         elevatorMotor.getConfigurator().apply(elevatorConfig);
     
         // cancoder
-        armCancoder = new CANcoder(elevatorCancoderId);
+        armCancoder = new CANcoder(armCancoderId);
         armCancoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
-        armCancoderConfig.MagnetSensor.MagnetOffset = armEncoderOffset.in(Rotations); 
+        armCancoderConfig.MagnetSensor.MagnetOffset = PhysicalConstants.ARM_ENCODER_OFFSET.in(Rotations); 
         armCancoder.getConfigurator().apply(armCancoderConfig);
         armConfig.Feedback.withRemoteCANcoder(armCancoder);
         // pid
@@ -126,8 +107,6 @@ public class CoralIOReal implements CoralIO{
         armMotionMagicConfig.MotionMagicJerk = 1;
         // misc
         armConfig.MotorOutput.withInverted(InvertedValue.CounterClockwise_Positive);
-        armMotor.setPosition(Rotations.of(0));
-        armConfig.Feedback.withSensorToMechanismRatio(armGearingReduction);
         armMotor.getConfigurator().apply(armConfig);
 
         // wristMotor.setCANTimeout(500);
