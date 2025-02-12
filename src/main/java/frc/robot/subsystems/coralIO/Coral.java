@@ -55,6 +55,10 @@ public class Coral extends SubsystemBase {
         return new InstantCommand(() -> io.setArmVoltage(Volts.of(0)));
     }
 
+    public Command getStopElevatorCommand(){
+        return new InstantCommand(() -> io.setElevatorVoltage(Volts.of(0)));
+    }
+
     // ————— final command factories ————— //
 
     // open claw, then move the elevator and arm down while setting wrist position
