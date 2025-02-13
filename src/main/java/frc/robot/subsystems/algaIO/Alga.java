@@ -33,7 +33,7 @@ public class Alga extends SubsystemBase {
     }
 
     public void out() {
-        io.setVoltage(Volts.of(4)); 
+        io.setVoltage(Volts.of(4));
     }
     
     public void stop() {

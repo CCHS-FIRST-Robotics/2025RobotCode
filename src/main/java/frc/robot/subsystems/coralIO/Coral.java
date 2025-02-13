@@ -1,7 +1,5 @@
 package frc.robot.subsystems.coralIO;
 
-import static edu.wpi.first.units.Units.*;
-
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.units.measure.*;
@@ -16,7 +14,6 @@ public class Coral extends SubsystemBase {
     private final DigitalInput elevatorSwitchTop = new DigitalInput(VirtualConstants.ELEVATOR_SWITCH_TOP_PORT); // top
     private final DigitalInput troughSensor = new DigitalInput(VirtualConstants.TROUGH_SENSOR_PORT);
     private final CoralIOInputs inputs = new CoralIOInputs();
-    // ! the arm can only rotate above the elevator (use inputmodulus or whatever the last arm used)
 
     public Coral(CoralIO io) {
         this.io = io;
@@ -37,22 +34,9 @@ public class Coral extends SubsystemBase {
     public Command getSetElevatorCommand(Angle angle){
         return new InstantCommand(() -> io.setElevatorPosition(angle));
     }
-    
-    public Command getElevatorDownCommand(){
-        return new StartEndCommand(
-            () -> io.setElevatorVoltage(Volts.of(-2)), 
-            () -> io.setElevatorVoltage(Volts.of(0))
-        )
-        .until(() -> elevatorSwitchBottom.get())
-        .andThen(new InstantCommand(() -> io.zeroElevator()));
-    }
 
     public Command getSetArmCommand(Angle angle){
         return new InstantCommand(() -> io.setArmPosition(angle));
-    }
-
-    public Command getStopArmCommand(){
-        return new InstantCommand(() -> io.setArmVoltage(Volts.of(0)));
     }
 
     // ————— final command factories ————— //

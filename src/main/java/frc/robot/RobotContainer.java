@@ -23,7 +23,7 @@ public class RobotContainer {
 
     private final Drive drive;
     private final Coral coral;
-    // private final Alga alga;
+    private final Alga alga;
 
     private final AutoRoutineGenerator autoGenerator;
     private final AutoChooser autoChooser;
@@ -50,7 +50,7 @@ public class RobotContainer {
                     )
                 );
 
-                // alga = new Alga(new AlgaIOTalonFX(VirtualConstants.ALGA_ID_1));
+                alga = new Alga(new AlgaIOTalonFX(VirtualConstants.ALGA_ID_1));
                 break;
             case SIM:
                 drive = new Drive(
@@ -63,7 +63,7 @@ public class RobotContainer {
 
                 coral = new Coral(new CoralIOSim());
 
-                // alga = new Alga(new AlgaIOSim());
+                alga = new Alga(new AlgaIOSim());
                 break;
             default:
                 drive = new Drive(
@@ -85,7 +85,7 @@ public class RobotContainer {
                     )
                 );
 
-                // alga = new Alga(new AlgaIOTalonFX(VirtualConstants.ALGA_ID_1));
+                alga = new Alga(new AlgaIOTalonFX(VirtualConstants.ALGA_ID_1));
                 break;
         }
 
@@ -110,16 +110,16 @@ public class RobotContainer {
         );
 
         // ————— elevator ————— //
-        controller.y().onTrue(coral.getSetElevatorCommand(PhysicalConstants.ELEVATOR_MAX_ROTATIONS));
-        controller.a().onTrue(coral.getSetElevatorCommand(PhysicalConstants.ELEVATOR_MAX_ROTATIONS));
-        
+        // controller.y().onTrue(coral.getSetElevatorCommand(PhysicalConstants.ELEVATOR_MAX_ROTATIONS));
+        // controller.a().onTrue(coral.getSetElevatorCommand(PhysicalConstants.ELEVATOR_MIN_ROTATIONS));
+
         // ————— arm ————— //
-        controller.x().onTrue(coral.getSetArmCommand(Rotations.of(0)));
-        controller.b().onTrue(coral.getStopArmCommand());
+        // controller.x().onTrue(coral.getSetArmCommand(PhysicalConstants.ARM_MAX_ROTATIONS);
+        // controller.b().onTrue(coral.getSetArmCommand(PhysicalConstants.ARM_MIN_ROTATIONS));
 
         // ————— alga ————— //
-        // controller.x().onTrue(alga.getIntakeCommand());
-        // controller.b().onTrue(alga.getOutputCommand());
+        controller.x().onTrue(alga.getIntakeCommand());
+        controller.b().onTrue(alga.getOutputCommand());
     }
 
     private void configureAutos(){

@@ -14,8 +14,6 @@ import choreo.trajectory.SwerveSample;
 import org.littletonrobotics.junction.Logger;
 import frc.robot.constants.*;
 
-//! trapezoidal accelleration
-
 public class Drive extends SubsystemBase {
     public enum DRIVE_MODE {
         DISABLED,
@@ -115,7 +113,7 @@ public class Drive extends SubsystemBase {
                 );
                 // fallthrough to VELOCITY case; no break statement needed
             case VELOCITY: 
-                ChassisSpeeds.discretize(speeds, VirtualConstants.PERIOD); // more detail: https://www.chiefdelphi.com/t/whitepaper-swerve-drive-skew-and-second-order-kinematics/416964/30                
+                speeds = ChassisSpeeds.discretize(speeds, VirtualConstants.PERIOD); // explaination: https://www.chiefdelphi.com/t/whitepaper-swerve-drive-skew-and-second-order-kinematics/416964/30                
                 SwerveModuleState[] moduleStates = PhysicalConstants.KINEMATICS.toSwerveModuleStates(speeds); // convert speeds to module states
                 SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates, PhysicalConstants.MAX_LINEAR_SPEED); // renormalize wheel speeds
 

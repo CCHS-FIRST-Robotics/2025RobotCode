@@ -30,9 +30,13 @@ public class CoralIOReal implements CoralIO{
     private final MotionMagicConfigs elevatorMotionMagicConfig = elevatorConfig.MotionMagic;
     private final MotionMagicVoltage elevatorMotionMagicVoltage = new MotionMagicVoltage(0);
 
-    private double kPElevator = 15;
+    private double kPElevator = 20;
     private double kIElevator = 0;
     private double kDElevator = 0;
+    private double kGElevator = 0;
+    private double kSElevator = 0;
+    private double kVElevator = 0.1121914734;
+    private double kAElevator = 0; // ! sysid this at some point
 
     private final TalonFXConfiguration armConfig = new TalonFXConfiguration();
     private final CANcoder armCancoder;
@@ -41,10 +45,13 @@ public class CoralIOReal implements CoralIO{
     private final MotionMagicConfigs armMotionMagicConfig = armConfig.MotionMagic;
     private final MotionMagicVoltage armMotionMagicVoltage = new MotionMagicVoltage(0);
 
-    private double kPArm = 4;
+    private double kPArm = 20;
     private double kIArm = 0;
     private double kDArm = 0;
-    private double kGArm = 0.07;
+    private double kGArm = 0.15; // ! recalculate after they attacth the wrist
+    private double kSArm = 0;
+    private double kVArm = 0.1121914734;
+    private double kAArm = 0;
 
     // private final SparkMaxConfig wristConfig = new SparkMaxConfig();
     // private final RelativeEncoder wristEncoder;
@@ -52,6 +59,7 @@ public class CoralIOReal implements CoralIO{
     // private double kPWrist = 0;
     // private double kIWrist = 0;
     // private double kDWrist = 0;
+    // private double kGWrist = 0;
 
     private final StatusSignal<Voltage> voltageSignalElevator;
     private final StatusSignal<Current> currentSignalElevator;
@@ -84,6 +92,11 @@ public class CoralIOReal implements CoralIO{
         elevatorPIDF.kP = kPElevator;
         elevatorPIDF.kI = kIElevator;
         elevatorPIDF.kD = kDElevator;
+        elevatorPIDF.kG = kGElevator;
+        elevatorPIDF.kS = kSElevator;
+        elevatorPIDF.kV = kVElevator;
+        elevatorPIDF.kA = kAElevator;
+        elevatorPIDF.GravityType = GravityTypeValue.Elevator_Static;
         elevatorMotionMagicConfig.MotionMagicCruiseVelocity = 100;
         elevatorMotionMagicConfig.MotionMagicAcceleration = 1;
         elevatorMotionMagicConfig.MotionMagicJerk = 1;
@@ -93,7 +106,7 @@ public class CoralIOReal implements CoralIO{
     
         // cancoder
         armCancoder = new CANcoder(armCancoderId);
-        armCancoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+        armCancoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
         armCancoderConfig.MagnetSensor.MagnetOffset = PhysicalConstants.ARM_ENCODER_OFFSET.in(Rotations); 
         armCancoder.getConfigurator().apply(armCancoderConfig);
         armConfig.Feedback.withRemoteCANcoder(armCancoder);
@@ -102,7 +115,11 @@ public class CoralIOReal implements CoralIO{
         armPIDF.kI = kIArm;
         armPIDF.kD = kDArm;
         armPIDF.kG = kGArm;
-        armMotionMagicConfig.MotionMagicCruiseVelocity = 100;
+        armPIDF.kS = kSArm;
+        armPIDF.kV = kVArm;
+        armPIDF.kA = kAArm;
+        armPIDF.GravityType = GravityTypeValue.Arm_Cosine;
+        armMotionMagicConfig.MotionMagicCruiseVelocity = 0.5;
         armMotionMagicConfig.MotionMagicAcceleration = 1;
         armMotionMagicConfig.MotionMagicJerk = 1;
         // misc
@@ -177,11 +194,11 @@ public class CoralIOReal implements CoralIO{
     //     );
     // }
 
-    @Override
-    public void setClawVoltage(Voltage volts){}
+    // @Override
+    // public void setClawVoltage(Voltage volts){}
 
-    @Override
-    public void setClawPosition(boolean open){}
+    // @Override
+    // public void setClawPosition(boolean open){}
 
     @Override
     public void updateInputs(CoralIOInputs inputs) {

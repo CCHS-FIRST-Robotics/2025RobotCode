@@ -8,19 +8,19 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import java.util.AbstractMap.SimpleEntry;
 
 public final class PhysicalConstants {
-    // ————— swerve constants ————— // 
-    // ! recalculate these
-    // specs
-    public static final LinearVelocity MAX_LINEAR_SPEED = MetersPerSecond.of(2); // 4.5
+    // ————— swerve constants ————— //
+    // specs // ! recalculate these
+    public static final LinearVelocity MAX_LINEAR_SPEED = MetersPerSecond.of(2); // 4.4759614398144
     public static final LinearAcceleration MAX_LINEAR_ACCEL = MetersPerSecondPerSecond.of(3); // 9
     public static final AngularVelocity MAX_ANGULAR_SPEED = RadiansPerSecond.of(Math.PI); // 8 * pi
     public static final AngularAcceleration MAX_ANGULAR_ACCEL = RadiansPerSecond.per(Seconds).of(2 * Math.PI); // 10 * pi
     
     // kinematics
+    public static final Mass ROBOT_WEIGHT = Pounds.of(97.666);
     public static final Distance WHEEL_RADIUS = Inches.of(2);
     public static final Distance TRACK_WIDTH_X = Inches.of(23.625);
     public static final Distance TRACK_WIDTH_Y = Inches.of(27.75);
-    public static final Translation2d[] MODULE_TRANSLATIONS = new Translation2d[] { // using the chassisspeeds coordinate plane (really stupid)
+    public static final Translation2d[] MODULE_TRANSLATIONS = new Translation2d[] { // using the chassisspeeds coordinate plane
         new Translation2d(TRACK_WIDTH_X.in(Meters) / 2.0, TRACK_WIDTH_Y.in(Meters) / 2.0), // FL
         new Translation2d(TRACK_WIDTH_X.in(Meters) / 2.0, -TRACK_WIDTH_Y.in(Meters) / 2.0), // FR
         new Translation2d(-TRACK_WIDTH_X.in(Meters) / 2.0, TRACK_WIDTH_Y.in(Meters) / 2.0), // BL
@@ -34,6 +34,15 @@ public final class PhysicalConstants {
     public static final double COUPLING_RATIO = 50.0 / 14.0;
 
     // ————— coral constants ————— //
+    public static final Angle ELEVATOR_ENCODER_OFFSET = Rotations.of(0.39599609375);
+    public static final Angle ELEVATOR_MAX_ROTATIONS = Rotations.of(3.612548828125);
+    public static final Angle ELEVATOR_MIN_ROTATIONS = Rotations.of(0);
+
+    // recalc: https://www.reca.lc/arm?armMass=%7B%22s%22%3A4.59%2C%22u%22%3A%22lbs%22%7D&comLength=%7B%22s%22%3A11.5%2C%22u%22%3A%22in%22%7D&currentLimit=%7B%22s%22%3A30%2C%22u%22%3A%22A%22%7D&efficiency=100&endAngle=%7B%22s%22%3A90%2C%22u%22%3A%22deg%22%7D&iterationLimit=10000&motor=%7B%22quantity%22%3A1%2C%22name%22%3A%22Falcon%20500%22%7D&ratio=%7B%22magnitude%22%3A100%2C%22ratioType%22%3A%22Reduction%22%7D&startAngle=%7B%22s%22%3A0%2C%22u%22%3A%22deg%22%7D
+    public static final Angle ARM_ENCODER_OFFSET = Rotations.of(-0.260986328125);
+    public static final Angle ARM_MAX_ROTATIONS = Rotations.of(0.582763671875); // 0.922119140625 when elevator fully up
+    public static final Angle ARM_MIN_ROTATIONS = Rotations.of(0);
+
     public static class CoralPositions{
         public static final CoralPosition INTAKE = new CoralPosition(
             Inches.of(0), // elevator height
@@ -88,12 +97,4 @@ public final class PhysicalConstants {
         }
     }
 
-    public static final Angle ELEVATOR_ENCODER_OFFSET = Rotations.of(0.39599609375);
-    public static final Angle ELEVATOR_MAX_ROTATIONS = Rotations.of(3.612548828125);
-    public static final Angle ELEVATOR_MIN_ROTATIONS = Rotations.of(0);
-
-    public static final Angle ARM_ENCODER_OFFSET = Rotations.of(0);
-    public static final Angle ARM_MAX_ROTATIONS = Rotations.of(0);
-    public static final Angle ARM_MIN_ROTATIONS = Rotations.of(0);
-    // arm recalc: https://www.reca.lc/arm?armMass=%7B%22s%22%3A15%2C%22u%22%3A%22lbs%22%7D&comLength=%7B%22s%22%3A20%2C%22u%22%3A%22in%22%7D&currentLimit=%7B%22s%22%3A40%2C%22u%22%3A%22A%22%7D&efficiency=100&endAngle=%7B%22s%22%3A90%2C%22u%22%3A%22deg%22%7D&iterationLimit=10000&motor=%7B%22quantity%22%3A2%2C%22name%22%3A%22Kraken%20X60%20%28FOC%29%2A%22%7D&ratio=%7B%22magnitude%22%3A100%2C%22ratioType%22%3A%22Reduction%22%7D&startAngle=%7B%22s%22%3A0%2C%22u%22%3A%22deg%22%7D
 }

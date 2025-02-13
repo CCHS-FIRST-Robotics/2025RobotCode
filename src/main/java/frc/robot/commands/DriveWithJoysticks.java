@@ -84,7 +84,7 @@ public class DriveWithJoysticks extends Command {
         );
 
         Logger.recordOutput("outputs/speeds", speeds);
-
+        
         drive.runVelocity(speeds);
         prevSpeeds = speeds;
     }
