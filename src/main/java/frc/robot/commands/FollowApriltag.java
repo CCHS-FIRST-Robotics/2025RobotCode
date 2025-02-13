@@ -37,8 +37,9 @@ public class FollowApriltag extends Command {
 
     @Override
     public void execute() {
-        Tag tag = camera.getTag(followID);
         ChassisSpeeds speeds = new ChassisSpeeds();
+
+        /*Tag tag = camera.getTag(followID);
 
         if (tag == null) {
             state = FollowApriltagStates.IDLE;
@@ -58,7 +59,7 @@ public class FollowApriltag extends Command {
             speeds = new ChassisSpeeds(0, 0, 0.5);
         }
         
-        drive.runVelocity(speeds);
+        drive.runVelocity(speeds);*/
     }
 
     @Override

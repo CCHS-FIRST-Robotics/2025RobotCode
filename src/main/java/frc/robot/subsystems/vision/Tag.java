@@ -7,10 +7,21 @@ public class Tag {
     //angle 0 deg = centered, -180 deg = left, 180 deg = right
     double m_angle;
 
+    double x, y, z;
+
+
     public Tag(long ID, double distance, double angle) {
         m_ID = ID;
         m_distance = distance;
         m_angle = angle;
+    }
+
+
+    public Tag(long ID, double x, double y, double z) {
+        m_ID = ID;
+        this.x = x;
+        this.y = y;
+        this.z = z;
     }
 
     public long getID() {

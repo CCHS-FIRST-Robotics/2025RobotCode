@@ -1,60 +1,100 @@
 package frc.robot.subsystems.vision;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.DoubleArraySubscriber;
 import edu.wpi.first.networktables.IntegerArraySubscriber;
 import edu.wpi.first.networktables.IntegerSubscriber;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import frc.robot.RobotContainer;
+import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.drive.GyroIO;
+import frc.robot.subsystems.drive.GyroIO.GyroIOInputs;
+import edu.wpi.first.math.geometry.Translation3d;
 
 public class Camera {
     NetworkTable tagsTable;
+    DoubleArraySubscriber tag_Sub;
+    HashMap<Integer, Translation3d> tagsMap;
+    Drive drive;
+    double robotX;
+    double robotY;
 
-    IntegerArraySubscriber tagIdsSub;
-    DoubleArraySubscriber tag_anglesSub;
-    DoubleArraySubscriber tag_distancesSub;
-    IntegerSubscriber packet_id;
-    HashMap<Long, Tag> tags;
+    public Camera(Drive drive) {
+        this.drive = drive;
 
-    public Camera() {
         tagsTable = NetworkTableInstance.getDefault().getTable("tag");
 
-        tagIdsSub = tagsTable.getIntegerArrayTopic("tagID").subscribe(new long[] {});
-        tag_anglesSub = tagsTable.getDoubleArrayTopic("tag_angle").subscribe(new double[] {});
-        tag_distancesSub = tagsTable.getDoubleArrayTopic("tag_distance").subscribe(new double[] {});
-        packet_id = tagsTable.getIntegerTopic("packet_id").subscribe(0);
-        tags = new HashMap<Long, Tag>();
+        tag_Sub = tagsTable.getDoubleArrayTopic("tags").subscribe(new double[] {});
+
+        tagsMap = new HashMap<Integer, Translation3d>();
+
+        tagsMap.put(1, new Translation3d(16.697, 0.655, 1.486));
+        tagsMap.put(2, new Translation3d(16.697, 7.396, 1.486));
+        tagsMap.put(3, new Translation3d(11.561, 8.056, 1.302));
+        tagsMap.put(4, new Translation3d(9.276, 6.138, 1.868));
+        tagsMap.put(5, new Translation3d(9.276, 1.915, 1.868));
+        tagsMap.put(6, new Translation3d(13.474, 3.306, 0.308));
+        tagsMap.put(7, new Translation3d(13.890, 4.026, 0.308));
+        tagsMap.put(8, new Translation3d(13.474, 4.745, 0.308));
+        tagsMap.put(9, new Translation3d(12.643, 4.745, 0.308));
+        tagsMap.put(10, new Translation3d(12.227, 4.026, 0.308));
+        tagsMap.put(11, new Translation3d(12.643, 3.306, 0.308));
+        tagsMap.put(12, new Translation3d(0.851, 0.655, 1.486));
+        tagsMap.put(13, new Translation3d(0.851, 7.396, 1.486));
+        tagsMap.put(14, new Translation3d(8.272, 6.138, 1.868));
+        tagsMap.put(15, new Translation3d(8.272, 1.915, 1.868));
+        tagsMap.put(16, new Translation3d(5.988, -0.004, 1.302));
+        tagsMap.put(17, new Translation3d(4.074, 3.306, 0.308));
+        tagsMap.put(18, new Translation3d(3.658, 4.026, 0.308));
+        tagsMap.put(19, new Translation3d(4.074, 4.745, 0.308));
+        tagsMap.put(20, new Translation3d(4.905, 4.745, 0.308));
+        tagsMap.put(21, new Translation3d(5.321, 4.026, 0.308));
+        tagsMap.put(22, new Translation3d(4.905, 3.306, 0.308));
 
     }
-    public Tag getTag(long ID) {
-        if (tags.containsKey(ID)) {
-            return tags.get(ID);
+    
+    public Translation3d getTagLocation(int ID) {
+        if (tagsMap.containsKey(ID)) {
+            return tagsMap.get(ID);
         }
         return null;
     }
 
     public void updateInputs() {
-        long[] tagids = tagIdsSub.get();
-        double[] tag_distances = tag_distancesSub.get();
-        double[] tag_angles = tag_anglesSub.get();
+        double[] tags = tag_Sub.get();
+        double robotYaw = 20;// drive.Gyro(); rad
 
-        System.out.println(packet_id);
+        System.out.println();
+        int tagCount = 0;
+        robotX = 0;
+        robotY = 0;
 
-        for (int i = 0; i < tagids.length; i++) {
-            System.out.println(tagids[i]);
-            System.out.println(tag_distances[i]);
-            System.out.println(tag_angles[i]);
-        }
+        for (int i = 1; i < tags.length; i+=3) {
+            int tagid = (int)tags[i];
+            double tagAngle = tags[i+1];
+            double distance = tags[i+2];
+            double angle2tag = tagAngle - robotYaw;
 
-        if (tagids.length != tag_angles.length && 
-            tagids.length != tag_distances.length) {
-            return;
+            double dx = Math.sin(angle2tag) * distance;
+            double dy = Math.cos(angle2tag) * distance;
+
+            Translation3d taglocation = getTagLocation(tagid);
+
+            robotX += taglocation.getX() - dx;
+            robotY += taglocation.getY() - dy;
+
+            tagCount++;
+        
         }
-        tags.clear();
-        for (int i = 0; i < tagids.length; i++) {
-            long id = tagids[i];
-            tags.put(id, new Tag(id, tag_distances[i], tag_angles[i]));
-        }
+        robotX /= tagCount;
+        robotY /= tagCount;
+
+        tagsMap.clear();
+
     }
 }

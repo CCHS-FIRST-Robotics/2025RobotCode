@@ -12,12 +12,14 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import frc.robot.commands.*;
 import frc.robot.utils.PoseEstimator;
 import frc.robot.subsystems.drive.*;
+import frc.robot.subsystems.vision.Camera;
 import frc.robot.utils.AutoCommandSequenceBuilder;
 import static frc.robot.Constants.*;
 
 public class RobotContainer {
     private final Drive drive;
     private final PoseEstimator poseEstimator;
+    private final Camera camera;
 
     private final CommandXboxController controller1 = new CommandXboxController(Constants.CONTROLLER_PORT_1);
 
@@ -34,6 +36,8 @@ public class RobotContainer {
                     new ModuleIOSparkMax(2),
                     new ModuleIOSparkMax(3)
                 );
+
+                camera = new Camera(drive);
                 break;
             case SIM:
                 drive = new Drive(
@@ -43,6 +47,7 @@ public class RobotContainer {
                     new ModuleIOSim(),
                     new ModuleIOSim()
                 );
+                camera = new Camera(drive);
                 break;
             default:
                 drive = new Drive(
@@ -52,6 +57,7 @@ public class RobotContainer {
                     new ModuleIOSparkMax(2),
                     new ModuleIOSparkMax(3)
                 );
+                camera = new Camera(drive);
                 break;
         }
 
