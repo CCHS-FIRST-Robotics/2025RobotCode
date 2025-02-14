@@ -15,8 +15,7 @@ import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.coralIO.*;
 import frc.robot.subsystems.algaIO.*;
 import frc.robot.utils.AutoRoutineGenerator;
-import frc.robot.constants.PhysicalConstants;
-import frc.robot.constants.VirtualConstants;
+import frc.robot.constants.*;
 
 public class RobotContainer {
     private final CommandXboxController controller = new CommandXboxController(VirtualConstants.CONTROLLER_PORT);
@@ -117,9 +116,13 @@ public class RobotContainer {
         // controller.x().onTrue(coral.getSetArmCommand(PhysicalConstants.ARM_MAX_ROTATIONS);
         // controller.b().onTrue(coral.getSetArmCommand(PhysicalConstants.ARM_MIN_ROTATIONS));
 
+        controller.x().onTrue(coral.getSetWristVoltageCommand(Volts.of(1)));
+        controller.b().onTrue(coral.getSetWristVoltageCommand(Volts.of(-1)));
+        controller.y().onTrue(coral.getSetWristVoltageCommand(Volts.of(0)));
+
         // ————— alga ————— //
-        controller.x().onTrue(alga.getIntakeCommand());
-        controller.b().onTrue(alga.getOutputCommand());
+        // controller.x().onTrue(alga.getIntakeCommand());
+        // controller.b().onTrue(alga.getOutputCommand());
     }
 
     private void configureAutos(){

@@ -10,8 +10,8 @@ import frc.robot.constants.PhysicalConstants.CoralPositions;
 
 public class Coral extends SubsystemBase {
     private final CoralIO io;
-    private final DigitalInput elevatorSwitchBottom = new DigitalInput(VirtualConstants.ELEVATOR_SWITCH_BOTTOM_PORT); // bottom
-    private final DigitalInput elevatorSwitchTop = new DigitalInput(VirtualConstants.ELEVATOR_SWITCH_TOP_PORT); // top
+    // private final DigitalInput elevatorSwitchBottom = new DigitalInput(VirtualConstants.ELEVATOR_SWITCH_BOTTOM_PORT); // bottom
+    // private final DigitalInput elevatorSwitchTop = new DigitalInput(VirtualConstants.ELEVATOR_SWITCH_TOP_PORT); // top
     private final DigitalInput troughSensor = new DigitalInput(VirtualConstants.TROUGH_SENSOR_PORT);
     private final CoralIOInputs inputs = new CoralIOInputs();
 
@@ -24,8 +24,8 @@ public class Coral extends SubsystemBase {
         io.updateInputs(inputs);
         Logger.processInputs("coralIO", inputs);
         
-        Logger.recordOutput("outputs/coral/elevatorSwitchBottom", elevatorSwitchBottom.get());
-        Logger.recordOutput("outputs/coral/elevatorSwitchTop", elevatorSwitchTop.get());
+        // Logger.recordOutput("outputs/coral/elevatorSwitchBottom", elevatorSwitchBottom.get());
+        // Logger.recordOutput("outputs/coral/elevatorSwitchTop", elevatorSwitchTop.get());
         Logger.recordOutput("outputs/coral/troughSensor", troughSensor.get());
     }
 
@@ -37,6 +37,10 @@ public class Coral extends SubsystemBase {
 
     public Command getSetArmCommand(Angle angle){
         return new InstantCommand(() -> io.setArmPosition(angle));
+    }
+
+    public Command getSetWristVoltageCommand(Voltage volts){
+        return new InstantCommand(() -> io.setWristVoltage(volts));
     }
 
     // ————— final command factories ————— //

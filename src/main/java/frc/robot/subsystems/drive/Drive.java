@@ -80,6 +80,7 @@ public class Drive extends SubsystemBase {
         fieldPosition = fieldPosition.exp(PhysicalConstants.KINEMATICS.toTwist2d(getModuleDeltas()));
         poseEstimator.updateWithTime(
             Timer.getFPGATimestamp(),
+            // ! um, probably gyro yaw velocity????
             gyroInputs.connected ? new Rotation2d(Rotations.of(gyroInputs.yaw).in(Radians)) : fieldPosition.getRotation(),
             getModulePositions()
         );
@@ -96,6 +97,11 @@ public class Drive extends SubsystemBase {
                 // set all modules' voltage to 0
                 for (Module module : modules) {
                     module.stop();
+                }
+                break;
+            case CHARACTERIZING:
+                for (int i = 0; i < 4; i++) {
+                    modules[i].characterize(Volts.of(1));
                 }
                 break;
             case POSITION:
@@ -115,7 +121,7 @@ public class Drive extends SubsystemBase {
             case VELOCITY: 
                 speeds = ChassisSpeeds.discretize(speeds, VirtualConstants.PERIOD); // explaination: https://www.chiefdelphi.com/t/whitepaper-swerve-drive-skew-and-second-order-kinematics/416964/30                
                 SwerveModuleState[] moduleStates = PhysicalConstants.KINEMATICS.toSwerveModuleStates(speeds); // convert speeds to module states
-                SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates, PhysicalConstants.MAX_LINEAR_SPEED); // renormalize wheel speeds
+                SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates, PhysicalConstants.MAX_ALLOWED_LINEAR_SPEED); // renormalize wheel speeds
 
                 // run modules
                 for (int i = 0; i < 4; i++) {
@@ -123,10 +129,6 @@ public class Drive extends SubsystemBase {
                 }
                 Logger.recordOutput("outputs/moduleStates", moduleStates);
                 break;
-            case CHARACTERIZING:
-                for (int i = 0; i < 4; i++) {
-                    modules[i].characterize(Volts.of(1));
-                }
         }
     }
 
@@ -134,6 +136,10 @@ public class Drive extends SubsystemBase {
 
     public void stop() {
         controlMode = DRIVE_MODE.DISABLED;
+    }
+
+    public void runCharacterization(){
+        controlMode = DRIVE_MODE.CHARACTERIZING;
     }
 
     public void runPosition(SwerveSample sample){
@@ -145,10 +151,6 @@ public class Drive extends SubsystemBase {
     public void runVelocity(ChassisSpeeds speeds) {
         controlMode = DRIVE_MODE.VELOCITY;
         this.speeds = speeds;
-    }
-
-    public void runCharacterization(){
-        controlMode = DRIVE_MODE.CHARACTERIZING;
     }
 
     // ————— functions for odometry ————— //

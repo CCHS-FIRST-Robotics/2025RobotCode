@@ -58,9 +58,9 @@ public class DriveWithJoysticks extends Command {
 
         // denormalize speeds and FOC
         ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-            linearVelocity.getX() * PhysicalConstants.MAX_LINEAR_SPEED.in(MetersPerSecond),
-            -linearVelocity.getY() * PhysicalConstants.MAX_LINEAR_SPEED.in(MetersPerSecond), // chassisspeeds is flipped
-            -angularVelocity * PhysicalConstants.MAX_ANGULAR_SPEED.in(RadiansPerSecond), // chassisspeeds is flipped
+            linearVelocity.getX() * PhysicalConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond),
+            -linearVelocity.getY() * PhysicalConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond), // chassisspeeds is flipped
+            -angularVelocity * PhysicalConstants.MAX_ALLOWED_ANGULAR_SPEED.in(RadiansPerSecond), // chassisspeeds is flipped
             drive.getYawWithAllianceRotation() // ! bugged
         );
 
@@ -69,17 +69,17 @@ public class DriveWithJoysticks extends Command {
             clampVelocity(
                 speeds.vxMetersPerSecond, 
                 prevSpeeds.vxMetersPerSecond, 
-                PhysicalConstants.MAX_LINEAR_ACCEL.in(MetersPerSecondPerSecond) * VirtualConstants.PERIOD
+                PhysicalConstants.MAX_ALLOWED_LINEAR_ACCEL.in(MetersPerSecondPerSecond) * VirtualConstants.PERIOD
             ),
             clampVelocity(
                 speeds.vyMetersPerSecond, 
                 prevSpeeds.vyMetersPerSecond, 
-                PhysicalConstants.MAX_LINEAR_ACCEL.in(MetersPerSecondPerSecond) * VirtualConstants.PERIOD
+                PhysicalConstants.MAX_ALLOWED_LINEAR_ACCEL.in(MetersPerSecondPerSecond) * VirtualConstants.PERIOD
             ),
             clampVelocity(
                 speeds.omegaRadiansPerSecond, 
                 prevSpeeds.omegaRadiansPerSecond, 
-                PhysicalConstants.MAX_ANGULAR_ACCEL.in(RadiansPerSecond.per(Second)) * VirtualConstants.PERIOD
+                PhysicalConstants.MAX_ALLOWED_ANGULAR_ACCEL.in(RadiansPerSecond.per(Second)) * VirtualConstants.PERIOD
             )
         );
 
