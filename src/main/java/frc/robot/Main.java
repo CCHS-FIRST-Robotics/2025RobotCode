@@ -31,6 +31,7 @@ import edu.wpi.first.wpilibj.RobotBase;
  *   make poseestimator its own class, record robot pose not under realoutputs
  *   fused cancoder instead of remote
  *   ir sensors
+ *   maybe add kV values from datasheets to motorspecs (probably will be overridden by sysid)
  */
 
 public final class Main {

@@ -18,7 +18,7 @@ import com.revrobotics.spark.SparkBase.*;
 import edu.wpi.first.units.measure.*;
 import frc.robot.constants.PhysicalConstants;
 
-public class CoralIOReal implements CoralIO{ // ! sysid all gains
+public class CoralIOReal implements CoralIO{
     private final TalonFX elevatorMotor;
     private final TalonFX armMotor;
     private final SparkMax wristMotor;
@@ -30,7 +30,7 @@ public class CoralIOReal implements CoralIO{ // ! sysid all gains
     private final MotionMagicConfigs elevatorMotionMagicConfig = elevatorConfig.MotionMagic;
     private final MotionMagicVoltage elevatorMotionMagicVoltage = new MotionMagicVoltage(0);
 
-    private double kPElevator = 20;
+    private double kPElevator = 20; // ! sysid all gains
     private double kIElevator = 0;
     private double kDElevator = 0;
     private double kGElevator = 0;
@@ -56,7 +56,7 @@ public class CoralIOReal implements CoralIO{ // ! sysid all gains
     private final SparkMaxConfig wristConfig = new SparkMaxConfig();
     private final RelativeEncoder wristEncoder;
 
-    private double kPWrist = 0;
+    private double kPWrist = 1;
     private double kIWrist = 0;
     private double kDWrist = 0;
     private double kGWrist = 0;
