@@ -45,6 +45,7 @@ public class RobotContainer {
                         VirtualConstants.ARM_ID, 
                         VirtualConstants.ARM_CANCODER_ID, 
                         VirtualConstants.WRIST_ID, 
+                        VirtualConstants.WRIST_CANCODER_ID, 
                         VirtualConstants.CLAW_ID
                     )
                 );
@@ -80,6 +81,7 @@ public class RobotContainer {
                         VirtualConstants.ARM_ID, 
                         VirtualConstants.ARM_CANCODER_ID, 
                         VirtualConstants.WRIST_ID, 
+                        VirtualConstants.WRIST_CANCODER_ID, 
                         VirtualConstants.CLAW_ID
                     )
                 );
