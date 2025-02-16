@@ -18,7 +18,8 @@ import frc.robot.utils.AutoRoutineGenerator;
 import frc.robot.constants.*;
 
 public class RobotContainer {
-    private final CommandXboxController controller = new CommandXboxController(VirtualConstants.CONTROLLER_PORT);
+    private final CommandXboxController controller1 = new CommandXboxController(VirtualConstants.CONTROLLER_PORT_1);
+    private final CommandXboxController controller2 = new CommandXboxController(VirtualConstants.CONTROLLER_PORT_2);
 
     private final Drive drive;
     private final Coral coral;
@@ -100,31 +101,32 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        // ————— driving ————— //
+        // driving
         drive.setDefaultCommand(
             new DriveWithJoysticks(
                 drive,
-                () -> -controller.getLeftY(), // xboxcontroller is flipped
-                () -> controller.getLeftX(), 
-                () -> controller.getRightX()
+                () -> -controller1.getLeftY(), // xboxcontroller is flipped
+                () -> controller1.getLeftX(), 
+                () -> controller1.getRightX()
             )
         );
 
-        // ————— elevator ————— //
-        // controller.y().onTrue(coral.getSetElevatorCommand(PhysicalConstants.ELEVATOR_MAX_ROTATIONS));
-        // controller.a().onTrue(coral.getSetElevatorCommand(PhysicalConstants.ELEVATOR_MIN_ROTATIONS));
+        // elevator
+        // controller1.y().onTrue(coral.getSetElevatorCommand(PhysicalConstants.ELEVATOR_MAX_ROTATIONS));
+        // controller1.a().onTrue(coral.getSetElevatorCommand(PhysicalConstants.ELEVATOR_MIN_ROTATIONS));
 
-        // ————— arm ————— //
-        // controller.x().onTrue(coral.getSetArmCommand(PhysicalConstants.ARM_MAX_ROTATIONS);
-        // controller.b().onTrue(coral.getSetArmCommand(PhysicalConstants.ARM_MIN_ROTATIONS));
+        // arm
+        // controller1.x().onTrue(coral.getSetArmCommand(PhysicalConstants.ARM_MAX_ROTATIONS);
+        // controller1.b().onTrue(coral.getSetArmCommand(PhysicalConstants.ARM_MIN_ROTATIONS));
 
-        controller.x().onTrue(coral.getSetWristVoltageCommand(Volts.of(1)));
-        controller.b().onTrue(coral.getSetWristVoltageCommand(Volts.of(-1)));
-        controller.y().onTrue(coral.getSetWristVoltageCommand(Volts.of(0)));
+        // wrist
+        controller1.x().onTrue(coral.getSetWristVoltageCommand(Volts.of(1)));
+        controller1.b().onTrue(coral.getSetWristVoltageCommand(Volts.of(-1)));
+        controller1.y().onTrue(coral.getSetWristVoltageCommand(Volts.of(0)));
 
-        // ————— alga ————— //
-        // controller.x().onTrue(alga.getIntakeCommand());
-        // controller.b().onTrue(alga.getOutputCommand());
+        // alga
+        controller2.x().onTrue(alga.getIntakeCommand());
+        controller2.b().onTrue(alga.getOutputCommand());
     }
 
     private void configureAutos(){

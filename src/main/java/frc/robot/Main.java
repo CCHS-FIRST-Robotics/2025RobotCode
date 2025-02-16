@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.RobotBase;
 /**
  * to do: 
  *  daily at home: 
- *   check drive position control
  *   sysid
  * 
  * — daily at robotics: 
@@ -18,7 +17,7 @@ import edu.wpi.first.wpilibj.RobotBase;
  * —— drive: 
  * ——— test max speed
  * ——— test position control
- * ———— drivePosition logging code was changed
+ * ———— note that drivePosition logging code was changed
  * *—— test autos
  * —— alga: 
  * ——— code release mechanism
