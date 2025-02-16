@@ -9,7 +9,6 @@ import org.littletonrobotics.junction.LoggedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.vision.Camera;
-import frc.robot.subsystems.vision.Tag;
 
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
@@ -23,7 +22,6 @@ public class Robot extends LoggedRobot {
     @Override
     public void robotInit() {
         robotContainer = new RobotContainer();
-        camera = new Camera();
 
         Logger.recordMetadata("ProjectName", "2025RobotCode");
         switch (Constants.CURRENT_MODE) {

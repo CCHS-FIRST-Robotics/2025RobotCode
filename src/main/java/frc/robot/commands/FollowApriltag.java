@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.drive.*;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.Constants;
 
@@ -39,27 +40,27 @@ public class FollowApriltag extends Command {
     public void execute() {
         ChassisSpeeds speeds = new ChassisSpeeds();
 
-        /*Tag tag = camera.getTag(followID);
+        Translation3d location = camera.getTagLocation(followID);
 
-        if (tag == null) {
+        if (location == null) {
             state = FollowApriltagStates.IDLE;
             return;
         }
 
-        if(tag.getDistance() < Constants.STOP_TAG_DISTANCE){
-            speeds = new ChassisSpeeds(0, 0, 0);
+        if(location.getX() < 0){
+            speeds = new ChassisSpeeds(0, 0, 0.5);
             state = FollowApriltagStates.IDLE;
             return;
         }
 
-        if(tag.getAngle() > 0){
+        if(location.getX() > 0){
             speeds = new ChassisSpeeds(0, 0, -0.5);
         }
         else{
-            speeds = new ChassisSpeeds(0, 0, 0.5);
+            speeds = new ChassisSpeeds(0.5, 0, 0);
         }
         
-        drive.runVelocity(speeds);*/
+        drive.runVelocity(speeds);
     }
 
     @Override

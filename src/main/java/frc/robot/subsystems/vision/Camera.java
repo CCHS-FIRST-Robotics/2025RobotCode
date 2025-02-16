@@ -1,19 +1,13 @@
 package frc.robot.subsystems.vision;
 
-import java.util.Arrays;
 import java.util.HashMap;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.DoubleArraySubscriber;
-import edu.wpi.first.networktables.IntegerArraySubscriber;
-import edu.wpi.first.networktables.IntegerSubscriber;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.drive.Drive;
-import frc.robot.subsystems.drive.GyroIO;
-import frc.robot.subsystems.drive.GyroIO.GyroIOInputs;
 import edu.wpi.first.math.geometry.Translation3d;
 
 public class Camera {
@@ -67,7 +61,7 @@ public class Camera {
 
     public void updateInputs() {
         double[] tags = tag_Sub.get();
-        double robotYaw = 20;// drive.Gyro(); rad
+        Rotation2d robotYaw =  drive.getYaw();
 
         System.out.println();
         int tagCount = 0;
@@ -78,7 +72,7 @@ public class Camera {
             int tagid = (int)tags[i];
             double tagAngle = tags[i+1];
             double distance = tags[i+2];
-            double angle2tag = tagAngle - robotYaw;
+            double angle2tag = tagAngle - robotYaw.getRadians();
 
             double dx = Math.sin(angle2tag) * distance;
             double dy = Math.cos(angle2tag) * distance;

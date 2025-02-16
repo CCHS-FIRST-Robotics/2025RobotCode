@@ -257,7 +257,8 @@ public class Drive extends SubsystemBase {
     }
 
     public Rotation2d getYaw() {
-        return getPose().getRotation();
+        // return getPose().getRotation();
+        return new Rotation2d(gyroInputs.yawPosition.in(Radians));
     }
 
     public Rotation2d getYawWithAllianceRotation() {
