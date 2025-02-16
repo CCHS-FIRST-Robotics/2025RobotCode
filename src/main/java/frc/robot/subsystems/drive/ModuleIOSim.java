@@ -5,7 +5,6 @@ import static edu.wpi.first.units.Units.*;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.math.system.plant.*;
 import edu.wpi.first.math.controller.*;
-import edu.wpi.first.math.*;
 import edu.wpi.first.units.measure.*;
 import frc.robot.constants.PhysicalConstants;
 import frc.robot.constants.VirtualConstants;
@@ -13,16 +12,21 @@ import frc.robot.constants.VirtualConstants;
 public class ModuleIOSim implements ModuleIO {
     private final DCMotorSim driveSim;
     private final DCMotorSim turnSim = new DCMotorSim( // 
-        LinearSystemId.createDCMotorSystem(DCMotor.getNEO(1), 0.004, 1), // ! ask colin where he got 0.004 from
+        LinearSystemId.createDCMotorSystem(
+            DCMotor.getNEO(1), 
+            0.004,  // ! ask colin where he got this from
+            1
+        ),
         DCMotor.getNEO(1)
     );
 
-    private double driveKp = 0.00015;
+    // for drive, pid units are in V/rpm, ff units are the normal V/(rad per second)
+    private double driveKp = 0.00015 * 2d * Math.PI / 60d ; 
     private double driveKi = 0;
     private double driveKd = 0;
     private double driveKs = 0;
-    private double driveKv = 1/(473d * 2d * Math.PI / 60d) * PhysicalConstants.DRIVE_AFTER_ENCODER_REDUCTION; // neo kV = 473 rpm/V (from datasheet)
-    private double driveKa = 0.0148;
+    private double driveKv = 1/(473d * 2d * Math.PI / 60d) * PhysicalConstants.DRIVE_AFTER_ENCODER_REDUCTION; // neo kV = 473 rpm/V (from datasheet)    
+    private double driveKa = 0.020864; // ! replace after sysid
 
     private double turnKp = 8 / (2 * Math.PI);
     private double turnKi = 0;
@@ -71,11 +75,8 @@ public class ModuleIOSim implements ModuleIO {
 
     @Override
     public void setTurnPosition(Angle position) {
-        position = Radians.of(MathUtil.inputModulus(position.in(Radians), 0, 2 * Math.PI));
-        Angle currentPosition = Radians.of(MathUtil.inputModulus(turnSim.getAngularPositionRad(), 0, 2 * Math.PI));
-
         double volts = turnPID.calculate(
-            currentPosition.in(Rotations),
+            turnSim.getAngularPositionRotations(),
             position.in(Rotations)
         );
 

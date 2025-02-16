@@ -47,7 +47,15 @@ public class Module {
         return inputs.drivePosition * PhysicalConstants.WHEEL_RADIUS.in(Meters);
     }
 
+    public double getVelocity() {
+        return inputs.driveVelocity * PhysicalConstants.WHEEL_RADIUS.in(Meters);
+    }
+
     public Rotation2d getAngle() {
         return new Rotation2d(Rotations.of(inputs.turnPosition).in(Radians));
+    }
+
+    public SwerveModuleState getState(){
+        return new SwerveModuleState(getVelocity(), getAngle());
     }
 }

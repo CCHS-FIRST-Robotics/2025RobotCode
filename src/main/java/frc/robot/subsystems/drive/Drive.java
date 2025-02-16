@@ -74,18 +74,28 @@ public class Drive extends SubsystemBase {
             controlMode = DRIVE_MODE.DISABLED;
         }
 
-        // update odometry // ! prolly bugged somewhere
+        // ————— odometry ————— //
+
+        // gyro
         gyroIO.updateInputs(gyroInputs);
         Logger.processInputs("gyro", gyroInputs);
+        // module states
+        SwerveModuleState[] moduleStatesOutput = getModuleStates();
+        Logger.recordOutput("outputs/moduleStatesOutput", moduleStatesOutput);
+        // chassisspeeds
+        ChassisSpeeds speedsOutput = PhysicalConstants.KINEMATICS.toChassisSpeeds(moduleStatesOutput);
+        Logger.recordOutput("outputs/speedsOutput", speedsOutput);
+        // pose
         fieldPosition = fieldPosition.exp(PhysicalConstants.KINEMATICS.toTwist2d(getModuleDeltas()));
         poseEstimator.updateWithTime(
             Timer.getFPGATimestamp(),
-            // ! um, probably gyro yaw velocity????
-            gyroInputs.connected ? new Rotation2d(Rotations.of(gyroInputs.yaw).in(Radians)) : fieldPosition.getRotation(),
+            gyroInputs.connected ? getYaw() : fieldPosition.getRotation(),
             getModulePositions()
         );
         Logger.recordOutput("outputs/robotPose", getPose());   
         
+        // ————— driving ————— //
+
         // update module inputs
         for (Module module : modules) {
             module.periodic();
@@ -127,7 +137,7 @@ public class Drive extends SubsystemBase {
                 for (int i = 0; i < 4; i++) {
                     modules[i].runState(moduleStates[i]);
                 }
-                Logger.recordOutput("outputs/moduleStates", moduleStates);
+                Logger.recordOutput("outputs/moduleStatesInput", moduleStates);
                 break;
         }
     }
@@ -164,8 +174,7 @@ public class Drive extends SubsystemBase {
     }
 
     public Rotation2d getYaw() {
-        // return getPose().getRotation(); // ! get this working
-        return new Rotation2d(Rotations.of(gyroInputs.yaw).in(Radians));
+        return gyroInputs.connected ? new Rotation2d(Rotations.of(gyroInputs.yaw).in(Radians)) : getPose().getRotation();
     }
 
     public Rotation2d getYawWithAllianceRotation() {
@@ -197,5 +206,13 @@ public class Drive extends SubsystemBase {
             lastModulePositionsMeters[i] = modules[i].getDistance();
         }
         return wheelDeltas;
+    }
+
+    public SwerveModuleState[] getModuleStates() {
+        SwerveModuleState[] moduleStates = new SwerveModuleState[4];
+        for (int i = 0; i < 4; i++) {
+            moduleStates[i] = modules[i].getState();
+        }
+        return moduleStates;
     }
 }

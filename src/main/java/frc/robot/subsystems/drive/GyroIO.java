@@ -10,6 +10,9 @@ public interface GyroIO {
         public double roll;
         public double pitch;
         public double yaw;
+        public double rollVelocity;
+        public double pitchVelocity;
+        public double yawVelocity;
     }
 
     public default void updateInputs(GyroIOInputs inputs) {}

@@ -57,7 +57,7 @@ public class DriveWithJoysticks extends Command {
         );
 
         // denormalize speeds and FOC
-        ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+        ChassisSpeeds speedsInput = ChassisSpeeds.fromFieldRelativeSpeeds(
             linearVelocity.getX() * PhysicalConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond),
             -linearVelocity.getY() * PhysicalConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond), // chassisspeeds is flipped
             -angularVelocity * PhysicalConstants.MAX_ALLOWED_ANGULAR_SPEED.in(RadiansPerSecond), // chassisspeeds is flipped
@@ -65,28 +65,28 @@ public class DriveWithJoysticks extends Command {
         );
 
         // clamp everything between max and min possible accels
-        speeds = new ChassisSpeeds(
+        speedsInput = new ChassisSpeeds(
             clampVelocity(
-                speeds.vxMetersPerSecond, 
+                speedsInput.vxMetersPerSecond, 
                 prevSpeeds.vxMetersPerSecond, 
                 PhysicalConstants.MAX_ALLOWED_LINEAR_ACCEL.in(MetersPerSecondPerSecond) * VirtualConstants.PERIOD
             ),
             clampVelocity(
-                speeds.vyMetersPerSecond, 
+                speedsInput.vyMetersPerSecond, 
                 prevSpeeds.vyMetersPerSecond, 
                 PhysicalConstants.MAX_ALLOWED_LINEAR_ACCEL.in(MetersPerSecondPerSecond) * VirtualConstants.PERIOD
             ),
             clampVelocity(
-                speeds.omegaRadiansPerSecond, 
+                speedsInput.omegaRadiansPerSecond, 
                 prevSpeeds.omegaRadiansPerSecond, 
                 PhysicalConstants.MAX_ALLOWED_ANGULAR_ACCEL.in(RadiansPerSecond.per(Second)) * VirtualConstants.PERIOD
             )
         );
 
-        Logger.recordOutput("outputs/speeds", speeds);
+        Logger.recordOutput("outputs/speedsInput", speedsInput);
         
-        drive.runVelocity(speeds);
-        prevSpeeds = speeds;
+        drive.runVelocity(speedsInput);
+        prevSpeeds = speedsInput;
     }
 
     @Override
