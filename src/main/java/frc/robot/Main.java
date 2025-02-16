@@ -13,12 +13,12 @@ import edu.wpi.first.wpilibj.RobotBase;
  * 
  * — daily at robotics: 
  * —— coral: 
- * ——— wrist
+ * ——— wrist position control
  * —— drive: 
  * ——— test max speed
- * ——— test position control
+ * ——— test the poseestimator
  * ———— note that drivePosition logging code was changed
- * *—— test autos
+ * *—— test autos and position control
  * —— alga: 
  * ——— code release mechanism
  * 
