@@ -128,6 +128,7 @@ public class RobotContainer {
     }
 
     private void configureAutos(){
+        autoChooser.addRoutine("5Meter", () -> autoGenerator.fiveMeter());
         autoChooser.addRoutine("2Coral", () -> autoGenerator.twoCoral());
 
         SmartDashboard.putData("AutoChooser", autoChooser);

@@ -19,6 +19,21 @@ public class AutoRoutineGenerator {
             drive
         );
     }
+
+    public AutoRoutine fiveMeter() {
+        AutoRoutine routine = autoFactory.newRoutine("5Meter");
+
+        // load trajectories
+        AutoTrajectory trajectory = routine.trajectory("5Meter");
+
+        // when routine begins, reset odometry, start trajectory
+        routine.active().onTrue(
+            trajectory.resetOdometry()
+            .andThen(trajectory.cmd())
+        );
+
+        return routine;
+    }
     
     // ! in the future put preloaded coral on the reef, get another coral from the station, put that on the reef too
     public AutoRoutine twoCoral() {
