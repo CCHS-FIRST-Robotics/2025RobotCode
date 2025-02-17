@@ -30,15 +30,15 @@ public class Module {
         io.setDriveVoltage(Volts.of(0.0));
     }
 
+    public void runCharacterization(Voltage volts){
+        io.setTurnPosition(Rotations.of(0));
+        io.setDriveVoltage(volts);
+    }
+
     public void runState(SwerveModuleState state) {
         state.optimize(getAngle());
         io.setTurnPosition(Rotations.of(state.angle.getRotations()));
         io.setDriveVelocity(RadiansPerSecond.of(state.speedMetersPerSecond / PhysicalConstants.WHEEL_RADIUS.in(Meters)));
-    }
-
-    public void characterize(Voltage volts){
-        io.setTurnPosition(Rotations.of(0));
-        io.setDriveVoltage(volts);
     }
 
     // ————— functions for odometry ————— //

@@ -1,8 +1,13 @@
 package frc.robot.subsystems.coralIO;
 
+import static edu.wpi.first.units.Units.*;
+
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.units.*;
 import edu.wpi.first.units.measure.*;
+import java.util.function.Consumer;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import org.littletonrobotics.junction.Logger;
 import frc.robot.subsystems.coralIO.CoralIO.CoralIOInputs;
 import frc.robot.constants.*;
@@ -10,22 +15,38 @@ import frc.robot.constants.PhysicalConstants.CoralPositions;
 
 public class Coral extends SubsystemBase {
     private final CoralIO io;
-    // private final DigitalInput elevatorSwitchBottom = new DigitalInput(VirtualConstants.ELEVATOR_SWITCH_BOTTOM_PORT); // bottom
-    // private final DigitalInput elevatorSwitchTop = new DigitalInput(VirtualConstants.ELEVATOR_SWITCH_TOP_PORT); // top
     private final DigitalInput troughSensor = new DigitalInput(VirtualConstants.TROUGH_SENSOR_PORT);
     private final CoralIOInputs inputs = new CoralIOInputs();
 
+    private final SysIdRoutine elevatorSysIdRoutine;
+    private final SysIdRoutine armSysIdRoutine;
+    private final SysIdRoutine wristSysIDRoutine;
+
     public Coral(CoralIO io) {
         this.io = io;
+
+        elevatorSysIdRoutine = sysIdRoutineFactory(
+            "elevator", 
+            (volts) -> io.setElevatorVoltage(volts), 
+            Volts.per(Second).of(1), Volts.of(3), Seconds.of(5)
+        );
+        armSysIdRoutine = sysIdRoutineFactory(
+            "arm", 
+            (volts) -> io.setArmVoltage(volts), 
+            Volts.per(Second).of(1), Volts.of(3), Seconds.of(5)
+        );
+        wristSysIDRoutine = sysIdRoutineFactory(
+            "wrist", 
+            (volts) -> io.setWristVoltage(volts), 
+            Volts.per(Second).of(1), Volts.of(3), Seconds.of(5)
+        );
     }
 
     @Override
     public void periodic() {
         io.updateInputs(inputs);
         Logger.processInputs("coralIO", inputs);
-        
-        // Logger.recordOutput("outputs/coral/elevatorSwitchBottom", elevatorSwitchBottom.get());
-        // Logger.recordOutput("outputs/coral/elevatorSwitchTop", elevatorSwitchTop.get());
+
         Logger.recordOutput("outputs/coral/troughSensor", troughSensor.get());
     }
 
@@ -41,6 +62,10 @@ public class Coral extends SubsystemBase {
 
     public Command getSetWristVoltageCommand(Voltage volts){
         return new InstantCommand(() -> io.setWristVoltage(volts));
+    }
+
+    public Command getSetWristCommand(Angle angle){
+        return new InstantCommand(() -> io.setWristPosition(angle));
     }
 
     // ————— final command factories ————— //
@@ -83,5 +108,50 @@ public class Coral extends SubsystemBase {
     // press button, set arm to some position, drive forward, move it to some other position
     public Command getDealgifyComamand(){
         return null; // ! code this at some point
+    }
+
+    // ————— sysid command factories ————— //
+
+    public SysIdRoutine sysIdRoutineFactory(
+        String joint,
+        Consumer<Voltage> voltageConsumer,
+        Velocity<VoltageUnit> rampRate,
+        Voltage stepVoltage,
+        Time timeOut
+     ){
+        return new SysIdRoutine(
+            new SysIdRoutine.Config(
+                rampRate, 
+                stepVoltage, 
+                timeOut, 
+                (state) -> Logger.recordOutput("coral/" + joint + "/sysIdState", state.toString()) // send the data to advantagekit
+            ),
+            new SysIdRoutine.Mechanism(
+                voltageConsumer,
+                null, // no log consumer since advantagekit records the data
+                this
+            )
+        );
+    }
+
+    public Command elevatorSysIdFull(){
+        return elevatorSysIdRoutine.quasistatic(SysIdRoutine.Direction.kForward)
+            .andThen(elevatorSysIdRoutine.quasistatic(SysIdRoutine.Direction.kReverse))
+            .andThen(elevatorSysIdRoutine.dynamic(SysIdRoutine.Direction.kForward))
+            .andThen(elevatorSysIdRoutine.dynamic(SysIdRoutine.Direction.kReverse));
+    }
+
+    public Command armSysIdFull(){
+        return armSysIdRoutine.quasistatic(SysIdRoutine.Direction.kForward)
+            .andThen(armSysIdRoutine.quasistatic(SysIdRoutine.Direction.kReverse))
+            .andThen(armSysIdRoutine.dynamic(SysIdRoutine.Direction.kForward))
+            .andThen(armSysIdRoutine.dynamic(SysIdRoutine.Direction.kReverse));
+    }
+
+    public Command wristSysIdFull(){
+        return wristSysIDRoutine.quasistatic(SysIdRoutine.Direction.kForward)
+            .andThen(wristSysIDRoutine.quasistatic(SysIdRoutine.Direction.kReverse))
+            .andThen(wristSysIDRoutine.dynamic(SysIdRoutine.Direction.kForward))
+            .andThen(wristSysIDRoutine.dynamic(SysIdRoutine.Direction.kReverse));
     }
 }

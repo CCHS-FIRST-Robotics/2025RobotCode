@@ -111,6 +111,8 @@ public class RobotContainer {
             )
         );
 
+        controller1.a().whileTrue(drive.sysIdFull());
+
         // elevator
         // controller1.y().onTrue(coral.getSetElevatorCommand(PhysicalConstants.ELEVATOR_MAX_ROTATIONS));
         // controller1.a().onTrue(coral.getSetElevatorCommand(PhysicalConstants.ELEVATOR_MIN_ROTATIONS));

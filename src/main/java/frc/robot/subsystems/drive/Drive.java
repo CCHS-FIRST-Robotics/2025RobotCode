@@ -2,15 +2,17 @@ package frc.robot.subsystems.drive;
 
 import static edu.wpi.first.units.Units.*;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
-import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.units.measure.*;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import choreo.trajectory.SwerveSample;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import org.littletonrobotics.junction.Logger;
 import frc.robot.constants.*;
 
@@ -31,7 +33,23 @@ public class Drive extends SubsystemBase {
     private final SwerveDrivePoseEstimator poseEstimator;
     private Pose2d fieldPosition = new Pose2d();
     private double[] lastModulePositionsMeters = new double[] {0.0, 0.0, 0.0, 0.0};
-    
+
+    // charactarization
+    private Voltage characterizationVolts = Volts.of(0);
+    private final SysIdRoutine driveSysIdRoutine = new SysIdRoutine(
+        new SysIdRoutine.Config(
+            Volts.per(Second).of(1), // ramp rate
+            Volts.of(3), // step voltage
+            Seconds.of(5), // timeout
+            (state) -> Logger.recordOutput("drive/sysIdState", state.toString()) // send the data to advantagekit
+        ),
+        new SysIdRoutine.Mechanism(
+            (volts) -> this.runCharacterization(volts), // characterization supplier
+            null, // no log consumer since advantagekit records the data
+            this
+        )
+    );
+
     // position control
     private Pose2d positionSetpoint = new Pose2d();
     private Twist2d twistSetpoint = new Twist2d();
@@ -81,10 +99,10 @@ public class Drive extends SubsystemBase {
         Logger.processInputs("gyro", gyroInputs);
         // module states
         SwerveModuleState[] moduleStatesOutput = getModuleStates();
-        Logger.recordOutput("outputs/moduleStatesOutput", moduleStatesOutput);
+        Logger.recordOutput("outputs/drive/moduleStatesOutput", moduleStatesOutput);
         // chassisspeeds
         ChassisSpeeds speedsOutput = PhysicalConstants.KINEMATICS.toChassisSpeeds(moduleStatesOutput);
-        Logger.recordOutput("outputs/speedsOutput", speedsOutput);
+        Logger.recordOutput("outputs/drive/speedsOutput", speedsOutput);
         // pose
         fieldPosition = fieldPosition.exp(PhysicalConstants.KINEMATICS.toTwist2d(getModuleDeltas()));
         poseEstimator.updateWithTime(
@@ -92,7 +110,7 @@ public class Drive extends SubsystemBase {
             gyroInputs.connected ? getYaw() : fieldPosition.getRotation(),
             getModulePositions()
         );
-        Logger.recordOutput("outputs/robotPose", getPose());   
+        Logger.recordOutput("outputs/drive/robotPose", getPose());   
         
         // ————— driving ————— //
 
@@ -108,11 +126,13 @@ public class Drive extends SubsystemBase {
                 for (Module module : modules) {
                     module.stop();
                 }
+                Logger.recordOutput("outputs/drive/moduleStatesInput", new SwerveModuleState[] {});
                 break;
             case CHARACTERIZING:
                 for (int i = 0; i < 4; i++) {
-                    modules[i].characterize(Volts.of(1));
+                    modules[i].runCharacterization(characterizationVolts);
                 }
+                Logger.recordOutput("outputs/drive/moduleStatesInput", new SwerveModuleState[] {});
                 break;
             case POSITION:
                 // get PIDs
@@ -137,7 +157,7 @@ public class Drive extends SubsystemBase {
                 for (int i = 0; i < 4; i++) {
                     modules[i].runState(moduleStates[i]);
                 }
-                Logger.recordOutput("outputs/moduleStatesInput", moduleStates);
+                Logger.recordOutput("outputs/drive/moduleStatesInput", moduleStates);
                 break;
         }
     }
@@ -148,8 +168,9 @@ public class Drive extends SubsystemBase {
         controlMode = DRIVE_MODE.DISABLED;
     }
 
-    public void runCharacterization(){
+    public void runCharacterization(Voltage volts){
         controlMode = DRIVE_MODE.CHARACTERIZING;
+        characterizationVolts = volts;
     }
 
     public void runPosition(SwerveSample sample){
@@ -158,9 +179,18 @@ public class Drive extends SubsystemBase {
         twistSetpoint = sample.getChassisSpeeds().toTwist2d(1);
     }
 
-    public void runVelocity(ChassisSpeeds speeds) {
+    public void runVelocity(ChassisSpeeds speedsInput) {
         controlMode = DRIVE_MODE.VELOCITY;
-        this.speeds = speeds;
+        speeds = speedsInput;
+    }
+
+    // ————— functions for sysid ————— // 
+
+    public Command sysIdFull(){
+        return driveSysIdRoutine.quasistatic(SysIdRoutine.Direction.kForward)
+            .andThen(driveSysIdRoutine.quasistatic(SysIdRoutine.Direction.kReverse))
+            .andThen(driveSysIdRoutine.dynamic(SysIdRoutine.Direction.kForward))
+            .andThen(driveSysIdRoutine.dynamic(SysIdRoutine.Direction.kReverse));
     }
 
     // ————— functions for odometry ————— //
