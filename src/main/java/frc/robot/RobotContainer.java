@@ -101,7 +101,9 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
-        // driving
+
+        // ————— drive ————— // 
+
         drive.setDefaultCommand(
             new DriveWithJoysticks(
                 drive,
@@ -111,24 +113,28 @@ public class RobotContainer {
             )
         );
 
-        controller1.a().whileTrue(drive.sysIdFull());
+        controller1.y().whileTrue(drive.sysIdFull());
+
+        // ————— coral ————— // 
 
         // elevator
-        // controller1.y().onTrue(coral.getSetElevatorCommand(PhysicalConstants.ELEVATOR_MAX_ROTATIONS));
-        // controller1.a().onTrue(coral.getSetElevatorCommand(PhysicalConstants.ELEVATOR_MIN_ROTATIONS));
+        // controller2.y().onTrue(coral.getSetElevatorCommand(PhysicalConstants.ELEVATOR_MAX_ROTATIONS));
+        // controller2.a().onTrue(coral.getSetElevatorCommand(PhysicalConstants.ELEVATOR_MIN_ROTATIONS));
 
         // arm
-        // controller1.x().onTrue(coral.getSetArmCommand(PhysicalConstants.ARM_MAX_ROTATIONS);
-        // controller1.b().onTrue(coral.getSetArmCommand(PhysicalConstants.ARM_MIN_ROTATIONS));
+        // controller2.x().onTrue(coral.getSetArmCommand(PhysicalConstants.ARM_MAX_ROTATIONS);
+        // controller2.b().onTrue(coral.getSetArmCommand(PhysicalConstants.ARM_MIN_ROTATIONS));
 
         // wrist
-        controller1.x().onTrue(coral.getSetWristVoltageCommand(Volts.of(1)));
-        controller1.b().onTrue(coral.getSetWristVoltageCommand(Volts.of(-1)));
-        controller1.y().onTrue(coral.getSetWristVoltageCommand(Volts.of(0)));
+        controller2.y().onTrue(coral.getSetWristCommand(Rotations.of(1)));
+        controller2.x().onTrue(coral.getSetWristVoltageCommand(Volts.of(1)));
+        controller2.b().onTrue(coral.getSetWristVoltageCommand(Volts.of(-1)));
+        controller2.a().onTrue(coral.getSetWristVoltageCommand(Volts.of(0)));
 
-        // alga
-        controller2.x().onTrue(alga.getIntakeCommand());
-        controller2.b().onTrue(alga.getOutputCommand());
+        // ————— alga ————— // 
+
+        controller1.x().onTrue(alga.getIntakeCommand());
+        controller1.b().onTrue(alga.getOutputCommand());
     }
 
     private void configureAutos(){

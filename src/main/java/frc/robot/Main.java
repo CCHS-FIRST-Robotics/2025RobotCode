@@ -9,16 +9,17 @@ import edu.wpi.first.wpilibj.RobotBase;
 /**
  * to do: 
  *  daily at home: 
- *   sysid
  * 
  * — daily at robotics: 
  * —— coral: 
  * ——— wrist position control
+ * ——— sysid
  * —— drive: 
  * ——— test max speed
  * ——— test the poseestimator
  * ———— note that drivePosition logging code was changed
  * *—— test autos and position control
+ * ——— sysid
  * —— alga: 
  * ——— code release mechanism
  * 
