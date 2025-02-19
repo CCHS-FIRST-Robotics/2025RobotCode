@@ -137,8 +137,8 @@ public class CoralIOReal implements CoralIO{
         // ————— wrist ————— //
 
         // encoder
-        wristMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, 0);
-        // wristMotor.setSelectedSensorPosition(wristMotor.getSensorCollection().getPulseWidthPosition()); // ! idk
+        wristMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
+        wristMotor.setSelectedSensorPosition(wristMotor.getSensorCollection().getPulseWidthPosition()); // set relative position based on absolute position, then rely on the relative encoder
         wristMotor.setSensorPhase(true); // ! 
         // pid
         wristPID = new PIDController(kPWrist, kIWrist, kDWrist); // ! maybe change it to internal PID after getting it working
@@ -253,8 +253,8 @@ public class CoralIOReal implements CoralIO{
 
         inputs.wristCurrent = wristMotor.getStatorCurrent();
         inputs.wristVoltage = wristMotor.getMotorOutputVoltage();
-        inputs.wristPosition = wristMotor.getSelectedSensorPosition();
-        inputs.wristVelocity = wristMotor.getSelectedSensorVelocity();
+        inputs.wristPosition = wristMotor.getSelectedSensorPosition() / 4096;
+        inputs.wristVelocity = wristMotor.getSelectedSensorVelocity() / 60 / 4096; // ! probably wrong
         inputs.wristTemperature = wristMotor.getTemperature();
 
         this.inputs = inputs;
