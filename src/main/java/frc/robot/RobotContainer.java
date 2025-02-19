@@ -32,11 +32,11 @@ public class RobotContainer {
         switch (VirtualConstants.CURRENT_MODE) {
             case REAL:
                 drive = new Drive(
-                    new ModuleIOSparkMax(1),
-                    new ModuleIOSparkMax(2),
-                    new ModuleIOSparkMax(3),
-                    new ModuleIOSparkMax(4), 
-                    new GyroIONavX()
+                    new ModuleIOReal(1),
+                    new ModuleIOReal(2),
+                    new ModuleIOReal(3),
+                    new ModuleIOReal(4), 
+                    new GyroIOReal()
                 );
 
                 coral = new Coral(
@@ -51,7 +51,7 @@ public class RobotContainer {
                     )
                 );
 
-                alga = new Alga(new AlgaIOTalonFX(VirtualConstants.ALGA_ID_1));
+                alga = new Alga(new AlgaIOReal(VirtualConstants.ALGA_ID_1));
                 break;
             case SIM:
                 drive = new Drive(
@@ -68,11 +68,11 @@ public class RobotContainer {
                 break;
             default:
                 drive = new Drive(
-                    new ModuleIOSparkMax(1),
-                    new ModuleIOSparkMax(2),
-                    new ModuleIOSparkMax(3),
-                    new ModuleIOSparkMax(4),
-                    new GyroIONavX()
+                    new ModuleIOReal(1),
+                    new ModuleIOReal(2),
+                    new ModuleIOReal(3),
+                    new ModuleIOReal(4),
+                    new GyroIOReal()
                 );
 
                 coral = new Coral(
@@ -87,7 +87,7 @@ public class RobotContainer {
                     )
                 );
 
-                alga = new Alga(new AlgaIOTalonFX(VirtualConstants.ALGA_ID_1));
+                alga = new Alga(new AlgaIOReal(VirtualConstants.ALGA_ID_1));
                 break;
         }
 

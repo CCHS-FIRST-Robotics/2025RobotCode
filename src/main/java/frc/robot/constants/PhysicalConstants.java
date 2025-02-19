@@ -10,7 +10,7 @@ import java.util.AbstractMap.SimpleEntry;
 public final class PhysicalConstants {
     // ————— swerve constants ————— //
     // kinematics
-    public static final Mass ROBOT_WEIGHT = Pounds.of(97.666);
+    public static final Mass ROBOT_WEIGHT = Pounds.of(97.666); // battery is 13.324 so true weight is 84.342 pounds
     public static final Distance WHEEL_RADIUS = Inches.of(2);
     public static final Distance WHEEL_CIRCUMFERENCE = WHEEL_RADIUS.times(2 * Math.PI);
     public static final Distance TRACK_WIDTH_X = Inches.of(23.625);
@@ -58,6 +58,10 @@ public final class PhysicalConstants {
     public static final Angle ARM_ENCODER_OFFSET = Rotations.of(-0.260986328125);
     public static final Angle ARM_MAX_ROTATIONS = Rotations.of(0.582763671875); // 0.922119140625 when elevator fully up
     public static final Angle ARM_MIN_ROTATIONS = Rotations.of(0);
+
+    public static final Angle WRIST_ENCODER_OFFSET = Rotations.of(0);
+    public static final Angle WRIST_MAX_ROTATIONS = Rotations.of(0);
+    public static final Angle WRIST_MIN_ROTATIONS = Rotations.of(0);
 
     public static class CoralPositions{
         public static final CoralPosition INTAKE = new CoralPosition(

@@ -5,10 +5,10 @@ import static edu.wpi.first.units.Units.*;
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
 
-public class GyroIONavX implements GyroIO {
+public class GyroIOReal implements GyroIO {
     private final AHRS navx;
 
-    public GyroIONavX() {
+    public GyroIOReal() {
         navx = new AHRS(NavXComType.kMXP_SPI);
         navx.reset();
     }

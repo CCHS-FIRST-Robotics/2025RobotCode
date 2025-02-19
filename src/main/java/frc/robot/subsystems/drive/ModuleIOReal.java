@@ -13,7 +13,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.units.measure.*;
 import frc.robot.constants.PhysicalConstants;
 
-public class ModuleIOSparkMax implements ModuleIO {
+public class ModuleIOReal implements ModuleIO {
     private final SparkMax driveMotor; // NEO
     private final SparkMax turnMotor; // NEO
 
@@ -39,7 +39,7 @@ public class ModuleIOSparkMax implements ModuleIO {
 
     private AngularVelocity prevDriveVelocity = RadiansPerSecond.of(0.0);
 
-    public ModuleIOSparkMax(int index) {
+    public ModuleIOReal(int index) {
         driveMotor = new SparkMax(10 * index + 1, MotorType.kBrushless);
         turnMotor = new SparkMax(10 * index + 2, MotorType.kBrushless);
 

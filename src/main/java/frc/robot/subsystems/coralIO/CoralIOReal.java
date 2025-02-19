@@ -51,7 +51,7 @@ public class CoralIOReal implements CoralIO{
     private double kVArm = 0.1121914734;
     private double kAArm = 0;
 
-    private final SparkMaxConfig wristConfig = new SparkMaxConfig();
+    private final SparkMaxConfig wristConfig = new SparkMaxConfig(); // ! maybe consider using TalonSRX
     private final CANcoder wristCancoder;
     private final CANcoderConfiguration wristCancoderConfig = new CANcoderConfiguration();
     private final PIDController wristPID;
@@ -147,8 +147,8 @@ public class CoralIOReal implements CoralIO{
 
         // encoder
         wristCancoder = new CANcoder(wristCancoderId);
-        wristCancoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
-        wristCancoderConfig.MagnetSensor.MagnetOffset = PhysicalConstants.ARM_ENCODER_OFFSET.in(Rotations); 
+        wristCancoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive; // ! figure
+        wristCancoderConfig.MagnetSensor.MagnetOffset = PhysicalConstants.WRIST_ENCODER_OFFSET.in(Rotations); 
         wristCancoder.getConfigurator().apply(wristCancoderConfig);
         // pid
         wristPID = new PIDController(kPWrist, kIWrist, kDWrist);
@@ -159,8 +159,8 @@ public class CoralIOReal implements CoralIO{
         wristConfig.smartCurrentLimit(30);
         wristConfig.voltageCompensation(12);
         wristConfig.idleMode(IdleMode.kBrake);
-        wristMotor.setCANTimeout(0);
-        wristMotor.configure(wristConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        wristMotor.setCANTimeout(0); // ! try with resetsafeparameters
+        System.out.println("HLIUHWALKJJFLKJFLKJWAFA" + wristMotor.configure(wristConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
 
         // ————— misc ————— //
 

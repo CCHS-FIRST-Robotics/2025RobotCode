@@ -6,14 +6,14 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.*;
 import edu.wpi.first.units.measure.*;
 
-public class AlgaIOTalonFX implements AlgaIO {
+public class AlgaIOReal implements AlgaIO {
     private final TalonFX motor;
 
     private final StatusSignal<Voltage> voltageSignal;
     private final StatusSignal<Current> currentSignal;
     private final StatusSignal<Temperature> temperatureSignal;
 
-    public AlgaIOTalonFX(int id) {
+    public AlgaIOReal(int id) {
         motor = new TalonFX(id);
 
         voltageSignal = motor.getMotorVoltage();
