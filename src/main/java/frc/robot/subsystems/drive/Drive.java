@@ -16,10 +16,11 @@ import java.util.ArrayList;
 import org.littletonrobotics.junction.Logger;
 import frc.robot.Constants;
 import frc.robot.HardwareConstants;
+import frc.robot.subsystems.drive.GyroIO.GyroIOInputs;
 
 public class Drive extends SubsystemBase {
     private final GyroIO gyroIO;
-    private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
+    private final GyroIOInputs gyroInputs = new GyroIOInputs();
 
     private final Module[] modules = new Module[4]; // FL, FR, BL, BR
 
@@ -96,7 +97,6 @@ public class Drive extends SubsystemBase {
         }
 
         gyroIO.updateInputs(gyroInputs);
-        Logger.processInputs("Gyro", gyroInputs);
         
         for (Module module : modules) {
             module.periodic();

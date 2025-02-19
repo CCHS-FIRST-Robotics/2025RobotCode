@@ -5,12 +5,12 @@ import edu.wpi.first.units.measure.*;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.*;
-import org.littletonrobotics.junction.Logger;
 import frc.robot.Constants;
+import frc.robot.subsystems.drive.ModuleIO.ModuleIOInputs;
 
 public class Module {
     private final ModuleIO io;
-    private final ModuleIOInputsAutoLogged inputs = new ModuleIOInputsAutoLogged();
+    private final ModuleIOInputs inputs = new ModuleIOInputs();
     private final int index;
 
     // TODO: switch to tunable numbers w/ smartdash
@@ -29,7 +29,6 @@ public class Module {
     public void periodic() {
         // double prevVel = getVelocityMetersPerSec();
         io.updateInputs(inputs);
-        Logger.processInputs("Drive/Module" + Integer.toString(index), inputs);
     }
 
     public SwerveModuleState runSetpoint(SwerveModuleState targetState) {
