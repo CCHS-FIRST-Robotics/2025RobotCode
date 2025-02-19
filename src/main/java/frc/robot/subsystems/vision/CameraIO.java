@@ -14,7 +14,7 @@ public interface CameraIO {
         public int tagId = -1;
         public Angle tagAngle = Degrees.of(-1);
 
-        public ArrayList<Integer> tagData = new ArrayList<>();
+        //public final ArrayList<Double> tagData = new ArrayList<Double>();
 
     }
 
