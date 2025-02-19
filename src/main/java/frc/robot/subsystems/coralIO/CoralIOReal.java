@@ -7,19 +7,16 @@ import com.ctre.phoenix6.signals.*;
 import com.ctre.phoenix6.configs.*;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.*;
-import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.config.SparkMaxConfig;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.*;
 import edu.wpi.first.math.controller.PIDController;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import com.revrobotics.spark.SparkBase.*;
 import edu.wpi.first.units.measure.*;
 import frc.robot.constants.PhysicalConstants;
 
 public class CoralIOReal implements CoralIO{
     private final TalonFX elevatorMotor;
     private final TalonFX armMotor;
-    private final SparkMax wristMotor;
+    private final TalonSRX wristMotor;
 
     private final TalonFXConfiguration elevatorConfig = new TalonFXConfiguration();
     private final CANcoder elevatorCancoder;
@@ -51,9 +48,6 @@ public class CoralIOReal implements CoralIO{
     private double kVArm = 0.1121914734;
     private double kAArm = 0;
 
-    private final SparkMaxConfig wristConfig = new SparkMaxConfig(); // ! maybe consider using TalonSRX
-    private final CANcoder wristCancoder;
-    private final CANcoderConfiguration wristCancoderConfig = new CANcoderConfiguration();
     private final PIDController wristPID;
 
     private double kPWrist = 1;
@@ -77,9 +71,6 @@ public class CoralIOReal implements CoralIO{
     private final StatusSignal<AngularVelocity> velocityAbsoluteSignalArm;
     private final StatusSignal<Temperature> temperatureSignalArm;
 
-    private final StatusSignal<Angle> positionAbsoluteSignalWrist;
-    private final StatusSignal<AngularVelocity> velocityAbsoluteSignalWrist;
-
     private CoralIOInputs inputs = new CoralIOInputs();
     
     public CoralIOReal(
@@ -93,7 +84,7 @@ public class CoralIOReal implements CoralIO{
     ) {
         elevatorMotor = new TalonFX(elevatorId); // Falcon500
         armMotor = new TalonFX(armId); // Falcon500
-        wristMotor = new SparkMax(wristId, MotorType.kBrushed); // RedLine
+        wristMotor = new TalonSRX(wristId); // RedLine
 
         // ————— elevator ————— //
 
@@ -146,21 +137,15 @@ public class CoralIOReal implements CoralIO{
         // ————— wrist ————— //
 
         // encoder
-        wristCancoder = new CANcoder(wristCancoderId);
-        wristCancoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive; // ! figure
-        wristCancoderConfig.MagnetSensor.MagnetOffset = PhysicalConstants.WRIST_ENCODER_OFFSET.in(Rotations); 
-        wristCancoder.getConfigurator().apply(wristCancoderConfig);
+        wristMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, 0);
+        // wristMotor.setSelectedSensorPosition(wristMotor.getSensorCollection().getPulseWidthPosition()); // ! idk
+        wristMotor.setSensorPhase(true); // ! 
         // pid
-        wristPID = new PIDController(kPWrist, kIWrist, kDWrist);
+        wristPID = new PIDController(kPWrist, kIWrist, kDWrist); // ! maybe change it to internal PID after getting it working
         // misc
-        wristMotor.setCANTimeout(500);
-        wristConfig.signals.primaryEncoderPositionPeriodMs(20);
-        wristConfig.encoder.quadratureAverageDepth(2);
-        wristConfig.smartCurrentLimit(30);
-        wristConfig.voltageCompensation(12);
-        wristConfig.idleMode(IdleMode.kBrake);
-        wristMotor.setCANTimeout(0); // ! try with resetsafeparameters
-        System.out.println("HLIUHWALKJJFLKJFLKJWAFA" + wristMotor.configure(wristConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
+        wristMotor.configPeakCurrentLimit(30);
+        wristMotor.configVoltageCompSaturation(12);
+        wristMotor.setInverted(false); // ! 
 
         // ————— misc ————— //
 
@@ -179,9 +164,6 @@ public class CoralIOReal implements CoralIO{
         positionAbsoluteSignalArm = armCancoder.getPosition();
         velocityAbsoluteSignalArm = armCancoder.getVelocity();
         temperatureSignalArm = armMotor.getDeviceTemp();
-
-        positionAbsoluteSignalWrist = wristCancoder.getPosition();
-        velocityAbsoluteSignalWrist = wristCancoder.getVelocity();
     }
 
     // ————— elevator ————— //
@@ -212,7 +194,7 @@ public class CoralIOReal implements CoralIO{
 
     @Override
     public void setWristVoltage(Voltage volts){
-        wristMotor.setVoltage(volts.in(Volts));
+        wristMotor.set(TalonSRXControlMode.PercentOutput, volts.in(Volts) / 12);
     }
 
     @Override
@@ -269,11 +251,11 @@ public class CoralIOReal implements CoralIO{
         inputs.armAbsoluteVelocity = velocityAbsoluteSignalArm.getValue().in(RotationsPerSecond);
         inputs.armTemperature = temperatureSignalArm.getValue().in(Celsius);
 
-        inputs.wristCurrent = wristMotor.getOutputCurrent();
-        inputs.wristVoltage = wristMotor.getBusVoltage();
-        inputs.wristPosition = positionAbsoluteSignalWrist.getValue().in(Rotations);
-        inputs.wristVelocity = velocityAbsoluteSignalWrist.getValue().in(RotationsPerSecond);
-        inputs.wristTemperature = wristMotor.getMotorTemperature();
+        inputs.wristCurrent = wristMotor.getStatorCurrent();
+        inputs.wristVoltage = wristMotor.getMotorOutputVoltage();
+        inputs.wristPosition = wristMotor.getSelectedSensorPosition();
+        inputs.wristVelocity = wristMotor.getSelectedSensorVelocity();
+        inputs.wristTemperature = wristMotor.getTemperature();
 
         this.inputs = inputs;
     }
