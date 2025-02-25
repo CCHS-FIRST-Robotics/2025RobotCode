@@ -62,20 +62,24 @@ public class Camera {
     public void updateInputs() {
         double[] tags = tag_Sub.get();
         Rotation2d robotYaw =  drive.getYaw();
+        Rotation2d robotPitch = drive.getPitch();
 
         System.out.println();
         int tagCount = 0;
         robotX = 0;
         robotY = 0;
 
-        for (int i = 1; i < tags.length; i+=3) {
+        for (int i = 1; i < tags.length; i+=4) {
             int tagid = (int)tags[i];
-            double tagAngle = tags[i+1];
-            double distance = tags[i+2];
-            double angle2tag = tagAngle - robotYaw.getRadians();
+            double tagAnglePitch = tags[i+1];
+            double tagAngleYaw = tags[i+2];
+            double distance = tags[i+3];
 
-            double dx = Math.sin(angle2tag) * distance;
-            double dy = Math.cos(angle2tag) * distance;
+            double angle2tagYaw = tagAngleYaw - robotYaw.getRadians();
+            double angle2tagPitch = tagAnglePitch - robotPitch.getRadians();
+            
+            double dx = Math.sin(angle2tagYaw) * distance;
+            double dy = Math.cos(angle2tagYaw) * distance;
 
             Translation3d taglocation = getTagLocation(tagid);
 
