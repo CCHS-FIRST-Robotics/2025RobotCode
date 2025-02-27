@@ -8,12 +8,21 @@ import edu.wpi.first.wpilibj.RobotBase;
 
 /**
  * to do: 
+ * 
+ * ! move cancoder to alga drawbridge
+ * ! replace sparkmax with talonsrx
+ * ! maybe see if double gyro works
+ * 
+ * ! check pose control and sysid
+ * ! check sleder code and understand
+ * ! check whether pv on jetson nano is possible
+ * 
  *  daily at home: 
  * 
  * — daily at robotics: 
  * —— coral: 
- * ——— wrist position control
- * ——— sysid
+ * *—— wrist position control
+ * *—— sysid
  * —— drive: 
  * ——— test max speed
  * ——— test the poseestimator

@@ -15,7 +15,6 @@ import frc.robot.constants.PhysicalConstants.CoralPositions;
 
 public class Coral extends SubsystemBase {
     private final CoralIO io;
-    private final DigitalInput troughSensor = new DigitalInput(VirtualConstants.TROUGH_SENSOR_PORT);
     private final CoralIOInputs inputs = new CoralIOInputs();
 
     private final SysIdRoutine elevatorSysIdRoutine;
@@ -46,8 +45,6 @@ public class Coral extends SubsystemBase {
     public void periodic() {
         io.updateInputs(inputs);
         Logger.processInputs("coralIO", inputs);
-
-        Logger.recordOutput("outputs/coral/troughSensor", troughSensor.get());
     }
 
     // ————— testing command factories ————— //
@@ -82,9 +79,9 @@ public class Coral extends SubsystemBase {
     
     // check if ir sensor beam is broken, close claw, then swing to L4
     public Command getIntakeCommand(){
-        if(!troughSensor.get()){
-            return null; // ! idk if this'll throw an error
-        }
+        // if(!troughSensor.get()){ // ! troughSensor is needed for autos
+        //     return null; // ! idk if this'll throw an error
+        // }
 
         return new InstantCommand(() -> io.setClawPosition(false))
         .andThen(

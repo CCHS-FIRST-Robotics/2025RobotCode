@@ -4,7 +4,9 @@ import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.units.measure.*;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import java.util.*;
 import java.util.AbstractMap.SimpleEntry;
 
 public final class PhysicalConstants {
@@ -13,8 +15,8 @@ public final class PhysicalConstants {
     public static final Mass ROBOT_WEIGHT = Pounds.of(97.666); // battery is 13.324 so true weight is 84.342 pounds
     public static final Distance WHEEL_RADIUS = Inches.of(2);
     public static final Distance WHEEL_CIRCUMFERENCE = WHEEL_RADIUS.times(2 * Math.PI);
-    public static final Distance TRACK_WIDTH_X = Inches.of(23.625);
-    public static final Distance TRACK_WIDTH_Y = Inches.of(27.75);
+    public static final Distance TRACK_WIDTH_X = Inches.of(22.5);
+    public static final Distance TRACK_WIDTH_Y = Inches.of(26.5);
     public static final Distance TRACK_RADIUS = Inches.of(Math.hypot(TRACK_WIDTH_X.in(Inches) / 2.0, TRACK_WIDTH_Y.in(Inches) / 2.0));
     public static final Distance TRACK_CIRCUMFERENCE = TRACK_RADIUS.times(2 * Math.PI);
     public static final Translation2d[] MODULE_TRANSLATIONS = new Translation2d[] { // using the chassisspeeds coordinate plane
@@ -41,13 +43,44 @@ public final class PhysicalConstants {
         / TRACK_CIRCUMFERENCE.in(Meters) // rotations per second of the robot
     ); // = 1.5944299280
     
-    public static final LinearVelocity MAX_ALLOWED_LINEAR_SPEED = MetersPerSecond.of(4);
-    public static final AngularVelocity MAX_ALLOWED_ANGULAR_SPEED = RotationsPerSecond.of(1);
+    public static final LinearVelocity MAX_ALLOWED_LINEAR_SPEED = MetersPerSecond.of(2);
+    public static final AngularVelocity MAX_ALLOWED_ANGULAR_SPEED = RotationsPerSecond.of(0.5); // ! MOI makes this hard ,do sysid
 
     public static final LinearAcceleration MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(20);
     public static final AngularAcceleration MAX_ALLOWED_ANGULAR_ACCEL = RotationsPerSecond.per(Seconds).of(20 
         / TRACK_CIRCUMFERENCE.in(Meters)
     );
+
+    // ————— vision constants ————— //
+    // ! trust, also put in constants somewhere
+    // ! also, I wonder what these are relative to
+    // ! also, units
+    public static final HashMap<Integer, Translation3d> APRILTAG_LOCATIONS = new HashMap<Integer, Translation3d>();
+    static{
+        APRILTAG_LOCATIONS.put(1, new Translation3d(16.697, 0.655, 1.486));
+        APRILTAG_LOCATIONS.put(2, new Translation3d(16.697, 7.396, 1.486));
+        APRILTAG_LOCATIONS.put(3, new Translation3d(11.561, 8.056, 1.302));
+        APRILTAG_LOCATIONS.put(4, new Translation3d(9.276, 6.138, 1.868));
+        APRILTAG_LOCATIONS.put(5, new Translation3d(9.276, 1.915, 1.868));
+        APRILTAG_LOCATIONS.put(6, new Translation3d(13.474, 3.306, 0.308));
+        APRILTAG_LOCATIONS.put(7, new Translation3d(13.890, 4.026, 0.308));
+        APRILTAG_LOCATIONS.put(8, new Translation3d(13.474, 4.745, 0.308));
+        APRILTAG_LOCATIONS.put(9, new Translation3d(12.643, 4.745, 0.308));
+        APRILTAG_LOCATIONS.put(10, new Translation3d(12.227, 4.026, 0.308));
+        APRILTAG_LOCATIONS.put(11, new Translation3d(12.643, 3.306, 0.308));
+        APRILTAG_LOCATIONS.put(12, new Translation3d(0.851, 0.655, 1.486));
+        APRILTAG_LOCATIONS.put(13, new Translation3d(0.851, 7.396, 1.486));
+        APRILTAG_LOCATIONS.put(14, new Translation3d(8.272, 6.138, 1.868));
+        APRILTAG_LOCATIONS.put(15, new Translation3d(8.272, 1.915, 1.868));
+        APRILTAG_LOCATIONS.put(16, new Translation3d(5.988, -0.004, 1.302));
+        APRILTAG_LOCATIONS.put(17, new Translation3d(4.074, 3.306, 0.308));
+        APRILTAG_LOCATIONS.put(18, new Translation3d(3.658, 4.026, 0.308));
+        APRILTAG_LOCATIONS.put(19, new Translation3d(4.074, 4.745, 0.308));
+        APRILTAG_LOCATIONS.put(20, new Translation3d(4.905, 4.745, 0.308));
+        APRILTAG_LOCATIONS.put(21, new Translation3d(5.321, 4.026, 0.308));
+        APRILTAG_LOCATIONS.put(22, new Translation3d(4.905, 3.306, 0.308));
+    }
+    
 
     // ————— coral constants ————— //
     public static final Angle ELEVATOR_ENCODER_OFFSET = Rotations.of(0.39599609375);

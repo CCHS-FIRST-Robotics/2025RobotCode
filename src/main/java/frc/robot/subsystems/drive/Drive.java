@@ -39,8 +39,8 @@ public class Drive extends SubsystemBase {
     private final SysIdRoutine driveSysIdRoutine = new SysIdRoutine(
         new SysIdRoutine.Config(
             Volts.per(Second).of(1), // ramp rate
-            Volts.of(3), // step voltage
-            Seconds.of(5), // timeout
+            Volts.of(2), // step voltage
+            Seconds.of(3), // timeout
             (state) -> Logger.recordOutput("drive/sysIdState", state.toString()) // send the data to advantagekit
         ),
         new SysIdRoutine.Mechanism(
@@ -53,9 +53,12 @@ public class Drive extends SubsystemBase {
     // position control
     private Pose2d positionSetpoint = new Pose2d();
     private Twist2d twistSetpoint = new Twist2d();
-    private final PIDController xController = new PIDController(2.7, 0.05, 0.12);
-    private final PIDController yController = new PIDController(2.7, 0.05, 0.12);
-    private final PIDController thetaController = new PIDController(3, 0, 0.3); // ! these are in radians
+    // private final PIDController xController = new PIDController(3, 0, 0);
+    // private final PIDController yController = new PIDController(3, 0, 0);
+    // private final PIDController oController = new PIDController(3, 0, 0);
+    private final PIDController xController = new PIDController(50, 0, 0);
+    private final PIDController yController = new PIDController(50, 0, 0);
+    private final PIDController oController = new PIDController(30, 0, 0);
     
     // velocity control
     private ChassisSpeeds speeds = new ChassisSpeeds();
@@ -72,17 +75,14 @@ public class Drive extends SubsystemBase {
         modules[2] = new Module(blModuleIO, 3);
         modules[3] = new Module(brModuleIO, 4);
 
-        xController.setTolerance(.035); // ! experiment with these
-        yController.setTolerance(.035);
-        thetaController.setTolerance(.025);
-        thetaController.enableContinuousInput(-Math.PI, Math.PI);
+        oController.enableContinuousInput(-Math.PI, Math.PI); // ! is this even necessary
 
         this.gyroIO = gyroIO;
-        poseEstimator = new SwerveDrivePoseEstimator(
+        poseEstimator = new SwerveDrivePoseEstimator( // ! change position here for autos! 
             PhysicalConstants.KINEMATICS, 
             new Rotation2d(), 
             getModulePositions(), 
-            new Pose2d()
+            new Pose2d(new Translation2d(1, 1), new Rotation2d(Degrees.of(0)))
         );
     }
 
@@ -135,16 +135,23 @@ public class Drive extends SubsystemBase {
                 Logger.recordOutput("outputs/drive/moduleStatesInput", new SwerveModuleState[] {});
                 break;
             case POSITION:
+                System.out.println("1, " + positionSetpoint.getX());
+                System.out.println("2, " + positionSetpoint.getY());
+                System.out.println("3, " + positionSetpoint.getRotation().getRadians());
                 // get PIDs
                 double xPID = xController.calculate(getPose().getX(), positionSetpoint.getX());
                 double yPID = yController.calculate(getPose().getY(), positionSetpoint.getY());
-                double thetaPID = thetaController.calculate(getPose().getRotation().getRotations(), positionSetpoint.getRotation().getRotations());
+                double oPID = oController.calculate(getPose().getRotation().getRadians(), positionSetpoint.getRotation().getRadians());
                 
+                System.out.println("4, " + xPID);
+                System.out.println("5, " + yPID);
+                System.out.println("6, " + oPID);
+
                 // create chassisspeeds object with FOC
                 speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                     twistSetpoint.dx + xPID,
                     twistSetpoint.dy + yPID,
-                    twistSetpoint.dtheta + thetaPID,
+                    twistSetpoint.dtheta + oPID,
                     getYaw() // not getYawWithAllianceRotation(), because the setpoint is already generated with it in mind
                 );
                 // fallthrough to VELOCITY case; no break statement needed
@@ -173,10 +180,16 @@ public class Drive extends SubsystemBase {
         characterizationVolts = volts;
     }
 
-    public void runPosition(SwerveSample sample){
+    public void runPosition(Pose2d pose){
+        controlMode = DRIVE_MODE.POSITION;
+        positionSetpoint = pose;
+        twistSetpoint = new Twist2d();
+    }
+
+    public void runAutoPosition(SwerveSample sample){
         controlMode = DRIVE_MODE.POSITION;
         positionSetpoint = sample.getPose();
-        twistSetpoint = sample.getChassisSpeeds().toTwist2d(1);
+        twistSetpoint = sample.getChassisSpeeds().toTwist2d(0.02);
     }
 
     public void runVelocity(ChassisSpeeds speedsInput) {

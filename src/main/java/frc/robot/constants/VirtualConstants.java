@@ -21,12 +21,14 @@ public final class VirtualConstants {
     public static final double ANGULAR_SPEED_EXPONENT = 2;
 
     // ids
-    public static final int ELEVATOR_ID = 0;
-    public static final int ARM_ID = 1;
-    public static final int WRIST_ID = 2;
-    public static final int CLAW_ID = 3;
-    public static final int ALGA_ID_1 = 4;
-    public static final int ALGA_ID_2 = 5;
+    public static final int ROBORIO_ID = 0;
+    public static final int PDH_ID = 1;
+    public static final int ELEVATOR_ID = 2;
+    public static final int ARM_ID = 3;
+    public static final int WRIST_ID = 4;
+    public static final int CLAW_ID = 5;
+    public static final int ALGA_ID_1 = 6;
+    public static final int ALGA_ID_2 = 7;
 
     // cancoder ids
     public static final int ELEVATOR_CANCODER_ID = 50;
@@ -37,6 +39,6 @@ public final class VirtualConstants {
     // // DIO ports 
     // public static final int ELEVATOR_SWITCH_BOTTOM_PORT = 0;
     // public static final int ELEVATOR_SWITCH_TOP_PORT = 1;
-    public static final int TROUGH_SENSOR_PORT = 2;
+    // public static final int TROUGH_SENSOR_PORT = 2;
     // public static final int ALGA_SENSOR_PORT = 3;
 }

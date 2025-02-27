@@ -14,22 +14,22 @@ public class AutoRoutineGenerator {
         autoFactory = new AutoFactory(
             drive::getPose,
             drive::resetPoseEstimator,
-            drive::runPosition,
-            DriverStation.getAlliance().isPresent() ? DriverStation.getAlliance().get() == DriverStation.Alliance.Red : false,
+            drive::runAutoPosition,
+            DriverStation.getAlliance().isPresent() ? DriverStation.getAlliance().get() == DriverStation.Alliance.Blue : false,
             drive
         );
     }
 
-    public AutoRoutine fiveMeter() {
-        AutoRoutine routine = autoFactory.newRoutine("5Meter");
+    public AutoRoutine twoMeter() {
+        AutoRoutine routine = autoFactory.newRoutine("2Meter");
 
         // load trajectories
-        AutoTrajectory trajectory = routine.trajectory("5Meter");
+        AutoTrajectory trajectory = routine.trajectory("2Meter");
 
         // when routine begins, reset odometry, start trajectory
         routine.active().onTrue(
             trajectory.resetOdometry()
-            .andThen(trajectory.cmd())
+            .andThen(trajectory.cmd()) // ! 
         );
 
         return routine;

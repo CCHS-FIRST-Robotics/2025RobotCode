@@ -84,9 +84,18 @@ public class DriveWithJoysticks extends Command {
         );
 
         Logger.recordOutput("outputs/drive/speedsInput", speedsInput);
+        prevSpeeds = speedsInput;
+
+        // ! 
+        // if( speedsInput.vxMetersPerSecond == 0 
+        //     && speedsInput.vyMetersPerSecond == 0
+        //     && speedsInput.omegaRadiansPerSecond == 0
+        // ){
+        //     drive.runVelocity(new ChassisSpeeds());
+        //     return;
+        // }
         
         drive.runVelocity(speedsInput);
-        prevSpeeds = speedsInput;
     }
 
     @Override
