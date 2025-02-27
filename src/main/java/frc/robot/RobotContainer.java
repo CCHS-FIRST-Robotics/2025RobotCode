@@ -14,8 +14,8 @@ import choreo.auto.AutoChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
 import frc.robot.subsystems.drive.*;
-import frc.robot.subsystems.vision.*;
 import frc.robot.subsystems.coralIO.*;
+import frc.robot.subsystems.PoseEstimator.*;
 import frc.robot.subsystems.algaIO.*;
 import frc.robot.utils.AutoRoutineGenerator;
 import frc.robot.constants.*;
@@ -25,10 +25,9 @@ public class RobotContainer {
     private final CommandXboxController controller2 = new CommandXboxController(VirtualConstants.CONTROLLER_PORT_2);
 
     private final Drive drive;
-    // private final PoseEstimator poseEstimator;
+    private PoseEstimator poseEstimator;
     // private final Coral coral;
     // private final Alga alga;
-
 
     private final AutoRoutineGenerator autoGenerator;
     private final AutoChooser autoChooser;
@@ -96,11 +95,12 @@ public class RobotContainer {
                 break;
         }
 
-        // poseEstimator = new PoseEstimator(drive);
-        // drive.setPoseEstimator(poseEstimator);
+        poseEstimator = new PoseEstimator(drive);
+        drive.setPoseEstimator(poseEstimator);
 
         autoGenerator = new AutoRoutineGenerator(
-            drive
+            drive, 
+            poseEstimator
         );
         autoChooser = new AutoChooser();
         
@@ -110,7 +110,7 @@ public class RobotContainer {
 
     private void configureButtonBindings() {
 
-        // ————— drive ————— // 
+        // ————— drive ————— //
 
         drive.setDefaultCommand(
             new DriveWithJoysticks(
@@ -125,7 +125,7 @@ public class RobotContainer {
         controller1.a().whileTrue(Commands.run(() -> drive.runPosition(new Pose2d(1, 1, new Rotation2d())), drive));
         controller1.b().whileTrue(Commands.run(() -> drive.runCharacterization(Volts.of(0))));
 
-        // ————— coral ————— // 
+        // ————— coral ————— //
 
         // // elevator
         // controller2.y().onTrue(coral.getSetElevatorCommand(PhysicalConstants.ELEVATOR_MAX_ROTATIONS));

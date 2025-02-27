@@ -12,7 +12,7 @@ import java.util.AbstractMap.SimpleEntry;
 public final class PhysicalConstants {
     // ————— swerve constants ————— //
     // kinematics
-    public static final Mass ROBOT_WEIGHT = Pounds.of(97.666); // battery is 13.324 so true weight is 84.342 pounds
+    public static final Mass ROBOT_WEIGHT = Pounds.of(84.342); // battery is 13.324lbs extra
     public static final Distance WHEEL_RADIUS = Inches.of(2);
     public static final Distance WHEEL_CIRCUMFERENCE = WHEEL_RADIUS.times(2 * Math.PI);
     public static final Distance TRACK_WIDTH_X = Inches.of(22.5);
@@ -52,8 +52,7 @@ public final class PhysicalConstants {
     );
 
     // ————— vision constants ————— //
-    // ! trust, also put in constants somewhere
-    // ! also, I wonder what these are relative to
+    // ! I wonder what these are relative to
     // ! also, units
     public static final HashMap<Integer, Translation3d> APRILTAG_LOCATIONS = new HashMap<Integer, Translation3d>();
     static{
@@ -83,11 +82,11 @@ public final class PhysicalConstants {
     
 
     // ————— coral constants ————— //
+    // ! redo all of these
     public static final Angle ELEVATOR_ENCODER_OFFSET = Rotations.of(0.39599609375);
     public static final Angle ELEVATOR_MAX_ROTATIONS = Rotations.of(3.612548828125);
     public static final Angle ELEVATOR_MIN_ROTATIONS = Rotations.of(0);
 
-    // recalc: https://www.reca.lc/arm?armMass=%7B%22s%22%3A4.59%2C%22u%22%3A%22lbs%22%7D&comLength=%7B%22s%22%3A11.5%2C%22u%22%3A%22in%22%7D&currentLimit=%7B%22s%22%3A30%2C%22u%22%3A%22A%22%7D&efficiency=100&endAngle=%7B%22s%22%3A90%2C%22u%22%3A%22deg%22%7D&iterationLimit=10000&motor=%7B%22quantity%22%3A1%2C%22name%22%3A%22Falcon%20500%22%7D&ratio=%7B%22magnitude%22%3A100%2C%22ratioType%22%3A%22Reduction%22%7D&startAngle=%7B%22s%22%3A0%2C%22u%22%3A%22deg%22%7D
     public static final Angle ARM_ENCODER_OFFSET = Rotations.of(-0.260986328125);
     public static final Angle ARM_MAX_ROTATIONS = Rotations.of(0.582763671875); // 0.922119140625 when elevator fully up
     public static final Angle ARM_MIN_ROTATIONS = Rotations.of(0);
@@ -149,5 +148,4 @@ public final class PhysicalConstants {
             }
         }
     }
-
 }

@@ -35,10 +35,6 @@ public final class VirtualConstants {
     public static final int ARM_CANCODER_ID = 51;
     public static final int WRIST_CANCODER_ID = 52;
 
-
-    // // DIO ports 
-    // public static final int ELEVATOR_SWITCH_BOTTOM_PORT = 0;
-    // public static final int ELEVATOR_SWITCH_TOP_PORT = 1;
-    // public static final int TROUGH_SENSOR_PORT = 2;
-    // public static final int ALGA_SENSOR_PORT = 3;
+    // DIO ports 
+    public static final int TROUGH_SWITCH_PORT = 0;
 }

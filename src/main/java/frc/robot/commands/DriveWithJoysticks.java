@@ -61,7 +61,7 @@ public class DriveWithJoysticks extends Command {
             linearVelocity.getX() * PhysicalConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond),
             -linearVelocity.getY() * PhysicalConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond), // chassisspeeds is flipped
             -angularVelocity * PhysicalConstants.MAX_ALLOWED_ANGULAR_SPEED.in(RadiansPerSecond), // chassisspeeds is flipped
-            drive.getYawWithAllianceRotation() // ! bugged
+            drive.getYawWithAllianceRotation()
         );
 
         // clamp everything between max and min possible accels
@@ -85,15 +85,6 @@ public class DriveWithJoysticks extends Command {
 
         Logger.recordOutput("outputs/drive/speedsInput", speedsInput);
         prevSpeeds = speedsInput;
-
-        // ! 
-        // if( speedsInput.vxMetersPerSecond == 0 
-        //     && speedsInput.vyMetersPerSecond == 0
-        //     && speedsInput.omegaRadiansPerSecond == 0
-        // ){
-        //     drive.runVelocity(new ChassisSpeeds());
-        //     return;
-        // }
         
         drive.runVelocity(speedsInput);
     }

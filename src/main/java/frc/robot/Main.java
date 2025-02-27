@@ -8,12 +8,15 @@ import edu.wpi.first.wpilibj.RobotBase;
 
 /**
  * to do: 
+ * ! figure out how to maintain wheel position
+ * ! organize imports
+ * 
+ * ! check stuff when changing alliances
  * 
  * ! move cancoder to alga drawbridge
  * ! replace sparkmax with talonsrx
  * ! maybe see if double gyro works
  * 
- * ! check pose control and sysid
  * ! check sleder code and understand
  * ! check whether pv on jetson nano is possible
  * 

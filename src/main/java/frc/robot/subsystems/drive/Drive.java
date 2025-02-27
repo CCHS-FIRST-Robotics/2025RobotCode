@@ -4,7 +4,6 @@ import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.units.measure.*;
@@ -14,7 +13,9 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import choreo.trajectory.SwerveSample;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import org.littletonrobotics.junction.Logger;
+
 import frc.robot.constants.*;
+import frc.robot.subsystems.PoseEstimator.*;
 
 public class Drive extends SubsystemBase {
     public enum DRIVE_MODE {
@@ -30,7 +31,7 @@ public class Drive extends SubsystemBase {
     // odometry
     private final GyroIO gyroIO;
     private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
-    private final SwerveDrivePoseEstimator poseEstimator;
+    private PoseEstimator poseEstimator;
     private Pose2d fieldPosition = new Pose2d();
     private double[] lastModulePositionsMeters = new double[] {0.0, 0.0, 0.0, 0.0};
 
@@ -50,17 +51,17 @@ public class Drive extends SubsystemBase {
         )
     );
 
-    // position control
+    // position
     private Pose2d positionSetpoint = new Pose2d();
     private Twist2d twistSetpoint = new Twist2d();
-    // private final PIDController xController = new PIDController(3, 0, 0);
-    // private final PIDController yController = new PIDController(3, 0, 0);
-    // private final PIDController oController = new PIDController(3, 0, 0);
-    private final PIDController xController = new PIDController(50, 0, 0);
-    private final PIDController yController = new PIDController(50, 0, 0);
-    private final PIDController oController = new PIDController(30, 0, 0);
+    private final PIDController xController = new PIDController(3, 0, 0);
+    private final PIDController yController = new PIDController(3, 0, 0);
+    private final PIDController oController = new PIDController(3, 0, 0);
+    // private final PIDController xController = new PIDController(50, 0, 0);
+    // private final PIDController yController = new PIDController(50, 0, 0);
+    // private final PIDController oController = new PIDController(30, 0, 0);
     
-    // velocity control
+    // velocity
     private ChassisSpeeds speeds = new ChassisSpeeds();
 
     public Drive(
@@ -78,12 +79,6 @@ public class Drive extends SubsystemBase {
         oController.enableContinuousInput(-Math.PI, Math.PI); // ! is this even necessary
 
         this.gyroIO = gyroIO;
-        poseEstimator = new SwerveDrivePoseEstimator( // ! change position here for autos! 
-            PhysicalConstants.KINEMATICS, 
-            new Rotation2d(), 
-            getModulePositions(), 
-            new Pose2d(new Translation2d(1, 1), new Rotation2d(Degrees.of(0)))
-        );
     }
 
     @Override
@@ -105,12 +100,11 @@ public class Drive extends SubsystemBase {
         Logger.recordOutput("outputs/drive/speedsOutput", speedsOutput);
         // pose
         fieldPosition = fieldPosition.exp(PhysicalConstants.KINEMATICS.toTwist2d(getModuleDeltas()));
-        poseEstimator.updateWithTime(
+        poseEstimator.updateWithOdometry(
             Timer.getFPGATimestamp(),
             gyroInputs.connected ? getYaw() : fieldPosition.getRotation(),
             getModulePositions()
         );
-        Logger.recordOutput("outputs/drive/robotPose", getPose());   
         
         // ————— driving ————— //
 
@@ -139,9 +133,9 @@ public class Drive extends SubsystemBase {
                 System.out.println("2, " + positionSetpoint.getY());
                 System.out.println("3, " + positionSetpoint.getRotation().getRadians());
                 // get PIDs
-                double xPID = xController.calculate(getPose().getX(), positionSetpoint.getX());
-                double yPID = yController.calculate(getPose().getY(), positionSetpoint.getY());
-                double oPID = oController.calculate(getPose().getRotation().getRadians(), positionSetpoint.getRotation().getRadians());
+                double xPID = xController.calculate(poseEstimator.getPose().getX(), positionSetpoint.getX());
+                double yPID = yController.calculate(poseEstimator.getPose().getY(), positionSetpoint.getY());
+                double oPID = oController.calculate(poseEstimator.getPose().getRotation().getRadians(), positionSetpoint.getRotation().getRadians());
                 
                 System.out.println("4, " + xPID);
                 System.out.println("5, " + yPID);
@@ -208,16 +202,16 @@ public class Drive extends SubsystemBase {
 
     // ————— functions for odometry ————— //
 
-    public void resetPoseEstimator(Pose2d pose){
-        poseEstimator.resetPosition(pose.getRotation(), getModulePositions(), pose);
+    public void setPoseEstimator(PoseEstimator poseEstimator){
+        this.poseEstimator = poseEstimator;
     }
 
-    public Pose2d getPose() {
-        return poseEstimator.getEstimatedPosition();
+    public void resetPoseEstimator(Pose2d pose){
+        poseEstimator.resetPosition(pose, getModulePositions());
     }
 
     public Rotation2d getYaw() {
-        return gyroInputs.connected ? new Rotation2d(Rotations.of(gyroInputs.yaw).in(Radians)) : getPose().getRotation();
+        return gyroInputs.connected ? new Rotation2d(Rotations.of(gyroInputs.yaw).in(Radians)) : poseEstimator.getPose().getRotation();
     }
 
     public Rotation2d getYawWithAllianceRotation() {

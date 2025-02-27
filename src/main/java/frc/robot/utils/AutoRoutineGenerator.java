@@ -3,16 +3,18 @@ package frc.robot.utils;
 import choreo.auto.*;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.PoseEstimator.PoseEstimator;
 
 public class AutoRoutineGenerator {
     private final AutoFactory autoFactory;
 
     // ! it would be really painful to have to write what to do at each eventmarker for every single auto I write
     public AutoRoutineGenerator(
-        Drive drive
+        Drive drive,
+        PoseEstimator poseEstimator
     ) {
         autoFactory = new AutoFactory(
-            drive::getPose,
+            poseEstimator::getPose,
             drive::resetPoseEstimator,
             drive::runAutoPosition,
             DriverStation.getAlliance().isPresent() ? DriverStation.getAlliance().get() == DriverStation.Alliance.Blue : false,
