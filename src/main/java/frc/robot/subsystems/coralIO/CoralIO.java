@@ -9,10 +9,10 @@ public interface CoralIO {
     public static class CoralIOInputs implements LoggableInputs {
         public double elevatorVoltage;
         public double elevatorCurrent;
-        public double elevatorPosition;
-        public double elevatorVelocity;
-        public double elevatorAbsolutePosition;
-        public double elevatorAbsoluteVelocity;
+        public double elevatorMotorPosition;
+        public double elevatorMotorVelocity;
+        public double elevatorEncoderPosition;
+        public double elevatorEncoderVelocity;
         public double elevatorTemperature;
 
         public double armVoltage;
@@ -35,10 +35,10 @@ public interface CoralIO {
         public void toLog(LogTable table) {
             table.put("elevator/ElevatorVoltage", elevatorVoltage);
             table.put("elevator/ElevatorCurrent", elevatorCurrent);
-            table.put("elevator/ElevatorPosition", elevatorPosition);
-            table.put("elevator/ElevatorVelocity", elevatorVelocity);
-            table.put("elevator/ElevatorAbsolutePosition", elevatorAbsolutePosition);
-            table.put("elevator/ElevatorAbsoluteVelocity", elevatorAbsoluteVelocity);
+            table.put("elevator/ElevatorPosition", elevatorMotorPosition);
+            table.put("elevator/ElevatorVelocity", elevatorMotorVelocity);
+            table.put("elevator/ElevatorAbsolutePosition", elevatorEncoderPosition);
+            table.put("elevator/ElevatorAbsoluteVelocity", elevatorEncoderVelocity);
             table.put("elevator/ElevatorTemperature", elevatorTemperature);
             
             table.put("arm/ArmVoltage", armVoltage);
@@ -62,10 +62,10 @@ public interface CoralIO {
         public void fromLog(LogTable table) {
             elevatorVoltage = table.get("elevator/ElevatorVoltage", elevatorVoltage);
             elevatorCurrent = table.get("elevator/ElevatorCurrent", elevatorCurrent);
-            elevatorPosition = table.get("elevator/ElevatorPosition", elevatorPosition);
-            elevatorVelocity = table.get("elevator/ElevatorVelocity", elevatorVelocity);
-            elevatorAbsolutePosition = table.get("elevator/ElevatorAbsolutePosition", elevatorAbsolutePosition);
-            elevatorAbsoluteVelocity = table.get("elevator/ElevatorAbsoluteVelocity", elevatorAbsoluteVelocity);
+            elevatorMotorPosition = table.get("elevator/ElevatorPosition", elevatorMotorPosition);
+            elevatorMotorVelocity = table.get("elevator/ElevatorVelocity", elevatorMotorVelocity);
+            elevatorEncoderPosition = table.get("elevator/ElevatorAbsolutePosition", elevatorEncoderPosition);
+            elevatorEncoderVelocity = table.get("elevator/ElevatorAbsoluteVelocity", elevatorEncoderVelocity);
             elevatorTemperature = table.get("elevator/ElevatorTemperature", elevatorTemperature);
             
             armVoltage = table.get("arm/ArmVoltage", armVoltage);

@@ -24,14 +24,14 @@ public class ModuleIOReal implements ModuleIO {
     private final RelativeEncoder driveEncoder;
     private final RelativeEncoder turnRelativeEncoder;
     private final AbsoluteEncoder turnAbsoluteEncoder; // CANandMag
-    
+
     // for drive, pid units are in V/rpm, ff units are the normal V/(rad per second)
-    private double driveKp = 0.00015 * 2d * Math.PI / 60d ; 
+    private double driveKp = 0.000062333;     
     private double driveKi = 0;
     private double driveKd = 0;
-    private double driveKs = 0;
-    private double driveKv = 1/(473d * 2d * Math.PI / 60d) * PhysicalConstants.DRIVE_AFTER_ENCODER_REDUCTION; // neo kV = 473 rpm/V (from datasheet)    
-    private double driveKa = 0.020864; // ! replace after sysid
+    private double driveKs = 0.03422;
+    private double driveKv = 0.13259;
+    private double driveKa = 0.025003;
 
     private double turnKp = 8 / (2 * Math.PI);
     private double turnKi = 0;
@@ -127,7 +127,6 @@ public class ModuleIOReal implements ModuleIO {
     @Override
     public void updateInputs(ModuleIOInputs inputs) {
         inputs.driveVoltage = driveMotor.getAppliedOutput() * driveMotor.getBusVoltage();
-        inputs.driveVoltage = driveMotor.getBusVoltage();
         inputs.driveCurrent = driveMotor.getOutputCurrent();
         inputs.drivePosition = Rotations.of(driveEncoder.getPosition() / PhysicalConstants.DRIVE_AFTER_ENCODER_REDUCTION).in(Radians);
         inputs.driveVelocity = Rotations.per(Minute).of(driveEncoder.getVelocity() / PhysicalConstants.DRIVE_AFTER_ENCODER_REDUCTION).in(RadiansPerSecond);

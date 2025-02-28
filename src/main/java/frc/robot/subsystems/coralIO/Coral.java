@@ -15,6 +15,7 @@ import frc.robot.constants.PhysicalConstants.CoralPositions;
 
 public class Coral extends SubsystemBase {
     private final CoralIO io;
+    private final DigitalInput troughSwitch = new DigitalInput(VirtualConstants.TROUGH_SWITCH_PORT);
     private final CoralIOInputs inputs = new CoralIOInputs();
 
     private final SysIdRoutine elevatorSysIdRoutine;
@@ -27,7 +28,7 @@ public class Coral extends SubsystemBase {
         elevatorSysIdRoutine = sysIdRoutineFactory(
             "elevator", 
             (volts) -> io.setElevatorVoltage(volts), 
-            Volts.per(Second).of(1), Volts.of(3), Seconds.of(5)
+            Volts.per(Second).of(1), Volts.of(3), Seconds.of(7)
         );
         armSysIdRoutine = sysIdRoutineFactory(
             "arm", 
@@ -45,6 +46,8 @@ public class Coral extends SubsystemBase {
     public void periodic() {
         io.updateInputs(inputs);
         Logger.processInputs("coralIO", inputs);
+
+        Logger.recordOutput("outputs/coral/troughSwitch", troughSwitch.get());
     }
 
     // ————— testing command factories ————— //
@@ -53,17 +56,17 @@ public class Coral extends SubsystemBase {
         return new InstantCommand(() -> io.setElevatorPosition(angle));
     }
 
-    public Command getSetArmCommand(Angle angle){
-        return new InstantCommand(() -> io.setArmPosition(angle));
-    }
+    // public Command getSetArmCommand(Angle angle){
+    //     return new InstantCommand(() -> io.setArmPosition(angle));
+    // }
 
-    public Command getSetWristVoltageCommand(Voltage volts){
-        return new InstantCommand(() -> io.setWristVoltage(volts));
-    }
+    // public Command getSetWristVoltageCommand(Voltage volts){
+    //     return new InstantCommand(() -> io.setWristVoltage(volts));
+    // }
 
-    public Command getSetWristCommand(Angle angle){
-        return new InstantCommand(() -> io.setWristPosition(angle));
-    }
+    // public Command getSetWristCommand(Angle angle){
+    //     return new InstantCommand(() -> io.setWristPosition(angle));
+    // }
 
     // ————— final command factories ————— //
 
@@ -79,10 +82,9 @@ public class Coral extends SubsystemBase {
     
     // check if ir sensor beam is broken, close claw, then swing to L4
     public Command getIntakeCommand(){
-        // if(!troughSensor.get()){ // ! troughSensor is needed for autos
-        //     return null; // ! idk if this'll throw an error
-        // }
-
+        if(!troughSwitch.get()){
+            return null;
+        }
         return new InstantCommand(() -> io.setClawPosition(false))
         .andThen(
             new InstantCommand(() -> io.setElevatorPosition(CoralPositions.L4.elevatorPosition.getValue()))

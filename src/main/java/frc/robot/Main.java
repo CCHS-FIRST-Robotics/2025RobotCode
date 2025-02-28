@@ -8,42 +8,31 @@ import edu.wpi.first.wpilibj.RobotBase;
 
 /**
  * to do: 
- * ! figure out how to maintain wheel position
- * ! organize imports
- * 
  * ! check stuff when changing alliances
- * 
- * ! move cancoder to alga drawbridge
- * ! replace sparkmax with talonsrx
- * ! maybe see if double gyro works
- * 
- * ! check sleder code and understand
- * ! check whether pv on jetson nano is possible
+ * ! for elevator sysid, use the motor position and velocity, not encoder
+ * ! check alga current limits
+ * ! alga limit switches
  * 
  *  daily at home: 
+ *   organize imports
  * 
  * — daily at robotics: 
  * —— coral: 
  * *—— wrist position control
  * *—— sysid
  * —— drive: 
- * ——— test max speed
- * ——— test the poseestimator
- * ———— note that drivePosition logging code was changed
- * *—— test autos and position control
- * ——— sysid
+ * *—— choreo autos
  * —— alga: 
- * ——— code release mechanism
+ * ——— test drawbridge
  * 
  *  longer term: 
  *   zero the drive modules correctly
+ *   figure out how to maintain wheel position
  *   write coralIOSim
  *   pid tunable constants
  *   controllers for the year
- *   make poseestimator its own class, record robot pose not under realoutputs
  *   fused cancoder instead of remote
- *   ir sensors
- *   maybe add kV values from datasheets to motorspecs (probably will be overridden by sysid)
+ *   see if double gyro works
  */
 
 public final class Main {

@@ -8,6 +8,7 @@ import org.littletonrobotics.junction.Logger;
 public class Alga extends SubsystemBase {
     private final AlgaIO io;
     private final AlgaIOInputsAutoLogged inputs = new AlgaIOInputsAutoLogged();
+    // ! also limit switches for drawbridge
 
     public Alga(AlgaIO io) {
         this.io = io;
@@ -19,28 +20,30 @@ public class Alga extends SubsystemBase {
         Logger.processInputs("algaIO", inputs);
     }
 
+    // ————— alga ————— //
+
     public void in() {
-        io.setVoltage(Volts.of(-2));
+        io.setAlgaVoltage(Volts.of(2));
     }
 
     public void hold() {
-        io.setVoltage(Volts.of(-0.4));
+        io.setAlgaVoltage(Volts.of(0.4));
     }
 
     public void out() {
-        io.setVoltage(Volts.of(4));
+        io.setAlgaVoltage(Volts.of(-4));
     }
     
     public void stop() {
-        io.setVoltage(Volts.of(0));
+        io.setAlgaVoltage(Volts.of(0));
     }
 
     public boolean algaIn() {
-        return inputs.motorCurrent > 30;
+        return inputs.algaCurrent > 30;
     }
 
     public boolean algaOut() {
-        return inputs.motorCurrent < 3;
+        return inputs.algaCurrent < 3;
     }
 
     public Command getIntakeCommand() {
@@ -49,5 +52,35 @@ public class Alga extends SubsystemBase {
 
     public Command getOutputCommand() {
         return startEnd(this::out, this::stop).until(this::algaOut);
+    }
+
+    // ————— drawbridge ————— //
+
+    public void up(){
+        io.setDrawbridgeVoltage(Volts.of(1));
+    }
+
+    public void down(){
+        io.setDrawbridgeVoltage(Volts.of(-1));
+    }
+
+    public void stay(){
+        io.setDrawbridgeVoltage(Volts.of(0)); // ! bad naming; also probably should be greater than 0?
+    }
+
+    public boolean drawbridgeUp(){
+        return false;
+    }
+
+    public boolean drawbridgeDown(){
+        return false;
+    }
+
+    public Command getUpCommand() {
+        return startEnd(this::up, this::hold).until(this::drawbridgeUp);
+    }
+
+    public Command getDownCommand() {
+        return startEnd(this::out, this::stop).until(this::drawbridgeDown);
     }
 }

@@ -82,18 +82,21 @@ public final class PhysicalConstants {
     
 
     // ————— coral constants ————— //
-    // ! redo all of these
-    public static final Angle ELEVATOR_ENCODER_OFFSET = Rotations.of(0.39599609375);
-    public static final Angle ELEVATOR_MAX_ROTATIONS = Rotations.of(3.612548828125);
+    public static final Angle ELEVATOR_ENCODER_OFFSET = Rotations.of(0.27587890625);
+    public static final Angle ELEVATOR_MAX_ROTATIONS = Rotations.of(4.123046875);
     public static final Angle ELEVATOR_MIN_ROTATIONS = Rotations.of(0);
+    public static final double ELEVATOR_GEAR_REDUCTION = 100;
 
+    // ! redo these
     public static final Angle ARM_ENCODER_OFFSET = Rotations.of(-0.260986328125);
     public static final Angle ARM_MAX_ROTATIONS = Rotations.of(0.582763671875); // 0.922119140625 when elevator fully up
     public static final Angle ARM_MIN_ROTATIONS = Rotations.of(0);
+    public static final double ARM_GEAR_REDUCTION = 100;
 
     public static final Angle WRIST_ENCODER_OFFSET = Rotations.of(0);
     public static final Angle WRIST_MAX_ROTATIONS = Rotations.of(0);
     public static final Angle WRIST_MIN_ROTATIONS = Rotations.of(0);
+    public static final double WRIST_GEAR_REDUCTION = 4; // ! I think
 
     public static class CoralPositions{
         public static final CoralPosition INTAKE = new CoralPosition(

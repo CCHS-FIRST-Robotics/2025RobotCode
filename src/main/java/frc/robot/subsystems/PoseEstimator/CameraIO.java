@@ -1,13 +1,12 @@
 package frc.robot.subsystems.PoseEstimator;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface CameraIO {
     @AutoLog
-    public static class CameraIOInputs{
-        public Pose2d estimatedPose;
+    public static class GyroIOInputs {
+
     }
 
-    public default void updateInputs(CameraIOInputs inputs) {}
+    public default void updateInputs(GyroIOInputs inputs) {}
 }

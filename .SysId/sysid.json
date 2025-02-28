@@ -1,1 +1,19 @@
-{}
+{
+  "SysId": {
+    "Analyzer": {
+      "window": {
+        "name": "Anlyzer"
+      }
+    },
+    "Data Selector": {
+      "window": {
+        "name": "Data Seletor"
+      }
+    },
+    "Log Loader": {
+      "window": {
+        "name": "Log Loder"
+      }
+    }
+  }
+}

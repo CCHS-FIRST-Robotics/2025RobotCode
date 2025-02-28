@@ -28,20 +28,22 @@ public class Drive extends SubsystemBase {
 
     private final Module[] modules = new Module[4];
 
-    // odometry
+    // ————— odometry ————— //
+
     private final GyroIO gyroIO;
     private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
     private PoseEstimator poseEstimator;
     private Pose2d fieldPosition = new Pose2d();
     private double[] lastModulePositionsMeters = new double[] {0.0, 0.0, 0.0, 0.0};
 
-    // charactarization
+    // ————— charactarization ————— //
+
     private Voltage characterizationVolts = Volts.of(0);
     private final SysIdRoutine driveSysIdRoutine = new SysIdRoutine(
         new SysIdRoutine.Config(
             Volts.per(Second).of(1), // ramp rate
             Volts.of(2), // step voltage
-            Seconds.of(3), // timeout
+            Seconds.of(5), // timeout
             (state) -> Logger.recordOutput("drive/sysIdState", state.toString()) // send the data to advantagekit
         ),
         new SysIdRoutine.Mechanism(
@@ -51,17 +53,20 @@ public class Drive extends SubsystemBase {
         )
     );
 
-    // position
+    // ————— position ————— // 
+
     private Pose2d positionSetpoint = new Pose2d();
     private Twist2d twistSetpoint = new Twist2d();
-    private final PIDController xController = new PIDController(3, 0, 0);
-    private final PIDController yController = new PIDController(3, 0, 0);
-    private final PIDController oController = new PIDController(3, 0, 0);
+    // manual
+    private final PIDController xController = new PIDController(2, 0, 0);
+    private final PIDController yController = new PIDController(2, 0, 0);
+    private final PIDController oController = new PIDController(2, 0, 0);
+    // autos
     // private final PIDController xController = new PIDController(50, 0, 0);
     // private final PIDController yController = new PIDController(50, 0, 0);
     // private final PIDController oController = new PIDController(30, 0, 0);
     
-    // velocity
+    // ————— velocity ————— //
     private ChassisSpeeds speeds = new ChassisSpeeds();
 
     public Drive(
@@ -129,17 +134,10 @@ public class Drive extends SubsystemBase {
                 Logger.recordOutput("outputs/drive/moduleStatesInput", new SwerveModuleState[] {});
                 break;
             case POSITION:
-                System.out.println("1, " + positionSetpoint.getX());
-                System.out.println("2, " + positionSetpoint.getY());
-                System.out.println("3, " + positionSetpoint.getRotation().getRadians());
                 // get PIDs
                 double xPID = xController.calculate(poseEstimator.getPose().getX(), positionSetpoint.getX());
                 double yPID = yController.calculate(poseEstimator.getPose().getY(), positionSetpoint.getY());
                 double oPID = oController.calculate(poseEstimator.getPose().getRotation().getRadians(), positionSetpoint.getRotation().getRadians());
-                
-                System.out.println("4, " + xPID);
-                System.out.println("5, " + yPID);
-                System.out.println("6, " + oPID);
 
                 // create chassisspeeds object with FOC
                 speeds = ChassisSpeeds.fromFieldRelativeSpeeds(

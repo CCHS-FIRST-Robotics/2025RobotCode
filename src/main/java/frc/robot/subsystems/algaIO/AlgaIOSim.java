@@ -21,7 +21,7 @@ public class AlgaIOSim implements AlgaIO {
     }
     
     @Override
-    public void setVoltage(Voltage volts) {
+    public void setAlgaVoltage(Voltage volts) {
         motor.setInputVoltage(volts.in(Volts));
         appliedVolts = volts;
     }
@@ -30,8 +30,8 @@ public class AlgaIOSim implements AlgaIO {
     public void updateInputs(AlgaIOInputs inputs) {
         motor.update(VirtualConstants.PERIOD);
 
-        inputs.motorVoltage = appliedVolts.in(Volts);
-        inputs.motorCurrent = motor.getCurrentDrawAmps();
-        inputs.motorTemperature = 0;
+        inputs.algaVoltage = appliedVolts.in(Volts);
+        inputs.algaCurrent = motor.getCurrentDrawAmps();
+        inputs.algaTemperature = 0;
     }
 }
