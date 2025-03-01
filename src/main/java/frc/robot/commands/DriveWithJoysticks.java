@@ -9,10 +9,12 @@ import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import org.littletonrobotics.junction.Logger;
 import frc.robot.subsystems.drive.*;
+import frc.robot.subsystems.poseEstimator.*;
 import frc.robot.constants.*;
 
 public class DriveWithJoysticks extends Command {
     private final Drive drive;
+    private final PoseEstimator poseEstimator;
     private final Supplier<Double> linearXSpeedSupplier;
     private final Supplier<Double> linearYSpeedSupplier;
     private final Supplier<Double> angularVelocitySupplier;
@@ -22,12 +24,14 @@ public class DriveWithJoysticks extends Command {
     // note that x is away from the alliance wall and y is to the left
     public DriveWithJoysticks(
         Drive drive,
+        PoseEstimator poseEstimator,
         Supplier<Double> linearXSpeedSupplier,
         Supplier<Double> linearYSpeedSupplier,
         Supplier<Double> angularVelocitySupplier
     ) {
         addRequirements(drive);
         this.drive = drive;
+        this.poseEstimator = poseEstimator;
         this.linearXSpeedSupplier = linearXSpeedSupplier;
         this.linearYSpeedSupplier = linearYSpeedSupplier;
         this.angularVelocitySupplier = angularVelocitySupplier;
@@ -61,7 +65,7 @@ public class DriveWithJoysticks extends Command {
             linearVelocity.getX() * PhysicalConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond),
             -linearVelocity.getY() * PhysicalConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond), // chassisspeeds is flipped
             -angularVelocity * PhysicalConstants.MAX_ALLOWED_ANGULAR_SPEED.in(RadiansPerSecond), // chassisspeeds is flipped
-            drive.getYawWithAllianceRotation()
+            poseEstimator.getYawWithAllianceRotation()
         );
 
         // clamp everything between max and min possible accels

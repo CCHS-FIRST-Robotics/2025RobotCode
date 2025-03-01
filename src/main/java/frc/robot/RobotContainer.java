@@ -10,13 +10,12 @@ import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
 import choreo.auto.AutoChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.math.geometry.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.drive.*;
+import frc.robot.subsystems.poseEstimator.*;
 import frc.robot.subsystems.coralIO.*;
-import frc.robot.subsystems.PoseEstimator.*;
 import frc.robot.subsystems.algaIO.*;
-import frc.robot.utils.AutoRoutineGenerator;
+import frc.robot.utils.*;
 import frc.robot.constants.*;
 
 public class RobotContainer {
@@ -24,7 +23,7 @@ public class RobotContainer {
     private final CommandXboxController controller2 = new CommandXboxController(VirtualConstants.CONTROLLER_PORT_2);
 
     private final Drive drive;
-    private PoseEstimator poseEstimator;
+    private final PoseEstimator poseEstimator;
     private final Coral coral;
     private final Alga alga;
 
@@ -38,8 +37,7 @@ public class RobotContainer {
                     new ModuleIOReal(1),
                     new ModuleIOReal(2),
                     new ModuleIOReal(3),
-                    new ModuleIOReal(4), 
-                    new GyroIOReal()
+                    new ModuleIOReal(4)
                 );
 
                 coral = new Coral(
@@ -64,8 +62,7 @@ public class RobotContainer {
                     new ModuleIOSim(),
                     new ModuleIOSim(),
                     new ModuleIOSim(),
-                    new ModuleIOSim(),
-                    new GyroIO() {}
+                    new ModuleIOSim()
                 );
 
                 coral = new Coral(new CoralIOSim());
@@ -77,8 +74,7 @@ public class RobotContainer {
                     new ModuleIOReal(1),
                     new ModuleIOReal(2),
                     new ModuleIOReal(3),
-                    new ModuleIOReal(4),
-                    new GyroIOReal()
+                    new ModuleIOReal(4)
                 );
 
                 coral = new Coral(
@@ -120,6 +116,7 @@ public class RobotContainer {
         drive.setDefaultCommand(
             new DriveWithJoysticks(
                 drive,
+                poseEstimator,
                 () -> -controller1.getLeftY(), // xboxcontroller is flipped
                 () -> controller1.getLeftX(), 
                 () -> controller1.getRightX()

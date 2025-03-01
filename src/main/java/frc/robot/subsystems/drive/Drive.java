@@ -7,15 +7,13 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.units.measure.*;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import choreo.trajectory.SwerveSample;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import org.littletonrobotics.junction.Logger;
 
 import frc.robot.constants.*;
-import frc.robot.subsystems.PoseEstimator.*;
+import frc.robot.subsystems.poseEstimator.PoseEstimator;
 
 public class Drive extends SubsystemBase {
     public enum DRIVE_MODE {
@@ -29,11 +27,7 @@ public class Drive extends SubsystemBase {
     private final Module[] modules = new Module[4];
 
     // ————— odometry ————— //
-
-    private final GyroIO gyroIO;
-    private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
     private PoseEstimator poseEstimator;
-    private Pose2d fieldPosition = new Pose2d();
     private double[] lastModulePositionsMeters = new double[] {0.0, 0.0, 0.0, 0.0};
 
     // ————— charactarization ————— //
@@ -73,17 +67,14 @@ public class Drive extends SubsystemBase {
         ModuleIO flModuleIO,
         ModuleIO frModuleIO,
         ModuleIO blModuleIO,
-        ModuleIO brModuleIO, 
-        GyroIO gyroIO
+        ModuleIO brModuleIO
     ) {
         modules[0] = new Module(flModuleIO, 1);
         modules[1] = new Module(frModuleIO, 2);
         modules[2] = new Module(blModuleIO, 3);
         modules[3] = new Module(brModuleIO, 4);
 
-        oController.enableContinuousInput(-Math.PI, Math.PI); // ! is this even necessary
-
-        this.gyroIO = gyroIO;
+        oController.enableContinuousInput(-Math.PI, Math.PI);
     }
 
     @Override
@@ -94,23 +85,13 @@ public class Drive extends SubsystemBase {
 
         // ————— odometry ————— //
 
-        // gyro
-        gyroIO.updateInputs(gyroInputs);
-        Logger.processInputs("gyro", gyroInputs);
         // module states
         SwerveModuleState[] moduleStatesOutput = getModuleStates();
         Logger.recordOutput("outputs/drive/moduleStatesOutput", moduleStatesOutput);
         // chassisspeeds
         ChassisSpeeds speedsOutput = PhysicalConstants.KINEMATICS.toChassisSpeeds(moduleStatesOutput);
         Logger.recordOutput("outputs/drive/speedsOutput", speedsOutput);
-        // pose
-        fieldPosition = fieldPosition.exp(PhysicalConstants.KINEMATICS.toTwist2d(getModuleDeltas()));
-        poseEstimator.updateWithOdometry(
-            Timer.getFPGATimestamp(),
-            gyroInputs.connected ? getYaw() : fieldPosition.getRotation(),
-            getModulePositions()
-        );
-        
+
         // ————— driving ————— //
 
         // update module inputs
@@ -144,7 +125,7 @@ public class Drive extends SubsystemBase {
                     twistSetpoint.dx + xPID,
                     twistSetpoint.dy + yPID,
                     twistSetpoint.dtheta + oPID,
-                    getYaw() // not getYawWithAllianceRotation(), because the setpoint is already generated with it in mind
+                    poseEstimator.getYaw() // not getYawWithAllianceRotation(), because the setpoint is already generated with it in mind
                 );
                 // fallthrough to VELOCITY case; no break statement needed
             case VELOCITY: 
@@ -202,22 +183,6 @@ public class Drive extends SubsystemBase {
 
     public void setPoseEstimator(PoseEstimator poseEstimator){
         this.poseEstimator = poseEstimator;
-    }
-
-    public void resetPoseEstimator(Pose2d pose){
-        poseEstimator.resetPosition(pose, getModulePositions());
-    }
-
-    public Rotation2d getYaw() {
-        return gyroInputs.connected ? new Rotation2d(Rotations.of(gyroInputs.yaw).in(Radians)) : poseEstimator.getPose().getRotation();
-    }
-
-    public Rotation2d getYawWithAllianceRotation() {
-        return getYaw().plus(
-            DriverStation.getAlliance().get() == Alliance.Red ? 
-            new Rotation2d(0) : 
-            new Rotation2d(Math.PI)
-        );
     }
     
     public SwerveModulePosition[] getModulePositions() {

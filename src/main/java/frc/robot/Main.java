@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.RobotBase;
  * ! for elevator sysid, use the motor position and velocity, not encoder
  * ! check alga current limits
  * ! alga limit switches
+ * ! figure out poseEstimator and camera
  * 
  *  daily at home: 
  *   organize imports

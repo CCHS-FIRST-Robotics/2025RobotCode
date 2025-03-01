@@ -1,12 +1,12 @@
-package frc.robot.subsystems.PoseEstimator;
+package frc.robot.subsystems.poseEstimator;
 
 import org.littletonrobotics.junction.AutoLog;
 
 public interface CameraIO {
     @AutoLog
-    public static class GyroIOInputs {
-
+    public static class CameraIOInputs{
+        double[] tagArray;
     }
 
-    public default void updateInputs(GyroIOInputs inputs) {}
+    public default void updateInputs(CameraIOInputs inputs) {}
 }
