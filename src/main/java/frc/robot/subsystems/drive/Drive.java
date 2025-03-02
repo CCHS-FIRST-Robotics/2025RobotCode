@@ -28,6 +28,7 @@ public class Drive extends SubsystemBase {
 
     // ————— odometry ————— //
     private PoseEstimator poseEstimator;
+    private SwerveModulePosition[] moduleDeltas = new SwerveModulePosition[4];
     private double[] lastModulePositionsMeters = new double[] {0.0, 0.0, 0.0, 0.0};
 
     // ————— charactarization ————— //
@@ -91,6 +92,7 @@ public class Drive extends SubsystemBase {
         // chassisspeeds
         ChassisSpeeds speedsOutput = PhysicalConstants.KINEMATICS.toChassisSpeeds(moduleStatesOutput);
         Logger.recordOutput("outputs/drive/speedsOutput", speedsOutput);
+        updateModuleDeltas();
 
         // ————— driving ————— //
 
@@ -116,9 +118,9 @@ public class Drive extends SubsystemBase {
                 break;
             case POSITION:
                 // get PIDs
-                double xPID = xController.calculate(poseEstimator.getPose().getX(), positionSetpoint.getX());
-                double yPID = yController.calculate(poseEstimator.getPose().getY(), positionSetpoint.getY());
-                double oPID = oController.calculate(poseEstimator.getPose().getRotation().getRadians(), positionSetpoint.getRotation().getRadians());
+                double xPID = xController.calculate(poseEstimator.getOdometryPose().getX(), positionSetpoint.getX());
+                double yPID = yController.calculate(poseEstimator.getOdometryPose().getY(), positionSetpoint.getY());
+                double oPID = oController.calculate(poseEstimator.getOdometryPose().getRotation().getRadians(), positionSetpoint.getRotation().getRadians());
 
                 // create chassisspeeds object with FOC
                 speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -186,26 +188,29 @@ public class Drive extends SubsystemBase {
     }
     
     public SwerveModulePosition[] getModulePositions() {
-        SwerveModulePosition[] wheelPositions = new SwerveModulePosition[4];
+        SwerveModulePosition[] modulePositions = new SwerveModulePosition[4];
         for (int i = 0; i < 4; i++) {
-            wheelPositions[i] = new SwerveModulePosition(
+            modulePositions[i] = new SwerveModulePosition(
                 modules[i].getDistance(),
                 modules[i].getAngle()
             );
         }
-        return wheelPositions;
+        return modulePositions;
     }
 
-    public SwerveModulePosition[] getModuleDeltas() {
-        SwerveModulePosition[] wheelDeltas = new SwerveModulePosition[4];
+    public void updateModuleDeltas() {
         for (int i = 0; i < 4; i++) {
-            wheelDeltas[i] = new SwerveModulePosition(
+            moduleDeltas[i] = new SwerveModulePosition(
                 modules[i].getDistance() - lastModulePositionsMeters[i],
                 modules[i].getAngle()
             );
             lastModulePositionsMeters[i] = modules[i].getDistance();
         }
-        return wheelDeltas;
+        Logger.recordOutput("cjsofjwalkfm", moduleDeltas);
+    }
+
+    public SwerveModulePosition[] getModuleDeltas() {
+        return moduleDeltas;
     }
 
     public SwerveModuleState[] getModuleStates() {

@@ -40,8 +40,8 @@ public class DriveWithJoysticks extends Command {
     @Override
     public void execute() {
         // get linearVelocity
-        double linearXSpeed = linearXSpeedSupplier.get();
-        double linearYSpeed = linearYSpeedSupplier.get();
+        double linearXSpeed = linearXSpeedSupplier.get() + 2e-6; // + 2e-6 to prevent from constant "x and y components of rotation2d are 0" error
+        double linearYSpeed = linearYSpeedSupplier.get() + 2e-6;
         double linearSpeed = applyPreferences(
             Math.hypot(linearXSpeed, linearYSpeed), 
             VirtualConstants.JOYSTICK_DEADZONE, 
@@ -100,7 +100,7 @@ public class DriveWithJoysticks extends Command {
 
     private double applyPreferences(double input, double deadzone, double exponent) {
         if (Math.abs(input) < deadzone) {
-            return 0;
+            return 0; 
         }
         return Math.pow(Math.abs(input), exponent) * Math.signum(input);
     }
