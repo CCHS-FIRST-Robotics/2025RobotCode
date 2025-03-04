@@ -14,7 +14,7 @@ import frc.robot.constants.PhysicalConstants.CoralPositions;
 
 public class Coral extends SubsystemBase {
     private final CoralIO io;
-    private final DigitalInput troughSwitch;
+    private final DigitalInput troughSwitch; // ! might become an ir sensor
     private final CoralIOInputs inputs = new CoralIOInputs();
 
     private Angle wristPosition = Rotations.of(0);

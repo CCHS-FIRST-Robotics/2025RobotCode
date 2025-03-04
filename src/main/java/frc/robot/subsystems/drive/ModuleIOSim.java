@@ -25,7 +25,7 @@ public class ModuleIOSim implements ModuleIO {
     private double driveKd = 0;
     private double driveKs = 0;
     private double driveKv = 1/(473d * 2d * Math.PI / 60d) * PhysicalConstants.DRIVE_AFTER_ENCODER_REDUCTION; // neo kV = 473 rpm/V (from datasheet)    
-    private double driveKa = 0.020864; // ! replace after sysid
+    private double driveKa = 0.020864; 
 
     private double turnKp = 8 / (2 * Math.PI);
     private double turnKi = 0;

@@ -81,11 +81,11 @@ public class PoseEstimator extends SubsystemBase {
         Logger.recordOutput("outputs/pose/combinedPoseEstimate", combinedEstimator.getEstimatedPosition());
     }
 
-    public Pose2d updateVisionEstimate(){ // ! sigh... shouldn't this also run on the jetson?
+    public Pose2d updateVisionEstimate(){
         int tagCount = 0;
         double accumulatedX = 0;
         double accumulatedY = 0;
-        for (int i = 1; i < cameraInputs.tagArray.length; i += 4) { // ! tags[0] is the something
+        for (int i = 1; i < cameraInputs.tagArray.length; i += 4) { // tags[0] is the packetId
             int id = (int) cameraInputs.tagArray[i];
             double distance = cameraInputs.tagArray[i+3]; // meters
             double tagAngle = cameraInputs.tagArray[i+1]; // radians

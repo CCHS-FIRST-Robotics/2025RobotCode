@@ -178,7 +178,7 @@ public class CoralIOReal implements CoralIO{
         // ————— claw ————— //
 
         // limit switch
-        clawSwitch = new DigitalInput(clawSwitchPort); // ! might become an ir sensor
+        clawSwitch = new DigitalInput(clawSwitchPort); 
         // misc
         clawMotor.setCANTimeout(500);
         clawConfig.smartCurrentLimit(30);

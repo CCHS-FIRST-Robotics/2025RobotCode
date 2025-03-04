@@ -52,7 +52,7 @@ public class CoralIOSim implements CoralIO{
 //     private final double kI = 0;
 //     private final double kD = 0;
 //     private final double kS = 0;
-//     private final double kV = 3.01; // V/(m/s) // ! uhhh meters?????
+//     private final double kV = 3.01; // V/(m/s) 
 //     private final double kA = 0.1; // V/(m/s^2)
 
 //     Voltage appliedVolts = Volts.of(0);

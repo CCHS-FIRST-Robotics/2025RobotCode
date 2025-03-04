@@ -96,7 +96,7 @@ public final class PhysicalConstants {
     public static final Angle WRIST_ENCODER_OFFSET = Rotations.of(0);
     public static final Angle WRIST_MAX_ROTATIONS = Rotations.of(0);
     public static final Angle WRIST_MIN_ROTATIONS = Rotations.of(0);
-    public static final double WRIST_GEAR_REDUCTION = 48; // ! I think
+    public static final double WRIST_GEAR_REDUCTION = 48; 
 
     // ! get these
     public static class CoralPositions{
