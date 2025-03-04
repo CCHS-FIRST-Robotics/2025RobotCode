@@ -4,19 +4,18 @@ import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.kinematics.*;
-import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.units.measure.*;
+import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.wpilibj.DriverStation;
-import choreo.trajectory.SwerveSample;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import choreo.trajectory.SwerveSample;
 import org.littletonrobotics.junction.Logger;
-
 import frc.robot.constants.*;
 import frc.robot.subsystems.poseEstimator.PoseEstimator;
 
 public class Drive extends SubsystemBase {
-    public enum DRIVE_MODE {
+    private enum DRIVE_MODE {
         DISABLED,
         POSITION,
         VELOCITY,
@@ -56,7 +55,7 @@ public class Drive extends SubsystemBase {
     private final PIDController xController = new PIDController(2, 0, 0);
     private final PIDController yController = new PIDController(2, 0, 0);
     private final PIDController oController = new PIDController(2, 0, 0);
-    // autos
+    // choreo
     // private final PIDController xController = new PIDController(50, 0, 0);
     // private final PIDController yController = new PIDController(50, 0, 0);
     // private final PIDController oController = new PIDController(30, 0, 0);

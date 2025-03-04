@@ -9,7 +9,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.SparkBase.*;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.controller.*;
 import edu.wpi.first.units.measure.*;
 import frc.robot.constants.PhysicalConstants;
 
@@ -33,6 +33,7 @@ public class ModuleIOReal implements ModuleIO {
     private double driveKv = 0.13259;
     private double driveKa = 0.025003;
 
+    // ! do sysid on these
     private double turnKp = 8 / (2 * Math.PI);
     private double turnKi = 0;
     private double turnKd = 1.5 / (2 * Math.PI);

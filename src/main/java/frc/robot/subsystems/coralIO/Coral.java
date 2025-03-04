@@ -4,10 +4,10 @@ import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import java.util.function.Consumer;
 import edu.wpi.first.units.*;
 import edu.wpi.first.units.measure.*;
-import java.util.function.Consumer;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import org.littletonrobotics.junction.Logger;
 import frc.robot.subsystems.coralIO.CoralIO.CoralIOInputs;
 import frc.robot.constants.PhysicalConstants.CoralPositions;

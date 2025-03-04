@@ -2,10 +2,9 @@ package frc.robot.constants;
 
 import static edu.wpi.first.units.Units.*;
 
-import edu.wpi.first.units.measure.*;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.units.measure.*;
+import edu.wpi.first.math.geometry.*;
 import java.util.*;
 import java.util.AbstractMap.SimpleEntry;
 
@@ -99,6 +98,7 @@ public final class PhysicalConstants {
     public static final Angle WRIST_MIN_ROTATIONS = Rotations.of(0);
     public static final double WRIST_GEAR_REDUCTION = 48; // ! I think
 
+    // ! get these
     public static class CoralPositions{
         public static final CoralPosition INTAKE = new CoralPosition(
             Inches.of(0), // elevator height

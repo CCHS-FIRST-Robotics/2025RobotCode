@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import java.util.function.Supplier;
 import edu.wpi.first.math.*;
 import edu.wpi.first.math.geometry.*;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.*;
 import org.littletonrobotics.junction.Logger;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.poseEstimator.*;
@@ -19,7 +19,7 @@ public class DriveWithJoysticks extends Command {
     private final Supplier<Double> linearYSpeedSupplier;
     private final Supplier<Double> angularVelocitySupplier;
     
-    ChassisSpeeds prevSpeeds = new ChassisSpeeds();
+    private ChassisSpeeds prevSpeeds = new ChassisSpeeds();
 
     // note that x is away from the alliance wall and y is to the left
     public DriveWithJoysticks(

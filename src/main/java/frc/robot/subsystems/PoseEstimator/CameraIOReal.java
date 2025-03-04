@@ -3,8 +3,8 @@ package frc.robot.subsystems.poseEstimator;
 import edu.wpi.first.networktables.*;
 
 public class CameraIOReal implements CameraIO{
-    NetworkTable tagsTable;
-    DoubleArraySubscriber tagSubscriber;
+    private final NetworkTable tagsTable;
+    private final DoubleArraySubscriber tagSubscriber;
 
     public CameraIOReal() {
         tagsTable = NetworkTableInstance.getDefault().getTable("tags");

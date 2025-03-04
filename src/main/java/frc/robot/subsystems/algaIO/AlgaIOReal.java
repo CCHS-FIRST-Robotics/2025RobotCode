@@ -4,8 +4,8 @@ import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.*;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.InvertedValue;
 import edu.wpi.first.units.measure.*;
 
 public class AlgaIOReal implements AlgaIO {

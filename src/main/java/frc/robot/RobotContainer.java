@@ -144,27 +144,32 @@ public class RobotContainer {
         // ————— coral ————— //
 
         // elevator
-        // controller2.y().onTrue(coral.getSetElevatorCommand(PhysicalConstants.ELEVATOR_MAX_ROTATIONS));
-        // controller2.a().onTrue(coral.getSetElevatorCommand(PhysicalConstants.ELEVATOR_MIN_ROTATIONS));
+        controller2.y().onTrue(coral.getSetElevatorCommand(PhysicalConstants.ELEVATOR_MAX_ROTATIONS));
+        controller2.a().onTrue(coral.getSetElevatorCommand(PhysicalConstants.ELEVATOR_MIN_ROTATIONS));
 
         // arm
-        // controller2.x().onTrue(coral.getSetArmCommand(PhysicalConstants.ARM_MAX_ROTATIONS));
-        // controller2.b().onTrue(coral.getSetArmCommand(PhysicalConstants.ARM_MIN_ROTATIONS));
+        controller2.x().onTrue(coral.getSetArmCommand(PhysicalConstants.ARM_MAX_ROTATIONS));
+        controller2.b().onTrue(coral.getSetArmCommand(PhysicalConstants.ARM_MIN_ROTATIONS));
 
         // wrist
+        controller2.leftBumper().onTrue(new InstantCommand(() -> coral.setWristPosition(Rotations.of(1))));
+        controller2.rightBumper().onTrue(new InstantCommand(() -> coral.setWristPosition(Rotations.of(0))));
+        
+        // claw
+        controller2.leftTrigger().onTrue(new InstantCommand(() -> coral.setClawPosition(true)));
+        controller2.rightTrigger().onTrue(new InstantCommand(() -> coral.setClawPosition(false)));
+
         // controller2.x().whileTrue(coral.elevatorSysIdFull());
         // controller2.y().whileTrue(coral.armSysIdFull());
-        controller2.b().whileTrue(coral.wristSysIdFull());
-
-        controller2.y().onTrue(new InstantCommand(() -> coral.setWristPosition(Rotations.of(1))));
-        controller2.a().onTrue(new InstantCommand(() -> coral.setWristPosition(Rotations.of(0))));
+        // controller2.b().whileTrue(coral.wristSysIdFull());
+        // controller2.a().whileTrue(coral.clawSysIdFull());
 
         // ————— alga ————— // 
 
-        controller1.x().onTrue(alga.getIntakeCommand());
-        controller1.b().onTrue(alga.getOutputCommand());
         controller1.y().onTrue(alga.getUpCommand());
         controller1.a().onTrue(alga.getDownCommand());
+        controller1.x().onTrue(alga.getIntakeCommand());
+        controller1.b().onTrue(alga.getOutputCommand());
     }
 
     private void configureAutos(){

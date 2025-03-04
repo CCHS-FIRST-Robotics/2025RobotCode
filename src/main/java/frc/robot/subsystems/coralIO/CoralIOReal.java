@@ -2,23 +2,21 @@ package frc.robot.subsystems.coralIO;
 
 import static edu.wpi.first.units.Units.*;
 
-import com.ctre.phoenix6.hardware.*;
-import com.ctre.phoenix6.signals.*;
+import com.ctre.phoenix6.*;
 import com.ctre.phoenix6.configs.*;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
-import com.ctre.phoenix6.*;
+import com.ctre.phoenix6.hardware.*;
+import com.ctre.phoenix6.signals.*;
 import com.revrobotics.spark.*;
 import com.revrobotics.spark.SparkBase.*;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import com.revrobotics.spark.config.SparkMaxConfig;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.controller.*;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.units.measure.*;
 import edu.wpi.first.wpilibj.DigitalInput;
-import frc.robot.constants.PhysicalConstants;
-import frc.robot.constants.VirtualConstants;
+import frc.robot.constants.*;
 
 public class CoralIOReal implements CoralIO{
     private final TalonFX elevatorMotor;
@@ -48,7 +46,7 @@ public class CoralIOReal implements CoralIO{
     private final MotionMagicConfigs armMotionMagicConfig = armConfig.MotionMagic;
     private final MotionMagicVoltage armMotionMagicVoltage = new MotionMagicVoltage(0);
 
-    private double kPArm = 20;
+    private double kPArm = 20; // ! sysid all gains
     private double kIArm = 0;
     private double kDArm = 0;
     private double kGArm = 0.15;
@@ -62,10 +60,8 @@ public class CoralIOReal implements CoralIO{
     private final PIDController wristPID;
     private final SimpleMotorFeedforward wristFF;
     private final TrapezoidProfile wristProfile;
-    private TrapezoidProfile.State wristStart = new TrapezoidProfile.State();
-    private TrapezoidProfile.State wristEnd = new TrapezoidProfile.State();
 
-    private double kPWrist = 10;
+    private double kPWrist = 10; // ! sysid all gains
     private double kIWrist = 0;
     private double kDWrist = 0;
     private double kGWrist = 0;
@@ -162,7 +158,7 @@ public class CoralIOReal implements CoralIO{
 
         // ————— wrist ————— //
 
-        //
+        // encoder
         wristCancoder = new CANcoder(wristCancoderId);
         wristCancoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
         wristCancoderConfig.MagnetSensor.MagnetOffset = PhysicalConstants.WRIST_ENCODER_OFFSET.in(Rotations); 
@@ -181,7 +177,9 @@ public class CoralIOReal implements CoralIO{
 
         // ————— claw ————— //
 
+        // limit switch
         clawSwitch = new DigitalInput(clawSwitchPort); // ! might become an ir sensor
+        // misc
         clawMotor.setCANTimeout(500);
         clawConfig.smartCurrentLimit(30);
         clawConfig.voltageCompensation(12);
@@ -189,8 +187,7 @@ public class CoralIOReal implements CoralIO{
         clawMotor.setCANTimeout(0);
         clawMotor.configure(clawConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-
-        // ————— misc ————— //
+        // ————— logging ————— //
 
         voltageSignalElevator = elevatorMotor.getMotorVoltage();
         currentSignalElevator = elevatorMotor.getStatorCurrent();
@@ -245,13 +242,10 @@ public class CoralIOReal implements CoralIO{
 
     @Override
     public void setWristPosition(Angle position){
-        wristStart = new TrapezoidProfile.State(inputs.wristAbsolutePosition, 0);
-        wristEnd = new TrapezoidProfile.State(position.in(Rotations), 0);
-
         TrapezoidProfile.State targetState = wristProfile.calculate(
             VirtualConstants.PERIOD, 
-            wristStart, 
-            wristEnd
+            new TrapezoidProfile.State(inputs.wristAbsolutePosition, 0), 
+            new TrapezoidProfile.State(position.in(Rotations), 0)
         );
 
         this.setWristVoltage(
