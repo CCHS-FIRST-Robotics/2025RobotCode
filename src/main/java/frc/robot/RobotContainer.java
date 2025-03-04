@@ -48,14 +48,20 @@ public class RobotContainer {
                         VirtualConstants.ARM_CANCODER_ID, 
                         VirtualConstants.WRIST_ID, 
                         VirtualConstants.WRIST_CANCODER_ID, 
-                        VirtualConstants.CLAW_ID
-                    )
+                        VirtualConstants.CLAW_ID,
+                        VirtualConstants.CLAW_SWITCH_PORT
+                    ), 
+                    VirtualConstants.TROUGH_SWITCH_PORT
                 );
 
-                alga = new Alga(new AlgaIOReal(
-                    VirtualConstants.ALGA_ID_1,
-                    VirtualConstants.ALGA_ID_2
-                ));
+                alga = new Alga(
+                    new AlgaIOReal(
+                        VirtualConstants.ALGA_ID_1,
+                        VirtualConstants.ALGA_ID_2
+                    ), 
+                    VirtualConstants.ALGA_UP_SWITCH_PORT,
+                    VirtualConstants.ALGA_DOWN_SWITCH_PORT
+                );
                 break;
             case SIM:
                 drive = new Drive(
@@ -65,9 +71,9 @@ public class RobotContainer {
                     new ModuleIOSim()
                 );
 
-                coral = new Coral(new CoralIOSim());
+                coral = new Coral(new CoralIOSim(), 0);
 
-                alga = new Alga(new AlgaIOSim());
+                alga = new Alga(new AlgaIOSim(), 0, 0);
                 break;
             default:
                 drive = new Drive(
@@ -85,14 +91,20 @@ public class RobotContainer {
                         VirtualConstants.ARM_CANCODER_ID, 
                         VirtualConstants.WRIST_ID, 
                         VirtualConstants.WRIST_CANCODER_ID, 
-                        VirtualConstants.CLAW_ID
-                    )
+                        VirtualConstants.CLAW_ID,
+                        VirtualConstants.CLAW_SWITCH_PORT
+                    ), 
+                    VirtualConstants.TROUGH_SWITCH_PORT
                 );
 
-                alga = new Alga(new AlgaIOReal(
-                    VirtualConstants.ALGA_ID_1,
-                    VirtualConstants.ALGA_ID_2
-                ));
+                alga = new Alga(
+                    new AlgaIOReal(
+                        VirtualConstants.ALGA_ID_1,
+                        VirtualConstants.ALGA_ID_2
+                    ), 
+                    VirtualConstants.ALGA_UP_SWITCH_PORT,
+                    VirtualConstants.ALGA_DOWN_SWITCH_PORT
+                );
                 break;
         }
 
@@ -123,8 +135,6 @@ public class RobotContainer {
             )
         );
 
-        controller1.y().whileTrue(coral.elevatorSysIdFull());
-
         // manual position control
         // controller1.y().whileTrue(Commands.run(() -> drive.runPosition(new Pose2d(3, 2.5, new Rotation2d(-Math.PI/2))), drive));
         // controller1.x().whileTrue(Commands.run(() -> drive.runPosition(new Pose2d(5, 0, new Rotation2d(Math.PI))), drive));
@@ -134,23 +144,27 @@ public class RobotContainer {
         // ————— coral ————— //
 
         // elevator
-        controller2.y().onTrue(coral.getSetElevatorCommand(PhysicalConstants.ELEVATOR_MAX_ROTATIONS));
-        controller2.a().onTrue(coral.getSetElevatorCommand(PhysicalConstants.ELEVATOR_MIN_ROTATIONS));
+        // controller2.y().onTrue(coral.getSetElevatorCommand(PhysicalConstants.ELEVATOR_MAX_ROTATIONS));
+        // controller2.a().onTrue(coral.getSetElevatorCommand(PhysicalConstants.ELEVATOR_MIN_ROTATIONS));
 
         // arm
         // controller2.x().onTrue(coral.getSetArmCommand(PhysicalConstants.ARM_MAX_ROTATIONS));
         // controller2.b().onTrue(coral.getSetArmCommand(PhysicalConstants.ARM_MIN_ROTATIONS));
 
         // wrist
-        // controller2.y().onTrue(coral.getSetWristCommand(Rotations.of(1)));
-        // controller2.x().onTrue(coral.getSetWristVoltageCommand(Volts.of(1)));
-        // controller2.b().onTrue(coral.getSetWristVoltageCommand(Volts.of(-1)));
-        // controller2.a().onTrue(coral.getSetWristVoltageCommand(Volts.of(0)));
+        // controller2.x().whileTrue(coral.elevatorSysIdFull());
+        // controller2.y().whileTrue(coral.armSysIdFull());
+        controller2.b().whileTrue(coral.wristSysIdFull());
+
+        controller2.y().onTrue(new InstantCommand(() -> coral.setWristPosition(Rotations.of(1))));
+        controller2.a().onTrue(new InstantCommand(() -> coral.setWristPosition(Rotations.of(0))));
 
         // ————— alga ————— // 
 
-        // controller1.x().onTrue(alga.getIntakeCommand());
-        // controller1.b().onTrue(alga.getOutputCommand());
+        controller1.x().onTrue(alga.getIntakeCommand());
+        controller1.b().onTrue(alga.getOutputCommand());
+        controller1.y().onTrue(alga.getUpCommand());
+        controller1.a().onTrue(alga.getDownCommand());
     }
 
     private void configureAutos(){

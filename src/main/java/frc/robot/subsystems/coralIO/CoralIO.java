@@ -27,9 +27,14 @@ public interface CoralIO {
         public double wristCurrent;
         public double wristPosition;
         public double wristVelocity;
+        public double wristAbsolutePosition;
+        public double wristAbsoluteVelocity;
         public double wristTemperature;
         
-        public boolean clawState;
+        public double clawVoltage;
+        public double clawCurrent;
+        public boolean clawSwitch;
+        public double clawTemperature;
 
         @Override
         public void toLog(LogTable table) {
@@ -53,9 +58,14 @@ public interface CoralIO {
             table.put("wrist/WristCurrent", wristCurrent);
             table.put("wrist/WristPosition", wristPosition);
             table.put("wrist/WristVelocity", wristVelocity);
+            table.put("wrist/WristAbsolutePosition", wristAbsolutePosition);
+            table.put("wrist/WristAbsoluteVelocity", wristAbsoluteVelocity);
             table.put("wrist/WristTemperature", wristTemperature);
-            
-            table.put("claw/ClawState", clawState);
+
+            table.put("claw/ClawVoltage", clawVoltage);
+            table.put("claw/ClawCurrent", clawCurrent);
+            table.put("claw/ClawSwitch", clawSwitch);
+            table.put("claw/ClawTemperature", clawTemperature);
         }
 
         @Override
@@ -80,9 +90,14 @@ public interface CoralIO {
             wristCurrent = table.get("wrist/WristCurrent", wristCurrent);
             wristPosition = table.get("wrist/WristPosition", wristPosition);
             wristVelocity = table.get("wrist/WristVelocity", wristVelocity);
+            wristAbsolutePosition = table.get("wrist/WristPosition", wristAbsolutePosition);
+            wristAbsoluteVelocity = table.get("wrist/WristVelocity", wristAbsoluteVelocity);
             wristTemperature = table.get("wrist/WristTemperature", wristTemperature);
             
-            clawState = table.get("claw/ClawState", clawState);
+            clawVoltage = table.get("claw/ClawVoltage", clawVoltage);
+            clawCurrent = table.get("claw/ClawCurrent", clawCurrent);
+            clawSwitch = table.get("claw/ClawSwitch", clawSwitch);
+            clawTemperature = table.get("claw/ClawTemperature", clawTemperature);
         }
     }
 
@@ -99,8 +114,8 @@ public interface CoralIO {
     public default void setWristPosition(Angle position){}
 
     public default void setClawVoltage(Voltage volts){}
-    
-    public default void setClawPosition(boolean open){}
 
+    public default void setClawPosition(boolean open){}
+    
     public default void updateInputs(CoralIOInputs inputs) {}
 }

@@ -9,13 +9,27 @@ import edu.wpi.first.wpilibj.RobotBase;
 /**
  * to do: 
  * ! check stuff when changing alliances
- * ! for elevator sysid, use the motor position and velocity, not encoder
  * ! check alga current limits
  * ! alga limit switches
  * ! figure out poseEstimator and camera
  * 
+ * test the alga drawbridge (just voltage control, then ask hickey to mount the limit switches)
+ * test the arm and wrist position control
+ * run sysid on the whole coral
+ * maybe get coral reef positions
+ * 
+ * maybe run sysid on drivebase (wait until trough and claw are on)
+ * maybe test if camera pose estimate works
+ * maybe test if pose estimator updates with turning while robot is real
+ * 
+ * ask jonathan if he can figure out how to configure radios to 6ghz (distract sleder with this)
+ * 
+ * ! write manual position autos
+ * 
  *  daily at home: 
  *   organize imports
+ *   private finals
+ *   write manual autos
  * 
  * — daily at robotics: 
  * —— coral: 

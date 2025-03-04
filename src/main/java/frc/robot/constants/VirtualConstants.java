@@ -11,7 +11,7 @@ public final class VirtualConstants {
         SIM,
         REPLAY
     }
-    public static final ROBOT_MODE CURRENT_MODE = ROBOT_MODE.SIM;
+    public static final ROBOT_MODE CURRENT_MODE = ROBOT_MODE.REAL;
     
     // controller
     public static final int CONTROLLER_PORT_1 = 0;
@@ -37,4 +37,7 @@ public final class VirtualConstants {
 
     // DIO ports 
     public static final int TROUGH_SWITCH_PORT = 0;
+    public static final int CLAW_SWITCH_PORT = 1;
+    public static final int ALGA_UP_SWITCH_PORT = 2;
+    public static final int ALGA_DOWN_SWITCH_PORT = 3;
 }

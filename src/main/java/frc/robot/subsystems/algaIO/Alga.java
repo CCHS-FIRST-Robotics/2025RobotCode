@@ -3,21 +3,28 @@ package frc.robot.subsystems.algaIO;
 import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.wpilibj2.command.*;
+import edu.wpi.first.wpilibj.DigitalInput;
 import org.littletonrobotics.junction.Logger;
 
 public class Alga extends SubsystemBase {
     private final AlgaIO io;
+    private final DigitalInput upSwitch;
+    private final DigitalInput downSwitch;
     private final AlgaIOInputsAutoLogged inputs = new AlgaIOInputsAutoLogged();
-    // ! also limit switches for drawbridge
 
-    public Alga(AlgaIO io) {
+    public Alga(AlgaIO io, int upPort, int downPort) {
         this.io = io;
+        upSwitch = new DigitalInput(upPort);
+        downSwitch = new DigitalInput(downPort);
     }
 
     @Override
     public void periodic() {
         io.updateInputs(inputs);
         Logger.processInputs("algaIO", inputs);
+
+        Logger.recordOutput("outputs/alga/upSwitch", upSwitch.get());
+        Logger.recordOutput("outputs/alga/downSwitch", downSwitch.get());
     }
 
     // ————— alga ————— //
@@ -57,30 +64,30 @@ public class Alga extends SubsystemBase {
     // ————— drawbridge ————— //
 
     public void up(){
-        io.setDrawbridgeVoltage(Volts.of(1));
+        io.setDrawbridgeVoltage(Volts.of(12));
     }
 
     public void down(){
-        io.setDrawbridgeVoltage(Volts.of(-1));
+        io.setDrawbridgeVoltage(Volts.of(-2));
     }
 
     public void stay(){
-        io.setDrawbridgeVoltage(Volts.of(0)); // ! bad naming; also probably should be greater than 0?
+        io.setDrawbridgeVoltage(Volts.of(0));
     }
 
     public boolean drawbridgeUp(){
-        return false;
+        return !upSwitch.get();
     }
 
     public boolean drawbridgeDown(){
-        return false;
+        return !downSwitch.get();
     }
 
     public Command getUpCommand() {
-        return startEnd(this::up, this::hold).until(this::drawbridgeUp);
+        return startEnd(this::up, this::stay).until(this::drawbridgeUp);
     }
 
     public Command getDownCommand() {
-        return startEnd(this::out, this::stop).until(this::drawbridgeDown);
+        return startEnd(this::down, this::stay).until(this::drawbridgeDown);
     }
 }

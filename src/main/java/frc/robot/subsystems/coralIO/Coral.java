@@ -10,20 +10,25 @@ import java.util.function.Consumer;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import org.littletonrobotics.junction.Logger;
 import frc.robot.subsystems.coralIO.CoralIO.CoralIOInputs;
-import frc.robot.constants.*;
 import frc.robot.constants.PhysicalConstants.CoralPositions;
 
 public class Coral extends SubsystemBase {
     private final CoralIO io;
-    private final DigitalInput troughSwitch = new DigitalInput(VirtualConstants.TROUGH_SWITCH_PORT);
+    private final DigitalInput troughSwitch;
     private final CoralIOInputs inputs = new CoralIOInputs();
+
+    private Angle wristPosition = Rotations.of(0);
+    private boolean clawPosition = false;
 
     private final SysIdRoutine elevatorSysIdRoutine;
     private final SysIdRoutine armSysIdRoutine;
     private final SysIdRoutine wristSysIDRoutine;
+    private final SysIdRoutine clawSysIDRoutine;
 
-    public Coral(CoralIO io) {
+    public Coral(CoralIO io, int troughPort) {
         this.io = io;
+
+        troughSwitch = new DigitalInput(troughPort);
 
         elevatorSysIdRoutine = sysIdRoutineFactory(
             "elevator", 
@@ -38,7 +43,12 @@ public class Coral extends SubsystemBase {
         wristSysIDRoutine = sysIdRoutineFactory(
             "wrist", 
             (volts) -> io.setWristVoltage(volts), 
-            Volts.per(Second).of(1), Volts.of(3), Seconds.of(5)
+            Volts.per(Second).of(1), Volts.of(5), Seconds.of(7)
+        );
+        clawSysIDRoutine = sysIdRoutineFactory(
+            "claw", 
+            (volts) -> io.setClawVoltage(volts), 
+            Volts.per(Second).of(1), Volts.of(5), Seconds.of(7)
         );
     }
 
@@ -48,6 +58,9 @@ public class Coral extends SubsystemBase {
         Logger.processInputs("coralIO", inputs);
 
         Logger.recordOutput("outputs/coral/troughSwitch", troughSwitch.get());
+
+        io.setWristPosition(wristPosition);
+        io.setClawPosition(clawPosition);
     }
 
     // ————— testing command factories ————— //
@@ -56,23 +69,23 @@ public class Coral extends SubsystemBase {
         return new InstantCommand(() -> io.setElevatorPosition(angle));
     }
 
-    // public Command getSetArmCommand(Angle angle){
-    //     return new InstantCommand(() -> io.setArmPosition(angle));
-    // }
+    public Command getSetArmCommand(Angle angle){
+        return new InstantCommand(() -> io.setArmPosition(angle));
+    }
 
-    // public Command getSetWristVoltageCommand(Voltage volts){
-    //     return new InstantCommand(() -> io.setWristVoltage(volts));
-    // }
+    public void setWristPosition(Angle angle){
+        wristPosition = angle;
+    }
 
-    // public Command getSetWristCommand(Angle angle){
-    //     return new InstantCommand(() -> io.setWristPosition(angle));
-    // }
+    public void setClawPosition(boolean open){
+        clawPosition = open;
+    }
 
-    // ————— final command factories ————— //
+    // ————— final command factories ————— // 
 
     // open claw, then move the elevator and arm down while setting wrist position
     public Command getPrepIntakeCommand(){
-        return new InstantCommand(() -> io.setClawPosition(true))
+        return new InstantCommand(() -> setClawPosition(true))
         .andThen(
             new InstantCommand(() -> io.setElevatorPosition(CoralPositions.INTAKE.elevatorPosition.getValue()))
             .alongWith(new InstantCommand(() -> io.setArmPosition(CoralPositions.INTAKE.armPosition)))
@@ -85,7 +98,7 @@ public class Coral extends SubsystemBase {
         if(!troughSwitch.get()){
             return null;
         }
-        return new InstantCommand(() -> io.setClawPosition(false))
+        return new InstantCommand(() -> setClawPosition(false))
         .andThen(
             new InstantCommand(() -> io.setElevatorPosition(CoralPositions.L4.elevatorPosition.getValue()))
             .alongWith(new InstantCommand(() -> io.setArmPosition(CoralPositions.L4.armPosition)))
@@ -101,7 +114,7 @@ public class Coral extends SubsystemBase {
 
     // press button, open the claw
     public Command getOuttakeCommand(){
-        return new InstantCommand(() -> io.setClawPosition(true));
+        return  new InstantCommand(() -> setClawPosition(true));
     }
 
     // press button, set arm to some position, drive forward, move it to some other position
@@ -152,5 +165,12 @@ public class Coral extends SubsystemBase {
             .andThen(wristSysIDRoutine.quasistatic(SysIdRoutine.Direction.kReverse))
             .andThen(wristSysIDRoutine.dynamic(SysIdRoutine.Direction.kForward))
             .andThen(wristSysIDRoutine.dynamic(SysIdRoutine.Direction.kReverse));
+    }
+
+    public Command clawSysIdFull(){
+        return clawSysIDRoutine.quasistatic(SysIdRoutine.Direction.kForward)
+            .andThen(clawSysIDRoutine.quasistatic(SysIdRoutine.Direction.kReverse))
+            .andThen(clawSysIDRoutine.dynamic(SysIdRoutine.Direction.kForward))
+            .andThen(clawSysIDRoutine.dynamic(SysIdRoutine.Direction.kReverse));
     }
 }

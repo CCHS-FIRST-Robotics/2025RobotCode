@@ -10,7 +10,7 @@ import java.util.*;
 import java.util.AbstractMap.SimpleEntry;
 
 public final class PhysicalConstants {
-    // ————— swerve constants ————— //
+    // ————— drive constants ————— //
     // kinematics
     public static final Mass ROBOT_WEIGHT = Pounds.of(84.342); // battery is 13.324lbs extra
     public static final Distance WHEEL_RADIUS = Inches.of(2);
@@ -43,15 +43,16 @@ public final class PhysicalConstants {
         / TRACK_CIRCUMFERENCE.in(Meters) // rotations per second of the robot
     ); // = 1.5944299280
     
+    // ! update these after sysid is done
     public static final LinearVelocity MAX_ALLOWED_LINEAR_SPEED = MetersPerSecond.of(2);
-    public static final AngularVelocity MAX_ALLOWED_ANGULAR_SPEED = RotationsPerSecond.of(0.5); // ! MOI makes this hard ,do sysid
+    public static final AngularVelocity MAX_ALLOWED_ANGULAR_SPEED = RotationsPerSecond.of(0.5);
 
     public static final LinearAcceleration MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(20);
     public static final AngularAcceleration MAX_ALLOWED_ANGULAR_ACCEL = RotationsPerSecond.per(Seconds).of(20 
         / TRACK_CIRCUMFERENCE.in(Meters)
     );
 
-    // ————— vision constants ————— //
+    // ————— poseEstimator constants ————— //
     // ! I wonder what these are relative to
     // ! also, units
     public static final HashMap<Integer, Translation3d> APRILTAG_LOCATIONS = new HashMap<Integer, Translation3d>();
@@ -96,7 +97,7 @@ public final class PhysicalConstants {
     public static final Angle WRIST_ENCODER_OFFSET = Rotations.of(0);
     public static final Angle WRIST_MAX_ROTATIONS = Rotations.of(0);
     public static final Angle WRIST_MIN_ROTATIONS = Rotations.of(0);
-    public static final double WRIST_GEAR_REDUCTION = 4; // ! I think
+    public static final double WRIST_GEAR_REDUCTION = 48; // ! I think
 
     public static class CoralPositions{
         public static final CoralPosition INTAKE = new CoralPosition(

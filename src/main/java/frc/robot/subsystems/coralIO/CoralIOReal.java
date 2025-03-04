@@ -10,17 +10,21 @@ import com.ctre.phoenix6.*;
 import com.revrobotics.spark.*;
 import com.revrobotics.spark.SparkBase.*;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.units.measure.*;
+import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.constants.PhysicalConstants;
+import frc.robot.constants.VirtualConstants;
 
 public class CoralIOReal implements CoralIO{
     private final TalonFX elevatorMotor;
-    // private final TalonFX armMotor;
+    private final TalonFX armMotor;
     private final SparkMax wristMotor;
+    private final SparkMax clawMotor;
 
     private final TalonFXConfiguration elevatorConfig = new TalonFXConfiguration();
     private final CANcoder elevatorCancoder;
@@ -37,30 +41,40 @@ public class CoralIOReal implements CoralIO{
     private double kVElevator = 0.1121914734;
     private double kAElevator = 0;
 
-    // private final TalonFXConfiguration armConfig = new TalonFXConfiguration();
-    // private final CANcoder armCancoder;
-    // private final CANcoderConfiguration armCancoderConfig = new CANcoderConfiguration(); 
-    // private final Slot0Configs armPIDF = armConfig.Slot0;
-    // private final MotionMagicConfigs armMotionMagicConfig = armConfig.MotionMagic;
-    // private final MotionMagicVoltage armMotionMagicVoltage = new MotionMagicVoltage(0);
+    private final TalonFXConfiguration armConfig = new TalonFXConfiguration();
+    private final CANcoder armCancoder;
+    private final CANcoderConfiguration armCancoderConfig = new CANcoderConfiguration(); 
+    private final Slot0Configs armPIDF = armConfig.Slot0;
+    private final MotionMagicConfigs armMotionMagicConfig = armConfig.MotionMagic;
+    private final MotionMagicVoltage armMotionMagicVoltage = new MotionMagicVoltage(0);
 
-    // private double kPArm = 20;
-    // private double kIArm = 0;
-    // private double kDArm = 0;
-    // private double kGArm = 0.15;
-    // private double kSArm = 0;
-    // private double kVArm = 0.1121914734;
-    // private double kAArm = 0;
+    private double kPArm = 20;
+    private double kIArm = 0;
+    private double kDArm = 0;
+    private double kGArm = 0.15;
+    private double kSArm = 0;
+    private double kVArm = 0.1121914734;
+    private double kAArm = 0;
 
     private final SparkMaxConfig wristConfig = new SparkMaxConfig();
     private final CANcoder wristCancoder;
     private final CANcoderConfiguration wristCancoderConfig = new CANcoderConfiguration();
     private final PIDController wristPID;
+    private final SimpleMotorFeedforward wristFF;
+    private final TrapezoidProfile wristProfile;
+    private TrapezoidProfile.State wristStart = new TrapezoidProfile.State();
+    private TrapezoidProfile.State wristEnd = new TrapezoidProfile.State();
 
-    private double kPWrist = 1;
+    private double kPWrist = 10;
     private double kIWrist = 0;
     private double kDWrist = 0;
     private double kGWrist = 0;
+    private double kSWrist = 0.35284;
+    private double kVWrist = 0.058472;
+    private double kAWrist = 0.0039432;
+
+    private final SparkMaxConfig clawConfig = new SparkMaxConfig();
+    private final DigitalInput clawSwitch;
 
     private final StatusSignal<Voltage> voltageSignalElevator;
     private final StatusSignal<Current> currentSignalElevator;
@@ -70,13 +84,13 @@ public class CoralIOReal implements CoralIO{
     private final StatusSignal<AngularVelocity> velocityAbsoluteSignalElevator;
     private final StatusSignal<Temperature> temperatureSignalElevator;
 
-    // private final StatusSignal<Voltage> voltageSignalArm;
-    // private final StatusSignal<Current> currentSignalArm;
-    // private final StatusSignal<Angle> positionSignalArm;
-    // private final StatusSignal<AngularVelocity> velocitySignalArm;
-    // private final StatusSignal<Angle> positionAbsoluteSignalArm;
-    // private final StatusSignal<AngularVelocity> velocityAbsoluteSignalArm;
-    // private final StatusSignal<Temperature> temperatureSignalArm;
+    private final StatusSignal<Voltage> voltageSignalArm;
+    private final StatusSignal<Current> currentSignalArm;
+    private final StatusSignal<Angle> positionSignalArm;
+    private final StatusSignal<AngularVelocity> velocitySignalArm;
+    private final StatusSignal<Angle> positionAbsoluteSignalArm;
+    private final StatusSignal<AngularVelocity> velocityAbsoluteSignalArm;
+    private final StatusSignal<Temperature> temperatureSignalArm;
 
     private final StatusSignal<Angle> positionAbsoluteSignalWrist;
     private final StatusSignal<AngularVelocity> velocityAbsoluteSignalWrist;
@@ -90,11 +104,13 @@ public class CoralIOReal implements CoralIO{
         int armCancoderId, 
         int wristId, 
         int wristCancoderId, 
-        int clawId
+        int clawId,
+        int clawSwitchPort
     ) {
         elevatorMotor = new TalonFX(elevatorId); // Falcon500
-        // armMotor = new TalonFX(armId); // Falcon500
+        armMotor = new TalonFX(armId); // Falcon500
         wristMotor = new SparkMax(wristId, MotorType.kBrushed); // RedLine
+        clawMotor = new SparkMax(wristId, MotorType.kBrushed); // BAG
 
         // ————— elevator ————— //
 
@@ -120,48 +136,58 @@ public class CoralIOReal implements CoralIO{
         elevatorConfig.MotorOutput.withInverted(InvertedValue.Clockwise_Positive);
         elevatorMotor.getConfigurator().apply(elevatorConfig);
     
-        // // ————— arm ————— //
+        // ————— arm ————— //
 
-        // // encoder
-        // armCancoder = new CANcoder(armCancoderId);
-        // armCancoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
-        // armCancoderConfig.MagnetSensor.MagnetOffset = PhysicalConstants.ARM_ENCODER_OFFSET.in(Rotations); 
-        // armCancoder.getConfigurator().apply(armCancoderConfig);
-        // armConfig.Feedback.withRemoteCANcoder(armCancoder);
-        // // pid
-        // armPIDF.kP = kPArm;
-        // armPIDF.kI = kIArm;
-        // armPIDF.kD = kDArm;
-        // armPIDF.kG = kGArm;
-        // armPIDF.kS = kSArm;
-        // armPIDF.kV = kVArm;
-        // armPIDF.kA = kAArm;
-        // armPIDF.GravityType = GravityTypeValue.Arm_Cosine;
-        // armMotionMagicConfig.MotionMagicCruiseVelocity = 0.5;
-        // armMotionMagicConfig.MotionMagicAcceleration = 1;
-        // armMotionMagicConfig.MotionMagicJerk = 1;
-        // // misc
-        // armConfig.MotorOutput.withInverted(InvertedValue.CounterClockwise_Positive);
-        // armMotor.getConfigurator().apply(armConfig);
+        // encoder
+        armCancoder = new CANcoder(armCancoderId);
+        armCancoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
+        armCancoderConfig.MagnetSensor.MagnetOffset = PhysicalConstants.ARM_ENCODER_OFFSET.in(Rotations); 
+        armCancoder.getConfigurator().apply(armCancoderConfig);
+        armConfig.Feedback.withRemoteCANcoder(armCancoder);
+        // pid
+        armPIDF.kP = kPArm;
+        armPIDF.kI = kIArm;
+        armPIDF.kD = kDArm;
+        armPIDF.kG = kGArm;
+        armPIDF.kS = kSArm;
+        armPIDF.kV = kVArm;
+        armPIDF.kA = kAArm;
+        armPIDF.GravityType = GravityTypeValue.Arm_Cosine;
+        armMotionMagicConfig.MotionMagicCruiseVelocity = 0.5;
+        armMotionMagicConfig.MotionMagicAcceleration = 1;
+        armMotionMagicConfig.MotionMagicJerk = 1;
+        // misc
+        armConfig.MotorOutput.withInverted(InvertedValue.CounterClockwise_Positive);
+        armMotor.getConfigurator().apply(armConfig);
 
         // ————— wrist ————— //
 
+        //
         wristCancoder = new CANcoder(wristCancoderId);
-        wristCancoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
-        wristCancoderConfig.MagnetSensor.MagnetOffset = PhysicalConstants.ARM_ENCODER_OFFSET.in(Rotations); 
+        wristCancoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+        wristCancoderConfig.MagnetSensor.MagnetOffset = PhysicalConstants.WRIST_ENCODER_OFFSET.in(Rotations); 
         wristCancoder.getConfigurator().apply(wristCancoderConfig);
         // pid
         wristPID = new PIDController(kPWrist, kIWrist, kDWrist);
+        wristFF = new SimpleMotorFeedforward(kSWrist, kVWrist, kAWrist);
+        wristProfile = new TrapezoidProfile(new TrapezoidProfile.Constraints(0.01, 10));
         // misc
         wristMotor.setCANTimeout(500);
-        wristConfig.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder).pid(kPWrist, kIWrist, kDWrist, ClosedLoopSlot.kSlot0);        
-        wristConfig.signals.primaryEncoderPositionPeriodMs(20);
-        wristConfig.encoder.quadratureAverageDepth(2);
         wristConfig.smartCurrentLimit(30);
         wristConfig.voltageCompensation(12);
         wristConfig.idleMode(IdleMode.kBrake);
         wristMotor.setCANTimeout(0);
-        System.out.println("OWAHLFJAJKEAFJF" + wristMotor.configure(wristConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
+        wristMotor.configure(wristConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+        // ————— claw ————— //
+
+        clawSwitch = new DigitalInput(clawSwitchPort); // ! might become an ir sensor
+        clawMotor.setCANTimeout(500);
+        clawConfig.smartCurrentLimit(30);
+        clawConfig.voltageCompensation(12);
+        clawConfig.idleMode(IdleMode.kBrake);
+        clawMotor.setCANTimeout(0);
+        clawMotor.configure(clawConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
 
         // ————— misc ————— //
@@ -174,13 +200,13 @@ public class CoralIOReal implements CoralIO{
         velocityAbsoluteSignalElevator = elevatorCancoder.getVelocity();
         temperatureSignalElevator = elevatorMotor.getDeviceTemp();
 
-        // voltageSignalArm = armMotor.getMotorVoltage();
-        // currentSignalArm = armMotor.getStatorCurrent();
-        // positionSignalArm = armMotor.getPosition();
-        // velocitySignalArm = armMotor.getVelocity();
-        // positionAbsoluteSignalArm = armCancoder.getPosition();
-        // velocityAbsoluteSignalArm = armCancoder.getVelocity();
-        // temperatureSignalArm = armMotor.getDeviceTemp();
+        voltageSignalArm = armMotor.getMotorVoltage();
+        currentSignalArm = armMotor.getStatorCurrent();
+        positionSignalArm = armMotor.getPosition();
+        velocitySignalArm = armMotor.getVelocity();
+        positionAbsoluteSignalArm = armCancoder.getPosition();
+        velocityAbsoluteSignalArm = armCancoder.getVelocity();
+        temperatureSignalArm = armMotor.getDeviceTemp();
 
         positionAbsoluteSignalWrist = wristCancoder.getPosition();
         velocityAbsoluteSignalWrist = wristCancoder.getVelocity();
@@ -200,39 +226,62 @@ public class CoralIOReal implements CoralIO{
 
     // ————— arm ————— //
 
-    // @Override
-    // public void setArmVoltage(Voltage volts){
-    //     armMotor.setVoltage(volts.in(Volts));
-    // }
+    @Override
+    public void setArmVoltage(Voltage volts){
+        armMotor.setVoltage(volts.in(Volts));
+    }
 
-    // @Override
-    // public void setArmPosition(Angle position){
-    //     armMotor.setControl(armMotionMagicVoltage.withPosition(position).withSlot(0));
-    // }
+    @Override
+    public void setArmPosition(Angle position){
+        armMotor.setControl(armMotionMagicVoltage.withPosition(position).withSlot(0));
+    }
 
     // ————— wrist ————— //
 
     @Override
     public void setWristVoltage(Voltage volts){
-        // wristMotor.set(TalonSRXControlMode.PercentOutput, volts.in(Volts) / 12);
         wristMotor.setVoltage(volts);
     }
 
     @Override
     public void setWristPosition(Angle position){
-        this.setWristVoltage(Volts.of(
-            wristPID.calculate(inputs.wristPosition, position.in(Rotations))
-            + kGWrist
-        ));
+        wristStart = new TrapezoidProfile.State(inputs.wristAbsolutePosition, 0);
+        wristEnd = new TrapezoidProfile.State(position.in(Rotations), 0);
+
+        TrapezoidProfile.State targetState = wristProfile.calculate(
+            VirtualConstants.PERIOD, 
+            wristStart, 
+            wristEnd
+        );
+
+        this.setWristVoltage(
+            Volts.of(
+                wristPID.calculate(targetState.position, position.in(Rotations))
+                + kGWrist
+                + wristFF.calculate(targetState.velocity)
+            )
+        );
     }
     
     // ————— claw ————— //
 
-    // @Override
-    // public void setClawVoltage(Voltage volts){}
+    @Override
+    public void setClawVoltage(Voltage volts){
+        clawMotor.setVoltage(volts);
+    }
 
-    // @Override
-    // public void setClawPosition(boolean open){}
+    @Override 
+    public void setClawPosition(boolean open){
+        if(open){
+            if (!clawSwitch.get()) { // ! see how they sauter it
+                this.setClawVoltage(Volts.of(-6));
+            } else {
+                this.setClawVoltage(Volts.of(-0.5));
+            }
+        }else{
+            this.setClawVoltage(Volts.of(12));
+        }
+    }
 
     // ————— logging ————— //
 
@@ -245,15 +294,18 @@ public class CoralIOReal implements CoralIO{
             velocitySignalElevator,
             positionAbsoluteSignalElevator,
             velocityAbsoluteSignalElevator,
-            temperatureSignalElevator
+            temperatureSignalElevator,
 
-            // voltageSignalArm, 
-            // currentSignalArm, 
-            // positionSignalArm, 
-            // velocitySignalArm, 
-            // positionAbsoluteSignalArm,
-            // velocityAbsoluteSignalArm,
-            // temperatureSignalArm
+            voltageSignalArm, 
+            currentSignalArm, 
+            positionSignalArm, 
+            velocitySignalArm, 
+            positionAbsoluteSignalArm,
+            velocityAbsoluteSignalArm,
+            temperatureSignalArm,
+
+            positionAbsoluteSignalWrist,
+            velocityAbsoluteSignalWrist
         );
 
         inputs.elevatorVoltage = voltageSignalElevator.getValue().in(Volts);
@@ -264,19 +316,26 @@ public class CoralIOReal implements CoralIO{
         inputs.elevatorEncoderVelocity = velocityAbsoluteSignalElevator.getValue().in(RotationsPerSecond);
         inputs.elevatorTemperature = temperatureSignalElevator.getValue().in(Celsius);
 
-        // inputs.armVoltage = voltageSignalArm.getValue().in(Volts);
-        // inputs.armCurrent = currentSignalArm.getValue().in(Amps);
-        // inputs.armPosition = positionSignalArm.getValue().in(Rotations);
-        // inputs.armVelocity = velocitySignalArm.getValue().in(RotationsPerSecond);
-        // inputs.armAbsolutePosition = positionAbsoluteSignalArm.getValue().in(Rotations);
-        // inputs.armAbsoluteVelocity = velocityAbsoluteSignalArm.getValue().in(RotationsPerSecond);
-        // inputs.armTemperature = temperatureSignalArm.getValue().in(Celsius);
+        inputs.armVoltage = voltageSignalArm.getValue().in(Volts);
+        inputs.armCurrent = currentSignalArm.getValue().in(Amps);
+        inputs.armPosition = positionSignalArm.getValue().in(Rotations) * PhysicalConstants.ARM_GEAR_REDUCTION;
+        inputs.armVelocity = velocitySignalArm.getValue().in(RotationsPerSecond) * PhysicalConstants.ARM_GEAR_REDUCTION;
+        inputs.armAbsolutePosition = positionAbsoluteSignalArm.getValue().in(Rotations);
+        inputs.armAbsoluteVelocity = velocityAbsoluteSignalArm.getValue().in(RotationsPerSecond);
+        inputs.armTemperature = temperatureSignalArm.getValue().in(Celsius);
 
         inputs.wristVoltage = wristMotor.getAppliedOutput() * wristMotor.getBusVoltage();
         inputs.wristCurrent = wristMotor.getOutputCurrent();
-        inputs.wristPosition = positionAbsoluteSignalWrist.getValue().in(Rotations);
-        inputs.wristVelocity = velocityAbsoluteSignalWrist.getValue().in(RotationsPerSecond);
+        inputs.wristPosition = positionAbsoluteSignalWrist.getValue().in(Rotations) * PhysicalConstants.WRIST_GEAR_REDUCTION;
+        inputs.wristVelocity = velocityAbsoluteSignalWrist.getValue().in(RotationsPerSecond) * PhysicalConstants.WRIST_GEAR_REDUCTION;
+        inputs.wristAbsolutePosition = positionAbsoluteSignalWrist.getValue().in(Rotations);
+        inputs.wristAbsoluteVelocity = velocityAbsoluteSignalWrist.getValue().in(RotationsPerSecond);
         inputs.wristTemperature = wristMotor.getMotorTemperature();
+
+        inputs.clawVoltage = clawMotor.getAppliedOutput() * clawMotor.getBusVoltage();
+        inputs.clawCurrent = clawMotor.getOutputCurrent();
+        inputs.clawSwitch = clawSwitch.get();
+        inputs.clawTemperature = clawMotor.getMotorTemperature();
 
         this.inputs = inputs;
     }

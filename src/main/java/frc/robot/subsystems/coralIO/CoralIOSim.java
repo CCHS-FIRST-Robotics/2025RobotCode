@@ -27,9 +27,6 @@ public class CoralIOSim implements CoralIO{
     public void setClawVoltage(Voltage volts){}
 
     @Override
-    public void setClawPosition(boolean open){}
-
-    @Override
     public void updateInputs(CoralIOInputs inputs) {}
 }
 
