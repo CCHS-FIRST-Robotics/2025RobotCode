@@ -71,11 +71,11 @@ public class PoseEstimator extends SubsystemBase {
         );
         combinedEstimator.addVisionMeasurement(visionEstimate, Timer.getFPGATimestamp()); 
         
-        Logger.recordOutput("outputs/pose/fieldPosition", fieldPosition);
+        Logger.recordOutput("outputs/poseEstimator/fieldPosition", fieldPosition);
 
-        Logger.recordOutput("outputs/pose/odometryPoseEstimate", odometryEstimator.getEstimatedPosition());
-        Logger.recordOutput("outputs/pose/visionPoseEstimate", visionEstimate);
-        Logger.recordOutput("outputs/pose/combinedPoseEstimate", combinedEstimator.getEstimatedPosition());
+        Logger.recordOutput("outputs/poseEstimator/odometryPoseEstimate", odometryEstimator.getEstimatedPosition());
+        Logger.recordOutput("outputs/poseEstimator/visionPoseEstimate", visionEstimate);
+        Logger.recordOutput("outputs/poseEstimator/combinedPoseEstimate", combinedEstimator.getEstimatedPosition());
     }
 
     public Pose2d updateVisionEstimate(){
