@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj.RobotBase;
  * run sysid on drivebase (wait until trough and claw are on)
 
  *  daily at home: 
- * ! write manual autos
  * ! check stuff when changing alliances
  * 
  * ! check if colin's code fixed the problem with the timing stuff
@@ -30,10 +29,11 @@ import edu.wpi.first.wpilibj.RobotBase;
  * ! sysid on coral
  * ! see how they sauter the claw limit switch (always on or not)
  * ! turn sysid
- * ! change poseEstimator starting position for autos?
  * 
- * ! get fieldposition fixed
- * ! write manual autos
+ * 
+ * ! look up what counts as a legal auto (how coral starts on robot etc.)
+ * 
+ * ! at some point decide on max allowed velocity
  * 
  * — daily at robotics: 
  * —— coral: 

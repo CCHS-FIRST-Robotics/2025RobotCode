@@ -12,6 +12,7 @@ public class AutoRoutineGenerator {
     private final AutoFactory autoFactory;
 
     private final Drive drive;
+    private final PoseEstimator poseEstimator;
 
     public AutoRoutineGenerator(
         Drive drive,
@@ -26,11 +27,14 @@ public class AutoRoutineGenerator {
         );
 
         this.drive = drive;
+        this.poseEstimator = poseEstimator;
     }
 
     public Command twoMeterManual(){
-        // ! look up what counts as a legal auto (how coral starts on robot etc.)
-        return new DriveWithPosition(drive, new Pose2d(0, 2, new Rotation2d()));
+        // ! starting position should depend on alliance
+        return new InstantCommand(() -> poseEstimator.resetPosition(new Pose2d(0, 0, new Rotation2d())))
+        .andThen(new DriveWithPosition(drive, poseEstimator, new Pose2d(2, 0, new Rotation2d())))
+        .andThen(new DriveWithPosition(drive, poseEstimator, new Pose2d(2, 2, new Rotation2d(Math.PI/2))));
     }
 
     public AutoRoutine twoMeterChoreo() {

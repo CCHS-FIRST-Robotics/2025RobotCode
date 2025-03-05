@@ -34,13 +34,13 @@ public class PoseEstimator extends SubsystemBase {
             PhysicalConstants.KINEMATICS, 
             new Rotation2d(), 
             drive.getModulePositions(), 
-            new Pose2d() // ! change position here for autos?
+            new Pose2d()
         );
         combinedEstimator = new SwerveDrivePoseEstimator(
             PhysicalConstants.KINEMATICS, 
             new Rotation2d(), 
             drive.getModulePositions(), 
-            new Pose2d() // ! change position here for autos?
+            new Pose2d()
         );
 
         this.drive = drive;
