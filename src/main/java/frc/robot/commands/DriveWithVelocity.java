@@ -12,7 +12,7 @@ import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.poseEstimator.*;
 import frc.robot.constants.*;
 
-public class DriveWithJoysticks extends Command {
+public class DriveWithVelocity extends Command {
     private final Drive drive;
     private final PoseEstimator poseEstimator;
     private final Supplier<Double> linearXSpeedSupplier;
@@ -22,7 +22,7 @@ public class DriveWithJoysticks extends Command {
     private ChassisSpeeds prevSpeeds = new ChassisSpeeds();
 
     // note that x is away from the alliance wall and y is to the left
-    public DriveWithJoysticks(
+    public DriveWithVelocity(
         Drive drive,
         PoseEstimator poseEstimator,
         Supplier<Double> linearXSpeedSupplier,

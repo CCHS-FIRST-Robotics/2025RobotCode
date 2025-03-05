@@ -24,8 +24,8 @@ public class RobotContainer {
 
     private final Drive drive;
     private final PoseEstimator poseEstimator;
-    private final Coral coral;
-    private final Alga alga;
+    // private final Coral coral;
+    // private final Alga alga;
 
     private final AutoRoutineGenerator autoGenerator;
     private final AutoChooser autoChooser;
@@ -40,28 +40,34 @@ public class RobotContainer {
                     new ModuleIOReal(4)
                 );
 
-                coral = new Coral(
-                    new CoralIOReal(
-                        VirtualConstants.ELEVATOR_ID, 
-                        VirtualConstants.ELEVATOR_CANCODER_ID, 
-                        VirtualConstants.ARM_ID, 
-                        VirtualConstants.ARM_CANCODER_ID, 
-                        VirtualConstants.WRIST_ID, 
-                        VirtualConstants.WRIST_CANCODER_ID, 
-                        VirtualConstants.CLAW_ID,
-                        VirtualConstants.CLAW_SWITCH_PORT
-                    ), 
-                    VirtualConstants.TROUGH_SWITCH_PORT
+                poseEstimator = new PoseEstimator(
+                    new GyroIOReal(),
+                    new CameraIOReal(),
+                    drive
                 );
 
-                alga = new Alga(
-                    new AlgaIOReal(
-                        VirtualConstants.ALGA_ID_1,
-                        VirtualConstants.ALGA_ID_2
-                    ), 
-                    VirtualConstants.ALGA_UP_SWITCH_PORT,
-                    VirtualConstants.ALGA_DOWN_SWITCH_PORT
-                );
+                // coral = new Coral(
+                //     new CoralIOReal(
+                //         VirtualConstants.ELEVATOR_ID, 
+                //         VirtualConstants.ELEVATOR_CANCODER_ID, 
+                //         VirtualConstants.ARM_ID, 
+                //         VirtualConstants.ARM_CANCODER_ID, 
+                //         VirtualConstants.WRIST_ID, 
+                //         VirtualConstants.WRIST_CANCODER_ID, 
+                //         VirtualConstants.CLAW_ID,
+                //         VirtualConstants.CLAW_SWITCH_PORT
+                //     ), 
+                //     VirtualConstants.TROUGH_SWITCH_PORT
+                // );
+
+                // alga = new Alga(
+                //     new AlgaIOReal(
+                //         VirtualConstants.ALGA_ID_1,
+                //         VirtualConstants.ALGA_ID_2
+                //     ), 
+                //     VirtualConstants.ALGA_UP_SWITCH_PORT,
+                //     VirtualConstants.ALGA_DOWN_SWITCH_PORT
+                // );
                 break;
             case SIM:
                 drive = new Drive(
@@ -71,9 +77,15 @@ public class RobotContainer {
                     new ModuleIOSim()
                 );
 
-                coral = new Coral(new CoralIOSim(), 0);
+                poseEstimator = new PoseEstimator(
+                    new GyroIO() {},
+                    new CameraIO() {},
+                    drive
+                );
 
-                alga = new Alga(new AlgaIOSim(), 0, 0);
+                // coral = new Coral(new CoralIOSim(), 0);
+
+                // alga = new Alga(new AlgaIOSim(), 0, 2);
                 break;
             default:
                 drive = new Drive(
@@ -83,32 +95,37 @@ public class RobotContainer {
                     new ModuleIOReal(4)
                 );
 
-                coral = new Coral(
-                    new CoralIOReal(
-                        VirtualConstants.ELEVATOR_ID, 
-                        VirtualConstants.ELEVATOR_CANCODER_ID, 
-                        VirtualConstants.ARM_ID, 
-                        VirtualConstants.ARM_CANCODER_ID, 
-                        VirtualConstants.WRIST_ID, 
-                        VirtualConstants.WRIST_CANCODER_ID, 
-                        VirtualConstants.CLAW_ID,
-                        VirtualConstants.CLAW_SWITCH_PORT
-                    ), 
-                    VirtualConstants.TROUGH_SWITCH_PORT
+                poseEstimator = new PoseEstimator(
+                    new GyroIOReal(),
+                    new CameraIOReal(),
+                    drive
                 );
 
-                alga = new Alga(
-                    new AlgaIOReal(
-                        VirtualConstants.ALGA_ID_1,
-                        VirtualConstants.ALGA_ID_2
-                    ), 
-                    VirtualConstants.ALGA_UP_SWITCH_PORT,
-                    VirtualConstants.ALGA_DOWN_SWITCH_PORT
-                );
+                // coral = new Coral(
+                //     new CoralIOReal(
+                //         VirtualConstants.ELEVATOR_ID, 
+                //         VirtualConstants.ELEVATOR_CANCODER_ID, 
+                //         VirtualConstants.ARM_ID, 
+                //         VirtualConstants.ARM_CANCODER_ID, 
+                //         VirtualConstants.WRIST_ID, 
+                //         VirtualConstants.WRIST_CANCODER_ID, 
+                //         VirtualConstants.CLAW_ID,
+                //         VirtualConstants.CLAW_SWITCH_PORT
+                //     ), 
+                //     VirtualConstants.TROUGH_SWITCH_PORT
+                // );
+
+                // alga = new Alga(
+                //     new AlgaIOReal(
+                //         VirtualConstants.ALGA_ID_1,
+                //         VirtualConstants.ALGA_ID_2
+                //     ), 
+                //     VirtualConstants.ALGA_UP_SWITCH_PORT,
+                //     VirtualConstants.ALGA_DOWN_SWITCH_PORT
+                // );
                 break;
         }
 
-        poseEstimator = new PoseEstimator(drive);
         drive.setPoseEstimator(poseEstimator);
 
         autoGenerator = new AutoRoutineGenerator(
@@ -126,7 +143,7 @@ public class RobotContainer {
         // ————— drive ————— //
 
         drive.setDefaultCommand(
-            new DriveWithJoysticks(
+            new DriveWithVelocity(
                 drive,
                 poseEstimator,
                 () -> -controller1.getLeftY(), // xboxcontroller is flipped
@@ -143,21 +160,21 @@ public class RobotContainer {
 
         // ————— coral ————— //
 
-        // elevator
-        controller2.y().onTrue(coral.getSetElevatorCommand(PhysicalConstants.ELEVATOR_MAX_ROTATIONS));
-        controller2.a().onTrue(coral.getSetElevatorCommand(PhysicalConstants.ELEVATOR_MIN_ROTATIONS));
+        // // elevator
+        // controller2.y().onTrue(coral.getSetElevatorCommand(PhysicalConstants.ELEVATOR_MAX_ROTATIONS));
+        // controller2.a().onTrue(coral.getSetElevatorCommand(PhysicalConstants.ELEVATOR_MIN_ROTATIONS));
 
-        // arm
-        controller2.x().onTrue(coral.getSetArmCommand(PhysicalConstants.ARM_MAX_ROTATIONS));
-        controller2.b().onTrue(coral.getSetArmCommand(PhysicalConstants.ARM_MIN_ROTATIONS));
+        // // arm
+        // controller2.x().onTrue(coral.getSetArmCommand(PhysicalConstants.ARM_MAX_ROTATIONS));
+        // controller2.b().onTrue(coral.getSetArmCommand(PhysicalConstants.ARM_MIN_ROTATIONS));
 
-        // wrist
-        controller2.leftBumper().onTrue(new InstantCommand(() -> coral.setWristPosition(Rotations.of(1))));
-        controller2.rightBumper().onTrue(new InstantCommand(() -> coral.setWristPosition(Rotations.of(0))));
+        // // wrist
+        // controller2.leftBumper().onTrue(new InstantCommand(() -> coral.setWristPosition(Rotations.of(1))));
+        // controller2.rightBumper().onTrue(new InstantCommand(() -> coral.setWristPosition(Rotations.of(0))));
         
-        // claw
-        controller2.leftTrigger().onTrue(new InstantCommand(() -> coral.setClawPosition(true)));
-        controller2.rightTrigger().onTrue(new InstantCommand(() -> coral.setClawPosition(false)));
+        // // claw
+        // controller2.leftTrigger().onTrue(new InstantCommand(() -> coral.setClawPosition(true)));
+        // controller2.rightTrigger().onTrue(new InstantCommand(() -> coral.setClawPosition(false)));
 
         // controller2.x().whileTrue(coral.elevatorSysIdFull());
         // controller2.y().whileTrue(coral.armSysIdFull());
@@ -166,15 +183,16 @@ public class RobotContainer {
 
         // ————— alga ————— // 
 
-        controller1.y().onTrue(alga.getUpCommand());
-        controller1.a().onTrue(alga.getDownCommand());
-        controller1.x().onTrue(alga.getIntakeCommand());
-        controller1.b().onTrue(alga.getOutputCommand());
+        // controller1.y().onTrue(alga.getUpCommand());
+        // controller1.a().onTrue(alga.getDownCommand());
+        // controller1.x().onTrue(alga.getIntakeCommand());
+        // controller1.b().onTrue(alga.getOutputCommand());
     }
 
     private void configureAutos(){
-        autoChooser.addRoutine("2Meter", () -> autoGenerator.twoMeter());
-        autoChooser.addRoutine("2Coral", () -> autoGenerator.twoCoral());
+        autoChooser.addCmd("2MeterManual", () -> autoGenerator.twoMeterManual());
+        autoChooser.addRoutine("2MeterChoreo", () -> autoGenerator.twoMeterChoreo());
+        autoChooser.addRoutine("2Coral", () -> autoGenerator.twoCoralChoreo());
 
         SmartDashboard.putData("AutoChooser", autoChooser);
     }

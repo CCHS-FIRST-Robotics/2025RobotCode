@@ -16,7 +16,7 @@ public class PoseEstimator extends SubsystemBase {
     private final GyroIO gyroIO;
     private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
 
-    private final CameraIOReal cameraIO;
+    private final CameraIO cameraIO;
     private final CameraIOInputsAutoLogged cameraInputs = new CameraIOInputsAutoLogged();
 
     private final SwerveDrivePoseEstimator odometryEstimator;
@@ -26,9 +26,9 @@ public class PoseEstimator extends SubsystemBase {
 
     private final Drive drive;
 
-    public PoseEstimator(Drive drive){
-        gyroIO = new GyroIOReal();
-        cameraIO = new CameraIOReal();
+    public PoseEstimator(GyroIO gyroIO, CameraIO cameraIO, Drive drive){
+        this.gyroIO = gyroIO;
+        this.cameraIO = cameraIO;
 
         odometryEstimator = new SwerveDrivePoseEstimator(
             PhysicalConstants.KINEMATICS, 
@@ -57,9 +57,6 @@ public class PoseEstimator extends SubsystemBase {
         Logger.processInputs("poseEstimator/camera", cameraInputs);
         
         // pose
-        Logger.recordOutput("arojaoijfoaf", drive.getModuleDeltas());
-        Logger.recordOutput("boiajofjm", getYaw());
-
         fieldPosition = fieldPosition.exp(PhysicalConstants.KINEMATICS.toTwist2d(drive.getModuleDeltas()));
         odometryEstimator.updateWithTime(
             Timer.getFPGATimestamp(),

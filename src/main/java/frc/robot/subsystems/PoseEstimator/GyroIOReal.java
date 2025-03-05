@@ -16,7 +16,7 @@ public class GyroIOReal implements GyroIO {
     public void updateInputs(GyroIOInputs inputs) {
         inputs.connected = navx.isConnected();
         
-        inputs.roll = Degrees.of(navx.getRoll()).in(Rotations);
+        inputs.roll = Degrees.of(navx.getRoll()).in(Rotations); // ! connected even when sim
         inputs.pitch = Degrees.of(navx.getPitch()).in(Rotations);
         inputs.yaw = Degrees.of(-navx.getYaw()).in(Rotations); // navx is flipped
         inputs.rollVelocity = DegreesPerSecond.of(navx.getRawGyroY()).in(RotationsPerSecond);

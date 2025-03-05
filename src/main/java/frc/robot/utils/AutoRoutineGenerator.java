@@ -1,12 +1,17 @@
 package frc.robot.utils;
 
+import edu.wpi.first.wpilibj2.command.*;
 import choreo.auto.*;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.math.geometry.*;
+import frc.robot.commands.*;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.poseEstimator.*;
 
 public class AutoRoutineGenerator {
     private final AutoFactory autoFactory;
+
+    private final Drive drive;
 
     public AutoRoutineGenerator(
         Drive drive,
@@ -19,9 +24,16 @@ public class AutoRoutineGenerator {
             DriverStation.getAlliance().isPresent() ? DriverStation.getAlliance().get() == DriverStation.Alliance.Blue : false,
             drive
         );
+
+        this.drive = drive;
     }
 
-    public AutoRoutine twoMeter() {
+    public Command twoMeterManual(){
+        // ! look up what counts as a legal auto (how coral starts on robot etc.)
+        return new DriveWithPosition(drive, new Pose2d(0, 2, new Rotation2d()));
+    }
+
+    public AutoRoutine twoMeterChoreo() {
         AutoRoutine routine = autoFactory.newRoutine("2Meter");
 
         // load trajectories
@@ -37,7 +49,7 @@ public class AutoRoutineGenerator {
     }
     
     // ! in the future put preloaded coral on the reef, get another coral from the station, put that on the reef too
-    public AutoRoutine twoCoral() {
+    public AutoRoutine twoCoralChoreo() {
         AutoRoutine routine = autoFactory.newRoutine("2Coral");
 
         // load trajectories

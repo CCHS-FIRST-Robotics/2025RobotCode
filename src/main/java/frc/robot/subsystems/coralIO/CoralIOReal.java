@@ -106,7 +106,7 @@ public class CoralIOReal implements CoralIO{
         elevatorMotor = new TalonFX(elevatorId); // Falcon500
         armMotor = new TalonFX(armId); // Falcon500
         wristMotor = new SparkMax(wristId, MotorType.kBrushed); // RedLine
-        clawMotor = new SparkMax(wristId, MotorType.kBrushed); // BAG
+        clawMotor = new SparkMax(clawId, MotorType.kBrushed); // BAG
 
         // ————— elevator ————— //
 

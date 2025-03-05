@@ -19,6 +19,10 @@ import edu.wpi.first.wpilibj.RobotBase;
  * ! write manual autos
  * ! check stuff when changing alliances
  * 
+ * ! check if colin's code fixed the problem with the timing stuff
+ * 
+ * ! check the discrepancy between fieldposition and odometryposition irl (hopefully odom is more accurate)
+ * 
  * ! drive sysid
  * ! get coral encoder offsets
  * ! get coral positions
@@ -27,6 +31,9 @@ import edu.wpi.first.wpilibj.RobotBase;
  * ! see how they sauter the claw limit switch (always on or not)
  * ! turn sysid
  * ! change poseEstimator starting position for autos?
+ * 
+ * ! get fieldposition fixed
+ * ! write manual autos
  * 
  * — daily at robotics: 
  * —— coral: 

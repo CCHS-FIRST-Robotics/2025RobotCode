@@ -5,7 +5,7 @@ import org.littletonrobotics.junction.AutoLog;
 public interface GyroIO {
     @AutoLog
     public static class GyroIOInputs {
-        public boolean connected = false;
+        public boolean connected;
 
         public double roll;
         public double pitch;

@@ -205,7 +205,6 @@ public class Drive extends SubsystemBase {
             );
             lastModulePositionsMeters[i] = modules[i].getDistance();
         }
-        Logger.recordOutput("cjsofjwalkfm", moduleDeltas);
     }
 
     public SwerveModulePosition[] getModuleDeltas() {
