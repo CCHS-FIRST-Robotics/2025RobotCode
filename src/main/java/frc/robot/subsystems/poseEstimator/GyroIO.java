@@ -1,4 +1,4 @@
-package frc.robot.subsystems.poseEstimators;
+package frc.robot.subsystems.poseEstimator;
 
 import org.littletonrobotics.junction.AutoLog;
 
