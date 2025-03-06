@@ -169,7 +169,7 @@ public class CoralIOReal implements CoralIO{
         wristProfile = new TrapezoidProfile(new TrapezoidProfile.Constraints(0.01, 10));
         // misc
         wristMotor.setCANTimeout(500);
-        wristConfig.smartCurrentLimit(30);
+        wristConfig.smartCurrentLimit(10);
         wristConfig.voltageCompensation(12);
         wristConfig.idleMode(IdleMode.kBrake);
         wristMotor.setCANTimeout(0);
@@ -181,7 +181,7 @@ public class CoralIOReal implements CoralIO{
         clawSwitch = new DigitalInput(clawSwitchPort); 
         // misc
         clawMotor.setCANTimeout(500);
-        clawConfig.smartCurrentLimit(30);
+        clawConfig.smartCurrentLimit(10);
         clawConfig.voltageCompensation(12);
         clawConfig.idleMode(IdleMode.kBrake);
         clawMotor.setCANTimeout(0);

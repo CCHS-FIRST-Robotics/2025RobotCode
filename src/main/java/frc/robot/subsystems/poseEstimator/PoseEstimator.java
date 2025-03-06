@@ -8,10 +8,9 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.math.geometry.*;
+import java.util.HashMap;
 import org.littletonrobotics.junction.Logger;
 import frc.robot.subsystems.drive.*;
-import frc.robot.subsystems.poseEstimator.CameraIOInputsAutoLogged;
-import frc.robot.subsystems.poseEstimator.GyroIOInputsAutoLogged;
 import frc.robot.constants.*;
 
 public class PoseEstimator extends SubsystemBase {
@@ -19,6 +18,7 @@ public class PoseEstimator extends SubsystemBase {
     private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
 
     private final CameraIO cameraIO;
+    private final HashMap<Integer, double[]> tagMap = new HashMap<Integer, double[]>();
     private final CameraIOInputsAutoLogged cameraInputs = new CameraIOInputsAutoLogged();
 
     private final SwerveDrivePoseEstimator odometryEstimator;
@@ -92,6 +92,8 @@ public class PoseEstimator extends SubsystemBase {
             double angleToTag = tagAngle - robotAngle;
             double xDistance = Math.sin(angleToTag) * distance;
             double yDistance = Math.cos(angleToTag) * distance;
+            // ! adjust for jetson offset
+            tagMap.put(id, new double[] {xDistance, yDistance, angleToTag});
 
             Translation3d taglocation = PhysicalConstants.APRILTAG_LOCATIONS.get(id);
             accumulatedX += taglocation.getX() - xDistance;
@@ -134,5 +136,13 @@ public class PoseEstimator extends SubsystemBase {
             new Rotation2d(0) : 
             new Rotation2d(Math.PI)
         );
+    }
+
+    public double[] getTagArray(){
+        return cameraInputs.tagArray;
+    }
+
+    public double[] getSpecificTag(int id){
+        return tagMap.get(id);
     }
 }

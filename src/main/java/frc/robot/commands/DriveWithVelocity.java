@@ -30,6 +30,7 @@ public class DriveWithVelocity extends Command {
         Supplier<Double> angularVelocitySupplier
     ) {
         addRequirements(drive);
+        addRequirements(poseEstimator);
         this.drive = drive;
         this.poseEstimator = poseEstimator;
         this.linearXSpeedSupplier = linearXSpeedSupplier;
