@@ -11,7 +11,7 @@ import java.util.AbstractMap.SimpleEntry;
 public final class PhysicalConstants {
     // ————— drive constants ————— //
     // kinematics
-    public static final Mass ROBOT_WEIGHT = Pounds.of(84.342); // battery is 13.324lbs extra
+    public static final Mass ROBOT_WEIGHT = Pounds.of(99.2); // battery is 13.324lbs extra
     public static final Distance WHEEL_RADIUS = Inches.of(2);
     public static final Distance WHEEL_CIRCUMFERENCE = WHEEL_RADIUS.times(2 * Math.PI);
     public static final Distance TRACK_WIDTH_X = Inches.of(22.5);

@@ -64,15 +64,15 @@ public class Alga extends SubsystemBase {
     // ————— drawbridge ————— //
 
     public void up(){
-        io.setDrawbridgeVoltage(Volts.of(12));
+        io.setDrawbridgeVoltage(Volts.of(1));
     }
 
     public void down(){
-        io.setDrawbridgeVoltage(Volts.of(-2));
+        io.setDrawbridgeVoltage(Volts.of(-1));
     }
 
     public void stay(){
-        io.setDrawbridgeVoltage(Volts.of(0));
+        io.setDrawbridgeVoltage(Volts.of(0.125));
     }
 
     public boolean drawbridgeUp(){

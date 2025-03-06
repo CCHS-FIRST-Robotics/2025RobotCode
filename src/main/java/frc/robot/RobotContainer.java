@@ -168,20 +168,20 @@ public class RobotContainer {
         // ————— coral ————— //
 
         // elevator
-        controller2.y().onTrue(coral.getSetElevatorCommand(PhysicalConstants.ELEVATOR_MAX_ROTATIONS));
-        controller2.a().onTrue(coral.getSetElevatorCommand(PhysicalConstants.ELEVATOR_MIN_ROTATIONS));
+        controller2.y().onTrue(coral.getSetElevatorCommand(Rotations.of(2.1875)));
+        controller2.a().onTrue(coral.getSetElevatorCommand(Rotations.of(0.5)));
 
         // arm
-        controller2.x().onTrue(coral.getSetArmCommand(PhysicalConstants.ARM_MAX_ROTATIONS));
-        controller2.b().onTrue(coral.getSetArmCommand(PhysicalConstants.ARM_MIN_ROTATIONS));
+        // controller2.x().onTrue(coral.getSetArmCommand(PhysicalConstants.ARM_MAX_ROTATIONS));
+        // controller2.b().onTrue(coral.getSetArmCommand(PhysicalConstants.ARM_MIN_ROTATIONS));
 
-        // wrist
-        controller2.leftBumper().onTrue(new InstantCommand(() -> coral.setWristPosition(Rotations.of(1))));
-        controller2.rightBumper().onTrue(new InstantCommand(() -> coral.setWristPosition(Rotations.of(0))));
+        // // wrist
+        // controller2.leftBumper().onTrue(new InstantCommand(() -> coral.setWristPosition(Rotations.of(1))));
+        // controller2.rightBumper().onTrue(new InstantCommand(() -> coral.setWristPosition(Rotations.of(0))));
         
-        // claw
-        controller2.leftTrigger().onTrue(new InstantCommand(() -> coral.setClawPosition(true)));
-        controller2.rightTrigger().onTrue(new InstantCommand(() -> coral.setClawPosition(false)));
+        // // claw
+        // controller2.leftTrigger().onTrue(new InstantCommand(() -> coral.setClawPosition(true)));
+        // controller2.rightTrigger().onTrue(new InstantCommand(() -> coral.setClawPosition(false)));
 
         // controller2.x().whileTrue(coral.elevatorSysIdFull());
         // controller2.y().whileTrue(coral.armSysIdFull());
@@ -192,19 +192,18 @@ public class RobotContainer {
 
         controller1.y().onTrue(alga.getUpCommand());
         controller1.a().onTrue(alga.getDownCommand());
-        controller1.x().onTrue(alga.getIntakeCommand());
-        controller1.b().onTrue(alga.getOutputCommand());
+        // controller1.x().onTrue(alga.getIntakeCommand());
+        // controller1.b().onTrue(alga.getOutputCommand());
     }
 
     private void configureAutos(){
-        autoChooser.addCmd("2MeterManual", () -> autoGenerator.twoMeterManual());
-        autoChooser.addRoutine("2MeterChoreo", () -> autoGenerator.twoMeterChoreo());
+        autoChooser.addRoutine("2Meter", () -> autoGenerator.twoMeter());
         autoChooser.addRoutine("2Coral", () -> autoGenerator.twoCoralChoreo());
 
         SmartDashboard.putData("AutoChooser", autoChooser);
     }
 
     public Command getAutonomousCommand(){
-        return autoChooser.selectedCommand();
+        return autoChooser.selectedCommand(); // 2.5
     }
 }

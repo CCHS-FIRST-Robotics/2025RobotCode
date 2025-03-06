@@ -68,8 +68,8 @@ public class AlgaIOReal implements AlgaIO {
         inputs.algaCurrent = algaCurrentSignal.getValue().in(Amps);
         inputs.algaTemperature = algaTemperatureSignal.getValue().in(Celsius);
 
-        inputs.algaVoltage = drawbridgeVoltageSignal.getValue().in(Volts);
-        inputs.algaCurrent = drawbridgeCurrentSignal.getValue().in(Amps);
-        inputs.algaTemperature = drawbridgeTemperatureSignal.getValue().in(Celsius);
+        inputs.drawbridgeVoltage = drawbridgeVoltageSignal.getValue().in(Volts);
+        inputs.drawbridgeCurrent = drawbridgeCurrentSignal.getValue().in(Amps);
+        inputs.drawbridgeTemperature = drawbridgeTemperatureSignal.getValue().in(Celsius);
     }
 }

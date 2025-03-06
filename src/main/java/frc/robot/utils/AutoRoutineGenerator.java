@@ -1,6 +1,5 @@
 package frc.robot.utils;
 
-import edu.wpi.first.wpilibj2.command.*;
 import choreo.auto.*;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.math.geometry.*;
@@ -30,14 +29,7 @@ public class AutoRoutineGenerator {
         this.poseEstimator = poseEstimator;
     }
 
-    public Command twoMeterManual(){
-        // ! starting position should depend on alliance
-        return new InstantCommand(() -> poseEstimator.resetPosition(new Pose2d(0, 0, new Rotation2d())))
-        .andThen(new DriveWithPosition(drive, poseEstimator, new Pose2d(2, 0, new Rotation2d())))
-        .andThen(new DriveWithPosition(drive, poseEstimator, new Pose2d(2, 2, new Rotation2d(Math.PI/2))));
-    }
-
-    public AutoRoutine twoMeterChoreo() {
+    public AutoRoutine twoMeter() {
         AutoRoutine routine = autoFactory.newRoutine("2Meter");
 
         // load trajectories
@@ -46,7 +38,9 @@ public class AutoRoutineGenerator {
         // when routine begins, reset odometry, start trajectory
         routine.active().onTrue(
             trajectory.resetOdometry()
-            .andThen(trajectory.cmd()) // ! 
+            .andThen(trajectory.cmd())
+            .andThen(new DriveWithPosition(drive, poseEstimator, trajectory.getFinalPose().get()))
+            .andThen(new DriveWithPosition(drive, poseEstimator, new Pose2d(0, 0, new Rotation2d(Math.PI))))
         );
 
         return routine;

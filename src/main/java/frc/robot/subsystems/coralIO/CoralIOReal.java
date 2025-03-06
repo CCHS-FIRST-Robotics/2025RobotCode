@@ -125,7 +125,7 @@ public class CoralIOReal implements CoralIO{
         elevatorPIDF.kV = kVElevator;
         elevatorPIDF.kA = kAElevator;
         elevatorPIDF.GravityType = GravityTypeValue.Elevator_Static;
-        elevatorMotionMagicConfig.MotionMagicCruiseVelocity = 1; // max is 
+        elevatorMotionMagicConfig.MotionMagicCruiseVelocity = 1; // max is 1
         elevatorMotionMagicConfig.MotionMagicAcceleration = 1;
         elevatorMotionMagicConfig.MotionMagicJerk = 1;
         // misc
@@ -149,7 +149,7 @@ public class CoralIOReal implements CoralIO{
         armPIDF.kV = kVArm;
         armPIDF.kA = kAArm;
         armPIDF.GravityType = GravityTypeValue.Arm_Cosine;
-        armMotionMagicConfig.MotionMagicCruiseVelocity = 0.5;
+        armMotionMagicConfig.MotionMagicCruiseVelocity = 0.25;
         armMotionMagicConfig.MotionMagicAcceleration = 1;
         armMotionMagicConfig.MotionMagicJerk = 1;
         // misc
