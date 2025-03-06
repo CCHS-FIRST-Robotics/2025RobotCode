@@ -1,4 +1,4 @@
-package frc.robot.subsystems.poseEstimator;
+package frc.robot.subsystems.poseEstimators;
 
 import static edu.wpi.first.units.Units.*;
 
@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.math.geometry.*;
 import org.littletonrobotics.junction.Logger;
 import frc.robot.subsystems.drive.*;
+import frc.robot.subsystems.poseEstimator.CameraIOInputsAutoLogged;
+import frc.robot.subsystems.poseEstimator.GyroIOInputsAutoLogged;
 import frc.robot.constants.*;
 
 public class PoseEstimator extends SubsystemBase {
