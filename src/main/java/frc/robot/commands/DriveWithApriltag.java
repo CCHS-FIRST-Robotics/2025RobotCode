@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.poseEstimator.*;
@@ -32,12 +33,14 @@ public class DriveWithApriltag extends Command {
             return;
         }
 
-        if(targetTagArray[1] > 0.05){
+        // ! just have one drive.runVelocity statement that has a function in each variable
+
+
             drive.runVelocity(new ChassisSpeeds(
-                0, 1, 0
+                Math.abs(targetTagArray[0]) > 0.1 ? MathUtil.inputModulus(targetTagArray[0],-1,1) : 0,
+                Math.abs(targetTagArray[1]) > 0.1 ? MathUtil.inputModulus(targetTagArray[1],-1,1) : 0,
+                Math.abs(targetTagArray[2]) > 0.1 ? MathUtil.inputModulus(targetTagArray[2],-1,1) : 0
             ));
-            return;
-        }
 
         if(targetTagArray[1] < -0.05){
             drive.runVelocity(new ChassisSpeeds(

@@ -15,7 +15,6 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import edu.wpi.first.math.controller.*;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.units.measure.*;
-import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.constants.*;
 
 public class CoralIOReal implements CoralIO{
@@ -61,7 +60,7 @@ public class CoralIOReal implements CoralIO{
     private final SimpleMotorFeedforward wristFF;
     private final TrapezoidProfile wristProfile;
 
-    private double kPWrist = 10; // ! sysid all gains
+    private double kPWrist = 1; // ! sysid all gains
     private double kIWrist = 0;
     private double kDWrist = 0;
     private double kGWrist = 0;
@@ -70,7 +69,7 @@ public class CoralIOReal implements CoralIO{
     private double kAWrist = 0.0039432;
 
     private final SparkMaxConfig clawConfig = new SparkMaxConfig();
-    private final DigitalInput clawSwitch;
+    private final SparkAnalogSensor clawSwitch;
 
     private final StatusSignal<Voltage> voltageSignalElevator;
     private final StatusSignal<Current> currentSignalElevator;
@@ -100,8 +99,7 @@ public class CoralIOReal implements CoralIO{
         int armCancoderId, 
         int wristId, 
         int wristCancoderId, 
-        int clawId,
-        int clawSwitchPort
+        int clawId
     ) {
         elevatorMotor = new TalonFX(elevatorId); // Falcon500
         armMotor = new TalonFX(armId); // Falcon500
@@ -136,7 +134,7 @@ public class CoralIOReal implements CoralIO{
 
         // encoder
         armCancoder = new CANcoder(armCancoderId);
-        armCancoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
+        armCancoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
         armCancoderConfig.MagnetSensor.MagnetOffset = PhysicalConstants.ARM_ENCODER_OFFSET.in(Rotations); 
         armCancoder.getConfigurator().apply(armCancoderConfig);
         armConfig.Feedback.withRemoteCANcoder(armCancoder);
@@ -149,18 +147,18 @@ public class CoralIOReal implements CoralIO{
         armPIDF.kV = kVArm;
         armPIDF.kA = kAArm;
         armPIDF.GravityType = GravityTypeValue.Arm_Cosine;
-        armMotionMagicConfig.MotionMagicCruiseVelocity = 0.25;
+        armMotionMagicConfig.MotionMagicCruiseVelocity = 0.05; // ! make this higher hopefully
         armMotionMagicConfig.MotionMagicAcceleration = 1;
         armMotionMagicConfig.MotionMagicJerk = 1;
         // misc
-        armConfig.MotorOutput.withInverted(InvertedValue.CounterClockwise_Positive);
+        armConfig.MotorOutput.withInverted(InvertedValue.Clockwise_Positive); // ! probably wrong
         armMotor.getConfigurator().apply(armConfig);
 
         // ————— wrist ————— //
 
         // encoder
         wristCancoder = new CANcoder(wristCancoderId);
-        wristCancoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+        wristCancoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
         wristCancoderConfig.MagnetSensor.MagnetOffset = PhysicalConstants.WRIST_ENCODER_OFFSET.in(Rotations); 
         wristCancoder.getConfigurator().apply(wristCancoderConfig);
         // pid
@@ -169,7 +167,7 @@ public class CoralIOReal implements CoralIO{
         wristProfile = new TrapezoidProfile(new TrapezoidProfile.Constraints(0.01, 10));
         // misc
         wristMotor.setCANTimeout(500);
-        wristConfig.smartCurrentLimit(10);
+        wristConfig.smartCurrentLimit(20);
         wristConfig.voltageCompensation(12);
         wristConfig.idleMode(IdleMode.kBrake);
         wristMotor.setCANTimeout(0);
@@ -178,10 +176,10 @@ public class CoralIOReal implements CoralIO{
         // ————— claw ————— //
 
         // limit switch
-        clawSwitch = new DigitalInput(clawSwitchPort); 
+        clawSwitch = clawMotor.getAnalog();
         // misc
         clawMotor.setCANTimeout(500);
-        clawConfig.smartCurrentLimit(10);
+        clawConfig.smartCurrentLimit(20);
         clawConfig.voltageCompensation(12);
         clawConfig.idleMode(IdleMode.kBrake);
         clawMotor.setCANTimeout(0);
@@ -242,17 +240,17 @@ public class CoralIOReal implements CoralIO{
 
     @Override
     public void setWristPosition(Angle position){
-        TrapezoidProfile.State targetState = wristProfile.calculate(
-            VirtualConstants.PERIOD, 
-            new TrapezoidProfile.State(inputs.wristAbsolutePosition, 0), 
-            new TrapezoidProfile.State(position.in(Rotations), 0)
-        );
+        // TrapezoidProfile.State targetState = wristProfile.calculate(
+        //     VirtualConstants.PERIOD, 
+        //     new TrapezoidProfile.State(inputs.wristAbsolutePosition, 0), 
+        //     new TrapezoidProfile.State(position.in(Rotations), 0)
+        // );
 
         this.setWristVoltage(
             Volts.of(
-                wristPID.calculate(targetState.position, position.in(Rotations))
-                + kGWrist
-                + wristFF.calculate(targetState.velocity)
+                wristPID.calculate(inputs.wristPosition, position.in(Rotations))
+                // + kGWrist
+                // + wristFF.calculate(targetState.velocity)
             )
         );
     }
@@ -265,15 +263,15 @@ public class CoralIOReal implements CoralIO{
     }
 
     @Override 
-    public void setClawPosition(boolean open){
-        if(open){
-            if (!clawSwitch.get()) { // ! see how they sauter it
-                this.setClawVoltage(Volts.of(-6));
-            } else {
-                this.setClawVoltage(Volts.of(-0.5));
+    public void setClawPosition(boolean open){ // 0 normally, 3.3 when switch on
+        if (open) { // open claw
+            if(inputs.clawSwitch < 2.5){ // if switch not on
+                this.setClawVoltage(Volts.of(-1));
+            }else{
+                this.setClawVoltage(Volts.of(1)); // ! idk if this actually does anything
             }
-        }else{
-            this.setClawVoltage(Volts.of(12));
+        } else { // close claw
+            this.setClawVoltage(Volts.of(1));
         }
     }
 
@@ -328,7 +326,7 @@ public class CoralIOReal implements CoralIO{
 
         inputs.clawVoltage = clawMotor.getAppliedOutput() * clawMotor.getBusVoltage();
         inputs.clawCurrent = clawMotor.getOutputCurrent();
-        inputs.clawSwitch = clawSwitch.get();
+        inputs.clawSwitch = clawSwitch.getPosition();
         inputs.clawTemperature = clawMotor.getMotorTemperature();
 
         this.inputs = inputs;

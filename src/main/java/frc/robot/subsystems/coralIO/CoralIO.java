@@ -33,7 +33,7 @@ public interface CoralIO {
         
         public double clawVoltage;
         public double clawCurrent;
-        public boolean clawSwitch;
+        public double clawSwitch;
         public double clawTemperature;
 
         @Override

@@ -18,7 +18,7 @@ public class Coral extends SubsystemBase {
     private final CoralIOInputs inputs = new CoralIOInputs();
 
     private Angle wristPosition = Rotations.of(0);
-    private boolean clawPosition = false;
+    private boolean clawPosition = true;
 
     private final SysIdRoutine elevatorSysIdRoutine;
     private final SysIdRoutine armSysIdRoutine;
@@ -59,8 +59,8 @@ public class Coral extends SubsystemBase {
 
         Logger.recordOutput("outputs/coral/troughSwitch", troughSwitch.get());
 
-        io.setWristPosition(wristPosition);
-        io.setClawPosition(clawPosition);
+        // io.setWristPosition(wristPosition);
+        // io.setClawPosition(clawPosition);
     }
 
     // ————— testing command factories ————— //
@@ -95,13 +95,14 @@ public class Coral extends SubsystemBase {
     
     // check if ir sensor beam is broken, close claw, then swing to L4
     public Command getIntakeCommand(){
-        if(!troughSwitch.get()){
+        if(troughSwitch.get()){
             return null;
         }
         return new InstantCommand(() -> setClawPosition(false))
         .andThen(
             new InstantCommand(() -> io.setElevatorPosition(CoralPositions.L4.elevatorPosition.getValue()))
             .alongWith(new InstantCommand(() -> io.setArmPosition(CoralPositions.L4.armPosition)))
+            .alongWith(new InstantCommand(() -> io.setWristPosition(CoralPositions.L4.wristPosition)))
         );
     }
 

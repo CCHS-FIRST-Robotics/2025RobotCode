@@ -4,18 +4,22 @@ import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Timer;
+
 import org.littletonrobotics.junction.Logger;
 
 public class Alga extends SubsystemBase {
     private final AlgaIO io;
     private final DigitalInput upSwitch;
     private final DigitalInput downSwitch;
+    private final Timer timer;
     private final AlgaIOInputsAutoLogged inputs = new AlgaIOInputsAutoLogged();
 
     public Alga(AlgaIO io, int upPort, int downPort) {
         this.io = io;
         upSwitch = new DigitalInput(upPort);
         downSwitch = new DigitalInput(downPort);
+        timer = new Timer();
     }
 
     @Override
@@ -50,7 +54,7 @@ public class Alga extends SubsystemBase {
     }
 
     public boolean algaOut() {
-        return inputs.algaCurrent < 3;
+        return inputs.algaCurrent < 7;
     }
 
     public Command getIntakeCommand() {
@@ -71,8 +75,12 @@ public class Alga extends SubsystemBase {
         io.setDrawbridgeVoltage(Volts.of(-1));
     }
 
-    public void stay(){
-        io.setDrawbridgeVoltage(Volts.of(0.125));
+    public void stayUp(){
+        io.setDrawbridgeVoltage(Volts.of(0.2));
+    }
+
+    public void stayDown(){
+        io.setDrawbridgeVoltage(Volts.of(0));
     }
 
     public boolean drawbridgeUp(){
@@ -83,11 +91,17 @@ public class Alga extends SubsystemBase {
         return !downSwitch.get();
     }
 
+    public Command getDownAtMatchStartCommand(){
+        return new InstantCommand(() -> timer.start())
+            .andThen(startEnd(this::up, this::stayUp).until(() -> timer.get() > 0.5)) // ! maybe 0.75
+            .andThen(this.getDownCommand());
+    }
+
     public Command getUpCommand() {
-        return startEnd(this::up, this::stay).until(this::drawbridgeUp);
+        return startEnd(this::up, this::stayUp).until(this::drawbridgeUp);
     }
 
     public Command getDownCommand() {
-        return startEnd(this::down, this::stay).until(this::drawbridgeDown);
+        return startEnd(this::down, this::stayDown).until(this::drawbridgeDown);
     }
 }

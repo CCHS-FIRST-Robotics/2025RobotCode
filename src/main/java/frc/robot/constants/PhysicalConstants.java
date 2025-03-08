@@ -27,8 +27,8 @@ public final class PhysicalConstants {
     public static final SwerveDriveKinematics KINEMATICS = new SwerveDriveKinematics(MODULE_TRANSLATIONS);
 
     // gears
-    public static final double DRIVE_AFTER_ENCODER_REDUCTION = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0);
-    public static final double TURN_AFTER_ENCODER_REDUCTION = 150.0 / 7.0;
+    public static final double DRIVE_AFTER_ENCODER_REDUCTION = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0); // 6.7460317460
+    public static final double TURN_AFTER_ENCODER_REDUCTION = 150.0 / 7.0; // 21.4285714286
     public static final double COUPLING_RATIO = 50.0 / 14.0;
 
     // specs
@@ -87,15 +87,14 @@ public final class PhysicalConstants {
     public static final Angle ELEVATOR_MIN_ROTATIONS = Rotations.of(0);
     public static final double ELEVATOR_GEAR_REDUCTION = 100;
 
-    // ! redo these
-    public static final Angle ARM_ENCODER_OFFSET = Rotations.of(-0.260986328125);
+    public static final Angle ARM_ENCODER_OFFSET = Rotations.of(0.09130859375);
     public static final Angle ARM_MAX_ROTATIONS = Rotations.of(0.582763671875); // 0.922119140625 when elevator fully up
     public static final Angle ARM_MIN_ROTATIONS = Rotations.of(0);
     public static final double ARM_GEAR_REDUCTION = 100;
 
-    public static final Angle WRIST_ENCODER_OFFSET = Rotations.of(0);
-    public static final Angle WRIST_MAX_ROTATIONS = Rotations.of(0);
-    public static final Angle WRIST_MIN_ROTATIONS = Rotations.of(0);
+    public static final Angle WRIST_ENCODER_OFFSET = Rotations.of(-0.4970703125);
+    public static final Angle WRIST_MAX_ROTATIONS = Rotations.of(0.193848);
+    public static final Angle WRIST_MIN_ROTATIONS = Rotations.of(-0.322998);
     public static final double WRIST_GEAR_REDUCTION = 48; 
 
     // ! get these
