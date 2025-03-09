@@ -12,14 +12,16 @@ public class Alga extends SubsystemBase {
     private final AlgaIO io;
     private final DigitalInput upSwitch;
     private final DigitalInput downSwitch;
-    private final Timer timer;
+    private final Timer algaTimer;
+    private final Timer drawbridgeTimer;
     private final AlgaIOInputsAutoLogged inputs = new AlgaIOInputsAutoLogged();
 
     public Alga(AlgaIO io, int upPort, int downPort) {
         this.io = io;
         upSwitch = new DigitalInput(upPort);
         downSwitch = new DigitalInput(downPort);
-        timer = new Timer();
+        algaTimer = new Timer();
+        drawbridgeTimer = new Timer();
     }
 
     @Override
@@ -34,15 +36,17 @@ public class Alga extends SubsystemBase {
     // ————— alga ————— //
 
     public void in() {
-        io.setAlgaVoltage(Volts.of(2));
+        algaTimer.start();
+        io.setAlgaVoltage(Volts.of(5.5));
     }
 
     public void hold() {
         io.setAlgaVoltage(Volts.of(0.4));
+        algaTimer.reset();
     }
 
     public void out() {
-        io.setAlgaVoltage(Volts.of(-4));
+        io.setAlgaVoltage(Volts.of(-12));
     }
     
     public void stop() {
@@ -50,11 +54,11 @@ public class Alga extends SubsystemBase {
     }
 
     public boolean algaIn() {
-        return inputs.algaCurrent > 30;
+        return inputs.algaCurrent > 30 && algaTimer.get() > 1;
     }
 
     public boolean algaOut() {
-        return inputs.algaCurrent < 7;
+        return inputs.algaCurrent < 15;
     }
 
     public Command getIntakeCommand() {
@@ -92,8 +96,8 @@ public class Alga extends SubsystemBase {
     }
 
     public Command getDownAtMatchStartCommand(){
-        return new InstantCommand(() -> timer.start())
-            .andThen(startEnd(this::up, this::stayUp).until(() -> timer.get() > 0.5)) // ! maybe 0.75
+        return new InstantCommand(() -> drawbridgeTimer.start())
+            .andThen(startEnd(this::up, this::stayUp).until(() -> drawbridgeTimer.get() > 0.5))
             .andThen(this.getDownCommand());
     }
 

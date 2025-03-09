@@ -1,7 +1,10 @@
 package frc.robot.utils;
 
+import static edu.wpi.first.units.Units.*;
+
 import choreo.auto.*;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.math.geometry.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.drive.*;
@@ -27,6 +30,11 @@ public class AutoRoutineGenerator {
 
         this.drive = drive;
         this.poseEstimator = poseEstimator;
+    }
+
+    public Command backUp() {
+        return new InstantCommand(() -> poseEstimator.resetPosition(new Pose2d()))
+        .andThen(new DriveWithPosition(drive, poseEstimator, new Pose2d(-2, 0, new Rotation2d())));
     }
 
     public AutoRoutine twoMeter() {

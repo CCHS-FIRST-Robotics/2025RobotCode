@@ -32,7 +32,8 @@ public class Drive extends SubsystemBase {
 
     // ————— charactarization ————— //
 
-    private Voltage characterizationVolts = Volts.of(0);
+    private Voltage[] characterizationVolts = {Volts.of(0), Volts.of(0), Volts.of(0), Volts.of(0)};
+    private Angle[] characterizationPositions = {Rotations.of(0), Rotations.of(0), Rotations.of(0), Rotations.of(0)};
     private final SysIdRoutine driveSysIdRoutine = new SysIdRoutine(
         new SysIdRoutine.Config(
             Volts.per(Second).of(1), // ramp rate
@@ -41,8 +42,11 @@ public class Drive extends SubsystemBase {
             (state) -> Logger.recordOutput("drive/sysIdState", state.toString()) // send the data to advantagekit
         ),
         new SysIdRoutine.Mechanism(
-            (volts) -> this.runCharacterization(volts), // characterization supplier
-            null, // no log consumer since advantagekit records the data
+            (volts) -> this.runCharacterization(
+                new Voltage[] {volts, volts, volts, volts}, 
+                new Angle[] {Rotations.of(0), Rotations.of(0), Rotations.of(0), Rotations.of(0)}
+            ), // characterization supplier
+            null, // no log consumer needed since advantagekit records the data
             this
         )
     );
@@ -52,9 +56,9 @@ public class Drive extends SubsystemBase {
     private Pose2d positionSetpoint = new Pose2d();
     private Twist2d twistSetpoint = new Twist2d();
     // manual
-    private final PIDController xController = new PIDController(2, 0, 0);
-    private final PIDController yController = new PIDController(2, 0, 0);
-    private final PIDController oController = new PIDController(2, 0, 0);
+    private final PIDController xController = new PIDController(3, 0, 0);
+    private final PIDController yController = new PIDController(3, 0, 0);
+    private final PIDController oController = new PIDController(3, 0, 0);
     // choreo
     // private final PIDController xController = new PIDController(50, 0, 0);
     // private final PIDController yController = new PIDController(50, 0, 0);
@@ -85,13 +89,13 @@ public class Drive extends SubsystemBase {
 
         // ————— odometry ————— //
 
+        updateModuleDeltas();
         // module states
         SwerveModuleState[] moduleStatesOutput = getModuleStates();
         Logger.recordOutput("outputs/drive/moduleStatesOutput", moduleStatesOutput);
         // chassisspeeds
         ChassisSpeeds speedsOutput = PhysicalConstants.KINEMATICS.toChassisSpeeds(moduleStatesOutput);
         Logger.recordOutput("outputs/drive/speedsOutput", speedsOutput);
-        updateModuleDeltas();
 
         // ————— driving ————— //
 
@@ -103,7 +107,7 @@ public class Drive extends SubsystemBase {
         // run modules 
         switch (controlMode) {
             case DISABLED:
-                // set all modules' voltage to 0
+                // set all module voltages to 0
                 for (Module module : modules) {
                     module.stop();
                 }
@@ -111,7 +115,7 @@ public class Drive extends SubsystemBase {
                 break;
             case CHARACTERIZING:
                 for (int i = 0; i < 4; i++) {
-                    modules[i].runCharacterization(characterizationVolts);
+                    modules[i].runCharacterization(characterizationVolts[i], characterizationPositions[i]);
                 }
                 Logger.recordOutput("outputs/drive/moduleStatesInput", new SwerveModuleState[] {});
                 break;
@@ -149,9 +153,10 @@ public class Drive extends SubsystemBase {
         controlMode = DRIVE_MODE.DISABLED;
     }
 
-    public void runCharacterization(Voltage volts){
+    public void runCharacterization(Voltage[] volts, Angle[] positions){
         controlMode = DRIVE_MODE.CHARACTERIZING;
         characterizationVolts = volts;
+        characterizationPositions = positions;
     }
 
     public void runPosition(Pose2d pose){

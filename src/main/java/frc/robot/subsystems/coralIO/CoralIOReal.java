@@ -2,6 +2,7 @@ package frc.robot.subsystems.coralIO;
 
 import static edu.wpi.first.units.Units.*;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix6.*;
 import com.ctre.phoenix6.configs.*;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
@@ -128,6 +129,7 @@ public class CoralIOReal implements CoralIO{
         elevatorMotionMagicConfig.MotionMagicJerk = 1;
         // misc
         elevatorConfig.MotorOutput.withInverted(InvertedValue.Clockwise_Positive);
+        elevatorConfig.CurrentLimits.StatorCurrentLimit = 30;
         elevatorMotor.getConfigurator().apply(elevatorConfig);
     
         // ————— arm ————— //
@@ -151,7 +153,9 @@ public class CoralIOReal implements CoralIO{
         armMotionMagicConfig.MotionMagicAcceleration = 1;
         armMotionMagicConfig.MotionMagicJerk = 1;
         // misc
-        armConfig.MotorOutput.withInverted(InvertedValue.Clockwise_Positive); // ! probably wrong
+        armConfig.MotorOutput.withInverted(InvertedValue.CounterClockwise_Positive);
+        armMotor.setNeutralMode(NeutralModeValue.Brake);
+        armConfig.CurrentLimits.StatorCurrentLimit = 30;
         armMotor.getConfigurator().apply(armConfig);
 
         // ————— wrist ————— //

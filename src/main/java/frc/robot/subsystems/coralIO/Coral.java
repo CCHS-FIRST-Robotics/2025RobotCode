@@ -60,7 +60,7 @@ public class Coral extends SubsystemBase {
         Logger.recordOutput("outputs/coral/troughSwitch", troughSwitch.get());
 
         // io.setWristPosition(wristPosition);
-        // io.setClawPosition(clawPosition);
+        io.setClawPosition(clawPosition);
     }
 
     // ————— testing command factories ————— //
@@ -69,12 +69,20 @@ public class Coral extends SubsystemBase {
         return new InstantCommand(() -> io.setElevatorPosition(angle));
     }
 
+    public Command getSetArmVoltageCommand(Voltage volts){
+        return new InstantCommand(() -> io.setArmVoltage(volts));
+    }
+
     public Command getSetArmCommand(Angle angle){
         return new InstantCommand(() -> io.setArmPosition(angle));
     }
 
     public void setWristPosition(Angle angle){
         wristPosition = angle;
+    }
+
+    public void setClawVoltage(Voltage volts){
+        io.setClawVoltage(volts);
     }
 
     public void setClawPosition(boolean open){

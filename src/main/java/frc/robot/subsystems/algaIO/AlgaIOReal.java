@@ -26,6 +26,7 @@ public class AlgaIOReal implements AlgaIO {
         algaMotor = new TalonFX(algaId);
         drawBridgeMotor = new TalonFX(drawbridgeId);
 
+        algaConfig.CurrentLimits.withStatorCurrentLimit(Amps.of(30));
         algaConfig.MotorOutput.withInverted(InvertedValue.Clockwise_Positive);
         algaMotor.getConfigurator().apply(algaConfig);
 

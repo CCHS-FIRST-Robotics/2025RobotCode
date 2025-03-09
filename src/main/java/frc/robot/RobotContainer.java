@@ -8,6 +8,7 @@ import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
+import edu.wpi.first.units.measure.*;
 import choreo.auto.AutoChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
@@ -157,6 +158,13 @@ public class RobotContainer {
             )
         );
 
+        controller1.x().whileTrue( // ! test this lol
+            new InstantCommand(() -> drive.runCharacterization(
+                new Voltage[] {Volts.of(0), Volts.of(0), Volts.of(0), Volts.of(0)}, 
+                new Angle[] {Rotations.of(0.125), Rotations.of(0.325), Rotations.of(0.125), Rotations.of(0.325)})
+            )
+        );
+
         // manual position control
         // controller1.y().whileTrue(Commands.run(() -> drive.runPosition(new Pose2d(3, 2.5, new Rotation2d(-Math.PI/2))), drive));
         // controller1.x().whileTrue(Commands.run(() -> drive.runPosition(new Pose2d(5, 0, new Rotation2d(Math.PI))), drive));
@@ -169,9 +177,9 @@ public class RobotContainer {
         // controller2.y().onTrue(coral.getSetElevatorCommand(Rotations.of(2.1875)));
         // controller2.a().onTrue(coral.getSetElevatorCommand(Rotations.of(0.5)));
 
-        // arm
-        controller2.x().onTrue(coral.getSetArmCommand(Rotations.of(0.2)));
-        controller2.b().onTrue(coral.getSetArmCommand(Rotations.of(0)));
+        // // arm
+        // controller2.x().onTrue(coral.getSetArmCommand(Rotations.of(0.3)));
+        // controller2.b().onTrue(coral.getSetArmCommand(Rotations.of(0)));
 
         // wrist
         // controller2.leftBumper().onTrue(new InstantCommand(() -> coral.setWristPosition(Rotations.of(1))));
@@ -189,14 +197,15 @@ public class RobotContainer {
 
         // ————— alga ————— // 
 
-        // controller1.y().onTrue(alga.getUpCommand());
-        // controller1.a().onTrue(alga.getDownCommand());
-        // controller1.x().onTrue(alga.getIntakeCommand());
-        // controller1.b().onTrue(alga.getOutputCommand());
-        // controller1.rightBumper().onTrue(alga.getDownAtMatchStartCommand());
+        // controller2.y().onTrue(alga.getUpCommand());
+        // controller2.a().onTrue(alga.getDownCommand());
+        // controller2.x().onTrue(alga.getIntakeCommand());
+        // controller2.b().onTrue(alga.getOutputCommand());
+        // controller2.rightBumper().onTrue(alga.getDownAtMatchStartCommand());
     }
 
     private void configureAutos(){
+        autoChooser.addCmd("Back Up", () -> autoGenerator.backUp());
         autoChooser.addRoutine("2Meter", () -> autoGenerator.twoMeter());
         autoChooser.addRoutine("2Coral", () -> autoGenerator.twoCoralChoreo());
 

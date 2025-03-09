@@ -30,9 +30,9 @@ public class Module {
         io.setDriveVoltage(Volts.of(0.0));
     }
 
-    public void runCharacterization(Voltage volts){
-        io.setTurnPosition(Rotations.of(0));
+    public void runCharacterization(Voltage volts, Angle position){
         io.setDriveVoltage(volts);
+        io.setTurnPosition(position);
     }
 
     public void runState(SwerveModuleState state) {
