@@ -270,12 +270,13 @@ public class CoralIOReal implements CoralIO{
     public void setClawPosition(boolean open){ // 0 normally, 3.3 when switch on
         if (open) { // open claw
             if(inputs.clawSwitch < 2.5){ // if switch not on
-                this.setClawVoltage(Volts.of(-1));
-            }else{
-                this.setClawVoltage(Volts.of(1)); // ! idk if this actually does anything
+                this.setClawVoltage(Volts.of(-4));
+                System.out.println("Running");
+            // }else{
+            //     this.setClawVoltage(Volts.of(1)); // ! idk if this actually does anything
             }
         } else { // close claw
-            this.setClawVoltage(Volts.of(1));
+            this.setClawVoltage(Volts.of(10));
         }
     }
 
