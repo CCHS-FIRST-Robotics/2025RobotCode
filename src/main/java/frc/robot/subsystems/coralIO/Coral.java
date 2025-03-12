@@ -81,6 +81,10 @@ public class Coral extends SubsystemBase {
         return new InstantCommand(() -> io.setArmPosition(angle));
     }
 
+    public void setWristVoltage(Voltage volts){
+        io.setWristVoltage(volts);
+    }
+
     public void setWristPosition(Angle angle){
         wristPosition = angle;
     }
