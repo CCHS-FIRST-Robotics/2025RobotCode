@@ -97,6 +97,12 @@ public class Coral extends SubsystemBase {
         clawPosition = open;
     }
 
+     public void applyvoltage(Voltage volts){
+        io.setArmVoltage(volts);
+    }
+
+
+
     // ————— final command factories ————— // 
 
     // open claw, then move the elevator and arm down while setting wrist position
