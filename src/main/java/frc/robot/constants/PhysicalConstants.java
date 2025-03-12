@@ -87,7 +87,7 @@ public final class PhysicalConstants {
     public static final Angle ELEVATOR_MIN_ROTATIONS = Rotations.of(0);
     public static final double ELEVATOR_GEAR_REDUCTION = 100;
 
-    public static final Angle ARM_ENCODER_OFFSET = Rotations.of(0.06591796875);
+    public static final Angle ARM_ENCODER_OFFSET = Rotations.of(0.060791015625);
     public static final Angle ARM_MAX_ROTATIONS = Rotations.of(0.582763671875); // 0.922119140625 when elevator fully up
     public static final Angle ARM_MIN_ROTATIONS = Rotations.of(0);
     public static final double ARM_GEAR_REDUCTION = 100;

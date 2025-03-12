@@ -2,6 +2,8 @@ package frc.robot.subsystems.coralIO;
 
 import static edu.wpi.first.units.Units.*;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix6.*;
 import com.ctre.phoenix6.configs.*;
@@ -16,6 +18,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import edu.wpi.first.math.controller.*;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.units.measure.*;
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.constants.*;
 
 public class CoralIOReal implements CoralIO{
@@ -31,7 +34,7 @@ public class CoralIOReal implements CoralIO{
     private final MotionMagicConfigs elevatorMotionMagicConfig = elevatorConfig.MotionMagic;
     private final MotionMagicVoltage elevatorMotionMagicVoltage = new MotionMagicVoltage(0);
 
-    private double kPElevator = 20; // ! sysid all gains
+    private double kPElevator = 20;
     private double kIElevator = 0;
     private double kDElevator = 0;
     private double kGElevator = 0;
@@ -46,7 +49,7 @@ public class CoralIOReal implements CoralIO{
     private final MotionMagicConfigs armMotionMagicConfig = armConfig.MotionMagic;
     private final MotionMagicVoltage armMotionMagicVoltage = new MotionMagicVoltage(0);
 
-    private double kPArm = 20; // ! sysid all gains
+    private double kPArm = 40;
     private double kIArm = 0;
     private double kDArm = 0;
     private double kGArm = 0.15;
@@ -61,7 +64,7 @@ public class CoralIOReal implements CoralIO{
     private final SimpleMotorFeedforward wristFF;
     private final TrapezoidProfile wristProfile;
 
-    private double kPWrist = 1; // ! sysid all gains
+    private double kPWrist = 1;
     private double kIWrist = 0;
     private double kDWrist = 0;
     private double kGWrist = 0;
@@ -71,6 +74,7 @@ public class CoralIOReal implements CoralIO{
 
     private final SparkMaxConfig clawConfig = new SparkMaxConfig();
     private final SparkAnalogSensor clawSwitch;
+    private final Timer clawTimer;
 
     private final StatusSignal<Voltage> voltageSignalElevator;
     private final StatusSignal<Current> currentSignalElevator;
@@ -179,8 +183,9 @@ public class CoralIOReal implements CoralIO{
 
         // ————— claw ————— //
 
-        // limit switch
+        // position control
         clawSwitch = clawMotor.getAnalog();
+        clawTimer = new Timer();
         // misc
         clawMotor.setCANTimeout(500);
         clawConfig.smartCurrentLimit(20);
@@ -264,18 +269,27 @@ public class CoralIOReal implements CoralIO{
     @Override
     public void setClawVoltage(Voltage volts){
         clawMotor.setVoltage(volts);
+        
+        Logger.recordOutput("hi", volts.in(Volts));
     }
 
     @Override 
     public void setClawPosition(boolean open){ // 0 normally, 3.3 when switch on
+        Logger.recordOutput("hi2", open);
         if (open) { // open claw
+            clawTimer.start();
             if(inputs.clawSwitch < 2.5){ // if switch not on
-                this.setClawVoltage(Volts.of(-1));
-            }else{
-                this.setClawVoltage(Volts.of(1)); // ! idk if this actually does anything
+                if (clawTimer.get() < 0.1) { // higher voltage at first
+                    this.setClawVoltage(Volts.of(-12));
+                } else { // lower voltage later
+                    this.setClawVoltage(Volts.of(-2));
+                }
+            } else { // if switch is on
+                this.setClawVoltage(Volts.of(0));
             }
         } else { // close claw
-            this.setClawVoltage(Volts.of(1));
+            this.setClawVoltage(Volts.of(4));
+            clawTimer.reset();
         }
     }
 

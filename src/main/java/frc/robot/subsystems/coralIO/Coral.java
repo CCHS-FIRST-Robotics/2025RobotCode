@@ -38,7 +38,7 @@ public class Coral extends SubsystemBase {
         armSysIdRoutine = sysIdRoutineFactory(
             "arm", 
             (volts) -> io.setArmVoltage(volts), 
-            Volts.per(Second).of(1), Volts.of(3), Seconds.of(5)
+            Volts.per(Second).of(0.25), Volts.of(0.5), Seconds.of(2)
         );
         wristSysIDRoutine = sysIdRoutineFactory(
             "wrist", 
@@ -60,10 +60,14 @@ public class Coral extends SubsystemBase {
         Logger.recordOutput("outputs/coral/troughSwitch", troughSwitch.get());
 
         // io.setWristPosition(wristPosition);
-        io.setClawPosition(clawPosition);
+        // io.setClawPosition(clawPosition);
     }
 
     // ————— testing command factories ————— //
+
+    public Command getSetElevatorVoltageCommand(Voltage volts){
+        return new InstantCommand(() -> io.setElevatorVoltage(volts));
+    }
 
     public Command getSetElevatorCommand(Angle angle){
         return new InstantCommand(() -> io.setElevatorPosition(angle));

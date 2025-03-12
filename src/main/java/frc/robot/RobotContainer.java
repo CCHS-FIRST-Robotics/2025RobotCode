@@ -158,6 +158,7 @@ public class RobotContainer {
             )
         );
 
+        // x-lock
         controller1.rightTrigger().whileTrue(
             Commands.run(() -> drive.runCharacterization(
                 new Voltage[] {Volts.of(0), Volts.of(0), Volts.of(0), Volts.of(0)}, 
@@ -165,33 +166,27 @@ public class RobotContainer {
             )
         );
 
-        // manual position control
-        // controller1.y().whileTrue(Commands.run(() -> drive.runPosition(new Pose2d(3, 2.5, new Rotation2d(-Math.PI/2))), drive));
-        // controller1.x().whileTrue(Commands.run(() -> drive.runPosition(new Pose2d(5, 0, new Rotation2d(Math.PI))), drive));
-        // controller1.a().whileTrue(Commands.run(() -> drive.runPosition(new Pose2d(1, 1, new Rotation2d())), drive));
-        // controller1.b().onTrue(new InstantCommand(() -> drive.resetPoseEstimator(new Pose2d(1, 1, new Rotation2d()))));
-
         // ————— coral ————— //
 
         // // elevator
-        // controller2.y().onTrue(coral.getSetElevatorCommand(Rotations.of(2.1875)));
-        // controller2.a().onTrue(coral.getSetElevatorCommand(Rotations.of(0.5)));
+        // controller2.y().onTrue(coral.getSetElevatorCommand(PhysicalConstants.ELEVATOR_MAX_ROTATIONS));
+        // controller2.a().onTrue(coral.getSetElevatorCommand(PhysicalConstants.ELEVATOR_MIN_ROTATIONS));
+        controller2.y().onTrue(coral.getSetElevatorVoltageCommand(Volts.of(0)));
 
-        // arm
-        // controller2.x().onTrue(coral.getSetArmCommand(Rotations.of(0.3)));
+        // // arm
+        // controller2.x().onTrue(coral.getSetArmVoltageCommand(Volts.of(0)));
         // controller2.b().onTrue(coral.getSetArmCommand(Rotations.of(0)));
-        // controller2.y().onTrue(coral.getSetArmCommand(Rotations.of(0.192138671875)));
-        // controller2.a().onTrue(coral.getSetArmCommand(Rotations.of(0.165771484375)));
+        // controller2.y().onTrue(coral.getSetArmCommand(Rotations.of(0.19775390624999997)));
+        // controller2.a().onTrue(coral.getSetArmCommand(Rotations.of(0.155029296875)));
 
-        // wrist
+        // // wrist
         // controller2.leftBumper().onTrue(new InstantCommand(() -> coral.setWristPosition(Rotations.of(1))));
         // controller2.rightBumper().onTrue(new InstantCommand(() -> coral.setWristPosition(Rotations.of(0))));
         
-        // claw
-        controller2.x().onTrue(new InstantCommand(() -> coral.setClawPosition(false)));
-        controller2.b().onTrue(new InstantCommand(() -> coral.setClawPosition(true))); // open
-        controller2.a().onTrue(new InstantCommand(() -> coral.setClawVoltage(Volts.of(0))));
-
+        // // claw
+        // controller2.x().onTrue(new InstantCommand(() -> coral.setClawPosition(false)));
+        // controller2.b().onTrue(new InstantCommand(() -> coral.setClawPosition(true)));
+        
         // controller2.x().whileTrue(coral.elevatorSysIdFull());
         // controller2.y().whileTrue(coral.armSysIdFull());
         // controller2.b().whileTrue(coral.wristSysIdFull());
