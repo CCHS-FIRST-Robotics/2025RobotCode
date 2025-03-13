@@ -6,10 +6,11 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.units.measure.*;
 import edu.wpi.first.math.geometry.*;
 import java.util.*;
-import java.util.AbstractMap.SimpleEntry;
 
 public final class PhysicalConstants {
+
     // ————— drive constants ————— //
+
     // kinematics
     public static final Mass ROBOT_WEIGHT = Pounds.of(99.2); // battery is 13.324lbs extra
     public static final Distance WHEEL_RADIUS = Inches.of(2);
@@ -42,7 +43,6 @@ public final class PhysicalConstants {
         / TRACK_CIRCUMFERENCE.in(Meters) // rotations per second of the robot
     ); // = 1.5944299280
     
-    // ! update these after sysid is done
     public static final LinearVelocity MAX_ALLOWED_LINEAR_SPEED = MetersPerSecond.of(4);
     public static final AngularVelocity MAX_ALLOWED_ANGULAR_SPEED = RotationsPerSecond.of(1);
 
@@ -52,6 +52,7 @@ public final class PhysicalConstants {
     );
 
     // ————— poseEstimator constants ————— //
+
     // ! I wonder what these are relative to
     // ! also, units
     public static final HashMap<Integer, Translation3d> APRILTAG_LOCATIONS = new HashMap<Integer, Translation3d>();
@@ -79,76 +80,25 @@ public final class PhysicalConstants {
         APRILTAG_LOCATIONS.put(21, new Translation3d(5.321, 4.026, 0.308));
         APRILTAG_LOCATIONS.put(22, new Translation3d(4.905, 3.306, 0.308));
     }
-    
 
     // ————— coral constants ————— //
+
     public static final Angle ELEVATOR_ENCODER_OFFSET = Rotations.of(0.27587890625);
     public static final Angle ELEVATOR_MAX_ROTATIONS = Rotations.of(4.123046875);
     public static final Angle ELEVATOR_MIN_ROTATIONS = Rotations.of(0);
     public static final double ELEVATOR_GEAR_REDUCTION = 100;
 
     public static final Angle ARM_ENCODER_OFFSET = Rotations.of(0.060791015625);
-    public static final Angle ARM_MAX_ROTATIONS = Rotations.of(0.582763671875); // 0.922119140625 when elevator fully up
+    public static final Angle ARM_MAX_ROTATIONS = Rotations.of(0.582763671875);
     public static final Angle ARM_MIN_ROTATIONS = Rotations.of(0);
     public static final double ARM_GEAR_REDUCTION = 100;
 
-    public static final Angle WRIST_ENCODER_OFFSET = Rotations.of(-0.4970703125);
-    public static final Angle WRIST_MAX_ROTATIONS = Rotations.of(0.193848);
-    public static final Angle WRIST_MIN_ROTATIONS = Rotations.of(-0.322998);
-    public static final double WRIST_GEAR_REDUCTION = 48; 
-
     // ! get these
     public static class CoralPositions{
-        public static final CoralPosition INTAKE = new CoralPosition(
-            Inches.of(0), // elevator height
-            Rotations.of(0), // elevator angle
-            Rotations.of(0), // arm angle
-            Rotations.of(0) // wrist angle
-        );
-    
-        public static final CoralPosition L1 = new CoralPosition(
-            Inches.of(18), 
-            Rotations.of(0),
-            Rotations.of(0),
-            Rotations.of(0)
-        ); 
-    
-        public static final CoralPosition L2 = new CoralPosition(
-            Inches.of(31.875), 
-            Rotations.of(0),
-            Rotations.of(0),
-            Rotations.of(0)
-        ); 
-    
-        public static final CoralPosition L3 = new CoralPosition(
-            Inches.of(47.625), 
-            Rotations.of(0),
-            Rotations.of(0),
-            Rotations.of(0)
-        ); 
-        
-        public static final CoralPosition L4 = new CoralPosition(
-            Inches.of(72), 
-            Rotations.of(0),
-            Rotations.of(0),
-            Rotations.of(0)
-        );
-
-        public static class CoralPosition{ // coralIO position struct
-            public final SimpleEntry<Distance, Angle> elevatorPosition;
-            public final Angle armPosition;
-            public final Angle wristPosition;
-    
-            public CoralPosition(
-                Distance elevatorDistance, 
-                Angle elevatorAngle, 
-                Angle armAngle, 
-                Angle wristPosition
-            ){
-                this.elevatorPosition = new SimpleEntry<Distance, Angle>(elevatorDistance, elevatorAngle);
-                this.armPosition = armAngle;
-                this.wristPosition = wristPosition;
-            }
-        }
+        public static final Angle[] INTAKE = {Rotations.of(0), Rotations.of(0)};
+        public static final Angle[] L1 = {Rotations.of(0), Rotations.of(0)};
+        public static final Angle[] L2 = {Rotations.of(0), Rotations.of(0)};
+        public static final Angle[] L3 = {Rotations.of(0), Rotations.of(0)};
+        public static final Angle[] L4 = {Rotations.of(0), Rotations.of(0)};
     }
 }

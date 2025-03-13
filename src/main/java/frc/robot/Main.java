@@ -8,35 +8,16 @@ import edu.wpi.first.wpilibj.RobotBase;
 
 /**
  * to do: 
- * 
- * get check wrist and claw position control
- * get coral reef positions
- * 
- * run sysid on drivebase (wait until trough and claw are on)
  *  daily at home: 
  * 
- * ! update coral position struct
- * ! check stuff when changing alliances
- * 
- * ! sysid on coral
- * 
- * ! at some point decide on max allowed velocity
- * 
  * — daily at robotics: 
- * —— coral: 
- * *—— wrist position control
- * *—— sysid
- * —— drive: 
- * *—— choreo autos
- * —— alga: 
- * ——— test drawbridge
+ * —— get coral reef positions
  * 
  *  longer term: 
  *   zero the drive modules correctly
  *   figure out how to maintain wheel position
  *   write coralIOSim
  *   pid tunable constants
- *   controllers for the year
  *   fused cancoder instead of remote
  *   see if double gyro works
  */

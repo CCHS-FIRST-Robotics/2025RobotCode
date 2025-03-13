@@ -11,22 +11,23 @@ import edu.wpi.first.wpilibj2.command.button.*;
 import edu.wpi.first.units.measure.*;
 import choreo.auto.AutoChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.commands.*;
+import frc.robot.constants.*;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.poseEstimator.*;
 import frc.robot.subsystems.coralIO.*;
-import frc.robot.subsystems.algaIO.*;
 import frc.robot.utils.*;
-import frc.robot.constants.*;
 
 public class RobotContainer {
-    private final CommandXboxController controller1 = new CommandXboxController(VirtualConstants.CONTROLLER_PORT_1);
-    private final CommandXboxController controller2 = new CommandXboxController(VirtualConstants.CONTROLLER_PORT_2);
+    private final CommandXboxController xboxController1 = new CommandXboxController(VirtualConstants.CONTROLLER_PORT_1);
+    private final CommandXboxController xboxController2 = new CommandXboxController(VirtualConstants.CONTROLLER_PORT_2);
+    private final CommandGenericHID coralController = new CommandGenericHID(VirtualConstants.CONTROLLER_PORT_3);
 
     private final Drive drive;
     private final PoseEstimator poseEstimator;
     private final Coral coral;
-    private final Alga alga;
 
     private final AutoRoutineGenerator autoGenerator;
     private final AutoChooser autoChooser;
@@ -52,21 +53,9 @@ public class RobotContainer {
                         VirtualConstants.ELEVATOR_ID, 
                         VirtualConstants.ELEVATOR_CANCODER_ID, 
                         VirtualConstants.ARM_ID, 
-                        VirtualConstants.ARM_CANCODER_ID, 
-                        VirtualConstants.WRIST_ID, 
-                        VirtualConstants.WRIST_CANCODER_ID, 
-                        VirtualConstants.CLAW_ID
+                        VirtualConstants.ARM_CANCODER_ID
                     ), 
                     VirtualConstants.TROUGH_SWITCH_PORT
-                );
-
-                alga = new Alga(
-                    new AlgaIOReal(
-                        VirtualConstants.ALGA_ID_1,
-                        VirtualConstants.ALGA_ID_2
-                    ), 
-                    VirtualConstants.ALGA_UP_SWITCH_PORT,
-                    VirtualConstants.ALGA_DOWN_SWITCH_PORT
                 );
                 break;
             case SIM:
@@ -86,12 +75,6 @@ public class RobotContainer {
                 coral = new Coral(
                     new CoralIOSim(), 
                     VirtualConstants.TROUGH_SWITCH_PORT
-                );
-
-                alga = new Alga(
-                    new AlgaIOSim(), 
-                    VirtualConstants.ALGA_UP_SWITCH_PORT,
-                    VirtualConstants.ALGA_DOWN_SWITCH_PORT
                 );
                 break;
             default:
@@ -113,21 +96,9 @@ public class RobotContainer {
                         VirtualConstants.ELEVATOR_ID, 
                         VirtualConstants.ELEVATOR_CANCODER_ID, 
                         VirtualConstants.ARM_ID, 
-                        VirtualConstants.ARM_CANCODER_ID, 
-                        VirtualConstants.WRIST_ID, 
-                        VirtualConstants.WRIST_CANCODER_ID, 
-                        VirtualConstants.CLAW_ID
+                        VirtualConstants.ARM_CANCODER_ID
                     ), 
                     VirtualConstants.TROUGH_SWITCH_PORT
-                );
-
-                alga = new Alga(
-                    new AlgaIOReal(
-                        VirtualConstants.ALGA_ID_1,
-                        VirtualConstants.ALGA_ID_2
-                    ), 
-                    VirtualConstants.ALGA_UP_SWITCH_PORT,
-                    VirtualConstants.ALGA_DOWN_SWITCH_PORT
                 );
                 break;
         }
@@ -152,14 +123,14 @@ public class RobotContainer {
             new DriveWithVelocity(
                 drive,
                 poseEstimator,
-                () -> -controller1.getLeftY(), // xboxcontroller is flipped
-                () -> controller1.getLeftX(), 
-                () -> controller1.getRightX()
+                () -> -xboxController1.getLeftY(), // xboxcontroller is flipped
+                () -> xboxController1.getLeftX(), 
+                () -> xboxController1.getRightX()
             )
         );
 
         // x-lock
-        controller1.rightTrigger().whileTrue(
+        xboxController1.rightTrigger().whileTrue(
             Commands.run(() -> drive.runCharacterization(
                 new Voltage[] {Volts.of(0), Volts.of(0), Volts.of(0), Volts.of(0)}, 
                 new Angle[] {Rotations.of(0.125), Rotations.of(0.325), Rotations.of(0.325), Rotations.of(0.125)})
@@ -169,36 +140,47 @@ public class RobotContainer {
         // ————— coral ————— //
 
         // // elevator
-        // controller2.y().onTrue(coral.getSetElevatorCommand(PhysicalConstants.ELEVATOR_MAX_ROTATIONS));
-        // controller2.a().onTrue(coral.getSetElevatorCommand(PhysicalConstants.ELEVATOR_MIN_ROTATIONS));
-        controller2.y().onTrue(coral.getSetElevatorVoltageCommand(Volts.of(0)));
+        // xboxController2.y().onTrue(coral.getSetElevatorCommand(PhysicalConstants.ELEVATOR_MAX_ROTATIONS));
+        // xboxController2.a().onTrue(coral.getSetElevatorCommand(PhysicalConstants.ELEVATOR_MIN_ROTATIONS));
 
         // // arm
-        // controller2.x().onTrue(coral.getSetArmVoltageCommand(Volts.of(0)));
-        // controller2.b().onTrue(coral.getSetArmCommand(Rotations.of(0)));
-        // controller2.y().onTrue(coral.getSetArmCommand(Rotations.of(0.19775390624999997)));
-        // controller2.a().onTrue(coral.getSetArmCommand(Rotations.of(0.155029296875)));
+        // xboxController2.x().onTrue(coral.getSetArmCommand(PhysicalConstants.ARM_MAX_ROTATIONS));
+        // xboxController2.b().onTrue(coral.getSetArmCommand(PhysicalConstants.ARM_MIN_ROTATIONS));
 
-        // // wrist
-        // controller2.leftBumper().onTrue(new InstantCommand(() -> coral.setWristPosition(Rotations.of(1))));
-        // controller2.rightBumper().onTrue(new InstantCommand(() -> coral.setWristPosition(Rotations.of(0))));
-        
-        // // claw
-        // controller2.x().onTrue(new InstantCommand(() -> coral.setClawPosition(false)));
-        // controller2.b().onTrue(new InstantCommand(() -> coral.setClawPosition(true)));
-        
-        // controller2.x().whileTrue(coral.elevatorSysIdFull());
-        // controller2.y().whileTrue(coral.armSysIdFull());
-        // controller2.b().whileTrue(coral.wristSysIdFull());
-        // controller2.a().whileTrue(coral.clawSysIdFull());
+        // // reef positions
+        // if ((DriverStation.getAlliance().isPresent() ? DriverStation.getAlliance().get() : Alliance.Red).equals(Alliance.Red)) {
+            // coralController.button(1 ).onTrue(new DriveWithApriltag(drive, poseEstimator, 6 , true));
+            // coralController.button(2 ).onTrue(new DriveWithApriltag(drive, poseEstimator, 6 , false));
+            // coralController.button(3 ).onTrue(new DriveWithApriltag(drive, poseEstimator, 7 , true));
+            // coralController.button(6 ).onTrue(new DriveWithApriltag(drive, poseEstimator, 7 , false));
+            // coralController.button(7 ).onTrue(new DriveWithApriltag(drive, poseEstimator, 8 , true));
+            // coralController.button(8 ).onTrue(new DriveWithApriltag(drive, poseEstimator, 8 , false));
+            // coralController.button(11).onTrue(new DriveWithApriltag(drive, poseEstimator, 9 , true));
+            // coralController.button(13).onTrue(new DriveWithApriltag(drive, poseEstimator, 9 , false));
+            // coralController.button(15).onTrue(new DriveWithApriltag(drive, poseEstimator, 10, true));
+            // coralController.button(12).onTrue(new DriveWithApriltag(drive, poseEstimator, 10, false));
+            // coralController.button(14).onTrue(new DriveWithApriltag(drive, poseEstimator, 11, true));
+            // coralController.button(16).onTrue(new DriveWithApriltag(drive, poseEstimator, 11, false));
+        // } else {
+            // coralController.button(1 ).onTrue(new DriveWithApriltag(drive, poseEstimator, 17, true));
+            // coralController.button(2 ).onTrue(new DriveWithApriltag(drive, poseEstimator, 17, false));
+            // coralController.button(3 ).onTrue(new DriveWithApriltag(drive, poseEstimator, 18, true));
+            // coralController.button(6 ).onTrue(new DriveWithApriltag(drive, poseEstimator, 18, false));
+            // coralController.button(7 ).onTrue(new DriveWithApriltag(drive, poseEstimator, 19, true));
+            // coralController.button(8 ).onTrue(new DriveWithApriltag(drive, poseEstimator, 19, false));
+            // coralController.button(11).onTrue(new DriveWithApriltag(drive, poseEstimator, 20, true));
+            // coralController.button(13).onTrue(new DriveWithApriltag(drive, poseEstimator, 20, false));
+            // coralController.button(15).onTrue(new DriveWithApriltag(drive, poseEstimator, 21, true));
+            // coralController.button(12).onTrue(new DriveWithApriltag(drive, poseEstimator, 21, false));
+            // coralController.button(14).onTrue(new DriveWithApriltag(drive, poseEstimator, 22, true));
+            // coralController.button(16).onTrue(new DriveWithApriltag(drive, poseEstimator, 22, false));
+        // }
 
-        // ————— alga ————— // 
-
-        // controller2.y().onTrue(alga.getUpCommand());
-        // controller2.a().onTrue(alga.getDownCommand());
-        // controller2.x().onTrue(alga.getIntakeCommand());
-        // controller2.b().onTrue(alga.getOutputCommand());
-        // controller2.rightBumper().onTrue(alga.getDownAtMatchStartCommand());
+        // // stalk positions
+        // coralController.button(4 ).onTrue(coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.INTAKE));
+        // coralController.button(5 ).onTrue(coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.L2));
+        // coralController.button(9 ).onTrue(coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.L3));
+        // coralController.button(10).onTrue(coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.L4));
     }
 
     private void configureAutos(){

@@ -17,15 +17,6 @@ public class CoralIOSim implements CoralIO{
     @Override
     public void setArmPosition(Angle position){}
 
-    // @Override
-    // public void setWristVoltage(Voltage volts){}
-
-    // @Override
-    // public void setWristPosition(Angle position){}
-
-    @Override
-    public void setClawVoltage(Voltage volts){}
-
     @Override
     public void updateInputs(CoralIOInputs inputs) {}
 }
