@@ -2,16 +2,15 @@ package frc.robot.subsystems.poseEstimator;
 
 import static edu.wpi.first.units.Units.*;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.wpilibj.Timer;
 import java.util.HashMap;
-import org.littletonrobotics.junction.Logger;
-import frc.robot.subsystems.drive.*;
-import frc.robot.constants.*;
+import frc.robot.subsystems.drive.Drive;
+import frc.robot.constants.PhysicalConstants;
 
 public class PoseEstimator extends SubsystemBase {
     private final GyroIO gyroIO;
@@ -62,13 +61,13 @@ public class PoseEstimator extends SubsystemBase {
         fieldPosition = fieldPosition.exp(PhysicalConstants.KINEMATICS.toTwist2d(drive.getModuleDeltas()));
         odometryEstimator.updateWithTime(
             Timer.getFPGATimestamp(),
-            getYaw(),
+            getRawYaw(),
             drive.getModulePositions()
         );
         visionEstimate = updateVisionEstimate();
         combinedEstimator.updateWithTime(
             Timer.getFPGATimestamp(),
-            getYaw(),
+            getRawYaw(),
             drive.getModulePositions()
         );
         combinedEstimator.addVisionMeasurement(visionEstimate, Timer.getFPGATimestamp()); 
@@ -79,7 +78,7 @@ public class PoseEstimator extends SubsystemBase {
         Logger.recordOutput("outputs/poseEstimator/combinedPoseEstimate", combinedEstimator.getEstimatedPosition());
     }
 
-    public Pose2d updateVisionEstimate(){
+    public Pose2d updateVisionEstimate(){ // ! 
         int tagCount = 0;
         double accumulatedX = 0;
         double accumulatedY = 0;
@@ -87,12 +86,13 @@ public class PoseEstimator extends SubsystemBase {
             int id = (int) cameraInputs.tagArray[i];
             double distance = cameraInputs.tagArray[i+3]; // meters
             double tagAngle = cameraInputs.tagArray[i+1]; // radians
-            double robotAngle = getYaw().getRadians();
+            double robotAngle = getRawYaw().getRadians();
+
             double angleToTag = tagAngle - robotAngle;
             double xDistance = Math.sin(angleToTag) * distance;
             double yDistance = Math.cos(angleToTag) * distance;
-            // ! adjust for jetson offset
-            tagMap.put(id, new double[] {xDistance, yDistance, angleToTag});
+
+            tagMap.put(id, new double[] {xDistance, yDistance, angleToTag}); // ! adjust for jetson offset
 
             Translation3d taglocation = PhysicalConstants.APRILTAG_LOCATIONS.get(id);
             accumulatedX += taglocation.getX() - xDistance;
@@ -101,11 +101,11 @@ public class PoseEstimator extends SubsystemBase {
             tagCount++;
         }
 
-        if (tagCount > 0) {
-            return new Pose2d(accumulatedX / tagCount, accumulatedY / tagCount, getYaw());
+        if (tagCount == 0) {
+            return new Pose2d();
         }
 
-        return new Pose2d();
+        return new Pose2d(accumulatedX / tagCount, accumulatedY / tagCount, getRawYaw()).plus(PhysicalConstants.JETSON_OFFSET);
     }
 
     public void resetPosition(Pose2d pose){
@@ -113,32 +113,27 @@ public class PoseEstimator extends SubsystemBase {
         combinedEstimator.resetPosition(pose.getRotation(), drive.getModulePositions(), pose);
     }
 
-    public Pose2d getOdometryPose(){
+    // @SuppressWarnings("unused")
+    private Pose2d getOdometryPose(){
         return odometryEstimator.getEstimatedPosition();
     }
 
-    public Pose2d getVisionPose(){
+    @SuppressWarnings("unused")
+    private Pose2d getVisionPose(){
         return visionEstimate;
     }
 
-    public Pose2d getCombinedPose(){
+    @SuppressWarnings("unused")
+    private Pose2d getCombinedPose(){
         return combinedEstimator.getEstimatedPosition();
     }
 
-    public Rotation2d getYaw(){
+    public Pose2d getPose(){
+        return getOdometryPose();
+    }
+
+    public Rotation2d getRawYaw(){
         return gyroInputs.connected ? new Rotation2d(Rotations.of(gyroInputs.yaw).in(Radians)) : fieldPosition.getRotation();
-    }
-
-    public Rotation2d getYawWithAllianceRotation() {
-        return getYaw().plus(
-            DriverStation.getAlliance().get() == Alliance.Red ? 
-            new Rotation2d(0) : 
-            new Rotation2d(Math.PI)
-        );
-    }
-
-    public double[] getTagArray(){
-        return cameraInputs.tagArray;
     }
 
     public double[] getSpecificTag(int id){

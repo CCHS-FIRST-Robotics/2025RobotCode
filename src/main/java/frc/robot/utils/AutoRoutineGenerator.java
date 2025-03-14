@@ -19,7 +19,7 @@ public class AutoRoutineGenerator {
         PoseEstimator poseEstimator
     ) {
         autoFactory = new AutoFactory(
-            poseEstimator::getOdometryPose,
+            poseEstimator::getPose,
             poseEstimator::resetPosition,
             drive::runAutoPosition,
             DriverStation.getAlliance().isPresent() ? DriverStation.getAlliance().get() == DriverStation.Alliance.Blue : false,

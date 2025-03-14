@@ -121,16 +121,16 @@ public class Drive extends SubsystemBase {
                 break;
             case POSITION:
                 // get PIDs
-                double xPID = xController.calculate(poseEstimator.getOdometryPose().getX(), positionSetpoint.getX());
-                double yPID = yController.calculate(poseEstimator.getOdometryPose().getY(), positionSetpoint.getY());
-                double oPID = oController.calculate(poseEstimator.getOdometryPose().getRotation().getRadians(), positionSetpoint.getRotation().getRadians());
+                double xPID = xController.calculate(poseEstimator.getPose().getX(), positionSetpoint.getX());
+                double yPID = yController.calculate(poseEstimator.getPose().getY(), positionSetpoint.getY());
+                double oPID = oController.calculate(poseEstimator.getPose().getRotation().getRadians(), positionSetpoint.getRotation().getRadians());
 
                 // create chassisspeeds object with FOC
                 speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                     twistSetpoint.dx + xPID,
                     twistSetpoint.dy + yPID,
                     twistSetpoint.dtheta + oPID,
-                    poseEstimator.getYaw() // not getYawWithAllianceRotation(), because the setpoint is already generated with it in mind
+                    poseEstimator.getRawYaw() // not getYawWithAllianceRotation(), because the setpoint is already generated with it in mind
                 );
                 // fallthrough to VELOCITY case; no break statement needed
             case VELOCITY: 

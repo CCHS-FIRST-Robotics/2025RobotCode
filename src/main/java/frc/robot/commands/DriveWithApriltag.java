@@ -37,9 +37,9 @@ public class DriveWithApriltag extends Command {
             return; 
         }
 
-        double xError = targetTagArray[0];
-        double yError = targetTagArray[1] + 0.1651 * (left ? -1 : 1);
-        double oError = targetTagArray[2];
+        double xError = targetTagArray[0]; // meters
+        double yError = targetTagArray[1] + 0.1651 * (left ? -1 : 1); // meters // ! idk if this logic is correct
+        double oError = targetTagArray[2]; // radians
 
         ChassisSpeeds speeds = new ChassisSpeeds( // ! add the rampdown later
             Math.abs(xError) > 0.1 ? 0.25 : 0,

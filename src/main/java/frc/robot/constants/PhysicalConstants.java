@@ -42,19 +42,16 @@ public final class PhysicalConstants {
         MAX_POSSIBLE_LINEAR_SPEED.in(MetersPerSecond) // meters per second of the robot
         / TRACK_CIRCUMFERENCE.in(Meters) // rotations per second of the robot
     ); // = 1.5944299280
-    
     public static final LinearVelocity MAX_ALLOWED_LINEAR_SPEED = MetersPerSecond.of(4);
     public static final AngularVelocity MAX_ALLOWED_ANGULAR_SPEED = RotationsPerSecond.of(1);
-
     public static final LinearAcceleration MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(20);
-    public static final AngularAcceleration MAX_ALLOWED_ANGULAR_ACCEL = RotationsPerSecond.per(Seconds).of(20 
-        / TRACK_CIRCUMFERENCE.in(Meters)
-    );
+    public static final AngularAcceleration MAX_ALLOWED_ANGULAR_ACCEL = RotationsPerSecond.per(Seconds).of(20 / TRACK_CIRCUMFERENCE.in(Meters));
 
     // ————— poseEstimator constants ————— //
 
     // ! I wonder what these are relative to
     // ! also, units
+    public static final Transform2d JETSON_OFFSET = new Transform2d(0, 0, new Rotation2d()); // ! 
     public static final HashMap<Integer, Translation3d> APRILTAG_LOCATIONS = new HashMap<Integer, Translation3d>();
     static{
         APRILTAG_LOCATIONS.put(1, new Translation3d(16.697, 0.655, 1.486));
@@ -93,8 +90,7 @@ public final class PhysicalConstants {
     public static final Angle ARM_MIN_ROTATIONS = Rotations.of(0);
     public static final double ARM_GEAR_REDUCTION = 100;
 
-    // ! get these
-    public static class CoralPositions{
+    public static class CoralPositions{ // ! 
         public static final Angle[] INTAKE = {Rotations.of(0), Rotations.of(0)};
         public static final Angle[] L1 = {Rotations.of(0), Rotations.of(0)};
         public static final Angle[] L2 = {Rotations.of(0), Rotations.of(0)};
