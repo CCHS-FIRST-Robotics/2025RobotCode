@@ -139,41 +139,47 @@ public class RobotContainer {
 
         // ————— coral ————— //
 
-        // // elevator
-        // xboxController2.y().onTrue(coral.getSetElevatorCommand(PhysicalConstants.ELEVATOR_MAX_ROTATIONS));
-        // xboxController2.a().onTrue(coral.getSetElevatorCommand(PhysicalConstants.ELEVATOR_MIN_ROTATIONS));
+        // elevator
+        xboxController2.y().onTrue(coral.getSetElevatorCommand(PhysicalConstants.ELEVATOR_MAX_ROTATIONS));
+        xboxController2.a().onTrue(coral.getSetElevatorCommand(PhysicalConstants.ELEVATOR_MIN_ROTATIONS));
 
-        // // arm
-        // xboxController2.x().onTrue(coral.getSetArmCommand(PhysicalConstants.ARM_MAX_ROTATIONS));
-        // xboxController2.b().onTrue(coral.getSetArmCommand(PhysicalConstants.ARM_MIN_ROTATIONS));
+        // xboxController2.y().onTrue(coral.getSetElevatorVoltageCommand(Volts.of(1)));
+        // xboxController2.a().onTrue(coral.getSetElevatorVoltageCommand(Volts.of(-1)));
+
+        // arm
+        xboxController2.x().onTrue(coral.getSetArmCommand(PhysicalConstants.ARM_MAX_ROTATIONS));
+        xboxController2.b().onTrue(coral.getSetArmCommand(PhysicalConstants.ARM_MIN_ROTATIONS));
+
+        // xboxController2.x().onTrue(coral.getSetArmVoltageCommand(Volts.of(1)));
+        // xboxController2.b().onTrue(coral.getSetArmVoltageCommand(Volts.of(-1)));
 
         // // reef positions
         // if ((DriverStation.getAlliance().isPresent() ? DriverStation.getAlliance().get() : Alliance.Red).equals(Alliance.Red)) {
-            // coralController.button(1 ).onTrue(new DriveWithApriltag(drive, poseEstimator, 6 , true));
-            // coralController.button(2 ).onTrue(new DriveWithApriltag(drive, poseEstimator, 6 , false));
-            // coralController.button(3 ).onTrue(new DriveWithApriltag(drive, poseEstimator, 7 , true));
-            // coralController.button(6 ).onTrue(new DriveWithApriltag(drive, poseEstimator, 7 , false));
-            // coralController.button(7 ).onTrue(new DriveWithApriltag(drive, poseEstimator, 8 , true));
-            // coralController.button(8 ).onTrue(new DriveWithApriltag(drive, poseEstimator, 8 , false));
-            // coralController.button(11).onTrue(new DriveWithApriltag(drive, poseEstimator, 9 , true));
-            // coralController.button(13).onTrue(new DriveWithApriltag(drive, poseEstimator, 9 , false));
-            // coralController.button(15).onTrue(new DriveWithApriltag(drive, poseEstimator, 10, true));
-            // coralController.button(12).onTrue(new DriveWithApriltag(drive, poseEstimator, 10, false));
-            // coralController.button(14).onTrue(new DriveWithApriltag(drive, poseEstimator, 11, true));
-            // coralController.button(16).onTrue(new DriveWithApriltag(drive, poseEstimator, 11, false));
+        //     coralController.button(1 ).onTrue(new DriveWithApriltag(drive, poseEstimator, 6 , true));
+        //     coralController.button(2 ).onTrue(new DriveWithApriltag(drive, poseEstimator, 6 , false));
+        //     coralController.button(3 ).onTrue(new DriveWithApriltag(drive, poseEstimator, 7 , true));
+        //     coralController.button(6 ).onTrue(new DriveWithApriltag(drive, poseEstimator, 7 , false));
+        //     coralController.button(7 ).onTrue(new DriveWithApriltag(drive, poseEstimator, 8 , true));
+        //     coralController.button(8 ).onTrue(new DriveWithApriltag(drive, poseEstimator, 8 , false));
+        //     coralController.button(11).onTrue(new DriveWithApriltag(drive, poseEstimator, 9 , true));
+        //     coralController.button(13).onTrue(new DriveWithApriltag(drive, poseEstimator, 9 , false));
+        //     coralController.button(15).onTrue(new DriveWithApriltag(drive, poseEstimator, 10, true));
+        //     coralController.button(12).onTrue(new DriveWithApriltag(drive, poseEstimator, 10, false));
+        //     coralController.button(14).onTrue(new DriveWithApriltag(drive, poseEstimator, 11, true));
+        //     coralController.button(16).onTrue(new DriveWithApriltag(drive, poseEstimator, 11, false));
         // } else {
-            // coralController.button(1 ).onTrue(new DriveWithApriltag(drive, poseEstimator, 17, true));
-            // coralController.button(2 ).onTrue(new DriveWithApriltag(drive, poseEstimator, 17, false));
-            // coralController.button(3 ).onTrue(new DriveWithApriltag(drive, poseEstimator, 18, true));
-            // coralController.button(6 ).onTrue(new DriveWithApriltag(drive, poseEstimator, 18, false));
-            // coralController.button(7 ).onTrue(new DriveWithApriltag(drive, poseEstimator, 19, true));
-            // coralController.button(8 ).onTrue(new DriveWithApriltag(drive, poseEstimator, 19, false));
-            // coralController.button(11).onTrue(new DriveWithApriltag(drive, poseEstimator, 20, true));
-            // coralController.button(13).onTrue(new DriveWithApriltag(drive, poseEstimator, 20, false));
-            // coralController.button(15).onTrue(new DriveWithApriltag(drive, poseEstimator, 21, true));
-            // coralController.button(12).onTrue(new DriveWithApriltag(drive, poseEstimator, 21, false));
-            // coralController.button(14).onTrue(new DriveWithApriltag(drive, poseEstimator, 22, true));
-            // coralController.button(16).onTrue(new DriveWithApriltag(drive, poseEstimator, 22, false));
+        //     coralController.button(1 ).onTrue(new DriveWithApriltag(drive, poseEstimator, 17, true));
+        //     coralController.button(2 ).onTrue(new DriveWithApriltag(drive, poseEstimator, 17, false));
+        //     coralController.button(3 ).onTrue(new DriveWithApriltag(drive, poseEstimator, 18, true));
+        //     coralController.button(6 ).onTrue(new DriveWithApriltag(drive, poseEstimator, 18, false));
+        //     coralController.button(7 ).onTrue(new DriveWithApriltag(drive, poseEstimator, 19, true));
+        //     coralController.button(8 ).onTrue(new DriveWithApriltag(drive, poseEstimator, 19, false));
+        //     coralController.button(11).onTrue(new DriveWithApriltag(drive, poseEstimator, 20, true));
+        //     coralController.button(13).onTrue(new DriveWithApriltag(drive, poseEstimator, 20, false));
+        //     coralController.button(15).onTrue(new DriveWithApriltag(drive, poseEstimator, 21, true));
+        //     coralController.button(12).onTrue(new DriveWithApriltag(drive, poseEstimator, 21, false));
+        //     coralController.button(14).onTrue(new DriveWithApriltag(drive, poseEstimator, 22, true));
+        //     coralController.button(16).onTrue(new DriveWithApriltag(drive, poseEstimator, 22, false));
         // }
 
         // // stalk positions

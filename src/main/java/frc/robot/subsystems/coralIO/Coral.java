@@ -10,7 +10,6 @@ import edu.wpi.first.units.*;
 import edu.wpi.first.units.measure.*;
 import org.littletonrobotics.junction.Logger;
 import frc.robot.subsystems.coralIO.CoralIO.CoralIOInputs;
-import frc.robot.constants.PhysicalConstants.*;
 
 public class Coral extends SubsystemBase {
     private final CoralIO io;
@@ -88,21 +87,11 @@ public class Coral extends SubsystemBase {
     //     );
     // }
 
-    // move elevator and arm, set wrist position
+    // move elevator and arm
     public Command getSetCoralPositionCommand(Angle[] position){
         return new InstantCommand(() -> io.setElevatorPosition(position[0]))
         .alongWith(new InstantCommand(() -> io.setArmPosition(position[1])));
     }
-
-    // // press button, open the claw
-    // public Command getOuttakeCommand(){
-    //     return  new InstantCommand(() -> setClawPosition(true));
-    // }
-
-    // // press button, set arm to some position, drive forward, move it to some other position
-    // public Command getDealgifyComamand(){
-    //     return null; // ! code this at some point
-    // }
 
     // ————— sysid command factories ————— //
 
