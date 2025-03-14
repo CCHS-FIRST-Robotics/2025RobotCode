@@ -76,7 +76,7 @@ public class Coral extends SubsystemBase {
     
     // // check if ir sensor beam is broken, close claw, then swing to L4
     // public Command getIntakeCommand(){
-    //     if(troughSensor.get()){
+    //     if (troughSensor.get()) {
     //         return null;
     //     }
     //     return new InstantCommand(() -> setClawPosition(false))

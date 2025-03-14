@@ -101,7 +101,7 @@ public class PoseEstimator extends SubsystemBase {
             tagCount++;
         }
 
-        if(tagCount > 0){
+        if (tagCount > 0) {
             return new Pose2d(accumulatedX / tagCount, accumulatedY / tagCount, getYaw());
         }
 

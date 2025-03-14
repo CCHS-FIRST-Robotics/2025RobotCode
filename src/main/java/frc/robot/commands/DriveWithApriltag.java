@@ -32,7 +32,7 @@ public class DriveWithApriltag extends Command {
     public void execute() {
         targetTagArray = poseEstimator.getSpecificTag(targetTagId);
 
-        if(targetTagArray == null){
+        if (targetTagArray == null) {
             isFinished = true;
             return; 
         }
