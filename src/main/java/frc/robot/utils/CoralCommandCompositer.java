@@ -25,19 +25,24 @@ public class CoralCommandCompositer {
     }
 
     public Command prepIntake() {
-        return coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.INTAKE_1);
+        return coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.INTAKE_PREP);
     }
 
     public Command runIntake() { 
-        if(coral.troughSensesCoral()){
-            return null;
-        }
+        // if(coral.troughSensesCoral()){ // ! 
+        //     return null;
+        // }
 
-        return coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.INTAKE_2);
+        return coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.INTAKE_RUN);
     }
 
     public Command prepL1() {
         return coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.L1);
+    }
+
+    public Command prepL1WithWait() {
+        return coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.L1)
+        .andThen(coral.getWaitUntilCoralInPositionCommand());
     }
 
     public Command runL1() {
@@ -48,6 +53,11 @@ public class CoralCommandCompositer {
         return coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.L2);
     }
 
+    public Command prepL2WithWait() {
+        return coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.L2)
+        .andThen(coral.getWaitUntilCoralInPositionCommand());
+    }
+    
     public Command runL2() {
         return coral.getLowerArmWithVoltageCommand();
     }
@@ -56,16 +66,26 @@ public class CoralCommandCompositer {
         return coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.L3);
     }
 
+    public Command prepL3WithWait() {
+        return coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.L3)
+        .andThen(coral.getWaitUntilCoralInPositionCommand());
+    }
+
     public Command runL3() {
         return coral.getLowerArmWithVoltageCommand();
     }
 
     public Command prepL4() {
-        return coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.L4_1);
+        return coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.L4_PREP);
+    }
+
+    public Command prepL4WithWait() {
+        return coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.L4_PREP)
+        .andThen(coral.getWaitUntilCoralInPositionCommand());
     }
 
     public Command runL4() {
-        return coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.L4_2)
+        return coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.L4_RUN)
         .andThen(new DriveWithPosition(drive, poseEstimator, new Transform2d(0, -1, new Rotation2d()))) // ! this is not backwards from the robot
         .andThen(coral.getLowerArmWithVoltageCommand());
     }

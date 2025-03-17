@@ -80,23 +80,23 @@ public final class PhysicalConstants {
 
     // ————— coral constants ————— //
 
-    public static final Angle ELEVATOR_ENCODER_OFFSET = Rotations.of(0.287109375);
-    public static final Angle ELEVATOR_MAX_ROTATIONS = Rotations.of(4.123046875); // ! remeasure this
+    public static final Angle ELEVATOR_ENCODER_OFFSET = Rotations.of(0.466796875);
+    public static final Angle ELEVATOR_MAX_ROTATIONS = Rotations.of(3.6831054687499996); // ! remeasure this
     public static final Angle ELEVATOR_MIN_ROTATIONS = Rotations.of(0);
     public static final double ELEVATOR_GEAR_REDUCTION = 100;
 
-    public static final Angle ARM_ENCODER_OFFSET = Rotations.of(-0.4033203125);
+    public static final Angle ARM_ENCODER_OFFSET = Rotations.of(0.405029296875);
     public static final Angle ARM_MAX_ROTATIONS = Rotations.of(0.582763671875); // ! remeasure this
-    public static final Angle ARM_MIN_ROTATIONS = Rotations.of(0); // ! rezero at horizontal probably
+    public static final Angle ARM_MIN_ROTATIONS = Rotations.of(0);
     public static final double ARM_GEAR_REDUCTION = 100;
 
     public static class CoralPositions { // elevator rotations, arm rotations
-        public static final Angle[] INTAKE_1 = {Rotations.of(1), Rotations.of(0)}; // !
-        public static final Angle[] INTAKE_2 = {Rotations.of(0), Rotations.of(0)}; // !
+        public static final Angle[] INTAKE_PREP = {Rotations.of(1), Rotations.of(-0.2131816406)}; // -0.211
+        public static final Angle[] INTAKE_RUN = {Rotations.of(0.195556640625), Rotations.of(-0.2131816406)};
         public static final Angle[] L1 = {Rotations.of(0), Rotations.of(0)};
-        public static final Angle[] L2 = {Rotations.of(0), Rotations.of(0)}; // !
-        public static final Angle[] L3 = {Rotations.of(0), Rotations.of(0.2958984375)}; // ! 
-        public static final Angle[] L4_1 = {Rotations.of(3.248046875), Rotations.of(0.3583984375)}; // !
-        public static final Angle[] L4_2 = {Rotations.of(3.248046875), Rotations.of(0.272705078125)}; // !
+        public static final Angle[] L2 = {Rotations.of(0), Rotations.of(0.014892578125)}; // ! have to drive backwards while outtaking
+        public static final Angle[] L3 = {Rotations.of(1), Rotations.of(0.070556640625)};
+        public static final Angle[] L4_PREP = {Rotations.of(3.6831054687499996), Rotations.of(0.13830078125)}; // !
+        public static final Angle[] L4_RUN = {Rotations.of(3.6831054687499996), Rotations.of(0.0673828125)}; // !
     }
 }

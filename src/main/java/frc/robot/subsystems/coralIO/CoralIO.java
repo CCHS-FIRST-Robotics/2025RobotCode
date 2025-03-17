@@ -74,6 +74,8 @@ public interface CoralIO {
 
     public default void setArmPosition(Angle position) {}
 
+    // public default void setArmPIDPosition(double position) {}
+
     public default boolean armAtSetpoint() {
         return false;
     }

@@ -139,10 +139,12 @@ public class RobotContainer {
         // ————— coral ————— //
 
         // a test with lack of untils //!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        xboxController2.x().onTrue(
-            coral.getSetElevatorCommand(Rotations.of(1.5))
-            .andThen(coral.getSetElevatorCommand(Rotations.of(1)))
-        );
+        // xboxController2.x().onTrue(
+        //     coral.getSetElevatorCommand(Rotations.of(1.5))
+        //     .andThen(coral.getSetElevatorCommand(Rotations.of(1)))
+        // );
+
+        xboxController2.x().whileTrue(coral.getLowerArmWithVoltageCommand());
 
         // // reef positions
         // if ((DriverStation.getAlliance().isPresent() ? DriverStation.getAlliance().get() : Alliance.Red).equals(Alliance.Red)) {
@@ -177,17 +179,17 @@ public class RobotContainer {
         coralController.button(4).onTrue(coralCommandCompositer.prepIntake());
         coralController.button(5).onTrue(coralCommandCompositer.runIntake());
         coralController.button(9).onTrue(coralCommandCompositer.prepL2());
-        coralController.button(10).onTrue(coralCommandCompositer.runL2());
+        // coralController.button(10).onTrue(coralCommandCompositer.runL2());
         coralController.button(17).onTrue(coralCommandCompositer.prepL3());
-        coralController.button(18).onTrue(coralCommandCompositer.runL3());
+        // coralController.button(18).onTrue(coralCommandCompositer.runL3());
         coralController.button(19).onTrue(coralCommandCompositer.prepL4());
-        coralController.button(20).onTrue(coralCommandCompositer.runL4());
+        // coralController.button(20).onTrue(coralCommandCompositer.runL4());
 
-        // emergency stop
-        coralController.button(21).onTrue(
-            coral.getSetElevatorVoltageCommand(Volts.of(0))
-            .andThen(coral.getSetArmVoltageCommand(Volts.of(0)))
-        );
+        // // emergency stop
+        // coralController.button(21).onTrue(
+        //     coral.getSetElevatorVoltageCommand(Volts.of(0))
+        //     .andThen(coral.getSetArmVoltageCommand(Volts.of(0)))
+        // );
     }
 
     private void configureAutos(){
@@ -199,6 +201,6 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand(){
-        return autoChooser.selectedCommand(); // 2.5
+        return autoChooser.selectedCommand();
     }
 }
