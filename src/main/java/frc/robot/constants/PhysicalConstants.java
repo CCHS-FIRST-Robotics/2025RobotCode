@@ -91,12 +91,12 @@ public final class PhysicalConstants {
     public static final double ARM_GEAR_REDUCTION = 100;
 
     public static class CoralPositions { // elevator rotations, arm rotations
-        public static final Angle[] INTAKE_1 = {Rotations.of(0), Rotations.of(0)}; // up before intake // !
-        public static final Angle[] INTAKE_2 = {Rotations.of(0), Rotations.of(0)}; // down to intake // !
+        public static final Angle[] INTAKE_1 = {Rotations.of(1), Rotations.of(0)}; // !
+        public static final Angle[] INTAKE_2 = {Rotations.of(0), Rotations.of(0)}; // !
         public static final Angle[] L1 = {Rotations.of(0), Rotations.of(0)};
         public static final Angle[] L2 = {Rotations.of(0), Rotations.of(0)}; // !
-        public static final Angle[] L3 = {Rotations.of(0), Rotations.of(0.2958984375)}; // done
-        public static final Angle[] L4_1 = {Rotations.of(3.248046875), Rotations.of(0.3583984375)}; // done
-        public static final Angle[] L4_2 = {Rotations.of(3.248046875), Rotations.of(0.272705078125)}; // done
+        public static final Angle[] L3 = {Rotations.of(0), Rotations.of(0.2958984375)}; // ! 
+        public static final Angle[] L4_1 = {Rotations.of(3.248046875), Rotations.of(0.3583984375)}; // !
+        public static final Angle[] L4_2 = {Rotations.of(3.248046875), Rotations.of(0.272705078125)}; // !
     }
 }

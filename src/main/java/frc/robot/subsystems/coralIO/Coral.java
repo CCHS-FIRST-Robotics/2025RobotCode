@@ -15,7 +15,7 @@ import frc.robot.subsystems.coralIO.CoralIO.CoralIOInputs;
 
 public class Coral extends SubsystemBase {
     private final CoralIO io;
-    private final DigitalInput troughSensor; // ! might become an ir sensor
+    private final DigitalInput troughSensor;
     private final CoralIOInputs inputs = new CoralIOInputs();
 
     private final SysIdRoutine elevatorSysIdRoutine;
@@ -71,10 +71,16 @@ public class Coral extends SubsystemBase {
         .alongWith(new InstantCommand(() -> io.setArmPosition(position[1])));
     }
 
+    public Command getWaitUntilCoralInPositionCommand() {
+        return Commands.waitUntil(
+            () -> (io.elevatorAtSetpoint() && io.armAtSetpoint())
+        );
+    }
+
     public Command getLowerArmWithVoltageCommand() {
         return new InstantCommand(() -> io.setArmVoltage(Volts.of(0.25)))
-        .until(() -> (inputs.armAbsolutePosition <= 0))
-        .andThen(this.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.INTAKE_2));
+        .andThen(Commands.waitUntil(() -> (inputs.armAbsolutePosition <= 0)))
+        .andThen(this.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.INTAKE_1)); // ! prolly something else realistically
     }
 
     public boolean troughSensesCoral() {

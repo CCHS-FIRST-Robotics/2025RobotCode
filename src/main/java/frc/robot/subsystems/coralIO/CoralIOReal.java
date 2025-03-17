@@ -151,6 +151,11 @@ public class CoralIOReal implements CoralIO{
         elevatorMotor.setControl(elevatorMotionMagicVoltage.withPosition(position).withSlot(0));
     }
 
+    @Override
+    public boolean elevatorAtSetpoint() {
+        return elevatorMotor.getClosedLoopError().getValue() < 0.05;
+    }
+
     // ————— arm ————— //
 
     @Override
@@ -161,6 +166,11 @@ public class CoralIOReal implements CoralIO{
     @Override
     public void setArmPosition(Angle position) {
         armMotor.setControl(armMotionMagicVoltage.withPosition(position).withSlot(0));
+    }
+
+    @Override
+    public boolean armAtSetpoint() {
+        return armMotor.getClosedLoopError().getValue() < 0.05;
     }
 
     // ————— logging ————— //

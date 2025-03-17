@@ -39,7 +39,7 @@ import edu.wpi.first.wpilibj.RobotBase;
  *     to intake coral, drive with choreo / position, then drivewithapriltag and wait for ir sensor
  *  
  * /   requirements: 
- *      global pose estimation with apriltags
+ *      global pose estimation with apriltags   
  *      drivewithapriltag homing
  *      setting coral position
  *      trough ir sensor
@@ -51,6 +51,15 @@ import edu.wpi.first.wpilibj.RobotBase;
  * /   requirements: 
  *      drivewithapriltag homing
  *      setting coral position
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * Set position_1 // ~ one button press
+ * wait until coral position is there
+ * then they can do drivewithapriltag and place // ~ another button press
  */
 
 public final class Main {

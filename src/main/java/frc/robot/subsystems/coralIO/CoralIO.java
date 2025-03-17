@@ -66,9 +66,17 @@ public interface CoralIO {
 
     public default void setElevatorPosition(Angle position) {}
 
+    public default boolean elevatorAtSetpoint() {
+        return false;
+    }
+
     public default void setArmVoltage(Voltage volts) {}
 
     public default void setArmPosition(Angle position) {}
+
+    public default boolean armAtSetpoint() {
+        return false;
+    }
     
     public default void updateInputs(CoralIOInputs inputs) {}
 }

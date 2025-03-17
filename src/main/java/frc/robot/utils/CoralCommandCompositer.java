@@ -24,33 +24,49 @@ public class CoralCommandCompositer {
         this.coral = coral;
     }
 
-    public Command intake() {
+    public Command prepIntake() {
+        return coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.INTAKE_1);
+    }
+
+    public Command runIntake() { 
         if(coral.troughSensesCoral()){
             return null;
         }
 
-        return coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.INTAKE_1)
-        .andThen(coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.INTAKE_2));
+        return coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.INTAKE_2);
     }
 
-    public Command L1() {
-        return coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.L1)
+    public Command prepL1() {
+        return coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.L1);
+    }
+
+    public Command runL1() {
+        return coral.getLowerArmWithVoltageCommand();
+    }
+
+    public Command prepL2() {
+        return coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.L2);
+    }
+
+    public Command runL2() {
+        return coral.getLowerArmWithVoltageCommand();
+    }
+
+    public Command prepL3() {
+        return coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.L3);
+    }
+
+    public Command runL3() {
+        return coral.getLowerArmWithVoltageCommand();
+    }
+
+    public Command prepL4() {
+        return coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.L4_1);
+    }
+
+    public Command runL4() {
+        return coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.L4_2)
+        .andThen(new DriveWithPosition(drive, poseEstimator, new Transform2d(0, -1, new Rotation2d()))) // ! this is not backwards from the robot
         .andThen(coral.getLowerArmWithVoltageCommand());
-    }
-
-    public Command L2() {
-        return coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.L2)
-        .andThen(coral.getLowerArmWithVoltageCommand());
-    }
-
-    public Command L3() {
-        return coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.L3)
-        .andThen(coral.getLowerArmWithVoltageCommand());
-    }
-
-    public Command L4() {
-        return coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.L4_1)
-        .andThen(coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.L4_2))
-        .andThen(new DriveWithPosition(drive, poseEstimator, new Transform2d(0, -1, new Rotation2d()))); // ! this is not backwards from the robot
     }
 }
