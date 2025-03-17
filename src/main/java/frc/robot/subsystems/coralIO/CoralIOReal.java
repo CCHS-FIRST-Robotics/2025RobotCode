@@ -142,24 +142,24 @@ public class CoralIOReal implements CoralIO{
     // ————— elevator ————— //
 
     @Override
-    public void setElevatorVoltage(Voltage volts){
+    public void setElevatorVoltage(Voltage volts) {
         elevatorMotor.setVoltage(volts.in(Volts));
     }
 
     @Override
-    public void setElevatorPosition(Angle position){
+    public void setElevatorPosition(Angle position) {
         elevatorMotor.setControl(elevatorMotionMagicVoltage.withPosition(position).withSlot(0));
     }
 
     // ————— arm ————— //
 
     @Override
-    public void setArmVoltage(Voltage volts){
+    public void setArmVoltage(Voltage volts) {
         armMotor.setVoltage(volts.in(Volts));
     }
 
     @Override
-    public void setArmPosition(Angle position){
+    public void setArmPosition(Angle position) {
         armMotor.setControl(armMotionMagicVoltage.withPosition(position).withSlot(0));
     }
 

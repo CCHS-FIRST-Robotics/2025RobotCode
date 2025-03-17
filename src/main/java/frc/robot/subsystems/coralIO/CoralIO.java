@@ -62,13 +62,13 @@ public interface CoralIO {
         }
     }
 
-    public default void setElevatorVoltage(Voltage volts){}
+    public default void setElevatorVoltage(Voltage volts) {}
 
-    public default void setElevatorPosition(Angle position){}
+    public default void setElevatorPosition(Angle position) {}
 
-    public default void setArmVoltage(Voltage volts){}
+    public default void setArmVoltage(Voltage volts) {}
 
-    public default void setArmPosition(Angle position){}
+    public default void setArmPosition(Angle position) {}
     
     public default void updateInputs(CoralIOInputs inputs) {}
 }

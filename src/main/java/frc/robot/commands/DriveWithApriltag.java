@@ -59,7 +59,7 @@ public class DriveWithApriltag extends Command {
     }
 
     @Override
-    public boolean isFinished(){
+    public boolean isFinished() {
         return isFinished;
     }
 

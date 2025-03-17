@@ -27,7 +27,11 @@ public class PoseEstimator extends SubsystemBase {
 
     private final Drive drive;
 
-    public PoseEstimator(GyroIO gyroIO, CameraIO cameraIO, Drive drive){
+    public PoseEstimator(
+        GyroIO gyroIO, 
+        CameraIO cameraIO, 
+        Drive drive
+    ) {
         this.gyroIO = gyroIO;
         this.cameraIO = cameraIO;
 
@@ -48,7 +52,7 @@ public class PoseEstimator extends SubsystemBase {
     }
 
     @Override
-    public void periodic(){
+    public void periodic() {
         // gyro
         gyroIO.updateInputs(gyroInputs);
         Logger.processInputs("poseEstimator/gyro", gyroInputs);
@@ -78,7 +82,7 @@ public class PoseEstimator extends SubsystemBase {
         Logger.recordOutput("outputs/poseEstimator/combinedPoseEstimate", combinedEstimator.getEstimatedPosition());
     }
 
-    public Pose2d updateVisionEstimate(){ // ! 
+    public Pose2d updateVisionEstimate() { // ! 
         int tagCount = 0;
         double accumulatedX = 0;
         double accumulatedY = 0;
@@ -108,35 +112,35 @@ public class PoseEstimator extends SubsystemBase {
         return new Pose2d(accumulatedX / tagCount, accumulatedY / tagCount, getRawYaw()).plus(PhysicalConstants.JETSON_OFFSET);
     }
 
-    public void resetPosition(Pose2d pose){
+    public void resetPosition(Pose2d pose) {
         odometryEstimator.resetPosition(pose.getRotation(), drive.getModulePositions(), pose);
         combinedEstimator.resetPosition(pose.getRotation(), drive.getModulePositions(), pose);
     }
 
     // @SuppressWarnings("unused")
-    private Pose2d getOdometryPose(){
+    private Pose2d getOdometryPose() {
         return odometryEstimator.getEstimatedPosition();
     }
 
     @SuppressWarnings("unused")
-    private Pose2d getVisionPose(){
+    private Pose2d getVisionPose() {
         return visionEstimate;
     }
 
     @SuppressWarnings("unused")
-    private Pose2d getCombinedPose(){
+    private Pose2d getCombinedPose() {
         return combinedEstimator.getEstimatedPosition();
     }
 
-    public Pose2d getPose(){
+    public Pose2d getPose() {
         return getOdometryPose();
     }
 
-    public Rotation2d getRawYaw(){
+    public Rotation2d getRawYaw() {
         return gyroInputs.connected ? new Rotation2d(Rotations.of(gyroInputs.yaw).in(Radians)) : fieldPosition.getRotation();
     }
 
-    public double[] getSpecificTag(int id){
+    public double[] getSpecificTag(int id) {
         return tagMap.get(id);
     }
 }

@@ -153,19 +153,19 @@ public class Drive extends SubsystemBase {
         controlMode = DRIVE_MODE.DISABLED;
     }
 
-    public void runCharacterization(Voltage[] volts, Angle[] positions){
+    public void runCharacterization(Voltage[] volts, Angle[] positions) {
         controlMode = DRIVE_MODE.CHARACTERIZING;
         characterizationVolts = volts;
         characterizationPositions = positions;
     }
 
-    public void runPosition(Pose2d pose){
+    public void runPosition(Pose2d pose) {
         controlMode = DRIVE_MODE.POSITION;
         positionSetpoint = pose;
         twistSetpoint = new Twist2d();
     }
 
-    public void runAutoPosition(SwerveSample sample){
+    public void runAutoPosition(SwerveSample sample) {
         controlMode = DRIVE_MODE.POSITION;
         positionSetpoint = sample.getPose();
         twistSetpoint = sample.getChassisSpeeds().toTwist2d(0.02);
@@ -178,7 +178,7 @@ public class Drive extends SubsystemBase {
 
     // ————— functions for sysid ————— // 
 
-    public Command sysIdFull(){
+    public Command sysIdFull() {
         return driveSysIdRoutine.quasistatic(SysIdRoutine.Direction.kForward)
             .andThen(driveSysIdRoutine.quasistatic(SysIdRoutine.Direction.kReverse))
             .andThen(driveSysIdRoutine.dynamic(SysIdRoutine.Direction.kForward))
@@ -187,7 +187,7 @@ public class Drive extends SubsystemBase {
 
     // ————— functions for odometry ————— //
 
-    public void setPoseEstimator(PoseEstimator poseEstimator){
+    public void setPoseEstimator(PoseEstimator poseEstimator) {
         this.poseEstimator = poseEstimator;
     }
     

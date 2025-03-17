@@ -48,36 +48,36 @@ public class Coral extends SubsystemBase {
 
     // ————— testing command factories ————— //
 
-    public Command getSetElevatorVoltageCommand(Voltage volts){
+    public Command getSetElevatorVoltageCommand(Voltage volts) {
         return new InstantCommand(() -> io.setElevatorVoltage(volts));
     }
 
-    public Command getSetElevatorCommand(Angle angle){
+    public Command getSetElevatorCommand(Angle angle) {
         return new InstantCommand(() -> io.setElevatorPosition(angle));
     }
 
-    public Command getSetArmVoltageCommand(Voltage volts){
+    public Command getSetArmVoltageCommand(Voltage volts) {
         return new InstantCommand(() -> io.setArmVoltage(volts));
     }
 
-    public Command getSetArmCommand(Angle angle){
+    public Command getSetArmCommand(Angle angle) {
         return new InstantCommand(() -> io.setArmPosition(angle));
     }
 
     // ————— final command factories ————— // 
 
-    public Command getSetCoralPositionCommand(Angle[] position){
+    public Command getSetCoralPositionCommand(Angle[] position) {
         return new InstantCommand(() -> io.setElevatorPosition(position[0]))
         .alongWith(new InstantCommand(() -> io.setArmPosition(position[1])));
     }
 
-    public Command getLowerArmWithVoltageCommand(){
+    public Command getLowerArmWithVoltageCommand() {
         return new InstantCommand(() -> io.setArmVoltage(Volts.of(0.25)))
         .until(() -> (inputs.armAbsolutePosition <= 0))
         .andThen(this.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.INTAKE_2));
     }
 
-    public boolean troughSensesCoral(){
+    public boolean troughSensesCoral() {
         return troughSensor.get(); // ! depends on how they wire it
     }
 
@@ -89,7 +89,7 @@ public class Coral extends SubsystemBase {
         Velocity<VoltageUnit> rampRate,
         Voltage stepVoltage,
         Time timeOut
-     ){
+     ) {
         return new SysIdRoutine(
             new SysIdRoutine.Config(
                 rampRate, 
@@ -105,14 +105,14 @@ public class Coral extends SubsystemBase {
         );
     }
 
-    public Command elevatorSysIdFull(){
+    public Command elevatorSysIdFull() {
         return elevatorSysIdRoutine.quasistatic(SysIdRoutine.Direction.kForward)
             .andThen(elevatorSysIdRoutine.quasistatic(SysIdRoutine.Direction.kReverse))
             .andThen(elevatorSysIdRoutine.dynamic(SysIdRoutine.Direction.kForward))
             .andThen(elevatorSysIdRoutine.dynamic(SysIdRoutine.Direction.kReverse));
     }
 
-    public Command armSysIdFull(){
+    public Command armSysIdFull() {
         return armSysIdRoutine.quasistatic(SysIdRoutine.Direction.kForward)
             .andThen(armSysIdRoutine.quasistatic(SysIdRoutine.Direction.kReverse))
             .andThen(armSysIdRoutine.dynamic(SysIdRoutine.Direction.kForward))

@@ -4,7 +4,7 @@ import org.littletonrobotics.junction.AutoLog;
 
 public interface CameraIO {
     @AutoLog
-    public static class CameraIOInputs{
+    public static class CameraIOInputs {
         public double[] tagArray = new double[0];
     }
 

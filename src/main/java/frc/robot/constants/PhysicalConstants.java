@@ -53,7 +53,7 @@ public final class PhysicalConstants {
     // ! also, units
     public static final Transform2d JETSON_OFFSET = new Transform2d(0, 0, new Rotation2d()); // ! 
     public static final HashMap<Integer, Translation3d> APRILTAG_LOCATIONS = new HashMap<Integer, Translation3d>();
-    static{
+    static {
         APRILTAG_LOCATIONS.put(1, new Translation3d(16.697, 0.655, 1.486));
         APRILTAG_LOCATIONS.put(2, new Translation3d(16.697, 7.396, 1.486));
         APRILTAG_LOCATIONS.put(3, new Translation3d(11.561, 8.056, 1.302));
@@ -90,11 +90,11 @@ public final class PhysicalConstants {
     public static final Angle ARM_MIN_ROTATIONS = Rotations.of(0); // ! rezero at horizontal probably
     public static final double ARM_GEAR_REDUCTION = 100;
 
-    public static class CoralPositions{ // elevator rotations, arm rotations
-        public static final Angle[] INTAKE_1 = {Rotations.of(0), Rotations.of(0)}; // up before intake // ! get this
-        public static final Angle[] INTAKE_2 = {Rotations.of(0), Rotations.of(0)}; // down to intake // ! get this
+    public static class CoralPositions { // elevator rotations, arm rotations
+        public static final Angle[] INTAKE_1 = {Rotations.of(0), Rotations.of(0)}; // up before intake // !
+        public static final Angle[] INTAKE_2 = {Rotations.of(0), Rotations.of(0)}; // down to intake // !
         public static final Angle[] L1 = {Rotations.of(0), Rotations.of(0)};
-        public static final Angle[] L2 = {Rotations.of(0), Rotations.of(0)}; // ! get this
+        public static final Angle[] L2 = {Rotations.of(0), Rotations.of(0)}; // !
         public static final Angle[] L3 = {Rotations.of(0), Rotations.of(0.2958984375)}; // done
         public static final Angle[] L4_1 = {Rotations.of(3.248046875), Rotations.of(0.3583984375)}; // done
         public static final Angle[] L4_2 = {Rotations.of(3.248046875), Rotations.of(0.272705078125)}; // done

@@ -30,7 +30,7 @@ public class Module {
         io.setDriveVoltage(Volts.of(0.0));
     }
 
-    public void runCharacterization(Voltage volts, Angle position){
+    public void runCharacterization(Voltage volts, Angle position) {
         io.setDriveVoltage(volts);
         io.setTurnPosition(position);
     }
@@ -55,7 +55,7 @@ public class Module {
         return new Rotation2d(Rotations.of(inputs.turnPosition).in(Radians));
     }
 
-    public SwerveModuleState getState(){
+    public SwerveModuleState getState() {
         return new SwerveModuleState(getVelocity(), getAngle());
     }
 }

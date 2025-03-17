@@ -106,7 +106,7 @@ public class DriveWithVelocity extends Command {
         return Math.pow(Math.abs(input), exponent) * Math.signum(input);
     }
 
-    public double clampVelocity(double velocity, double prevVelocity, double maxAcceleration){
+    public double clampVelocity(double velocity, double prevVelocity, double maxAcceleration) {
         return MathUtil.clamp(velocity, prevVelocity - maxAcceleration, prevVelocity + maxAcceleration);
     }
 }

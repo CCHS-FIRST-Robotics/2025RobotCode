@@ -22,7 +22,7 @@ public class DriveWithPosition extends Command {
         this.targetPose = targetPose;
     }
 
-    public DriveWithPosition( // ! could work
+    public DriveWithPosition(
         Drive drive,
         PoseEstimator poseEstimator,
         Transform2d targetTransform
@@ -40,7 +40,7 @@ public class DriveWithPosition extends Command {
     }
 
     @Override
-    public boolean isFinished(){
+    public boolean isFinished() {
         Pose2d robotPose = poseEstimator.getPose();
         return Math.abs(robotPose.getX() - targetPose.getX()) < 0.05
             && Math.abs(robotPose.getY() - targetPose.getY()) < 0.05

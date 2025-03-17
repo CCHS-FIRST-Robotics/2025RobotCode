@@ -24,7 +24,7 @@ public class CoralCommandCompositer {
         this.coral = coral;
     }
 
-    public Command intake(){
+    public Command intake() {
         if(coral.troughSensesCoral()){
             return null;
         }
@@ -33,22 +33,22 @@ public class CoralCommandCompositer {
         .andThen(coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.INTAKE_2));
     }
 
-    public Command L1(){
+    public Command L1() {
         return coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.L1)
         .andThen(coral.getLowerArmWithVoltageCommand());
     }
 
-    public Command L2(){
+    public Command L2() {
         return coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.L2)
         .andThen(coral.getLowerArmWithVoltageCommand());
     }
 
-    public Command L3(){
+    public Command L3() {
         return coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.L3)
         .andThen(coral.getLowerArmWithVoltageCommand());
     }
 
-    public Command L4(){
+    public Command L4() {
         return coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.L4_1)
         .andThen(coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.L4_2))
         .andThen(new DriveWithPosition(drive, poseEstimator, new Transform2d(0, -1, new Rotation2d()))); // ! this is not backwards from the robot
