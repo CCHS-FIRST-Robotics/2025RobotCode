@@ -29,6 +29,7 @@ public class RobotContainer {
     private final PoseEstimator poseEstimator;
     private final Coral coral;
 
+    private final CoralCommandCompositer coralCommandCompositer;
     private final AutoRoutineGenerator autoGenerator;
     private final AutoChooser autoChooser;
 
@@ -105,10 +106,8 @@ public class RobotContainer {
 
         drive.setPoseEstimator(poseEstimator);
 
-        autoGenerator = new AutoRoutineGenerator(
-            drive, 
-            poseEstimator
-        );
+        coralCommandCompositer = new CoralCommandCompositer(drive, poseEstimator, coral);
+        autoGenerator = new AutoRoutineGenerator(drive, poseEstimator);
         autoChooser = new AutoChooser();
         
         configureButtonBindings();
@@ -139,16 +138,6 @@ public class RobotContainer {
 
         // ————— coral ————— //
 
-        // elevator
-        xboxController1.y().onTrue(coral.getSetElevatorCommand(Rotations.of(0)));
-        xboxController1.b().onTrue(coral.getSetElevatorCommand(Rotations.of(1)));
-        xboxController1.a().onTrue(coral.getSetElevatorCommand(PhysicalConstants.ELEVATOR_MIN_ROTATIONS));
-
-        xboxController2.y().onTrue(coral.getSetArmCommand(Rotations.of(0))); 
-        xboxController2.b().onTrue(coral.getSetArmCommand(Rotations.of(0))); 
-        xboxController2.a().onTrue(coral.getSetArmCommand(Rotations.of(0))); // maybe limit switch
-        xboxController2.rightTrigger().onTrue(coral.getSetArmVoltageCommand(Volts.of(0)));
-
         // // reef positions
         // if ((DriverStation.getAlliance().isPresent() ? DriverStation.getAlliance().get() : Alliance.Red).equals(Alliance.Red)) {
         //     coralController.button(1).onTrue(new DriveWithApriltag(drive, poseEstimator, 6, true));
@@ -178,11 +167,17 @@ public class RobotContainer {
         //     coralController.button(16).onTrue(new DriveWithApriltag(drive, poseEstimator, 22, false));
         // }
 
-        // // stalk positions
-        // coralController.button(4 ).onTrue(coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.INTAKE));
-        // coralController.button(5 ).onTrue(coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.L2));
-        // coralController.button(9 ).onTrue(coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.L3));
-        // coralController.button(10).onTrue(coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.L4));
+        // ! think about the order things need to happen in, during the actual match
+
+        // stalk positions
+        coralController.button(4 ).onTrue(coralCommandCompositer.intake());
+        coralController.button(5 ).onTrue(coralCommandCompositer.L2());
+        coralController.button(9 ).onTrue(coralCommandCompositer.L3());
+        coralController.button(10).onTrue(coralCommandCompositer.L4()); // ! might have to be split into two
+
+        // e-stop // ! decide buttons
+        coralController.button(0).onTrue(coral.getSetElevatorVoltageCommand(Volts.of(0)));
+        coralController.button(0).onTrue(coral.getSetArmVoltageCommand(Volts.of(0)));
     }
 
     private void configureAutos(){

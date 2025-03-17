@@ -46,7 +46,7 @@ public class Coral extends SubsystemBase {
         Logger.recordOutput("outputs/coral/troughSensor", troughSensor.get());
     }
 
-    // ————— testing command factories ————— //
+    // ————— raw command factories ————— //
 
     public Command getSetElevatorVoltageCommand(Voltage volts) {
         return new InstantCommand(() -> io.setElevatorVoltage(volts));
@@ -64,7 +64,7 @@ public class Coral extends SubsystemBase {
         return new InstantCommand(() -> io.setArmPosition(angle));
     }
 
-    // ————— final command factories ————— // 
+    // ————— processed command factories ————— // 
 
     public Command getSetCoralPositionCommand(Angle[] position) {
         return new InstantCommand(() -> io.setElevatorPosition(position[0]))
