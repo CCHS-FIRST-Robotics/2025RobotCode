@@ -7,8 +7,6 @@ import com.ctre.phoenix6.configs.*;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.*;
 import com.ctre.phoenix6.signals.*;
-
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.units.measure.*;
 import frc.robot.constants.*;
 
@@ -36,14 +34,11 @@ public class CoralIOReal implements CoralIO{
     private final CANcoderConfiguration armCancoderConfig = new CANcoderConfiguration(); 
     private final Slot0Configs armPIDF = armConfig.Slot0;
 
-    // private final PIDController armTempPID;
-    // private CoralIOInputs inputs = new CoralIOInputs();
-
     private final MotionMagicConfigs armMotionMagicConfig = armConfig.MotionMagic;
     private final MotionMagicVoltage armMotionMagicVoltage = new MotionMagicVoltage(0);
 
-    private double kPArm = 30; // tune without motionmagic
-    private double kIArm = 0; // ki and kd could help
+    private double kPArm = 30;
+    private double kIArm = 0;
     private double kDArm = 0; 
     private double kGArm = 0.35;
     private double kSArm = 0;
@@ -116,8 +111,8 @@ public class CoralIOReal implements CoralIO{
         armPIDF.kS = kSArm; // 0 cancoder when it's parallel to the ground
         armPIDF.kV = kVArm;
         armPIDF.kA = kAArm;
-        armPIDF.GravityType = GravityTypeValue.Arm_Cosine; // ! zero cancoder at 0 lol
-        armMotionMagicConfig.MotionMagicCruiseVelocity = 0.2; // ! make this higher hopefully
+        armPIDF.GravityType = GravityTypeValue.Arm_Cosine;
+        armMotionMagicConfig.MotionMagicCruiseVelocity = 0.2;
         armMotionMagicConfig.MotionMagicAcceleration = 1;
         armMotionMagicConfig.MotionMagicJerk = 1;
         // misc
@@ -125,8 +120,6 @@ public class CoralIOReal implements CoralIO{
         armMotor.setNeutralMode(NeutralModeValue.Brake);
         armConfig.CurrentLimits.StatorCurrentLimit = 30;
         armMotor.getConfigurator().apply(armConfig);
-
-        // armTempPID = new PIDController(1, 0, 0);
 
         // ————— logging ————— //
 
@@ -175,15 +168,7 @@ public class CoralIOReal implements CoralIO{
     public void setArmPosition(Angle position) {
         armMotor.setControl(armMotionMagicVoltage.withPosition(position).withSlot(0));
     }
-
-    // public void setArmPIDPosition(double position){
-    //     this.setArmVoltage(
-    //         Volts.of(
-    //             armTempPID.calculate(position, inputs.armAbsolutePosition)
-    //         )
-    //     );
-    // }
-
+    
     @Override
     public boolean armAtSetpoint() {
         return armMotor.getClosedLoopError().getValue() < 0.05;
@@ -226,7 +211,5 @@ public class CoralIOReal implements CoralIO{
         inputs.armAbsolutePosition = positionAbsoluteSignalArm.getValue().in(Rotations);
         inputs.armAbsoluteVelocity = velocityAbsoluteSignalArm.getValue().in(RotationsPerSecond);
         inputs.armTemperature = temperatureSignalArm.getValue().in(Celsius);
-
-        // this.inputs = inputs;
     }
 }

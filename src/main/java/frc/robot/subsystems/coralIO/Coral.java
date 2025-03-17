@@ -21,8 +21,6 @@ public class Coral extends SubsystemBase {
     private final SysIdRoutine elevatorSysIdRoutine;
     private final SysIdRoutine armSysIdRoutine;
 
-    private double armPosition;
-
     public Coral(CoralIO io, int troughPort) {
         this.io = io;
 
@@ -46,7 +44,6 @@ public class Coral extends SubsystemBase {
         Logger.processInputs("coralIO", inputs);
 
         Logger.recordOutput("outputs/coral/troughSensor", troughSensor.get());
-        // io.setArmPIDPosition(armPosition);
     }
 
     // ————— raw command factories ————— //
@@ -82,19 +79,14 @@ public class Coral extends SubsystemBase {
 
     public Command getLowerArmWithVoltageCommand() {
         return new InstantCommand(() -> io.setArmVoltage(Volts.of(-0.25)))
-        .andThen(new InstantCommand(() -> System.out.println("HIHIHIHIHI")))
-        .andThen(Commands.waitUntil(this::armThere))
+        .andThen(new InstantCommand(() -> System.out.println("KKKKKKKKKKKK\nKKKKKKKKKKKKKK\nKKKKKKKKK\nKKKKKKKKK\nKKKKKKK\n")))
+        .andThen(Commands.waitUntil(() -> inputs.armAbsolutePosition <= -0.15))
         .andThen(new InstantCommand(() -> System.out.println("HIHIHIHIHIH\nHIHIHIHIHIH\nHIHIHIHIHIH\nHIHIHIHIHIH\nHIHIHIHIHIH\n")))
-        .andThen(this.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.INTAKE_PREP)); // ! prolly something else realistically
+        .andThen(this.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.INTAKE_PREP));
     }
 
     public boolean troughSensesCoral() {
         return troughSensor.get(); // ! depends on how they wire it
-    }
-
-    public boolean armThere(){
-        System.out.println(inputs.armAbsolutePosition <= -0.15);
-        return inputs.armAbsolutePosition <= -0.15;
     }
 
     // ————— sysid command factories ————— //

@@ -7,16 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.RobotBase;
 
 /**
- * test voltage thing
- * get coral position values
- * tune kg
- * tune pid
- * see if it works
- * 
- * ! maybe arm limit switch
- * ! if rezero arm, every coral position has to be refound
- * 
- * ! remember you have to align with the coral station as well
+ * ! tune arm without motionmagic
  * 
  * to do: 
  * * daily at home: 
@@ -51,15 +42,6 @@ import edu.wpi.first.wpilibj.RobotBase;
  * /   requirements: 
  *      drivewithapriltag homing
  *      setting coral position
- * 
- * 
- * 
- * 
- * 
- * 
- * Set position_1 // ~ one button press
- * wait until coral position is there
- * then they can do drivewithapriltag and place // ~ another button press
  */
 
 public final class Main {

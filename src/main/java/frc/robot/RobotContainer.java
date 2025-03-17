@@ -118,6 +118,7 @@ public class RobotContainer {
 
         // ————— drive ————— //
 
+        // drive
         drive.setDefaultCommand(
             new DriveWithVelocity(
                 drive,
@@ -138,16 +139,10 @@ public class RobotContainer {
 
         // ————— coral ————— //
 
-        // a test with lack of untils //!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        // xboxController2.x().onTrue(
-        //     coral.getSetElevatorCommand(Rotations.of(1.5))
-        //     .andThen(coral.getSetElevatorCommand(Rotations.of(1)))
-        // );
+        xboxController2.x().whileTrue(coral.getLowerArmWithVoltageCommand()); // ! 
 
-        xboxController2.x().whileTrue(coral.getLowerArmWithVoltageCommand());
-
-        // // reef positions
-        // if ((DriverStation.getAlliance().isPresent() ? DriverStation.getAlliance().get() : Alliance.Red).equals(Alliance.Red)) {
+        // reef positions
+        if ((DriverStation.getAlliance().isPresent() ? DriverStation.getAlliance().get() : Alliance.Red).equals(Alliance.Red)) {
         //     coralController.button(1).onTrue(new DriveWithApriltag(drive, poseEstimator, 6, true));
         //     coralController.button(2).onTrue(new DriveWithApriltag(drive, poseEstimator, 6, false));
         //     coralController.button(3).onTrue(new DriveWithApriltag(drive, poseEstimator, 7, true));
@@ -173,7 +168,7 @@ public class RobotContainer {
         //     coralController.button(12).onTrue(new DriveWithApriltag(drive, poseEstimator, 21, false));
         //     coralController.button(14).onTrue(new DriveWithApriltag(drive, poseEstimator, 22, true));
         //     coralController.button(16).onTrue(new DriveWithApriltag(drive, poseEstimator, 22, false));
-        // }
+        }
 
         // branch positions
         coralController.button(4).onTrue(coralCommandCompositer.prepIntake());
@@ -185,11 +180,11 @@ public class RobotContainer {
         coralController.button(19).onTrue(coralCommandCompositer.prepL4());
         // coralController.button(20).onTrue(coralCommandCompositer.runL4());
 
-        // // emergency stop
-        // coralController.button(21).onTrue(
-        //     coral.getSetElevatorVoltageCommand(Volts.of(0))
-        //     .andThen(coral.getSetArmVoltageCommand(Volts.of(0)))
-        // );
+        // emergency stop
+        coralController.button(21).onTrue(
+            coral.getSetElevatorVoltageCommand(Volts.of(0))
+            .andThen(coral.getSetArmVoltageCommand(Volts.of(0)))
+        );
     }
 
     private void configureAutos(){
