@@ -140,18 +140,14 @@ public class RobotContainer {
         // ————— coral ————— //
 
         // elevator
-        xboxController2.y().onTrue(coral.getSetElevatorCommand(PhysicalConstants.ELEVATOR_MAX_ROTATIONS));
-        xboxController2.a().onTrue(coral.getSetElevatorCommand(PhysicalConstants.ELEVATOR_MIN_ROTATIONS));
+        xboxController1.y().onTrue(coral.getSetElevatorCommand(Rotations.of(0)));
+        xboxController1.b().onTrue(coral.getSetElevatorCommand(Rotations.of(1)));
+        xboxController1.a().onTrue(coral.getSetElevatorCommand(PhysicalConstants.ELEVATOR_MIN_ROTATIONS));
 
-        // xboxController2.y().onTrue(coral.getSetElevatorVoltageCommand(Volts.of(1)));
-        // xboxController2.a().onTrue(coral.getSetElevatorVoltageCommand(Volts.of(-1)));
-
-        // arm
-        xboxController2.x().onTrue(coral.getSetArmCommand(PhysicalConstants.ARM_MAX_ROTATIONS));
-        xboxController2.b().onTrue(coral.getSetArmCommand(PhysicalConstants.ARM_MIN_ROTATIONS));
-
-        // xboxController2.x().onTrue(coral.getSetArmVoltageCommand(Volts.of(1)));
-        // xboxController2.b().onTrue(coral.getSetArmVoltageCommand(Volts.of(-1)));
+        xboxController2.y().onTrue(coral.getSetArmCommand(Rotations.of(0))); 
+        xboxController2.b().onTrue(coral.getSetArmCommand(Rotations.of(0))); 
+        xboxController2.a().onTrue(coral.getSetArmCommand(Rotations.of(0))); // maybe limit switch
+        xboxController2.rightTrigger().onTrue(coral.getSetArmVoltageCommand(Volts.of(0)));
 
         // // reef positions
         // if ((DriverStation.getAlliance().isPresent() ? DriverStation.getAlliance().get() : Alliance.Red).equals(Alliance.Red)) {

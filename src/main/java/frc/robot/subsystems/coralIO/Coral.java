@@ -9,6 +9,8 @@ import java.util.function.Consumer;
 import edu.wpi.first.units.*;
 import edu.wpi.first.units.measure.*;
 import org.littletonrobotics.junction.Logger;
+
+import frc.robot.constants.PhysicalConstants;
 import frc.robot.subsystems.coralIO.CoralIO.CoralIOInputs;
 
 public class Coral extends SubsystemBase {
@@ -64,33 +66,19 @@ public class Coral extends SubsystemBase {
 
     // ————— final command factories ————— // 
 
-    // // open claw, then move the elevator and arm down while setting wrist position
-    // public Command getPrepIntakeCommand(){
-    //     return new InstantCommand(() -> setClawPosition(true))
-    //     .andThen(
-    //         new InstantCommand(() -> io.setElevatorPosition(CoralPositions.INTAKE.elevatorPosition.getValue()))
-    //         .alongWith(new InstantCommand(() -> io.setArmPosition(CoralPositions.INTAKE.armPosition)))
-    //         .alongWith(new InstantCommand(() -> io.setWristPosition(CoralPositions.INTAKE.wristPosition)))
-    //     );
-    // }
-    
-    // // check if ir sensor beam is broken, close claw, then swing to L4
-    // public Command getIntakeCommand(){
-    //     if (troughSensor.get()) {
-    //         return null;
-    //     }
-    //     return new InstantCommand(() -> setClawPosition(false))
-    //     .andThen(
-    //         new InstantCommand(() -> io.setElevatorPosition(CoralPositions.L4.elevatorPosition.getValue()))
-    //         .alongWith(new InstantCommand(() -> io.setArmPosition(CoralPositions.L4.armPosition)))
-    //         .alongWith(new InstantCommand(() -> io.setWristPosition(CoralPositions.L4.wristPosition)))
-    //     );
-    // }
-
-    // move elevator and arm
     public Command getSetCoralPositionCommand(Angle[] position){
         return new InstantCommand(() -> io.setElevatorPosition(position[0]))
         .alongWith(new InstantCommand(() -> io.setArmPosition(position[1])));
+    }
+
+    public Command getLowerArmWithVoltageCommand(){
+        return new InstantCommand(() -> io.setArmVoltage(Volts.of(0.25)))
+        .until(() -> (inputs.armAbsolutePosition <= 0))
+        .andThen(this.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.INTAKE_2));
+    }
+
+    public boolean troughSensesCoral(){
+        return troughSensor.get(); // ! depends on how they wire it
     }
 
     // ————— sysid command factories ————— //

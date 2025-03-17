@@ -40,8 +40,8 @@ public class Robot extends LoggedRobot {
         Logger.start();
         
         SmartDashboard.putString("Mode", VirtualConstants.CURRENT_MODE.toString());
-        CameraServer.startAutomaticCapture("0", 0);
-        CameraServer.startAutomaticCapture("1", 1);
+        // CameraServer.startAutomaticCapture("0", 0);
+        // CameraServer.startAutomaticCapture("1", 1);
     }
 
     @Override

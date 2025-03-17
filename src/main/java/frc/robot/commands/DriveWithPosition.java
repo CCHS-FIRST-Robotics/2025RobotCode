@@ -22,6 +22,18 @@ public class DriveWithPosition extends Command {
         this.targetPose = targetPose;
     }
 
+    public DriveWithPosition( // ! could work
+        Drive drive,
+        PoseEstimator poseEstimator,
+        Transform2d targetTransform
+    ) {
+        addRequirements(drive);
+        addRequirements(poseEstimator);
+        this.drive = drive;
+        this.poseEstimator = poseEstimator;
+        this.targetPose = poseEstimator.getPose().plus(targetTransform);
+    }
+
     @Override
     public void execute() {
         drive.runPosition(targetPose);

@@ -36,10 +36,10 @@ public class CoralIOReal implements CoralIO{
     private final MotionMagicConfigs armMotionMagicConfig = armConfig.MotionMagic;
     private final MotionMagicVoltage armMotionMagicVoltage = new MotionMagicVoltage(0);
 
-    private double kPArm = 40;
-    private double kIArm = 0;
-    private double kDArm = 0;
-    private double kGArm = 0.15;
+    private double kPArm = 30; // tune without motionmagic
+    private double kIArm = 0; // ki and kd could help
+    private double kDArm = 0; 
+    private double kGArm = 0;
     private double kSArm = 0;
     private double kVArm = 0.1121914734;
     private double kAArm = 0;
@@ -86,7 +86,7 @@ public class CoralIOReal implements CoralIO{
         elevatorPIDF.kV = kVElevator;
         elevatorPIDF.kA = kAElevator;
         elevatorPIDF.GravityType = GravityTypeValue.Elevator_Static;
-        elevatorMotionMagicConfig.MotionMagicCruiseVelocity = 1; // max is 1
+        elevatorMotionMagicConfig.MotionMagicCruiseVelocity = 0.25; // max is 1
         elevatorMotionMagicConfig.MotionMagicAcceleration = 1;
         elevatorMotionMagicConfig.MotionMagicJerk = 1;
         // misc
@@ -98,7 +98,7 @@ public class CoralIOReal implements CoralIO{
 
         // encoder
         armCancoder = new CANcoder(armCancoderId);
-        armCancoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+        armCancoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
         armCancoderConfig.MagnetSensor.MagnetOffset = PhysicalConstants.ARM_ENCODER_OFFSET.in(Rotations); 
         armCancoder.getConfigurator().apply(armCancoderConfig);
         armConfig.Feedback.withRemoteCANcoder(armCancoder);
@@ -107,11 +107,11 @@ public class CoralIOReal implements CoralIO{
         armPIDF.kI = kIArm;
         armPIDF.kD = kDArm;
         armPIDF.kG = kGArm;
-        armPIDF.kS = kSArm;
+        armPIDF.kS = kSArm; // 0 cancoder when it's parallel to the ground
         armPIDF.kV = kVArm;
         armPIDF.kA = kAArm;
-        armPIDF.GravityType = GravityTypeValue.Arm_Cosine;
-        armMotionMagicConfig.MotionMagicCruiseVelocity = 0.05; // ! make this higher hopefully
+        armPIDF.GravityType = GravityTypeValue.Arm_Cosine; // ! zero cancoder at 0 lol
+        armMotionMagicConfig.MotionMagicCruiseVelocity = 0.1; // ! make this higher hopefully
         armMotionMagicConfig.MotionMagicAcceleration = 1;
         armMotionMagicConfig.MotionMagicJerk = 1;
         // misc
