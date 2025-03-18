@@ -22,7 +22,7 @@ import frc.robot.utils.*;
 
 public class RobotContainer {
     private final CommandXboxController xboxController1 = new CommandXboxController(VirtualConstants.CONTROLLER_PORT_1);
-    private final CommandXboxController xboxController2 = new CommandXboxController(VirtualConstants.CONTROLLER_PORT_2);
+    // private final CommandXboxController xboxController2 = new CommandXboxController(VirtualConstants.CONTROLLER_PORT_2);
     private final CommandGenericHID coralController = new CommandGenericHID(VirtualConstants.CONTROLLER_PORT_3);
 
     private final Drive drive;
@@ -139,8 +139,6 @@ public class RobotContainer {
 
         // ————— coral ————— //
 
-        xboxController2.x().whileTrue(coral.getLowerArmWithVoltageCommand()); // ! 
-
         // reef positions
         if ((DriverStation.getAlliance().isPresent() ? DriverStation.getAlliance().get() : Alliance.Red).equals(Alliance.Red)) {
         //     coralController.button(1).onTrue(new DriveWithApriltag(drive, poseEstimator, 6, true));
@@ -174,11 +172,11 @@ public class RobotContainer {
         coralController.button(4).onTrue(coralCommandCompositer.prepIntake());
         coralController.button(5).onTrue(coralCommandCompositer.runIntake());
         coralController.button(9).onTrue(coralCommandCompositer.prepL2());
-        // coralController.button(10).onTrue(coralCommandCompositer.runL2());
+        coralController.button(10).onTrue(coralCommandCompositer.runL2());
         coralController.button(17).onTrue(coralCommandCompositer.prepL3());
-        // coralController.button(18).onTrue(coralCommandCompositer.runL3());
+        coralController.button(18).onTrue(coralCommandCompositer.runL3());
         coralController.button(19).onTrue(coralCommandCompositer.prepL4());
-        // coralController.button(20).onTrue(coralCommandCompositer.runL4());
+        coralController.button(20).onTrue(coralCommandCompositer.runL4());
 
         // emergency stop
         coralController.button(21).onTrue(

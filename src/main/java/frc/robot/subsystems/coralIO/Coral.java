@@ -68,7 +68,7 @@ public class Coral extends SubsystemBase {
 
     public Command getSetCoralPositionCommand(Angle[] position) {
         return runOnce(() -> io.setElevatorPosition(position[0]))
-        .alongWith(runOnce(() -> io.setArmPosition(position[1])));
+        .alongWith(new InstantCommand(() -> io.setArmPosition(position[1])));
     }
 
     public Command getWaitUntilCoralInPositionCommand() {

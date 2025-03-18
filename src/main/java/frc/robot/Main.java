@@ -9,10 +9,15 @@ import edu.wpi.first.wpilibj.RobotBase;
 /**
  * to do: 
  * 
+ * ! try higher voltage when going down
+ * 
+ * ! wire trough sensor
+ * 
  * * things to keep in mind: 
  * !  maybe test using the coupling thing again
  * !  drive smart current limits
  * !  write the robot relative backwards code
+ * !  drivewithapriltag velocity rampdown
  * 
  * * daily at home: 
  *    write coralIOSim

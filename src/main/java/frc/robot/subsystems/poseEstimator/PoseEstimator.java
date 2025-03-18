@@ -17,7 +17,7 @@ public class PoseEstimator extends SubsystemBase {
     private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
 
     private final CameraIO cameraIO;
-    private final HashMap<Integer, double[]> tagMap = new HashMap<Integer, double[]>();
+    private HashMap<Integer, double[]> tagOffsetMap = new HashMap<Integer, double[]>();
     private final CameraIOInputsAutoLogged cameraInputs = new CameraIOInputsAutoLogged();
 
     private final SwerveDrivePoseEstimator odometryEstimator;
@@ -82,22 +82,37 @@ public class PoseEstimator extends SubsystemBase {
         Logger.recordOutput("outputs/poseEstimator/combinedPoseEstimate", combinedEstimator.getEstimatedPosition());
     }
 
-    public Pose2d updateVisionEstimate() { // ! 
+    public Pose2d updateVisionEstimate() {
         int tagCount = 0;
         double accumulatedX = 0;
         double accumulatedY = 0;
+        HashMap<Integer, double[]> tempTagOffsetMap = new HashMap<Integer, double[]>();
         for (int i = 1; i < cameraInputs.tagArray.length; i += 4) { // tags[0] is the packetId
+            // get networktables values
             int id = (int) cameraInputs.tagArray[i];
             double distance = cameraInputs.tagArray[i+3]; // meters
             double tagAngle = cameraInputs.tagArray[i+1]; // radians
             double robotAngle = getRawYaw().getRadians();
 
-            double angleToTag = tagAngle - robotAngle;
-            double xDistance = Math.sin(angleToTag) * distance;
-            double yDistance = Math.cos(angleToTag) * distance;
+            // calculate offsets
+            double angleToTag = tagAngle - robotAngle - PhysicalConstants.JETSON_OFFSET.getRotation().getRadians();
+            double xDistance = Math.cos(angleToTag) * distance - PhysicalConstants.JETSON_OFFSET.getX();
+            double yDistance = Math.sin(angleToTag) * distance - PhysicalConstants.JETSON_OFFSET.getY();
 
-            tagMap.put(id, new double[] {xDistance, yDistance, angleToTag}); // ! adjust for jetson offset
+            // add to temp map
+            if (tempTagOffsetMap.containsKey(id)) { // if two cameras see one tag, average the values
+                double[] oldArray = tempTagOffsetMap.get(id);
+                tempTagOffsetMap.put(id, new double[] {
+                    (xDistance + oldArray[0]) / 2, 
+                    (yDistance + oldArray[1]) / 2, 
+                    (angleToTag + oldArray[2]) / 2, 
+                    5 // ! probably should be bigger lol
+                });
+            } else {
+                tempTagOffsetMap.put(id, new double[] {xDistance, yDistance, angleToTag, 5});
+            }
 
+            // get pose from offset
             Translation3d taglocation = PhysicalConstants.APRILTAG_LOCATIONS.get(id);
             accumulatedX += taglocation.getX() - xDistance;
             accumulatedY += taglocation.getY() - yDistance;
@@ -105,11 +120,30 @@ public class PoseEstimator extends SubsystemBase {
             tagCount++;
         }
 
+        // combine both tag maps
+        for (int key : tagOffsetMap.keySet()) {
+            // if the id in the old array isn't in the temp array, add it to the temp array but subtract one from the counter
+            if (tempTagOffsetMap.containsKey(key)) {
+                continue;
+            }
+
+            double[] oldArray = tagOffsetMap.get(key);
+            if (oldArray[3] == 0) {
+                continue;
+            }
+            tempTagOffsetMap.put(key, new double[] {
+                oldArray[0],
+                oldArray[1],
+                oldArray[2],
+                oldArray[3] - 1,
+            });
+        }
+        tagOffsetMap = tempTagOffsetMap;
+
         if (tagCount == 0) {
             return new Pose2d();    
         }
-
-        return new Pose2d(accumulatedX / tagCount, accumulatedY / tagCount, getRawYaw()).plus(PhysicalConstants.JETSON_OFFSET);
+        return new Pose2d(accumulatedX / tagCount, accumulatedY / tagCount, getRawYaw());
     }
 
     public void resetPosition(Pose2d pose) {
@@ -140,7 +174,7 @@ public class PoseEstimator extends SubsystemBase {
         return gyroInputs.connected ? new Rotation2d(Rotations.of(gyroInputs.yaw).in(Radians)) : fieldPosition.getRotation();
     }
 
-    public double[] getSpecificTag(int id) {
-        return tagMap.get(id);
+    public double[] getOffsetFromSpecificTag(int id) {
+        return tagOffsetMap.get(id);
     }
 }

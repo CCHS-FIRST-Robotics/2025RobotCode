@@ -85,8 +85,7 @@ public class CoralCommandCompositer {
     }
 
     public Command runL4() {
-        return coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.L4_RUN)
-        .andThen(new DriveWithPosition(drive, poseEstimator, new Transform2d(0, -1, new Rotation2d()))) // ! this is not backwards from the robot
-        .andThen(coral.getLowerArmWithVoltageCommand());
+        return coral.getLowerArmWithVoltageCommand(); 
+        // ! maybe drivewithvelocity
     }
 }

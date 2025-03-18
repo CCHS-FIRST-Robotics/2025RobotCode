@@ -10,7 +10,7 @@ public class DriveWithApriltag extends Command {
     private final PoseEstimator poseEstimator;
     private final int targetTagId;
     private final boolean left;
-    private double[] targetTagArray; // xDistance, yDistance, angleToTag
+    private double[] targetTagOffsetArray; // xDistance, yDistance, angleToTag
     private boolean isFinished = false;
 
     public DriveWithApriltag(
@@ -25,28 +25,31 @@ public class DriveWithApriltag extends Command {
         this.poseEstimator = poseEstimator;
         this.targetTagId = targetTagId;
         this.left = left;
-        targetTagArray = poseEstimator.getSpecificTag(targetTagId);
+        targetTagOffsetArray = poseEstimator.getOffsetFromSpecificTag(targetTagId);
     }
 
     @Override
     public void execute() {
-        targetTagArray = poseEstimator.getSpecificTag(targetTagId);
+        targetTagOffsetArray = poseEstimator.getOffsetFromSpecificTag(targetTagId);
 
-        if (targetTagArray == null) {
+        // finish if tag is not detected
+        if (targetTagOffsetArray == null) {
             isFinished = true;
             return; 
         }
 
-        double xError = targetTagArray[0]; // meters
-        double yError = targetTagArray[1] + 0.1651 * (left ? -1 : 1); // meters // ! idk if this logic is correct
-        double oError = targetTagArray[2]; // radians
+        // calculate offsets
+        double xOffset = targetTagOffsetArray[0]; // meters
+        double yOffset = targetTagOffsetArray[1] + 0.1651 * (left ? -1 : 1); // meters
+        double oOffset = targetTagOffsetArray[2]; // radians
 
-        ChassisSpeeds speeds = new ChassisSpeeds( // ! add the rampdown later
-            Math.abs(xError) > 0.1 ? 0.25 : 0,
-            Math.abs(yError) > 0.1 ? 0.25 : 0,
-            Math.abs(oError) > 0.1 ? 0.10 : 0
+        ChassisSpeeds speeds = new ChassisSpeeds(
+            Math.abs(xOffset) > 0.1 ? 0.1 : 0,
+            Math.abs(yOffset) > 0.1 ? 0.1 : 0,
+            Math.abs(oOffset) > 0.1 ? 0.1 : 0
         );
 
+        // finish if offset is low enough
         if (speeds.vxMetersPerSecond == 0
          && speeds.vyMetersPerSecond == 0
          && speeds.omegaRadiansPerSecond == 0
