@@ -74,9 +74,9 @@ public class ModuleIOReal implements ModuleIO {
         turnConfig.encoder.quadratureMeasurementPeriod(10);
         turnConfig.encoder.quadratureAverageDepth(2);
         
-        driveConfig.smartCurrentLimit(30);
+        driveConfig.smartCurrentLimit(50); // ! 30
         driveConfig.voltageCompensation(12);
-        turnConfig.smartCurrentLimit(20); 
+        turnConfig.smartCurrentLimit(30); // ! 20
         turnConfig.voltageCompensation(12);
 
         turnConfig.inverted(true);

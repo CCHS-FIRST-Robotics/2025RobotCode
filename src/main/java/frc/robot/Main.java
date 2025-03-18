@@ -7,13 +7,24 @@ package frc.robot;
 import edu.wpi.first.wpilibj.RobotBase;
 
 /**
- * ! tune arm without motionmagic
+ * ! maybe test using the coupling thing again?
+ * 
+ * ! drive smart current limits
+ * 
+ * ! write the robot relative backwards code
+ * ! coralIOSim
  * 
  * to do: 
  * * daily at home: 
  * 
  * * daily at robotics: 
- *    get coral reef positions
+ *    tuesday: 
+ *     detect apriltags
+ *     create hashmap
+ *     drivewithapriltag
+ * 
+ *    wednesday: 
+ *     choreo position control + drivewithapriltag
  * 
  * * longer term: 
  *    zero the drive modules correctly 
@@ -22,6 +33,7 @@ import edu.wpi.first.wpilibj.RobotBase;
  *    pid tunable constants
  *    fused cancoder instead of remote
  *    see if double gyro works
+ *    tune arm without motionmagic
  *  
  * * game plan: 
  * —  autos: 

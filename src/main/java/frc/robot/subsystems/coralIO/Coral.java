@@ -49,26 +49,26 @@ public class Coral extends SubsystemBase {
     // ————— raw command factories ————— //
 
     public Command getSetElevatorVoltageCommand(Voltage volts) {
-        return new InstantCommand(() -> io.setElevatorVoltage(volts));
+        return runOnce(() -> io.setElevatorVoltage(volts));
     }
 
     public Command getSetElevatorCommand(Angle angle) {
-        return new InstantCommand(() -> io.setElevatorPosition(angle));
+        return runOnce(() -> io.setElevatorPosition(angle));
     }
 
     public Command getSetArmVoltageCommand(Voltage volts) {
-        return new InstantCommand(() -> io.setArmVoltage(volts));
+        return runOnce(() -> io.setArmVoltage(volts));
     }
 
     public Command getSetArmCommand(Angle angle) {
-        return new InstantCommand(() -> io.setArmPosition(angle));
+        return runOnce(() -> io.setArmPosition(angle));
     }
 
     // ————— processed command factories ————— // 
 
     public Command getSetCoralPositionCommand(Angle[] position) {
-        return new InstantCommand(() -> io.setElevatorPosition(position[0]))
-        .alongWith(new InstantCommand(() -> io.setArmPosition(position[1])));
+        return runOnce(() -> io.setElevatorPosition(position[0]))
+        .alongWith(runOnce(() -> io.setArmPosition(position[1])));
     }
 
     public Command getWaitUntilCoralInPositionCommand() {
@@ -78,10 +78,8 @@ public class Coral extends SubsystemBase {
     }
 
     public Command getLowerArmWithVoltageCommand() {
-        return new InstantCommand(() -> io.setArmVoltage(Volts.of(-0.25)))
-        .andThen(new InstantCommand(() -> System.out.println("KKKKKKKKKKKK\nKKKKKKKKKKKKKK\nKKKKKKKKK\nKKKKKKKKK\nKKKKKKK\n")))
+        return runOnce(() -> io.setArmVoltage(Volts.of(-0.25)))
         .andThen(Commands.waitUntil(() -> inputs.armAbsolutePosition <= -0.15))
-        .andThen(new InstantCommand(() -> System.out.println("HIHIHIHIHIH\nHIHIHIHIHIH\nHIHIHIHIHIH\nHIHIHIHIHIH\nHIHIHIHIHIH\n")))
         .andThen(this.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.INTAKE_PREP));
     }
 

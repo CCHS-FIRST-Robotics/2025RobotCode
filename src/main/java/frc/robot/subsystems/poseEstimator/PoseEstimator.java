@@ -106,7 +106,7 @@ public class PoseEstimator extends SubsystemBase {
         }
 
         if (tagCount == 0) {
-            return new Pose2d();
+            return new Pose2d();    
         }
 
         return new Pose2d(accumulatedX / tagCount, accumulatedY / tagCount, getRawYaw()).plus(PhysicalConstants.JETSON_OFFSET);
