@@ -7,29 +7,28 @@ package frc.robot;
 import edu.wpi.first.wpilibj.RobotBase;
 
 /**
- * ! maybe test using the coupling thing again?
- * 
- * ! drive smart current limits
- * 
- * ! write the robot relative backwards code
- * ! coralIOSim
- * 
  * to do: 
+ * 
+ * * things to keep in mind: 
+ * !  maybe test using the coupling thing again
+ * !  drive smart current limits
+ * !  write the robot relative backwards code
+ * 
  * * daily at home: 
+ *    write coralIOSim
  * 
  * * daily at robotics: 
  *    tuesday: 
- *     detect apriltags
+ *     mount jetson
+ *     check apriltag detection
  *     create hashmap
- *     drivewithapriltag
+ *     drivewithapriltags
  * 
  *    wednesday: 
  *     choreo position control + drivewithapriltag
  * 
  * * longer term: 
  *    zero the drive modules correctly 
- *    figure out how to maintain wheel position
- *    write coralIOSim
  *    pid tunable constants
  *    fused cancoder instead of remote
  *    see if double gyro works
