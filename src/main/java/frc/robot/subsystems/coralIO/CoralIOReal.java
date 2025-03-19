@@ -2,6 +2,8 @@ package frc.robot.subsystems.coralIO;
 
 import static edu.wpi.first.units.Units.*;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.*;
 import com.ctre.phoenix6.configs.*;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
@@ -29,6 +31,8 @@ public class CoralIOReal implements CoralIO{
     private double kVElevator = 0.1121914734;
     private double kAElevator = 0;
 
+    private Angle elevatorTargetPosition = Rotations.of(0);
+
     private final TalonFXConfiguration armConfig = new TalonFXConfiguration();
     private final CANcoder armCancoder;
     private final CANcoderConfiguration armCancoderConfig = new CANcoderConfiguration(); 
@@ -45,6 +49,8 @@ public class CoralIOReal implements CoralIO{
     private double kVArm = 0.1121914734;
     private double kAArm = 0;
 
+    private Angle armTargetPosition = Rotations.of(0);
+
     private final StatusSignal<Voltage> voltageSignalElevator;
     private final StatusSignal<Current> currentSignalElevator;
     private final StatusSignal<Angle> positionSignalElevator;
@@ -60,6 +66,8 @@ public class CoralIOReal implements CoralIO{
     private final StatusSignal<Angle> positionAbsoluteSignalArm;
     private final StatusSignal<AngularVelocity> velocityAbsoluteSignalArm;
     private final StatusSignal<Temperature> temperatureSignalArm;
+
+    CoralIOInputs inputs = new CoralIOInputs();
     
     public CoralIOReal(
         int elevatorId, 
@@ -87,8 +95,8 @@ public class CoralIOReal implements CoralIO{
         elevatorPIDF.kV = kVElevator;
         elevatorPIDF.kA = kAElevator;
         elevatorPIDF.GravityType = GravityTypeValue.Elevator_Static;
-        elevatorMotionMagicConfig.MotionMagicCruiseVelocity = 0.75; // max is 1
-        elevatorMotionMagicConfig.MotionMagicAcceleration = 1;
+        elevatorMotionMagicConfig.MotionMagicCruiseVelocity = 1.5; // max is 1
+        elevatorMotionMagicConfig.MotionMagicAcceleration = 20;
         elevatorMotionMagicConfig.MotionMagicJerk = 1;
         // misc
         elevatorConfig.MotorOutput.withInverted(InvertedValue.Clockwise_Positive);
@@ -150,11 +158,12 @@ public class CoralIOReal implements CoralIO{
     @Override
     public void setElevatorPosition(Angle position) {
         elevatorMotor.setControl(elevatorMotionMagicVoltage.withPosition(position).withSlot(0));
+        elevatorTargetPosition = position;
     }
 
     @Override
     public boolean elevatorAtSetpoint() {
-        return elevatorMotor.getClosedLoopError().getValue() < 0.05;
+        return Math.abs(elevatorTargetPosition.in(Rotations) - inputs.elevatorEncoderPosition) < 0.1;
     }
 
     // ————— arm ————— //
@@ -167,11 +176,12 @@ public class CoralIOReal implements CoralIO{
     @Override
     public void setArmPosition(Angle position) {
         armMotor.setControl(armMotionMagicVoltage.withPosition(position).withSlot(0));
+        armTargetPosition = position;
     }
     
     @Override
     public boolean armAtSetpoint() {
-        return armMotor.getClosedLoopError().getValue() < 0.05;
+        return Math.abs(armTargetPosition.in(Rotations) - inputs.armEncoderPosition) < 0.008;
     }
 
     // ————— logging ————— //
@@ -196,6 +206,9 @@ public class CoralIOReal implements CoralIO{
             temperatureSignalArm
         );
 
+        Logger.recordOutput("HI", elevatorTargetPosition.in(Rotations) - inputs.elevatorEncoderPosition);
+        Logger.recordOutput("JO", armTargetPosition.in(Rotations) - inputs.armEncoderPosition);
+
         inputs.elevatorVoltage = voltageSignalElevator.getValue().in(Volts);
         inputs.elevatorCurrent = currentSignalElevator.getValue().in(Amps);
         inputs.elevatorMotorPosition = positionSignalElevator.getValue().in(Rotations) * PhysicalConstants.ELEVATOR_GEAR_REDUCTION;
@@ -206,10 +219,12 @@ public class CoralIOReal implements CoralIO{
 
         inputs.armVoltage = voltageSignalArm.getValue().in(Volts);
         inputs.armCurrent = currentSignalArm.getValue().in(Amps);
-        inputs.armPosition = positionSignalArm.getValue().in(Rotations) * PhysicalConstants.ARM_GEAR_REDUCTION;
-        inputs.armVelocity = velocitySignalArm.getValue().in(RotationsPerSecond) * PhysicalConstants.ARM_GEAR_REDUCTION;
-        inputs.armAbsolutePosition = positionAbsoluteSignalArm.getValue().in(Rotations);
-        inputs.armAbsoluteVelocity = velocityAbsoluteSignalArm.getValue().in(RotationsPerSecond);
+        inputs.armMotorPosition = positionSignalArm.getValue().in(Rotations) * PhysicalConstants.ARM_GEAR_REDUCTION;
+        inputs.armMotorVelocity = velocitySignalArm.getValue().in(RotationsPerSecond) * PhysicalConstants.ARM_GEAR_REDUCTION;
+        inputs.armEncoderPosition = positionAbsoluteSignalArm.getValue().in(Rotations);
+        inputs.armEncoderVelocity = velocityAbsoluteSignalArm.getValue().in(RotationsPerSecond);
         inputs.armTemperature = temperatureSignalArm.getValue().in(Celsius);
+
+        this.inputs = inputs;
     }
 }

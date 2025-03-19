@@ -1,17 +1,16 @@
 package frc.robot.utils;
 
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
+import static edu.wpi.first.units.Units.*;
+
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.subsystems.coralIO.Coral;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.poseEstimator.PoseEstimator;
-import frc.robot.commands.DriveWithPosition;
 import frc.robot.constants.*;
 
 public class CoralCommandCompositer {
     private final Drive drive;
-    private final PoseEstimator poseEstimator;
     private final Coral coral;
 
     public CoralCommandCompositer(
@@ -20,7 +19,6 @@ public class CoralCommandCompositer {
         Coral coral
     ) {
         this.drive = drive;
-        this.poseEstimator = poseEstimator;
         this.coral = coral;
     }
 
@@ -33,7 +31,9 @@ public class CoralCommandCompositer {
         //     return null;
         // }
 
-        return coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.INTAKE_RUN);
+        return coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.INTAKE_RUN)
+        .andThen(coral.getWaitUntilCoralInPositionCommand())
+        .andThen(coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.INTAKE_PREP));
     }
 
     public Command prepL1() {
@@ -46,7 +46,7 @@ public class CoralCommandCompositer {
     }
 
     public Command runL1() {
-        return coral.getLowerArmWithVoltageCommand();
+        return coral.getLowerArmWithVoltageCommand(Volts.of(0), Rotations.of(0));
     }
 
     public Command prepL2() {
@@ -59,7 +59,18 @@ public class CoralCommandCompositer {
     }
     
     public Command runL2() {
-        return coral.getLowerArmWithVoltageCommand();
+        return coral.getLowerArmWithVoltageCommand(Volts.of(-0.3), Rotations.of(-0.08))
+        .alongWith(
+            Commands.waitSeconds(1)
+            .andThen(new InstantCommand(() -> drive.runVelocity(
+                new ChassisSpeeds(
+                    -0.1, 
+                    0, 
+                    0
+                )   
+            )).repeatedly().withTimeout(3))
+        )
+        .andThen(coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.INTAKE_PREP));
     }
 
     public Command prepL3() {
@@ -72,7 +83,18 @@ public class CoralCommandCompositer {
     }
 
     public Command runL3() {
-        return coral.getLowerArmWithVoltageCommand();
+        return coral.getLowerArmWithVoltageCommand(Volts.of(-0.3), Rotations.of(-0.1))
+        .alongWith(
+            Commands.waitSeconds(1)
+            .andThen(new InstantCommand(() -> drive.runVelocity(
+                new ChassisSpeeds(
+                    -0.1, 
+                    0, 
+                    0
+                )   
+            )).repeatedly().withTimeout(3))
+        )
+        .andThen(coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.INTAKE_PREP));
     }
 
     public Command prepL4() {
@@ -85,7 +107,15 @@ public class CoralCommandCompositer {
     }
 
     public Command runL4() {
-        return coral.getLowerArmWithVoltageCommand(); 
-        // ! maybe drivewithvelocity
+        return coral.getLowerArmWithVoltageCommand(Volts.of(-0.25), Rotations.of(0.0673828125))
+        .andThen(coral.getSetArmVoltageCommand(Volts.of(0.25)))
+        .andThen(new InstantCommand(() -> drive.runVelocity(
+            new ChassisSpeeds(
+                -0.1, 
+                0, 
+                0
+            )
+        )).repeatedly().withTimeout(3))
+        .andThen(coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.INTAKE_PREP));
     }
 }

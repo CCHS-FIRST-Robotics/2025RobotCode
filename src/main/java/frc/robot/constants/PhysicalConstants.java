@@ -51,7 +51,12 @@ public final class PhysicalConstants {
 
     // ! I wonder what these are relative to
     // ! also, units
-    public static final Transform2d JETSON_OFFSET = new Transform2d(0, 0, new Rotation2d()); // ! 
+    public static final Transform3d JETSON_OFFSET = new Transform3d(
+        Inches.of(-2).in(Meters), 
+        Inches.of(0).in(Meters),
+        Inches.of(34).in(Meters),
+        new Rotation3d()
+    );
     public static final HashMap<Integer, Translation3d> APRILTAG_LOCATIONS = new HashMap<Integer, Translation3d>();
     static {
         APRILTAG_LOCATIONS.put(1, new Translation3d(16.697, 0.655, 1.486));
@@ -91,7 +96,7 @@ public final class PhysicalConstants {
     public static final double ARM_GEAR_REDUCTION = 100;
 
     public static class CoralPositions { // elevator rotations, arm rotations
-        public static final Angle[] INTAKE_PREP = {Rotations.of(1), Rotations.of(-0.2151816406)}; // -0.211
+        public static final Angle[] INTAKE_PREP = {Rotations.of(1), Rotations.of(-0.2191816406)}; // -0.211
         public static final Angle[] INTAKE_RUN = {Rotations.of(0.195556640625), Rotations.of(-0.2131816406)};
         public static final Angle[] L1 = {Rotations.of(0), Rotations.of(0)};
         public static final Angle[] L2 = {Rotations.of(0), Rotations.of(0.014892578125)};

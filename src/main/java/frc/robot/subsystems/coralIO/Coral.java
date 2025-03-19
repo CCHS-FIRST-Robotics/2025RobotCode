@@ -9,8 +9,6 @@ import java.util.function.Consumer;
 import edu.wpi.first.units.*;
 import edu.wpi.first.units.measure.*;
 import org.littletonrobotics.junction.Logger;
-
-import frc.robot.constants.PhysicalConstants;
 import frc.robot.subsystems.coralIO.CoralIO.CoralIOInputs;
 
 public class Coral extends SubsystemBase {
@@ -77,10 +75,9 @@ public class Coral extends SubsystemBase {
         );
     }
 
-    public Command getLowerArmWithVoltageCommand() {
-        return runOnce(() -> io.setArmVoltage(Volts.of(-0.25)))
-        .andThen(Commands.waitUntil(() -> inputs.armAbsolutePosition <= -0.15))
-        .andThen(this.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.INTAKE_PREP));
+    public Command getLowerArmWithVoltageCommand(Voltage volts, Angle armPositionThreshold) {
+        return runOnce(() -> io.setArmVoltage(volts))
+        .andThen(Commands.waitUntil(() -> inputs.armEncoderPosition <= armPositionThreshold.in(Rotations)));
     }
 
     public boolean troughSensesCoral() {

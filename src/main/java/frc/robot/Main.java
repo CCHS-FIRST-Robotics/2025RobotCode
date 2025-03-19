@@ -9,9 +9,15 @@ import edu.wpi.first.wpilibj.RobotBase;
 /**
  * to do: 
  * 
+ * ! show in elastic which apriltags it can see
+ * 
+ * ! height is annoying
+ * 
  * ! try higher voltage when going down
  * 
  * ! wire trough sensor
+ * 
+ * ! knock out coral
  * 
  * * things to keep in mind: 
  * !  maybe test using the coupling thing again
@@ -21,6 +27,9 @@ import edu.wpi.first.wpilibj.RobotBase;
  * 
  * * daily at home: 
  *    write coralIOSim
+ *    figure out a cleanup procedure
+ *     imports
+ *     all {}
  * 
  * * daily at robotics: 
  *    tuesday: 

@@ -17,28 +17,28 @@ public interface CoralIO {
 
         public double armVoltage;
         public double armCurrent;
-        public double armPosition;
-        public double armVelocity;
-        public double armAbsolutePosition;
-        public double armAbsoluteVelocity;
+        public double armMotorPosition;
+        public double armMotorVelocity;
+        public double armEncoderPosition;
+        public double armEncoderVelocity;
         public double armTemperature;
 
         @Override
         public void toLog(LogTable table) {
             table.put("elevator/ElevatorVoltage", elevatorVoltage);
             table.put("elevator/ElevatorCurrent", elevatorCurrent);
-            table.put("elevator/ElevatorPosition", elevatorMotorPosition);
-            table.put("elevator/ElevatorVelocity", elevatorMotorVelocity);
-            table.put("elevator/ElevatorAbsolutePosition", elevatorEncoderPosition);
-            table.put("elevator/ElevatorAbsoluteVelocity", elevatorEncoderVelocity);
+            table.put("elevator/ElevatorMotorPosition", elevatorMotorPosition);
+            table.put("elevator/ElevatorMotorVelocity", elevatorMotorVelocity);
+            table.put("elevator/ElevatorEncoderPosition", elevatorEncoderPosition);
+            table.put("elevator/ElevatorEncoderVelocity", elevatorEncoderVelocity);
             table.put("elevator/ElevatorTemperature", elevatorTemperature);
             
             table.put("arm/ArmVoltage", armVoltage);
             table.put("arm/ArmCurrent", armCurrent);
-            table.put("arm/ArmPosition", armPosition);
-            table.put("arm/ArmVelocity", armVelocity);
-            table.put("arm/ArmAbsolutePosition", armAbsolutePosition);
-            table.put("arm/ArmAbsoluteVelocity", armAbsoluteVelocity);
+            table.put("arm/ArmMotorPosition", armMotorPosition);
+            table.put("arm/ArmMotorVelocity", armMotorVelocity);
+            table.put("arm/ArmEncoderPosition", armEncoderPosition);
+            table.put("arm/ArmEncoderVelocity", armEncoderVelocity);
             table.put("arm/ArmTemperature", armTemperature);
         }
 
@@ -46,18 +46,18 @@ public interface CoralIO {
         public void fromLog(LogTable table) {
             elevatorVoltage = table.get("elevator/ElevatorVoltage", elevatorVoltage);
             elevatorCurrent = table.get("elevator/ElevatorCurrent", elevatorCurrent);
-            elevatorMotorPosition = table.get("elevator/ElevatorPosition", elevatorMotorPosition);
-            elevatorMotorVelocity = table.get("elevator/ElevatorVelocity", elevatorMotorVelocity);
-            elevatorEncoderPosition = table.get("elevator/ElevatorAbsolutePosition", elevatorEncoderPosition);
-            elevatorEncoderVelocity = table.get("elevator/ElevatorAbsoluteVelocity", elevatorEncoderVelocity);
+            elevatorMotorPosition = table.get("elevator/ElevatorMotorPosition", elevatorMotorPosition);
+            elevatorMotorVelocity = table.get("elevator/ElevatorMotorVelocity", elevatorMotorVelocity);
+            elevatorEncoderPosition = table.get("elevator/ElevatorEncoderPosition", elevatorEncoderPosition);
+            elevatorEncoderVelocity = table.get("elevator/ElevatorEncoderVelocity", elevatorEncoderVelocity);
             elevatorTemperature = table.get("elevator/ElevatorTemperature", elevatorTemperature);
             
             armVoltage = table.get("arm/ArmVoltage", armVoltage);
             armCurrent = table.get("arm/ArmCurrent", armCurrent);
-            armPosition = table.get("arm/ArmPosition", armPosition);
-            armVelocity = table.get("arm/ArmVelocity", armVelocity);
-            armAbsolutePosition = table.get("arm/ArmAbsolutePosition", armAbsolutePosition);
-            armAbsoluteVelocity = table.get("arm/ArmAbsoluteVelocity", armAbsoluteVelocity);
+            armMotorPosition = table.get("arm/ArmMotorPosition", armMotorPosition);
+            armMotorVelocity = table.get("arm/ArmMotorVelocity", armMotorVelocity);
+            armEncoderPosition = table.get("arm/ArmEncoderPosition", armEncoderPosition);
+            armEncoderVelocity = table.get("arm/ArmEncoderVelocity", armEncoderVelocity);
             armTemperature = table.get("arm/ArmTemperature", armTemperature);
         }
     }
