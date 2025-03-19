@@ -8,38 +8,30 @@ import edu.wpi.first.wpilibj.RobotBase;
 
 /**
  * to do: 
- * 
- * ! show in elastic which apriltags it can see
- * 
- * ! height is annoying
- * 
- * ! try higher voltage when going down
- * 
- * ! wire trough sensor
- * 
- * ! knock out coral
- * 
  * * things to keep in mind: 
- * !  maybe test using the coupling thing again
- * !  drive smart current limits
- * !  write the robot relative backwards code
- * !  drivewithapriltag velocity rampdown
+ *    maybe test using the coupling thing again
+ *    drive smart current limits
+ *    drivewithapriltag velocity rampdown
+ *    knock out algae
  * 
  * * daily at home: 
  *    write coralIOSim
- *    figure out a cleanup procedure
+ *    figure out a cleanup procedure:
  *     imports
  *     all {}
  * 
  * * daily at robotics: 
- *    tuesday: 
- *     mount jetson
- *     check apriltag detection
- *     create hashmap
- *     drivewithapriltags
+ * !  mechanical / electrical: 
+ * !   take apart the arm gearbox
+ * !   wire trough sensor
+ * !  me: 
+ * !   write the pose3d code for apriltags (easy)
+ * !   drivewithapriltag needs to know which L they want to go to
+ * !    maybe make a constant in robotcontainer that tracks what the last L to go was and then pass it in as an argument for drivewithapriltags
+ * !    also make the checkifcoralmechanismthere function take in a coralposition instead of just relying on the last specified position
+ * !   show in elastic which apriltags it can see
  * 
- *    wednesday: 
- *     choreo position control + drivewithapriltag
+ * ! figure out what to do about the elevator cancoder (probably just adjust all elevator values by 1)
  * 
  * * longer term: 
  *    zero the drive modules correctly 
