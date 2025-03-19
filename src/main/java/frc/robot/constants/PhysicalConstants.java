@@ -49,38 +49,59 @@ public final class PhysicalConstants {
 
     // ————— poseEstimator constants ————— //
 
-    // ! I wonder what these are relative to
-    // ! also, units
     public static final Transform3d JETSON_OFFSET = new Transform3d(
         Inches.of(-2).in(Meters), 
         Inches.of(0).in(Meters),
         Inches.of(34).in(Meters),
         new Rotation3d()
     );
-    public static final HashMap<Integer, Translation3d> APRILTAG_LOCATIONS = new HashMap<Integer, Translation3d>();
+
+    public static final HashMap<Integer, Pose3d> APRILTAG_LOCATIONS = new HashMap<Integer, Pose3d>();
     static {
-        APRILTAG_LOCATIONS.put(1, new Translation3d(16.697, 0.655, 1.486));
-        APRILTAG_LOCATIONS.put(2, new Translation3d(16.697, 7.396, 1.486));
-        APRILTAG_LOCATIONS.put(3, new Translation3d(11.561, 8.056, 1.302));
-        APRILTAG_LOCATIONS.put(4, new Translation3d(9.276, 6.138, 1.868));
-        APRILTAG_LOCATIONS.put(5, new Translation3d(9.276, 1.915, 1.868));
-        APRILTAG_LOCATIONS.put(6, new Translation3d(13.474, 3.306, 0.308));
-        APRILTAG_LOCATIONS.put(7, new Translation3d(13.890, 4.026, 0.308));
-        APRILTAG_LOCATIONS.put(8, new Translation3d(13.474, 4.745, 0.308));
-        APRILTAG_LOCATIONS.put(9, new Translation3d(12.643, 4.745, 0.308));
-        APRILTAG_LOCATIONS.put(10, new Translation3d(12.227, 4.026, 0.308));
-        APRILTAG_LOCATIONS.put(11, new Translation3d(12.643, 3.306, 0.308));
-        APRILTAG_LOCATIONS.put(12, new Translation3d(0.851, 0.655, 1.486));
-        APRILTAG_LOCATIONS.put(13, new Translation3d(0.851, 7.396, 1.486));
-        APRILTAG_LOCATIONS.put(14, new Translation3d(8.272, 6.138, 1.868));
-        APRILTAG_LOCATIONS.put(15, new Translation3d(8.272, 1.915, 1.868));
-        APRILTAG_LOCATIONS.put(16, new Translation3d(5.988, -0.004, 1.302));
-        APRILTAG_LOCATIONS.put(17, new Translation3d(4.074, 3.306, 0.308));
-        APRILTAG_LOCATIONS.put(18, new Translation3d(3.658, 4.026, 0.308));
-        APRILTAG_LOCATIONS.put(19, new Translation3d(4.074, 4.745, 0.308));
-        APRILTAG_LOCATIONS.put(20, new Translation3d(4.905, 4.745, 0.308));
-        APRILTAG_LOCATIONS.put(21, new Translation3d(5.321, 4.026, 0.308));
-        APRILTAG_LOCATIONS.put(22, new Translation3d(4.905, 3.306, 0.308));
+        APRILTAG_LOCATIONS.put( 1, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0)));
+        APRILTAG_LOCATIONS.put( 2, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0)));
+        APRILTAG_LOCATIONS.put( 3, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0)));
+        APRILTAG_LOCATIONS.put( 4, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0)));
+        APRILTAG_LOCATIONS.put( 5, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0)));
+        APRILTAG_LOCATIONS.put( 6, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0)));
+        APRILTAG_LOCATIONS.put( 7, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0)));
+        APRILTAG_LOCATIONS.put( 8, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0)));
+        APRILTAG_LOCATIONS.put( 9, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0)));
+        APRILTAG_LOCATIONS.put(10, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0)));
+        APRILTAG_LOCATIONS.put(11, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0)));
+        APRILTAG_LOCATIONS.put(12, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0)));
+        APRILTAG_LOCATIONS.put(13, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0)));
+        APRILTAG_LOCATIONS.put(14, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0)));
+        APRILTAG_LOCATIONS.put(15, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0)));
+        APRILTAG_LOCATIONS.put(16, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0)));
+        APRILTAG_LOCATIONS.put(17, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0)));
+        APRILTAG_LOCATIONS.put(18, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0)));
+        APRILTAG_LOCATIONS.put(19, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0)));
+        APRILTAG_LOCATIONS.put(20, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0)));
+        APRILTAG_LOCATIONS.put(21, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0)));
+        APRILTAG_LOCATIONS.put(22, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0)));
+        // APRILTAG_LOCATIONS.put(1, new Translation3d(16.697, 0.655, 1.486));
+        // APRILTAG_LOCATIONS.put(2, new Translation3d(16.697, 7.396, 1.486));
+        // APRILTAG_LOCATIONS.put(3, new Translation3d(11.561, 8.056, 1.302));
+        // APRILTAG_LOCATIONS.put(4, new Translation3d(9.276, 6.138, 1.868));
+        // APRILTAG_LOCATIONS.put(5, new Translation3d(9.276, 1.915, 1.868));
+        // APRILTAG_LOCATIONS.put(6, new Translation3d(13.474, 3.306, 0.308));
+        // APRILTAG_LOCATIONS.put(7, new Translation3d(13.890, 4.026, 0.308));
+        // APRILTAG_LOCATIONS.put(8, new Translation3d(13.474, 4.745, 0.308));
+        // APRILTAG_LOCATIONS.put(9, new Translation3d(12.643, 4.745, 0.308));
+        // APRILTAG_LOCATIONS.put(10, new Translation3d(12.227, 4.026, 0.308));
+        // APRILTAG_LOCATIONS.put(11, new Translation3d(12.643, 3.306, 0.308));
+        // APRILTAG_LOCATIONS.put(12, new Translation3d(0.851, 0.655, 1.486));
+        // APRILTAG_LOCATIONS.put(13, new Translation3d(0.851, 7.396, 1.486));
+        // APRILTAG_LOCATIONS.put(14, new Translation3d(8.272, 6.138, 1.868));
+        // APRILTAG_LOCATIONS.put(15, new Translation3d(8.272, 1.915, 1.868));
+        // APRILTAG_LOCATIONS.put(16, new Translation3d(5.988, -0.004, 1.302));
+        // APRILTAG_LOCATIONS.put(17, new Translation3d(4.074, 3.306, 0.308));
+        // APRILTAG_LOCATIONS.put(18, new Translation3d(3.658, 4.026, 0.308));
+        // APRILTAG_LOCATIONS.put(19, new Translation3d(4.074, 4.745, 0.308));
+        // APRILTAG_LOCATIONS.put(20, new Translation3d(4.905, 4.745, 0.308));
+        // APRILTAG_LOCATIONS.put(21, new Translation3d(5.321, 4.026, 0.308));
+        // APRILTAG_LOCATIONS.put(22, new Translation3d(4.905, 3.306, 0.308));
     }
 
     // ————— coral constants ————— //
@@ -91,7 +112,7 @@ public final class PhysicalConstants {
     public static final double ELEVATOR_GEAR_REDUCTION = 100;
 
     public static final Angle ARM_ENCODER_OFFSET = Rotations.of(0.405029296875);
-    public static final Angle ARM_MAX_ROTATIONS = Rotations.of(0.582763671875); // ! remeasure this
+    public static final Angle ARM_MAX_ROTATIONS = Rotations.of(0.13830078125);
     public static final Angle ARM_MIN_ROTATIONS = Rotations.of(0);
     public static final double ARM_GEAR_REDUCTION = 100;
 
@@ -101,7 +122,6 @@ public final class PhysicalConstants {
         public static final Angle[] L1 = {Rotations.of(0), Rotations.of(0)};
         public static final Angle[] L2 = {Rotations.of(0), Rotations.of(0.014892578125)};
         public static final Angle[] L3 = {Rotations.of(1), Rotations.of(0.075556640625)};
-        public static final Angle[] L4_PREP = {Rotations.of(3.6831054687499996), Rotations.of(0.13830078125)};
-        public static final Angle[] L4_RUN = {Rotations.of(3.6831054687499996), Rotations.of(0.0673828125)};
+        public static final Angle[] L4 = {Rotations.of(3.6831054687499996), Rotations.of(0.13830078125)};
     }
 }

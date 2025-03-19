@@ -95,14 +95,18 @@ public class PoseEstimator extends SubsystemBase {
         for (int i = 1; i < cameraInputs.tagArray.length; i += 4) { // tags[0] is the packetId
             // get networktables values
             int id = (int) cameraInputs.tagArray[i];
-            double distance = cameraInputs.tagArray[i+3]; // meters
-            double tagAngle = cameraInputs.tagArray[i+1]; // radians
-            double robotAngle = getRawYaw().getRadians();
+            double threeDimensionalDistance = cameraInputs.tagArray[i+3]; // meters
+            double tagPitch = cameraInputs.tagArray[i+2]; // radians
+            double tagYaw = cameraInputs.tagArray[i+1]; // radians
+            double robotYaw = getRawYaw().getRadians();
 
+            // ! get rid of the jetson offset
             // calculate offsets
-            double angleToTag = tagAngle - robotAngle - PhysicalConstants.JETSON_OFFSET.getRotation().getZ();
-            double xDistance = Math.cos(angleToTag) * distance - PhysicalConstants.JETSON_OFFSET.getX();
-            double yDistance = Math.sin(angleToTag) * distance - PhysicalConstants.JETSON_OFFSET.getY();
+            double pitchToTag = (Math.PI / 2) - tagPitch;
+            double yawToTag = tagYaw - robotYaw; // ! this is correct right??????
+            double twoDimensionalDistance = Math.sin(pitchToTag) * threeDimensionalDistance;
+            double xDistance = Math.cos(yawToTag) * twoDimensionalDistance;
+            double yDistance = Math.sin(yawToTag) * twoDimensionalDistance;
 
             // add to temp map
             if (tempTagOffsetMap.containsKey(id)) { // if two cameras see one tag, average the values
@@ -110,15 +114,15 @@ public class PoseEstimator extends SubsystemBase {
                 tempTagOffsetMap.put(id, new double[] {
                     (xDistance + oldArray[0]) / 2, 
                     (yDistance + oldArray[1]) / 2, 
-                    (angleToTag + oldArray[2]) / 2, 
+                    (yawToTag + oldArray[2]) / 2, 
                     ticksToKeep
                 });
             } else {
-                tempTagOffsetMap.put(id, new double[] {xDistance, yDistance, angleToTag, ticksToKeep});
+                tempTagOffsetMap.put(id, new double[] {xDistance, yDistance, yawToTag, ticksToKeep});
             }
 
             // get pose from offset
-            Translation3d taglocation = PhysicalConstants.APRILTAG_LOCATIONS.get(id);
+            Pose3d taglocation = PhysicalConstants.APRILTAG_LOCATIONS.get(id);
             accumulatedX += taglocation.getX() - xDistance;
             accumulatedY += taglocation.getY() - yDistance;
 

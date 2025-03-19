@@ -158,12 +158,11 @@ public class CoralIOReal implements CoralIO{
     @Override
     public void setElevatorPosition(Angle position) {
         elevatorMotor.setControl(elevatorMotionMagicVoltage.withPosition(position).withSlot(0));
-        elevatorTargetPosition = position;
     }
 
     @Override
-    public boolean elevatorAtSetpoint() {
-        return Math.abs(elevatorTargetPosition.in(Rotations) - inputs.elevatorEncoderPosition) < 0.1;
+    public boolean elevatorAtSetpoint(Angle position) {
+        return Math.abs(position.in(Rotations) - inputs.elevatorEncoderPosition) < 0.1;
     }
 
     // ————— arm ————— //
@@ -176,12 +175,11 @@ public class CoralIOReal implements CoralIO{
     @Override
     public void setArmPosition(Angle position) {
         armMotor.setControl(armMotionMagicVoltage.withPosition(position).withSlot(0));
-        armTargetPosition = position;
     }
     
     @Override
-    public boolean armAtSetpoint() {
-        return Math.abs(armTargetPosition.in(Rotations) - inputs.armEncoderPosition) < 0.008;
+    public boolean armAtSetpoint(Angle position) {
+        return Math.abs(position.in(Rotations) - inputs.armEncoderPosition) < 0.008;
     }
 
     // ————— logging ————— //

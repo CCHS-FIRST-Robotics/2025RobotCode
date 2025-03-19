@@ -28,10 +28,15 @@ import edu.wpi.first.wpilibj.RobotBase;
  * !   write the pose3d code for apriltags (easy)
  * !   drivewithapriltag needs to know which L they want to go to
  * !    maybe make a constant in robotcontainer that tracks what the last L to go was and then pass it in as an argument for drivewithapriltags
- * !    also make the checkifcoralmechanismthere function take in a coralposition instead of just relying on the last specified position
  * !   show in elastic which apriltags it can see
+ * !   check apriltag hashmap
  * 
- * ! figure out what to do about the elevator cancoder (probably just adjust all elevator values by 1)
+ * 
+ * 
+ * 
+ * ! we need an easy way to convert from autos on blue team to red team
+ * 
+ * ! figure out what to do about the elevator cancoder (probably just adjust all elevator values by -1)
  * 
  * * longer term: 
  *    zero the drive modules correctly 

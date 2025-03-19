@@ -32,7 +32,7 @@ public class CoralCommandCompositer {
         // }
 
         return coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.INTAKE_RUN)
-        .andThen(coral.getWaitUntilCoralInPositionCommand())
+        .andThen(coral.getWaitUntilCoralInPositionCommand(PhysicalConstants.CoralPositions.INTAKE_RUN))
         .andThen(coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.INTAKE_PREP));
     }
 
@@ -42,7 +42,7 @@ public class CoralCommandCompositer {
 
     public Command prepL1WithWait() {
         return coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.L1)
-        .andThen(coral.getWaitUntilCoralInPositionCommand());
+        .andThen(coral.getWaitUntilCoralInPositionCommand(PhysicalConstants.CoralPositions.L1));
     }
 
     public Command runL1() {
@@ -55,7 +55,7 @@ public class CoralCommandCompositer {
 
     public Command prepL2WithWait() {
         return coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.L2)
-        .andThen(coral.getWaitUntilCoralInPositionCommand());
+        .andThen(coral.getWaitUntilCoralInPositionCommand(PhysicalConstants.CoralPositions.L2));
     }
     
     public Command runL2() {
@@ -79,7 +79,7 @@ public class CoralCommandCompositer {
 
     public Command prepL3WithWait() {
         return coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.L3)
-        .andThen(coral.getWaitUntilCoralInPositionCommand());
+        .andThen(coral.getWaitUntilCoralInPositionCommand(PhysicalConstants.CoralPositions.L3));
     }
 
     public Command runL3() {
@@ -98,12 +98,12 @@ public class CoralCommandCompositer {
     }
 
     public Command prepL4() {
-        return coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.L4_PREP);
+        return coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.L4);
     }
 
     public Command prepL4WithWait() {
-        return coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.L4_PREP)
-        .andThen(coral.getWaitUntilCoralInPositionCommand());
+        return coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.L4)
+        .andThen(coral.getWaitUntilCoralInPositionCommand(PhysicalConstants.CoralPositions.L4));
     }
 
     public Command runL4() {

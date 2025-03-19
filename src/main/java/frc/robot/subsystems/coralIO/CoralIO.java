@@ -66,7 +66,7 @@ public interface CoralIO {
 
     public default void setElevatorPosition(Angle position) {}
 
-    public default boolean elevatorAtSetpoint() {
+    public default boolean elevatorAtSetpoint(Angle position) {
         return false;
     }
 
@@ -74,7 +74,7 @@ public interface CoralIO {
 
     public default void setArmPosition(Angle position) {}
 
-    public default boolean armAtSetpoint() {
+    public default boolean armAtSetpoint(Angle position) {
         return false;
     }
     
