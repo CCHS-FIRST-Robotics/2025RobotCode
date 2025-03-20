@@ -12,7 +12,7 @@ public final class PhysicalConstants {
     // ————— drive constants ————— //
 
     // kinematics
-    public static final Mass ROBOT_WEIGHT = Pounds.of(99.2); // battery is 13.324lbs extra
+    public static final Mass ROBOT_WEIGHT = Pounds.of(98.568); // battery is 13.324lbs extra
     public static final Distance WHEEL_RADIUS = Inches.of(2);
     public static final Distance WHEEL_CIRCUMFERENCE = WHEEL_RADIUS.times(2 * Math.PI);
     public static final Distance TRACK_WIDTH_X = Inches.of(22.5);
@@ -49,59 +49,47 @@ public final class PhysicalConstants {
 
     // ————— poseEstimator constants ————— //
 
-    public static final Transform3d JETSON_OFFSET = new Transform3d(
-        Inches.of(-2).in(Meters), 
-        Inches.of(0).in(Meters),
-        Inches.of(34).in(Meters),
-        new Rotation3d()
+    public static final Angle[] ARDUCAM_PITCHES = {
+        Degrees.of(-25), // front
+        Degrees.of(-3), // left
+        Degrees.of(-3), // right
+        Degrees.of(30) // back
+    };
+    public static final Pose2d JETSON_OFFSET = new Pose2d(
+        Inches.of(0.75).in(Meters), // ! get this
+        Inches.of(0).in(Meters), 
+        new Rotation2d(Degrees.of(0))
+    );
+    public static final Pose2d USB_CAMERA_1_OFFSET = new Pose2d(
+        Meters.of(0.1).in(Meters), // should be positive
+        Meters.of(0.27).in(Meters), // should be positive
+        new Rotation2d(Degrees.of(-29.3577535419)) // should be negative
     );
 
-    public static final HashMap<Integer, Pose3d> APRILTAG_LOCATIONS = new HashMap<Integer, Pose3d>();
+    public static final HashMap<Integer, Translation2d> APRILTAG_LOCATIONS = new HashMap<Integer, Translation2d>();
     static {
-        APRILTAG_LOCATIONS.put( 1, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0)));
-        APRILTAG_LOCATIONS.put( 2, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0)));
-        APRILTAG_LOCATIONS.put( 3, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0)));
-        APRILTAG_LOCATIONS.put( 4, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0)));
-        APRILTAG_LOCATIONS.put( 5, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0)));
-        APRILTAG_LOCATIONS.put( 6, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0)));
-        APRILTAG_LOCATIONS.put( 7, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0)));
-        APRILTAG_LOCATIONS.put( 8, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0)));
-        APRILTAG_LOCATIONS.put( 9, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0)));
-        APRILTAG_LOCATIONS.put(10, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0)));
-        APRILTAG_LOCATIONS.put(11, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0)));
-        APRILTAG_LOCATIONS.put(12, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0)));
-        APRILTAG_LOCATIONS.put(13, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0)));
-        APRILTAG_LOCATIONS.put(14, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0)));
-        APRILTAG_LOCATIONS.put(15, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0)));
-        APRILTAG_LOCATIONS.put(16, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0)));
-        APRILTAG_LOCATIONS.put(17, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0)));
-        APRILTAG_LOCATIONS.put(18, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0)));
-        APRILTAG_LOCATIONS.put(19, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0)));
-        APRILTAG_LOCATIONS.put(20, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0)));
-        APRILTAG_LOCATIONS.put(21, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0)));
-        APRILTAG_LOCATIONS.put(22, new Pose3d(0, 0, 0, new Rotation3d(0, 0, 0)));
-        // APRILTAG_LOCATIONS.put(1, new Translation3d(16.697, 0.655, 1.486));
-        // APRILTAG_LOCATIONS.put(2, new Translation3d(16.697, 7.396, 1.486));
-        // APRILTAG_LOCATIONS.put(3, new Translation3d(11.561, 8.056, 1.302));
-        // APRILTAG_LOCATIONS.put(4, new Translation3d(9.276, 6.138, 1.868));
-        // APRILTAG_LOCATIONS.put(5, new Translation3d(9.276, 1.915, 1.868));
-        // APRILTAG_LOCATIONS.put(6, new Translation3d(13.474, 3.306, 0.308));
-        // APRILTAG_LOCATIONS.put(7, new Translation3d(13.890, 4.026, 0.308));
-        // APRILTAG_LOCATIONS.put(8, new Translation3d(13.474, 4.745, 0.308));
-        // APRILTAG_LOCATIONS.put(9, new Translation3d(12.643, 4.745, 0.308));
-        // APRILTAG_LOCATIONS.put(10, new Translation3d(12.227, 4.026, 0.308));
-        // APRILTAG_LOCATIONS.put(11, new Translation3d(12.643, 3.306, 0.308));
-        // APRILTAG_LOCATIONS.put(12, new Translation3d(0.851, 0.655, 1.486));
-        // APRILTAG_LOCATIONS.put(13, new Translation3d(0.851, 7.396, 1.486));
-        // APRILTAG_LOCATIONS.put(14, new Translation3d(8.272, 6.138, 1.868));
-        // APRILTAG_LOCATIONS.put(15, new Translation3d(8.272, 1.915, 1.868));
-        // APRILTAG_LOCATIONS.put(16, new Translation3d(5.988, -0.004, 1.302));
-        // APRILTAG_LOCATIONS.put(17, new Translation3d(4.074, 3.306, 0.308));
-        // APRILTAG_LOCATIONS.put(18, new Translation3d(3.658, 4.026, 0.308));
-        // APRILTAG_LOCATIONS.put(19, new Translation3d(4.074, 4.745, 0.308));
-        // APRILTAG_LOCATIONS.put(20, new Translation3d(4.905, 4.745, 0.308));
-        // APRILTAG_LOCATIONS.put(21, new Translation3d(5.321, 4.026, 0.308));
-        // APRILTAG_LOCATIONS.put(22, new Translation3d(4.905, 3.306, 0.308));
+        APRILTAG_LOCATIONS.put( 1, new Translation2d(16.697198, 0.65532 ));
+        APRILTAG_LOCATIONS.put( 2, new Translation2d(16.697198, 7.39648 ));
+        APRILTAG_LOCATIONS.put( 3, new Translation2d(11.56081 , 8.05561 ));
+        APRILTAG_LOCATIONS.put( 4, new Translation2d(9.27608  , 6.137656));
+        APRILTAG_LOCATIONS.put( 5, new Translation2d(9.27608  , 1.914906));
+        APRILTAG_LOCATIONS.put( 6, new Translation2d(13.474446, 3.306318));
+        APRILTAG_LOCATIONS.put( 7, new Translation2d(13.890498, 4.0259  ));
+        APRILTAG_LOCATIONS.put( 8, new Translation2d(13.474446, 4.745482));
+        APRILTAG_LOCATIONS.put( 9, new Translation2d(12.643358, 4.745482));
+        APRILTAG_LOCATIONS.put(10, new Translation2d(12.227306, 4.0259  ));
+        APRILTAG_LOCATIONS.put(11, new Translation2d(12.643358, 3.306318));
+        APRILTAG_LOCATIONS.put(12, new Translation2d(0.851154 , 0.65532 ));
+        APRILTAG_LOCATIONS.put(13, new Translation2d(0.851154 , 7.39648 ));
+        APRILTAG_LOCATIONS.put(14, new Translation2d(8.272272 , 6.137656));
+        APRILTAG_LOCATIONS.put(15, new Translation2d(8.272272 , 1.914906));
+        APRILTAG_LOCATIONS.put(16, new Translation2d(5.987542 , -0.00381  ));
+        APRILTAG_LOCATIONS.put(17, new Translation2d(4.073906 , 3.306318));
+        APRILTAG_LOCATIONS.put(18, new Translation2d(3.6576   , 4.0259  ));
+        APRILTAG_LOCATIONS.put(19, new Translation2d(4.073906 , 4.745482));
+        APRILTAG_LOCATIONS.put(20, new Translation2d(4.90474  , 4.745482));
+        APRILTAG_LOCATIONS.put(21, new Translation2d(5.321046 , 4.0259  ));
+        APRILTAG_LOCATIONS.put(22, new Translation2d(4.90474  , 3.306318));
     }
 
     // ————— coral constants ————— //

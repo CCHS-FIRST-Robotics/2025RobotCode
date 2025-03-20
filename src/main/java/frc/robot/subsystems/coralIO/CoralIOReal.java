@@ -41,10 +41,10 @@ public class CoralIOReal implements CoralIO{
     private final MotionMagicConfigs armMotionMagicConfig = armConfig.MotionMagic;
     private final MotionMagicVoltage armMotionMagicVoltage = new MotionMagicVoltage(0);
 
-    private double kPArm = 30;
+    private double kPArm = 40;
     private double kIArm = 0;
     private double kDArm = 0; 
-    private double kGArm = 0.35;
+    private double kGArm = 0.65;
     private double kSArm = 0;
     private double kVArm = 0.1121914734;
     private double kAArm = 0;
@@ -126,7 +126,7 @@ public class CoralIOReal implements CoralIO{
         // misc
         armConfig.MotorOutput.withInverted(InvertedValue.CounterClockwise_Positive);
         armMotor.setNeutralMode(NeutralModeValue.Brake);
-        armConfig.CurrentLimits.StatorCurrentLimit = 30;
+        armConfig.CurrentLimits.StatorCurrentLimit = 40;
         armMotor.getConfigurator().apply(armConfig);
 
         // ————— logging ————— //
@@ -203,10 +203,7 @@ public class CoralIOReal implements CoralIO{
             velocityAbsoluteSignalArm,
             temperatureSignalArm
         );
-
-        Logger.recordOutput("HI", elevatorTargetPosition.in(Rotations) - inputs.elevatorEncoderPosition);
-        Logger.recordOutput("JO", armTargetPosition.in(Rotations) - inputs.armEncoderPosition);
-
+        
         inputs.elevatorVoltage = voltageSignalElevator.getValue().in(Volts);
         inputs.elevatorCurrent = currentSignalElevator.getValue().in(Amps);
         inputs.elevatorMotorPosition = positionSignalElevator.getValue().in(Rotations) * PhysicalConstants.ELEVATOR_GEAR_REDUCTION;

@@ -18,7 +18,7 @@ public class PoseEstimator extends SubsystemBase {
 
     private final CameraIO cameraIO;
     private HashMap<Integer, double[]> tagOffsetMap = new HashMap<Integer, double[]>();
-    private final int ticksToKeep = 100;  // ! figure out how big it should be
+    private final int ticksToKeep = 10;
     private final CameraIOInputsAutoLogged cameraInputs = new CameraIOInputsAutoLogged();
 
     private final SwerveDrivePoseEstimator odometryEstimator;
@@ -88,43 +88,79 @@ public class PoseEstimator extends SubsystemBase {
     }
 
     public Pose2d updateVisionEstimate() {
-        int tagCount = 0; // front, left, right, back, -25, -3, -3, 30
+        int tagCount = 0; 
         double accumulatedX = 0;
         double accumulatedY = 0;
+        @SuppressWarnings("unused")
+        int packetId = (int) cameraInputs.tagArray[0];
+        int cameraId = (int) cameraInputs.tagArray[1];
         HashMap<Integer, double[]> tempTagOffsetMap = new HashMap<Integer, double[]>();
-        for (int i = 1; i < cameraInputs.tagArray.length; i += 4) { // tags[0] is the packetId
+        for (int i = 2; i < cameraInputs.tagArray.length; i += 4) {
             // get networktables values
-            int id = (int) cameraInputs.tagArray[i];
-            double threeDimensionalDistance = cameraInputs.tagArray[i+3]; // meters
+            int tagId = (int) cameraInputs.tagArray[i];
+            double tagYaw = -cameraInputs.tagArray[i+1]; // radians, sleder's code does clockwise positive
             double tagPitch = cameraInputs.tagArray[i+2]; // radians
-            double tagYaw = cameraInputs.tagArray[i+1]; // radians
+            double tagDistance = cameraInputs.tagArray[i+3]; // meters
             double robotYaw = getRawYaw().getRadians();
 
-            // ! get rid of the jetson offset
-            // calculate offsets
-            double pitchToTag = (Math.PI / 2) - tagPitch;
-            double yawToTag = tagYaw - robotYaw; // ! this is correct right??????
-            double twoDimensionalDistance = Math.sin(pitchToTag) * threeDimensionalDistance;
-            double xDistance = Math.cos(yawToTag) * twoDimensionalDistance;
-            double yDistance = Math.sin(yawToTag) * twoDimensionalDistance;
+            // get which camera offset to use
+            Pose2d cameraOffsetFromCenter = new Pose2d();
+            int idOffsetBasedOnCamera = 0;
+            switch (cameraId) {
+                case 0: 
+                    cameraOffsetFromCenter = PhysicalConstants.JETSON_OFFSET;
+                    idOffsetBasedOnCamera = 0;
+                    break;
+                case 1: 
+                    cameraOffsetFromCenter = PhysicalConstants.USB_CAMERA_1_OFFSET;
+                    idOffsetBasedOnCamera = 100;
+                    break;
+            }
+
+            tagId += idOffsetBasedOnCamera;
+
+            // get 2DDistance
+            double pitchToTag = tagPitch;
+            double twoDimensionalDistance = Math.cos(pitchToTag) * tagDistance;
+
+            // get camera adjusted values
+            double yawWithoutCameraOffset = tagYaw;
+            double xWithoutCameraOffset = Math.cos(yawWithoutCameraOffset) * twoDimensionalDistance;
+            double yWithoutCameraOffset = Math.sin(yawWithoutCameraOffset) * twoDimensionalDistance;
+
+            // add the camera xy offset
+            double xWithRobotRotationOffset = xWithoutCameraOffset + cameraOffsetFromCenter.getX();
+            double yWithRobotRotationOffset = yWithoutCameraOffset + cameraOffsetFromCenter.getY();
+            double hypotWithRobotRotationOffset = Math.hypot(xWithRobotRotationOffset, yWithRobotRotationOffset);
+            double yawWithRobotRotationOffset = Math.acos(xWithRobotRotationOffset / hypotWithRobotRotationOffset); // good value
+            
+            // get the actual 
+            double yawToTagFromRobotCenterLine = robotYaw - yawWithRobotRotationOffset;
+            double xToTagFromRobotCenterLine = Math.cos(yawToTagFromRobotCenterLine) * hypotWithRobotRotationOffset; // good value
+            double yToTagFromRobotCenterLine = Math.sin(yawToTagFromRobotCenterLine) * hypotWithRobotRotationOffset; // good value
 
             // add to temp map
-            if (tempTagOffsetMap.containsKey(id)) { // if two cameras see one tag, average the values
-                double[] oldArray = tempTagOffsetMap.get(id);
-                tempTagOffsetMap.put(id, new double[] {
-                    (xDistance + oldArray[0]) / 2, 
-                    (yDistance + oldArray[1]) / 2, 
-                    (yawToTag + oldArray[2]) / 2, 
+            if (tempTagOffsetMap.containsKey(tagId)) { // if two cameras see one tag, average the values
+                double[] oldArray = tagOffsetMap.get(tagId);
+                tempTagOffsetMap.put(tagId, new double[] {
+                    (xToTagFromRobotCenterLine + oldArray[0]) / 2, 
+                    (yToTagFromRobotCenterLine + oldArray[1]) / 2, 
+                    (yawWithRobotRotationOffset + oldArray[2]) / 2, 
                     ticksToKeep
                 });
             } else {
-                tempTagOffsetMap.put(id, new double[] {xDistance, yDistance, yawToTag, ticksToKeep});
+                tempTagOffsetMap.put(tagId, new double[] {
+                    xToTagFromRobotCenterLine, 
+                    yToTagFromRobotCenterLine, 
+                    yawWithRobotRotationOffset, 
+                    ticksToKeep
+                });
             }
 
             // get pose from offset
-            Pose3d taglocation = PhysicalConstants.APRILTAG_LOCATIONS.get(id);
-            accumulatedX += taglocation.getX() - xDistance;
-            accumulatedY += taglocation.getY() - yDistance;
+            Translation2d taglocation = PhysicalConstants.APRILTAG_LOCATIONS.get(tagId > 100 ? tagId - 100 : tagId);
+            accumulatedX += taglocation.getX() - xToTagFromRobotCenterLine;
+            accumulatedY += taglocation.getY() - yToTagFromRobotCenterLine;
 
             tagCount++;
         }
@@ -157,7 +193,7 @@ public class PoseEstimator extends SubsystemBase {
 
     public void resetPosition(Pose2d pose) {
         odometryEstimator.resetPosition(pose.getRotation(), drive.getModulePositions(), pose);
-        combinedEstimator.resetPosition(pose.getRotation(), drive.getModulePositions(), pose);
+        combinedEstimator.resetPosition(pose.getRotation(), drive.getModulePositions(), pose); // ! doesn't have stddevs of anything
     }
 
     // @SuppressWarnings("unused")

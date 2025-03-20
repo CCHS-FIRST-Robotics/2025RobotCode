@@ -7,6 +7,9 @@ package frc.robot;
 import edu.wpi.first.wpilibj.RobotBase;
 
 /**
+ * ! tell sleder that the tags are overriding each other
+ * 
+ * 
  * to do: 
  * * things to keep in mind: 
  *    maybe test using the coupling thing again

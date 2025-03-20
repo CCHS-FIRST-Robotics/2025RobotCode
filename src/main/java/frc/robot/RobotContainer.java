@@ -22,7 +22,7 @@ import frc.robot.utils.*;
 
 public class RobotContainer {
     private final CommandXboxController xboxController1 = new CommandXboxController(VirtualConstants.CONTROLLER_PORT_1);
-    // private final CommandXboxController xboxController2 = new CommandXboxController(VirtualConstants.CONTROLLER_PORT_2);
+    private final CommandXboxController xboxController2 = new CommandXboxController(VirtualConstants.CONTROLLER_PORT_2);
     private final CommandGenericHID coralController = new CommandGenericHID(VirtualConstants.CONTROLLER_PORT_3);
 
     private final Drive drive;
@@ -138,6 +138,9 @@ public class RobotContainer {
         );
 
         // ————— coral ————— //
+
+        // xboxController2.x().onTrue(coral.getSetArmCommand(Rotations.of(0)));
+        // xboxController2.b().onTrue(coral.getSetArmCommand(Rotations.of(0.12)));
 
         // reef positions
         if ((DriverStation.getAlliance().isPresent() ? DriverStation.getAlliance().get() : Alliance.Red).equals(Alliance.Red)) {
