@@ -5,12 +5,10 @@ import static edu.wpi.first.units.Units.*;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.*;
-import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.Timer;
 import java.util.HashMap;
-import java.util.Map;
 
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.constants.PhysicalConstants;
@@ -21,11 +19,12 @@ public class PoseEstimator extends SubsystemBase {
 
     private final CameraIO cameraIO;
     private int jetsonLastPacketId;
+    private int timesJetsonLastPacketIdWasStale;
     private int USB1LastPacketId;
-    private HashMap<Integer, double[]> jetsonTagOffsetMap = new HashMap<Integer, double[]>();
-    private HashMap<Integer, double[]> USB1TagOffsetMap = new HashMap<Integer, double[]>();
-    private HashMap<Integer, double[]> combinedTagOffsetMap = new HashMap<Integer, double[]>();
-    private final int ticksToKeep = 10;
+    private int timesUSB1LastPacketIdWasStale;
+    private HashMap<Integer, double[]> jetsonMap = new HashMap<Integer, double[]>();
+    private HashMap<Integer, double[]> USB1Map = new HashMap<Integer, double[]>();
+    private HashMap<Integer, double[]> combinedMap = new HashMap<Integer, double[]>();
     private final CameraIOInputsAutoLogged cameraInputs = new CameraIOInputsAutoLogged();
 
     private final SwerveDrivePoseEstimator odometryEstimator;
@@ -77,46 +76,145 @@ public class PoseEstimator extends SubsystemBase {
         Logger.recordOutput("outputs/poseEstimator/fieldPosition", fieldPosition);
         Logger.recordOutput("outputs/poseEstimator/odometryPoseEstimate", odometryEstimator.getEstimatedPosition());
 
-        // vision
+        // vision // ! decrement hashmap values
+        // for(int key : jetsonMap.keySet()){
+        //     Logger.recordOutput("outputs/poseEstimator/maps/jetsonMap/" + Integer.toString(key), jetsonMap.get(key));
+        // }
+        // for(int key : USB1Map.keySet()){
+        //     Logger.recordOutput("outputs/poseEstimator/maps/USB1Map/" + Integer.toString(key), USB1Map.get(key));
+        // }
+        // for(int key : combinedMap.keySet()){
+        //     Logger.recordOutput("outputs/poseEstimator/maps/combinedMap/" + Integer.toString(key), combinedMap.get(key));
+        // }
 
-        // if the packet is empty or stale, return 
-        if (cameraInputs.tagArray.length == 0) {
+        combinedMap = new HashMap<Integer, double[]>();
+        if (cameraInputs.tagArray.length == 0) { // if packet is empty
             return;
         }
         int packetId = (int) cameraInputs.tagArray[0];
         int cameraId = (int) cameraInputs.tagArray[1];
-        switch (cameraId) {
-            case 0: 
-                if(packetId == jetsonLastPacketId){ // if stale
+        switch (cameraId) { // if packet is stale
+            case 0: // jetson
+                if (packetId == jetsonLastPacketId) {
+                    timesJetsonLastPacketIdWasStale++;
+                    System.out.println(timesJetsonLastPacketIdWasStale);
+                } else {
+                    timesJetsonLastPacketIdWasStale = 0;
+                }
+                if(timesJetsonLastPacketIdWasStale > 10){
                     return;
                 }
                 jetsonLastPacketId = packetId;
                 break;
-            case 1: 
-                if(packetId == USB1LastPacketId){ // if stale
+            case 1: // usb 1
+                if (packetId == USB1LastPacketId) {
+                    timesUSB1LastPacketIdWasStale++;
+                    System.out.println(timesUSB1LastPacketIdWasStale);
+                } else {
+                    timesUSB1LastPacketIdWasStale = 0;
+                }
+                if(timesUSB1LastPacketIdWasStale > 10){
                     return;
                 }
+
                 USB1LastPacketId = packetId;
                 break;
         }
-        System.out.println("UPDATING");
-        visionEstimate = updateVisionEstimate();
-
+        visionEstimate = updateVision();
+        // for(int key : combinedMap.keySet()){
+        //     System.out.print(key + ", [");
+        //     for(double d : combinedMap.get(key)){
+        //         System.out.print(d + ", ");
+        //     }
+        //     System.out.println();
+        // }
+        // System.out.println("___________________________");
         combinedEstimator.updateWithTime(
             Timer.getFPGATimestamp(),
             getRawYaw(),
             drive.getModulePositions()
         );
         combinedEstimator.addVisionMeasurement(visionEstimate, Timer.getFPGATimestamp()); 
-
         Logger.recordOutput("outputs/poseEstimator/visionPoseEstimate", visionEstimate);
         Logger.recordOutput("outputs/poseEstimator/combinedPoseEstimate", combinedEstimator.getEstimatedPosition());
     }
 
-    /** 
-     * this gets a hashmap per packet of the estimated offsets to each tag
-     */
-    public HashMap<Integer, HashMap<Integer, double[]>> getCameraPacketTagOffsetMap() {
+    public Pose2d updateVision() {
+        // update jetson and usb 1 maps
+        HashMap<Integer, HashMap<Integer, double[]>> cameraPacketMap = getCameraPacketMap();
+        for(int key : cameraPacketMap.keySet()){
+            HashMap<Integer, double[]> packetMap = cameraPacketMap.get(key);
+            switch(key) {
+                case 0: // jetson
+                    HashMap<Integer, double[]> tempJetsonMap = cameraPacketMap.get(key);
+                    for(int tagId : packetMap.keySet()){ // add all the new values from packetMap
+                        tempJetsonMap.put(tagId, packetMap.get(tagId));
+                    }
+                    // transferring the old jetsonMap values
+                    for (int jetsonKey : jetsonMap.keySet()) {
+                        if (tempJetsonMap.containsKey(jetsonKey)) {
+                            continue;
+                        }
+
+                        tempJetsonMap.put(jetsonKey, jetsonMap.get(jetsonKey));
+                    }
+                    jetsonMap = tempJetsonMap;
+                    break;
+                case 1: // usb 1
+                    HashMap<Integer, double[]> tempUSB1Map = cameraPacketMap.get(key);
+                    for(int tagId : packetMap.keySet()){ // add all the new values from packetMap
+                        tempUSB1Map.put(tagId, packetMap.get(tagId));
+                    }
+                    // transferring the old usb 1 map values
+                    for (int USB1Key : USB1Map.keySet()) {
+                        if (tempUSB1Map.containsKey(USB1Key)) {
+                            continue;
+                        }
+
+                        tempUSB1Map.put(USB1Key, jetsonMap.get(USB1Key));
+                    }
+                    USB1Map = tempUSB1Map;
+                    break;
+            }
+        }
+
+        // combine jetson and usb 1 maps
+        for(int jetsonKey : jetsonMap.keySet()){
+            Logger.recordOutput("outputs/poseEstimator/maps/jetsonMap/" + Integer.toString(jetsonKey), jetsonMap.get(jetsonKey));
+            combinedMap.put(jetsonKey, jetsonMap.get(jetsonKey));
+        }
+        for(int USB1Key : USB1Map.keySet()){
+            Logger.recordOutput("outputs/poseEstimator/maps/USB1Map/" + Integer.toString(USB1Key), jetsonMap.get(USB1Key));
+            if(combinedMap.containsKey(USB1Key)){ // average the values
+                combinedMap.put(
+                    USB1Key,
+                    new double[] {
+                        (combinedMap.get(USB1Key)[0] + USB1Map.get(USB1Key)[0]) / 2,
+                        (combinedMap.get(USB1Key)[1] + USB1Map.get(USB1Key)[1]) / 2,
+                        (combinedMap.get(USB1Key)[2] + USB1Map.get(USB1Key)[2]) / 2,
+                        (combinedMap.get(USB1Key)[3] + USB1Map.get(USB1Key)[2]) / 2
+                    }
+                );
+                continue;
+            }
+
+            combinedMap.put(USB1Key, USB1Map.get(USB1Key));
+        }
+
+        // calculate robot pose
+        double accumulatedX = 0;
+        double accumulatedY = 0; // numtags = size
+        for(int key : combinedMap.keySet()){
+            Pose2d apriltagLocation = PhysicalConstants.APRILTAG_LOCATIONS.get(key);
+            accumulatedX += apriltagLocation.getX() - combinedMap.get(key)[2];
+            accumulatedY += apriltagLocation.getY() - combinedMap.get(key)[3];
+        }
+
+        double size = combinedMap.size();
+        return new Pose2d(accumulatedX / size, accumulatedY / size, getRawYaw());
+    }
+
+    public HashMap<Integer, HashMap<Integer, double[]>> getCameraPacketMap() {
         // get the camera offset
         int cameraId = (int) cameraInputs.tagArray[1];
         Pose2d cameraOffsetFromCenter = new Pose2d();
@@ -129,8 +227,8 @@ public class PoseEstimator extends SubsystemBase {
                 break;
         }
         
-        // get the packetOffsetMap
-        HashMap<Integer, double[]> packetTagOffsetMap = new HashMap<Integer, double[]>();// tag id, camera id and offset array        
+        // get the packetMap
+        HashMap<Integer, double[]> packetMap = new HashMap<Integer, double[]>();     
         for (int i = 2; i < cameraInputs.tagArray.length; i += 4) {
             // get networktables values
             int tagId = (int) cameraInputs.tagArray[i];
@@ -139,119 +237,33 @@ public class PoseEstimator extends SubsystemBase {
             double tagDistance = cameraInputs.tagArray[i+3]; // meters
             double robotYaw = getRawYaw().getRadians();
 
-            // get 2DDistance
+            // get distance from camera
             double pitchToTag = tagPitch;
-            double twoDimensionalDistance = Math.cos(pitchToTag) * tagDistance;
+            double hypotFromCamera = Math.cos(pitchToTag) * tagDistance;
 
-            // get camera adjusted values
-            double yawWithoutCameraOffset = tagYaw;
-            double xWithoutCameraOffset = Math.cos(yawWithoutCameraOffset) * twoDimensionalDistance;
-            double yWithoutCameraOffset = Math.sin(yawWithoutCameraOffset) * twoDimensionalDistance;
+            // get values from camera
+            double yawFromCamera = tagYaw;
+            double xFromCamera = Math.cos(yawFromCamera) * hypotFromCamera;
+            double yFromCamera = Math.sin(yawFromCamera) * hypotFromCamera;
 
-            // add the camera xy offset
-            double xWithRobotRotationOffset = xWithoutCameraOffset + cameraOffsetFromCenter.getX();
-            double yWithRobotRotationOffset = yWithoutCameraOffset + cameraOffsetFromCenter.getY();
-            double hypotWithRobotRotationOffset = Math.hypot(xWithRobotRotationOffset, yWithRobotRotationOffset);
-            double yawWithRobotRotationOffset = Math.acos(xWithRobotRotationOffset / hypotWithRobotRotationOffset); // good value
+            // get values from robot center
+            double xFromRobot = xFromCamera + cameraOffsetFromCenter.getX();
+            double yFromRobot = yFromCamera + cameraOffsetFromCenter.getY();
+            double hypotFromRobot = Math.hypot(xFromRobot, yFromRobot);
+            double yawFromRobot = Math.acos(xFromRobot / hypotFromRobot);
             
-            // get the actual 
-            double yawToTagFromRobotCenterLine = robotYaw - yawWithRobotRotationOffset;
-            double xToTagFromRobotCenterLine = Math.cos(yawToTagFromRobotCenterLine) * hypotWithRobotRotationOffset; // good value
-            double yToTagFromRobotCenterLine = Math.sin(yawToTagFromRobotCenterLine) * hypotWithRobotRotationOffset; // good value
+            // get values from robot center relative to the field 
+            double yawFromField = robotYaw + yawFromRobot;
+            double xFromField = Math.cos(yawFromField) * hypotFromRobot;
+            double yFromField = Math.sin(yawFromField) * hypotFromRobot;
             
-            packetTagOffsetMap.put(tagId, new double[]{xToTagFromRobotCenterLine, yToTagFromRobotCenterLine, getRawYaw().getRadians(), ticksToKeep});
+            packetMap.put(tagId, new double[]{xFromRobot, yFromRobot, xFromField, yFromField});
         }
 
-        HashMap<Integer, HashMap<Integer, double[]>> cameraPacketTagOffsetMap = new HashMap<Integer, HashMap<Integer, double[]>>();
-        cameraPacketTagOffsetMap.put(cameraId, packetTagOffsetMap);
-        return cameraPacketTagOffsetMap;
-    }
-
-    public Pose2d updateVisionEstimate() {
-        // update the jetson and USB camera offset maps
-        HashMap<Integer, HashMap<Integer, double[]>> cameraPacketTagOffsetMap = getCameraPacketTagOffsetMap();
-        for(int key : cameraPacketTagOffsetMap.keySet()){
-            HashMap<Integer, double[]> packetTagOffsetMap = cameraPacketTagOffsetMap.get(key);
-            switch(key){
-                case 0: // jetson
-                    for(int key1 : packetTagOffsetMap.keySet()){ // add all the new values
-                        jetsonTagOffsetMap.put(key1, packetTagOffsetMap.get(key1));
-                    }
-                    // transferring the cameraPacketTagoffsetmap to the jetsonoffsetmap
-                    for (int jetsonKey : jetsonTagOffsetMap.keySet()){ // go through the old values, see if they're overdue
-                        if(packetTagOffsetMap.containsKey(jetsonKey)){ // if it has it, just replace it
-                            continue;
-                        }
-
-                        if (jetsonTagOffsetMap.get(jetsonKey)[3] <= 0){
-                            continue;
-                        }
-                        jetsonTagOffsetMap.put(jetsonKey, new double[]{
-                            jetsonTagOffsetMap.get(jetsonKey)[0],
-                            jetsonTagOffsetMap.get(jetsonKey)[1],
-                            jetsonTagOffsetMap.get(jetsonKey)[2],
-                            jetsonTagOffsetMap.get(jetsonKey)[3] - 1
-                        });
-                    }
-                    break;
-                case 1: // usb 1
-                    for(int key1 : packetTagOffsetMap.keySet()){ // add all the new values
-                        jetsonTagOffsetMap.put(key1, packetTagOffsetMap.get(key1));
-                    }
-                    // transferring the cameraPacketTagoffsetmap to the jetsonoffsetmap
-                    for (int jetsonKey : jetsonTagOffsetMap.keySet()){ // go through the old values, see if they're overdue
-                        if(packetTagOffsetMap.containsKey(jetsonKey)){ // if it has it, just replace it
-                            continue;
-                        }
-
-                        if (jetsonTagOffsetMap.get(jetsonKey)[3] <= 0){
-                            continue;
-                        }
-                        jetsonTagOffsetMap.put(jetsonKey, new double[]{
-                            jetsonTagOffsetMap.get(jetsonKey)[0],
-                            jetsonTagOffsetMap.get(jetsonKey)[1],
-                            jetsonTagOffsetMap.get(jetsonKey)[2],
-                            jetsonTagOffsetMap.get(jetsonKey)[3] - 1
-                        });
-                    }
-                    break;
-            }
-        }
-
-        for(int USB1Key : USB1TagOffsetMap.keySet()){
-            if(jetsonTagOffsetMap.containsKey(USB1Key)){ // if they both have an apriltag, put the usb1 into the jetson
-                jetsonTagOffsetMap.put(
-                    USB1Key,
-                    new double[] {
-                        (jetsonTagOffsetMap.get(USB1Key)[0] + USB1TagOffsetMap.get(USB1Key)[0]) / 2,
-                        (jetsonTagOffsetMap.get(USB1Key)[1] + USB1TagOffsetMap.get(USB1Key)[1]) / 2,
-                        (jetsonTagOffsetMap.get(USB1Key)[2] + USB1TagOffsetMap.get(USB1Key)[2]) / 2
-                    }
-                );
-            }else{ // if only the usb has it, just add it to the jetson
-                jetsonTagOffsetMap.put(
-                    USB1Key,
-                    new double[] {
-                        USB1TagOffsetMap.get(USB1Key)[0],
-                        USB1TagOffsetMap.get(USB1Key)[1],
-                        USB1TagOffsetMap.get(USB1Key)[2]
-                    }
-                );
-            }
-        }
-        combinedTagOffsetMap = jetsonTagOffsetMap;
-
-        int accumulatedX = 0;
-        int accumulatedY = 0; // numtags = size
-        for(int key : combinedTagOffsetMap.keySet()){
-            Translation2d apriltagLocation = PhysicalConstants.APRILTAG_LOCATIONS.get(key);
-            accumulatedX += apriltagLocation.getX() - combinedTagOffsetMap.get(key)[0];
-            accumulatedY += apriltagLocation.getY() - combinedTagOffsetMap.get(key)[1];
-        }
-
-        int size = combinedTagOffsetMap.size();
-        return new Pose2d(accumulatedX / size, accumulatedY / size, getRawYaw());
-    }
+        HashMap<Integer, HashMap<Integer, double[]>> cameraPacketMap = new HashMap<Integer, HashMap<Integer, double[]>>();
+        cameraPacketMap.put(cameraId, packetMap);
+        return cameraPacketMap;
+    }    
 
     public void resetPosition(Pose2d pose) {
         odometryEstimator.resetPosition(pose.getRotation(), drive.getModulePositions(), pose);
@@ -281,7 +293,7 @@ public class PoseEstimator extends SubsystemBase {
         return gyroInputs.connected ? new Rotation2d(Rotations.of(gyroInputs.yaw).in(Radians)) : fieldPosition.getRotation();
     }
 
-    public double[] getOffsetFromSpecificTag(int id) {
-        return combinedTagOffsetMap.get(id);
+    public double[] getArrayFromSpecificTag(int id) {
+        return combinedMap.get(id);
     }
 }

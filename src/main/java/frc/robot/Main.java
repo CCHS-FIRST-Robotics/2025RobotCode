@@ -10,6 +10,9 @@ import edu.wpi.first.wpilibj.RobotBase;
  * ! elevator hits coral trough when L2
  * 
  * 
+ * ! add button to sqitch what max accel is
+ * 
+ * 
  * to do: 
  * * things to keep in mind: 
  *    maybe test using the coupling thing again

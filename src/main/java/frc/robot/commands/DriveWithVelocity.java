@@ -50,7 +50,7 @@ public class DriveWithVelocity extends Command {
         );
         Rotation2d linearDirection = new Rotation2d(linearXSpeed, linearYSpeed);
         Translation2d linearVelocity = new Translation2d(
-            linearSpeed,
+            linearSpeed, 
             linearDirection
         );
 
