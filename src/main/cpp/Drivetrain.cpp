@@ -4,16 +4,11 @@
 
 #include "subsystems/Drivetrain.h"
 
-void Drivetrain::Drive(units::meters_per_second_t xSpeed,
-                       units::meters_per_second_t ySpeed,
-                       units::radians_per_second_t rot, bool fieldRelative,
-                       units::second_t period) {
+void Drivetrain::Drive(units::meters_per_second_t xSpeed, units::meters_per_second_t ySpeed, units::radians_per_second_t rot, bool fieldRelative, units::second_t period) {
+
   auto states =
       m_kinematics.ToSwerveModuleStates(frc::ChassisSpeeds::Discretize(
-          fieldRelative ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(
-                              xSpeed, ySpeed, rot, m_gyro.GetRotation2d())
-                        : frc::ChassisSpeeds{xSpeed, ySpeed, rot},
-          period));
+          fieldRelative ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_gyro.GetRotation2d()) :frc::ChassisSpeeds{xSpeed, ySpeed, rot}, period));
 
   m_kinematics.DesaturateWheelSpeeds(&states, kMaxSpeed);
 
@@ -26,7 +21,5 @@ void Drivetrain::Drive(units::meters_per_second_t xSpeed,
 }
 
 void Drivetrain::UpdateOdometry() {
-  m_odometry.Update(m_gyro.GetRotation2d(),
-                    {m_frontLeft.GetPosition(), m_frontRight.GetPosition(),
-                     m_backLeft.GetPosition(), m_backRight.GetPosition()});
+  m_odometry.Update(m_gyro.GetRotation2d(), {m_frontLeft.GetPosition(), m_frontRight.GetPosition(), m_backLeft.GetPosition(), m_backRight.GetPosition()});
 }

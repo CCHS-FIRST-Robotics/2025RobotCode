@@ -32,9 +32,9 @@ class SwerveModule {
   static constexpr int kEncoderResolution = 4096;
 
   static constexpr auto kModuleMaxAngularVelocity =
-      std::numbers::pi * 1_rad_per_s;  // radians per second
+      std::numbers::pi * 1_rad_per_s;  // rad/sec
   static constexpr auto kModuleMaxAngularAcceleration =
-      std::numbers::pi * 2_rad_per_s / 1_s;  // radians per second^2
+      std::numbers::pi * 2_rad_per_s / 1_s;  // rad/sec^2
 
   frc::PWMSparkMax m_driveMotor;
   frc::PWMSparkMax m_turningMotor;
@@ -49,8 +49,5 @@ class SwerveModule {
       0.0,
       {kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration}};
 
-  frc::SimpleMotorFeedforward<units::meters> m_driveFeedforward{1_V,
-                                                                3_V / 1_mps};
-  frc::SimpleMotorFeedforward<units::radians> m_turnFeedforward{
-      1_V, 0.5_V / 1_rad_per_s};
-};
+  frc::SimpleMotorFeedforward<units::meters> m_driveFeedforward{1_V, 3_V / 1_mps};
+  frc::SimpleMotorFeedforward<units::radians> m_turnFeedforward{1_V, 0.5_V / 1_rad_per_s};};

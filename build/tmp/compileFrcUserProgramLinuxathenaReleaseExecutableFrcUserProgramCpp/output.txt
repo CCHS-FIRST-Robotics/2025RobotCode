@@ -1,11 +1,4 @@
 See file:///Users/jli28/Desktop/2025RobotCode/build/tmp/compileFrcUserProgramLinuxathenaReleaseExecutableFrcUserProgramCpp/output.txt for all output for compileFrcUserProgramLinuxathenaReleaseExecutableFrcUserProgramCpp.
-compiling RobotContainer.cpp failed.
-In file included from /Users/jli28/Desktop/2025RobotCode/src/main/cpp/RobotContainer.cpp:5:
-/Users/jli28/Desktop/2025RobotCode/src/main/include/RobotContainer.h:11:10: fatal error: subsystems/ExampleSubsystem.h: No such file or directory
-   11 | #include "subsystems/ExampleSubsystem.h"
-      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-
 compiling SwerveModule.cpp successful.
 
 compiling Drivetrain.cpp successful.

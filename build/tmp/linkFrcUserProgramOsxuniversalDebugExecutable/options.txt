@@ -1,10 +1,8 @@
 -o
 /Users/jli28/Desktop/2025RobotCode/build/exe/frcUserProgram/osxuniversal/debug/frcUserProgram
-/Users/jli28/Desktop/2025RobotCode/build/objs/frcUserProgram/osxuniversal/debug/frcUserProgramCpp/3odqi9l7u5yo62rc88vl0hy5x/ExampleSubsystem.o
 /Users/jli28/Desktop/2025RobotCode/build/objs/frcUserProgram/osxuniversal/debug/frcUserProgramCpp/9760xtgdau9jsoxxi90ozrpww/Robot.o
-/Users/jli28/Desktop/2025RobotCode/build/objs/frcUserProgram/osxuniversal/debug/frcUserProgramCpp/5k7lwr21bhf87kjzvfl5jglvo/Autos.o
-/Users/jli28/Desktop/2025RobotCode/build/objs/frcUserProgram/osxuniversal/debug/frcUserProgramCpp/6nj9yo0vlgs4v9h4m9zgp63ck/RobotContainer.o
-/Users/jli28/Desktop/2025RobotCode/build/objs/frcUserProgram/osxuniversal/debug/frcUserProgramCpp/69vvlsy0z27j4v9tzs23l3hvn/ExampleCommand.o
+/Users/jli28/Desktop/2025RobotCode/build/objs/frcUserProgram/osxuniversal/debug/frcUserProgramCpp/bww1jxueeyufv26s73zj86j9u/SwerveModule.o
+/Users/jli28/Desktop/2025RobotCode/build/objs/frcUserProgram/osxuniversal/debug/frcUserProgramCpp/cpxox320jmytzosewdh0ktd87/Drivetrain.o
 /Users/jli28/.gradle/caches/8.11/transforms/e4cd7fe3e5a5f79f822b6c218a737edc/transformed/wpilibNewCommands-cpp-2025.2.1-osxuniversaldebug/osx/universal/shared/libwpilibNewCommandsd.dylib
 /Users/jli28/.gradle/caches/8.11/transforms/656e29072d867bdf8f497387b71ea322/transformed/wpilibc-cpp-2025.2.1-osxuniversaldebug/osx/universal/shared/libwpilibcd.dylib
 /Users/jli28/.gradle/caches/8.11/transforms/b3eccecb5c8bbdf871ee21b719c4895d/transformed/ntcore-cpp-2025.2.1-osxuniversaldebug/osx/universal/shared/libntcored.dylib

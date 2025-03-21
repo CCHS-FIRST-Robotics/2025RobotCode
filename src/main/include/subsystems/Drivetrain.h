@@ -26,9 +26,9 @@ class Drivetrain {
   void UpdateOdometry();
 
   static constexpr units::meters_per_second_t kMaxSpeed =
-      3.0_mps;  // 3 meters per second
+      3.0_mps;  // 3 m/s
   static constexpr units::radians_per_second_t kMaxAngularSpeed{
-      std::numbers::pi};  // 1/2 rotation per second
+      std::numbers::pi};  //0.5 rotation/second
 
  private:
   frc::Translation2d m_frontLeftLocation{+0.381_m, +0.381_m};
