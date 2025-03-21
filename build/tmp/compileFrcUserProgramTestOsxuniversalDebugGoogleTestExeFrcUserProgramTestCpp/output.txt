@@ -1,0 +1,4 @@
+See file:///Users/jli28/Desktop/2025RobotCode/build/tmp/compileFrcUserProgramTestOsxuniversalDebugGoogleTestExeFrcUserProgramTestCpp/output.txt for all output for compileFrcUserProgramTestOsxuniversalDebugGoogleTestExeFrcUserProgramTestCpp.
+compiling main.cpp successful.
+
+Finished compileFrcUserProgramTestOsxuniversalDebugGoogleTestExeFrcUserProgramTestCpp, see full log file:///Users/jli28/Desktop/2025RobotCode/build/tmp/compileFrcUserProgramTestOsxuniversalDebugGoogleTestExeFrcUserProgramTestCpp/output.txt.

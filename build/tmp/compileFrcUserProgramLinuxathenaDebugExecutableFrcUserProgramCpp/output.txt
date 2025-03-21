@@ -1,0 +1,12 @@
+See file:///Users/jli28/Desktop/2025RobotCode/build/tmp/compileFrcUserProgramLinuxathenaDebugExecutableFrcUserProgramCpp/output.txt for all output for compileFrcUserProgramLinuxathenaDebugExecutableFrcUserProgramCpp.
+compiling ExampleSubsystem.cpp successful.
+
+compiling ExampleCommand.cpp successful.
+
+compiling RobotContainer.cpp successful.
+
+compiling Autos.cpp successful.
+
+compiling Robot.cpp successful.
+
+Finished compileFrcUserProgramLinuxathenaDebugExecutableFrcUserProgramCpp, see full log file:///Users/jli28/Desktop/2025RobotCode/build/tmp/compileFrcUserProgramLinuxathenaDebugExecutableFrcUserProgramCpp/output.txt.
