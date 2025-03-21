@@ -2,8 +2,6 @@ package frc.robot.subsystems.coralIO;
 
 import static edu.wpi.first.units.Units.*;
 
-import org.littletonrobotics.junction.Logger;
-
 import com.ctre.phoenix6.*;
 import com.ctre.phoenix6.configs.*;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
@@ -31,8 +29,6 @@ public class CoralIOReal implements CoralIO{
     private double kVElevator = 0.1121914734;
     private double kAElevator = 0;
 
-    private Angle elevatorTargetPosition = Rotations.of(0);
-
     private final TalonFXConfiguration armConfig = new TalonFXConfiguration();
     private final CANcoder armCancoder;
     private final CANcoderConfiguration armCancoderConfig = new CANcoderConfiguration(); 
@@ -48,8 +44,6 @@ public class CoralIOReal implements CoralIO{
     private double kSArm = 0;
     private double kVArm = 0.1121914734;
     private double kAArm = 0;
-
-    private Angle armTargetPosition = Rotations.of(0);
 
     private final StatusSignal<Voltage> voltageSignalElevator;
     private final StatusSignal<Current> currentSignalElevator;

@@ -73,20 +73,10 @@ public class PoseEstimator extends SubsystemBase {
             getRawYaw(),
             drive.getModulePositions()
         );
-        Logger.recordOutput("outputs/poseEstimator/fieldPosition", fieldPosition);
-        Logger.recordOutput("outputs/poseEstimator/odometryPoseEstimate", odometryEstimator.getEstimatedPosition());
+        Logger.recordOutput("outputs/poseEstimator/poses/odometryPoses/fieldPosition", fieldPosition);
+        Logger.recordOutput("outputs/poseEstimator/poses/odometryPoses/odometryPoseEstimate", odometryEstimator.getEstimatedPosition());
 
         // vision // ! decrement hashmap values
-        // for(int key : jetsonMap.keySet()){
-        //     Logger.recordOutput("outputs/poseEstimator/maps/jetsonMap/" + Integer.toString(key), jetsonMap.get(key));
-        // }
-        // for(int key : USB1Map.keySet()){
-        //     Logger.recordOutput("outputs/poseEstimator/maps/USB1Map/" + Integer.toString(key), USB1Map.get(key));
-        // }
-        // for(int key : combinedMap.keySet()){
-        //     Logger.recordOutput("outputs/poseEstimator/maps/combinedMap/" + Integer.toString(key), combinedMap.get(key));
-        // }
-
         combinedMap = new HashMap<Integer, double[]>();
         if (cameraInputs.tagArray.length == 0) { // if packet is empty
             return;
@@ -97,7 +87,7 @@ public class PoseEstimator extends SubsystemBase {
             case 0: // jetson
                 if (packetId == jetsonLastPacketId) {
                     timesJetsonLastPacketIdWasStale++;
-                    System.out.println(timesJetsonLastPacketIdWasStale);
+                    System.out.println(timesJetsonLastPacketIdWasStale); // !
                 } else {
                     timesJetsonLastPacketIdWasStale = 0;
                 }
@@ -109,7 +99,7 @@ public class PoseEstimator extends SubsystemBase {
             case 1: // usb 1
                 if (packetId == USB1LastPacketId) {
                     timesUSB1LastPacketIdWasStale++;
-                    System.out.println(timesUSB1LastPacketIdWasStale);
+                    System.out.println(timesUSB1LastPacketIdWasStale); // !
                 } else {
                     timesUSB1LastPacketIdWasStale = 0;
                 }
@@ -135,8 +125,8 @@ public class PoseEstimator extends SubsystemBase {
             drive.getModulePositions()
         );
         combinedEstimator.addVisionMeasurement(visionEstimate, Timer.getFPGATimestamp()); 
-        Logger.recordOutput("outputs/poseEstimator/visionPoseEstimate", visionEstimate);
-        Logger.recordOutput("outputs/poseEstimator/combinedPoseEstimate", combinedEstimator.getEstimatedPosition());
+        Logger.recordOutput("outputs/poseEstimator/poses/visionPoses/visionPoseEstimate", visionEstimate);
+        Logger.recordOutput("outputs/poseEstimator/poses/visionPoses/combinedPoseEstimate", combinedEstimator.getEstimatedPosition());
     }
 
     public Pose2d updateVision() {
@@ -171,7 +161,7 @@ public class PoseEstimator extends SubsystemBase {
                             continue;
                         }
 
-                        tempUSB1Map.put(USB1Key, jetsonMap.get(USB1Key));
+                        tempUSB1Map.put(USB1Key, USB1Map.get(USB1Key));
                     }
                     USB1Map = tempUSB1Map;
                     break;
@@ -179,12 +169,38 @@ public class PoseEstimator extends SubsystemBase {
         }
 
         // combine jetson and usb 1 maps
+        double accumulatedJetsonX = 0;
+        double accumulatedJetsonY = 0;
         for(int jetsonKey : jetsonMap.keySet()){
+            // log the jetsonMap
             Logger.recordOutput("outputs/poseEstimator/maps/jetsonMap/" + Integer.toString(jetsonKey), jetsonMap.get(jetsonKey));
+            
+            // add to jetson pose
+            Pose2d apriltagLocation = PhysicalConstants.APRILTAG_LOCATIONS.get(jetsonKey);
+            accumulatedJetsonX += apriltagLocation.getX() - jetsonMap.get(jetsonKey)[2];
+            accumulatedJetsonY += apriltagLocation.getY() - jetsonMap.get(jetsonKey)[3];
+            
+            // add to combinedMap
             combinedMap.put(jetsonKey, jetsonMap.get(jetsonKey));
         }
+        Logger.recordOutput("outputs/poseEstimator/poses/visionPoses/jetsonPose", new Pose2d(
+            accumulatedJetsonX / jetsonMap.size(),
+            accumulatedJetsonY / jetsonMap.size(),
+            getRawYaw()
+        ));
+
+        double accumulatedUSB1X = 0;
+        double accumulatedUSB1Y = 0;
         for(int USB1Key : USB1Map.keySet()){
-            Logger.recordOutput("outputs/poseEstimator/maps/USB1Map/" + Integer.toString(USB1Key), jetsonMap.get(USB1Key));
+            // log the usb 1 map
+            Logger.recordOutput("outputs/poseEstimator/maps/USB1Map/" + Integer.toString(USB1Key), USB1Map.get(USB1Key));
+            
+            // add to usb 1 pose
+            Pose2d apriltagLocation = PhysicalConstants.APRILTAG_LOCATIONS.get(USB1Key);
+            accumulatedUSB1X += apriltagLocation.getX() - USB1Map.get(USB1Key)[2];
+            accumulatedUSB1Y += apriltagLocation.getY() - USB1Map.get(USB1Key)[3];
+
+            // add to combinedMap
             if(combinedMap.containsKey(USB1Key)){ // average the values
                 combinedMap.put(
                     USB1Key,
@@ -197,9 +213,13 @@ public class PoseEstimator extends SubsystemBase {
                 );
                 continue;
             }
-
             combinedMap.put(USB1Key, USB1Map.get(USB1Key));
         }
+        Logger.recordOutput("outputs/poseEstimator/poses/visionPoses/USB1Pose", new Pose2d(
+            accumulatedUSB1X / USB1Map.size(),
+            accumulatedUSB1Y / USB1Map.size(),
+            getRawYaw()
+        ));
 
         // calculate robot pose
         double accumulatedX = 0;
