@@ -1,12 +1,15 @@
 See file:///Users/jli28/Desktop/2025RobotCode/build/tmp/compileFrcUserProgramTestOsxuniversalDebugGoogleTestExeFrcUserProgramCpp/output.txt for all output for compileFrcUserProgramTestOsxuniversalDebugGoogleTestExeFrcUserProgramCpp.
-compiling RobotContainer.cpp successful.
+compiling Drivetrain.cpp successful.
 
-compiling ExampleSubsystem.cpp successful.
+compiling RobotContainer.cpp failed.
+In file included from /Users/jli28/Desktop/2025RobotCode/src/main/cpp/RobotContainer.cpp:5:
+/Users/jli28/Desktop/2025RobotCode/src/main/include/RobotContainer.h:11:10: fatal error: 'subsystems/ExampleSubsystem.h' file not found
+#include "subsystems/ExampleSubsystem.h"
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 error generated.
+
+compiling SwerveModule.cpp successful.
 
 compiling Robot.cpp successful.
-
-compiling ExampleCommand.cpp successful.
-
-compiling Autos.cpp successful.
 
 Finished compileFrcUserProgramTestOsxuniversalDebugGoogleTestExeFrcUserProgramCpp, see full log file:///Users/jli28/Desktop/2025RobotCode/build/tmp/compileFrcUserProgramTestOsxuniversalDebugGoogleTestExeFrcUserProgramCpp/output.txt.

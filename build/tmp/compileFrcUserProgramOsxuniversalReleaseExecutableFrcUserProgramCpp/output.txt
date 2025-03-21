@@ -1,12 +1,15 @@
 See file:///Users/jli28/Desktop/2025RobotCode/build/tmp/compileFrcUserProgramOsxuniversalReleaseExecutableFrcUserProgramCpp/output.txt for all output for compileFrcUserProgramOsxuniversalReleaseExecutableFrcUserProgramCpp.
-compiling RobotContainer.cpp successful.
-
-compiling ExampleCommand.cpp successful.
+compiling RobotContainer.cpp failed.
+In file included from /Users/jli28/Desktop/2025RobotCode/src/main/cpp/RobotContainer.cpp:5:
+/Users/jli28/Desktop/2025RobotCode/src/main/include/RobotContainer.h:11:10: fatal error: 'subsystems/ExampleSubsystem.h' file not found
+#include "subsystems/ExampleSubsystem.h"
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 error generated.
 
 compiling Robot.cpp successful.
 
-compiling Autos.cpp successful.
+compiling SwerveModule.cpp successful.
 
-compiling ExampleSubsystem.cpp successful.
+compiling Drivetrain.cpp successful.
 
 Finished compileFrcUserProgramOsxuniversalReleaseExecutableFrcUserProgramCpp, see full log file:///Users/jli28/Desktop/2025RobotCode/build/tmp/compileFrcUserProgramOsxuniversalReleaseExecutableFrcUserProgramCpp/output.txt.

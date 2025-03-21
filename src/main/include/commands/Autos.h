@@ -6,8 +6,6 @@
 
 #include <frc2/command/CommandPtr.h>
 
-#include "subsystems/ExampleSubsystem.h"
-
 namespace autos {
 /**
  * Example static factory for an autonomous command.
