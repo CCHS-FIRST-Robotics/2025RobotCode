@@ -87,14 +87,16 @@ public class CoralCommandCompositer {
         .alongWith(
             Commands.waitSeconds(1)
             .andThen(new InstantCommand(() -> drive.runVelocity(
-                new ChassisSpeeds(
+                new ChassisSpeeds( 
                     -0.1, 
                     0, 
                     0
-                )   
-            )).repeatedly().withTimeout(3))
+                )
+            )).repeatedly().withTimeout(2))
         )
-        .andThen(coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.INTAKE_PREP));
+        .andThen(coral.getSetElevatorCommand(PhysicalConstants.CoralPositions.INTAKE_PREP[0]))
+        .andThen(Commands.waitSeconds(0.5))
+        .andThen(coral.getSetArmCommand(PhysicalConstants.CoralPositions.INTAKE_PREP[1]));
     }
 
     public Command prepL4() {

@@ -44,8 +44,8 @@ public final class PhysicalConstants {
     ); // = 1.5944299280
     public static final LinearVelocity MAX_ALLOWED_LINEAR_SPEED = MetersPerSecond.of(4);
     public static final AngularVelocity MAX_ALLOWED_ANGULAR_SPEED = RotationsPerSecond.of(1);
-    public static final LinearAcceleration MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(20);
-    public static final AngularAcceleration MAX_ALLOWED_ANGULAR_ACCEL = RotationsPerSecond.per(Seconds).of(20 / TRACK_CIRCUMFERENCE.in(Meters));
+    public static final LinearAcceleration MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(2);
+    public static final AngularAcceleration MAX_ALLOWED_ANGULAR_ACCEL = RotationsPerSecond.per(Seconds).of(2 / TRACK_CIRCUMFERENCE.in(Meters));
 
     // ————— poseEstimator constants ————— //
 
@@ -109,7 +109,7 @@ public final class PhysicalConstants {
         public static final Angle[] INTAKE_RUN = {Rotations.of(0.195556640625), Rotations.of(-0.2131816406)};
         public static final Angle[] L1 = {Rotations.of(0), Rotations.of(0)};
         public static final Angle[] L2 = {Rotations.of(0), Rotations.of(0.014892578125)};
-        public static final Angle[] L3 = {Rotations.of(1), Rotations.of(0.075556640625)};
+        public static final Angle[] L3 = {Rotations.of(0.263427734375), Rotations.of(0.0986328125)};
         public static final Angle[] L4 = {Rotations.of(3.6831054687499996), Rotations.of(0.13830078125)};
     }
 }

@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.RobotBase;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.poseEstimator.*;
 
@@ -31,7 +32,6 @@ public class DriveWithApriltag extends Command {
     @Override
     public void execute() {
         targetTagOffsetArray = poseEstimator.getOffsetFromSpecificTag(targetTagId);
-
         // finish if tag is not detected
         if (targetTagOffsetArray == null) {
             isFinished = true;
@@ -44,9 +44,11 @@ public class DriveWithApriltag extends Command {
         double oOffset = targetTagOffsetArray[2]; // radians
 
         ChassisSpeeds speeds = new ChassisSpeeds(
-            Math.abs(xOffset) > 0.1 ? 0.1 : 0,
-            Math.abs(yOffset) > 0.1 ? 0.1 : 0,
-            Math.abs(oOffset) > 0.1 ? 0.1 : 0
+            Math.abs(xOffset) > 0.1 ? Math.signum(xOffset) * 0.1 : 0,
+            0,
+            0
+            // Math.abs(yOffset) > 0.1 ? Math.signum(yOffset) * 0.1 : 0,
+            // Math.abs(oOffset) > 0.1 ? Math.signum(oOffset) * -0.1 : 0
         );
 
         // finish if offset is low enough

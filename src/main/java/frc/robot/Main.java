@@ -7,7 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.RobotBase;
 
 /**
- * ! tell sleder that the tags are overriding each other
+ * ! elevator hits coral trough when L2
  * 
  * 
  * to do: 

@@ -139,8 +139,8 @@ public class RobotContainer {
 
         // ————— coral ————— //
 
-        // xboxController2.x().onTrue(coral.getSetArmCommand(Rotations.of(0)));
-        // xboxController2.b().onTrue(coral.getSetArmCommand(Rotations.of(0.12)));
+        xboxController2.x().onTrue(coral.getSetElevatorCommand(Rotations.of(3.5)));
+        xboxController2.y().onTrue(new DriveWithApriltag(drive, poseEstimator, 18, true));
 
         // reef positions
         if ((DriverStation.getAlliance().isPresent() ? DriverStation.getAlliance().get() : Alliance.Red).equals(Alliance.Red)) {
