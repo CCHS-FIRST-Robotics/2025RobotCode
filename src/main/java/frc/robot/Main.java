@@ -7,18 +7,11 @@ package frc.robot;
 import edu.wpi.first.wpilibj.RobotBase;
 
 /**
- * ! elevator hits coral trough when L2
- * 
- * 
- * ! add button to sqitch what max accel is
- * 
+ * current goal is literally just be able to score L4 with apriltag
+ * ! maybe ask colin how come you can't drivewithjoysticks out of a drivewithapriltag
  * 
  * to do: 
  * * things to keep in mind: 
- *    maybe test using the coupling thing again
- *    drive smart current limits
- *    drivewithapriltag velocity rampdown
- *    knock out algae
  * 
  * * daily at home: 
  *    write coralIOSim
@@ -27,29 +20,17 @@ import edu.wpi.first.wpilibj.RobotBase;
  *     all {}
  * 
  * * daily at robotics: 
- * !  mechanical / electrical: 
- * !   take apart the arm gearbox
- * !   wire trough sensor
- * !  me: 
- * !   write the pose3d code for apriltags (easy)
- * !   drivewithapriltag needs to know which L they want to go to
- * !    maybe make a constant in robotcontainer that tracks what the last L to go was and then pass it in as an argument for drivewithapriltags
- * !   show in elastic which apriltags it can see
- * !   check apriltag hashmap
- * 
- * 
- * 
- * 
  * ! we need an easy way to convert from autos on blue team to red team
  * 
- * ! figure out what to do about the elevator cancoder (probably just adjust all elevator values by -1)
- * 
  * * longer term: 
+ *    knock out algae
+ *    maybe test using the coupling thing again
  *    zero the drive modules correctly 
  *    pid tunable constants
  *    fused cancoder instead of remote
  *    see if double gyro works
  *    tune arm without motionmagic
+ *    drivewithaprixltag velocity rampdown
  *  
  * * game plan: 
  * —  autos: 

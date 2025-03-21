@@ -130,17 +130,40 @@ public class RobotContainer {
         );
 
         // x-lock
-        xboxController1.rightTrigger().whileTrue(
+        xboxController1.x().whileTrue(
             Commands.run(() -> drive.runCharacterization(
                 new Voltage[] {Volts.of(0), Volts.of(0), Volts.of(0), Volts.of(0)}, 
                 new Angle[] {Rotations.of(0.125), Rotations.of(0.325), Rotations.of(0.325), Rotations.of(0.125)})
             )
         );
 
+        // control precision // ! 
+        xboxController1.leftTrigger().onTrue(
+            new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(2))
+            .andThen(new InstantCommand(
+                () -> PhysicalConstants.MAX_ALLOWED_ANGULAR_ACCEL = RotationsPerSecondPerSecond.of(2 / PhysicalConstants.TRACK_CIRCUMFERENCE.in(Meters)))
+            )
+        );
+        xboxController1.rightTrigger().onTrue(
+            new InstantCommand(
+                () -> PhysicalConstants.MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(20)
+            )
+            .andThen(new InstantCommand(
+                () -> PhysicalConstants.MAX_ALLOWED_ANGULAR_ACCEL = RotationsPerSecondPerSecond.of(20 / PhysicalConstants.TRACK_CIRCUMFERENCE.in(Meters)))
+            )
+        );
+
         // ————— coral ————— //
 
+        // ! testing drivewithapriltag
         xboxController2.x().onTrue(coral.getSetElevatorCommand(Rotations.of(3.5)));
-        xboxController2.y().onTrue(new DriveWithApriltag(drive, poseEstimator, 18, true));
+        xboxController2.y().onTrue(new DriveWithApriltag(
+            drive, 
+            poseEstimator, 
+            18, 
+            PhysicalConstants.DrivePositions.L4, 
+            true)
+        );
 
         // reef positions
         if ((DriverStation.getAlliance().isPresent() ? DriverStation.getAlliance().get() : Alliance.Red).equals(Alliance.Red)) {
@@ -181,7 +204,7 @@ public class RobotContainer {
         coralController.button(19).onTrue(coralCommandCompositer.prepL4());
         coralController.button(20).onTrue(coralCommandCompositer.runL4());
 
-        // emergency stop
+        // emergency stop // ! 
         coralController.button(21).onTrue(
             coral.getSetElevatorVoltageCommand(Volts.of(0))
             .andThen(coral.getSetArmVoltageCommand(Volts.of(0)))

@@ -44,8 +44,8 @@ public final class PhysicalConstants {
     ); // = 1.5944299280
     public static final LinearVelocity MAX_ALLOWED_LINEAR_SPEED = MetersPerSecond.of(4);
     public static final AngularVelocity MAX_ALLOWED_ANGULAR_SPEED = RotationsPerSecond.of(1);
-    public static final LinearAcceleration MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(2);
-    public static final AngularAcceleration MAX_ALLOWED_ANGULAR_ACCEL = RotationsPerSecond.per(Seconds).of(2 / TRACK_CIRCUMFERENCE.in(Meters));
+    public static LinearAcceleration MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(2);
+    public static AngularAcceleration MAX_ALLOWED_ANGULAR_ACCEL = RotationsPerSecondPerSecond.of(2 / TRACK_CIRCUMFERENCE.in(Meters));
 
     // ————— poseEstimator constants ————— //
 
@@ -56,14 +56,14 @@ public final class PhysicalConstants {
         Degrees.of(30) // back
     };
     public static final Pose2d JETSON_OFFSET = new Pose2d(
-        Inches.of(0.75).in(Meters), // ! get this
+        Inches.of(0.75).in(Meters), 
         Inches.of(0).in(Meters), 
         new Rotation2d(Degrees.of(0))
     );
     public static final Pose2d USB_CAMERA_1_OFFSET = new Pose2d(
-        Meters.of(0.1).in(Meters), // should be positive
-        Meters.of(0.27).in(Meters), // should be positive
-        new Rotation2d(Degrees.of(-29.3577535419)) // should be negative
+        Meters.of(0.1).in(Meters), 
+        Meters.of(0.27).in(Meters), 
+        new Rotation2d(Degrees.of(-29.3577535419))
     );
 
     public static final HashMap<Integer, Pose2d> APRILTAG_LOCATIONS = new HashMap<Integer, Pose2d>();
@@ -92,6 +92,15 @@ public final class PhysicalConstants {
         APRILTAG_LOCATIONS.put(22, new Pose2d(4.90474, 3.306318, new Rotation2d(Degrees.of(300))));
     }
 
+    public static final class DrivePositions {
+        public static final Translation2d INTAKE = new Translation2d(0, 0); // ! no idea how this would work
+        public static final Translation2d L1 = new Translation2d(0, 0);
+        public static final Translation2d L2 = new Translation2d(0, 0); // ! 
+        public static final Translation2d L3 = new Translation2d(0, 0); // ! 
+        public static final Translation2d L4 = new Translation2d(0.84, 0);
+
+    }
+
     // ————— coral constants ————— //
 
     public static final Angle ELEVATOR_ENCODER_OFFSET = Rotations.of(0.466796875);
@@ -105,7 +114,7 @@ public final class PhysicalConstants {
     public static final double ARM_GEAR_REDUCTION = 100;
 
     public static class CoralPositions { // elevator rotations, arm rotations
-        public static final Angle[] INTAKE_PREP = {Rotations.of(1), Rotations.of(-0.2191816406)}; // -0.211
+        public static final Angle[] INTAKE_PREP = {Rotations.of(1), Rotations.of(-0.2191816406)};
         public static final Angle[] INTAKE_RUN = {Rotations.of(0.195556640625), Rotations.of(-0.2131816406)};
         public static final Angle[] L1 = {Rotations.of(0), Rotations.of(0)};
         public static final Angle[] L2 = {Rotations.of(0), Rotations.of(0.014892578125)};
