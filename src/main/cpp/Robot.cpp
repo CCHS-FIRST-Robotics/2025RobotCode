@@ -30,20 +30,13 @@ class Robot : public frc::TimedRobot {
   void DriveWithJoystick(bool fieldRelative) {
 
     //x speed inverted bc Xbox controllers return neg when forward.
-    const auto xSpeed = -m_xspeedLimiter.Calculate(
-                            frc::ApplyDeadband(m_controller.GetLeftY(), 0.02)) *
-                        Drivetrain::kMaxSpeed;
+    const auto xSpeed = -m_xspeedLimiter.Calculate(frc::ApplyDeadband(m_controller.GetLeftY(), 0.02)) * Drivetrain::kMaxSpeed;
 
     //strafe speed inverted bc want pos when left
-    const auto ySpeed = -m_yspeedLimiter.Calculate(
-                            frc::ApplyDeadband(m_controller.GetLeftX(), 0.02)) *
-                        Drivetrain::kMaxSpeed;
-
+    const auto ySpeed = -m_yspeedLimiter.Calculate(frc::ApplyDeadband(m_controller.GetLeftX(), 0.02)) * Drivetrain::kMaxSpeed;
 
     //angular rotation inverted bc want pos when left
-    const auto rot = -m_rotLimiter.Calculate(
-                         frc::ApplyDeadband(m_controller.GetRightX(), 0.02)) *
-                     Drivetrain::kMaxAngularSpeed;
+    const auto rot = -m_rotLimiter.Calculate(frc::ApplyDeadband(m_controller.GetRightX(), 0.02)) * Drivetrain::kMaxAngularSpeed;
 
     m_swerve.Drive(xSpeed, ySpeed, rot, fieldRelative, GetPeriod());
   }

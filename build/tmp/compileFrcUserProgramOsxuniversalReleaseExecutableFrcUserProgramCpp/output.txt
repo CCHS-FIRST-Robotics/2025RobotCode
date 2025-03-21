@@ -1,8 +1,8 @@
 See file:///Users/jli28/Desktop/2025RobotCode/build/tmp/compileFrcUserProgramOsxuniversalReleaseExecutableFrcUserProgramCpp/output.txt for all output for compileFrcUserProgramOsxuniversalReleaseExecutableFrcUserProgramCpp.
 compiling Drivetrain.cpp successful.
 
-compiling SwerveModule.cpp successful.
-
 compiling Robot.cpp successful.
+
+compiling SwerveModule.cpp successful.
 
 Finished compileFrcUserProgramOsxuniversalReleaseExecutableFrcUserProgramCpp, see full log file:///Users/jli28/Desktop/2025RobotCode/build/tmp/compileFrcUserProgramOsxuniversalReleaseExecutableFrcUserProgramCpp/output.txt.

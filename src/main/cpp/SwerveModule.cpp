@@ -14,14 +14,12 @@ SwerveModule::SwerveModule(const int driveMotorChannel, const int turningMotorCh
         m_driveEncoder(driveEncoderChannelA, driveEncoderChannelB),
         m_turningEncoder(turningEncoderChannelA, turningEncoderChannelB) {
 
-  m_driveEncoder.SetDistancePerPulse(2 * std::numbers::pi * kWheelRadius /
-                                     kEncoderResolution);
+  m_driveEncoder.SetDistancePerPulse(2 * std::numbers::pi * kWheelRadius / kEncoderResolution);
 
-  // angle per pulse for turn encoder
+  // angle/pulse for turn encoder
   m_turningEncoder.SetDistancePerPulse(2 * std::numbers::pi / kEncoderResolution);
 
-  // Limit the PID Controller's input range between -pi and pi and set the input
-  // to be continuous.
+  // Limit pid controller input range btwn -pi and pi
   m_turningPIDController.EnableContinuousInput(-units::radian_t{std::numbers::pi}, units::radian_t{std::numbers::pi});
 }
 
@@ -31,35 +29,30 @@ frc::SwerveModuleState SwerveModule::GetState() const {
 }
 
 frc::SwerveModulePosition SwerveModule::GetPosition() const {
-  return {units::meter_t{m_driveEncoder.GetDistance()},
-          units::radian_t{m_turningEncoder.GetDistance()}};
+  return {units::meter_t{m_driveEncoder.GetDistance()}, units::radian_t{m_turningEncoder.GetDistance()}};
 }
 
 void SwerveModule::SetDesiredState(frc::SwerveModuleState& referenceState) {
   frc::Rotation2d encoderRotation{
       units::radian_t{m_turningEncoder.GetDistance()}};
 
-  // Optimize the reference state to avoid spinning further than 90 degrees
   referenceState.Optimize(encoderRotation);
 
-  // Scale speed by cos of angle error. This scales down movement
-  // perpendicular to the desired direction of travel that can occur when
-  // modules change directions. This results in smoother driving.
+  // smoother
   referenceState.CosineScale(encoderRotation);
 
-  // Calculate drive output from drive PID controller.
+  // calculate outputs from pid controllers
   const auto driveOutput = m_drivePIDController.Calculate(m_driveEncoder.GetRate(), referenceState.speed.value());
 
   const auto driveFeedforward = m_driveFeedforward.Calculate(referenceState.speed);
 
-  // Calculate turning motor output from turn PID controller.
   const auto turnOutput = m_turningPIDController.Calculate(
       units::radian_t{m_turningEncoder.GetDistance()},
       referenceState.angle.Radians());
 
   const auto turnFeedforward = m_turnFeedforward.Calculate(m_turningPIDController.GetSetpoint().velocity);
 
-  // Set motor outputs.
+  // Set motor outputs
   m_driveMotor.SetVoltage(units::volt_t{driveOutput} + driveFeedforward);
   m_turningMotor.SetVoltage(units::volt_t{turnOutput} + turnFeedforward);
 }
