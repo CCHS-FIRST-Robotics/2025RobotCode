@@ -36,6 +36,7 @@ class Drivetrain {
   frc::Translation2d m_backLeftLocation{-0.381_m, +0.381_m};
   frc::Translation2d m_backRightLocation{-0.381_m, -0.381_m};
 
+  //drive motor port, turn motor port, driveEncoderA, driveEncoderB, turnEncoderA, turnEncoderB
   SwerveModule m_frontLeft{1, 2, 0, 1, 2, 3};
   SwerveModule m_frontRight{3, 4, 4, 5, 6, 7};
   SwerveModule m_backLeft{5, 6, 8, 9, 10, 11};
@@ -43,9 +44,7 @@ class Drivetrain {
 
   frc::AnalogGyro m_gyro{0};
 
-  frc::SwerveDriveKinematics<4> m_kinematics{
-      m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation,
-      m_backRightLocation};
+  frc::SwerveDriveKinematics<4> m_kinematics{m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation};
 
   frc::SwerveDriveOdometry<4> m_odometry{
       m_kinematics,
