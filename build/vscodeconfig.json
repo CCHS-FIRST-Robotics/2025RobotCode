@@ -1,0 +1,1148 @@
+[
+  {
+    "name": "linuxathena",
+    "architecture": "arm-v7",
+    "operatingSystem": "linux",
+    "flavor": "default",
+    "buildType": "debug",
+    "cppPath": "/Users/jli28/wpilib/2025/roborio/bin/arm-frc2025-linux-gnueabi-g++",
+    "cPath": "/Users/jli28/wpilib/2025/roborio/bin/arm-frc2025-linux-gnueabi-gcc",
+    "msvc": false,
+    "gcc": true,
+    "systemCppMacros": [],
+    "systemCppArgs": [],
+    "systemCMacros": [],
+    "systemCArgs": [],
+    "allLibFiles": [
+      "/Users/jli28/.gradle/caches/8.11/transforms/ef138e41b9d18e0744123140d242aebc/transformed/wpilibNewCommands-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/c338c23b0066fb00af7164beb903a6c4/transformed/wpilibc-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/f05ae85525b0e41b916e567748fad6d4/transformed/ntcore-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/1d22e43b14d10c4be725b76174afd090/transformed/hal-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/823fb1c98d10530a4a70be9be36195d8/transformed/wpimath-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/6094ab635e1f936ba0a0a7de0b09087f/transformed/wpinet-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/9fd388198931d3847e7f6e1ce19d3541/transformed/wpiutil-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/2db7d69274afe67a0da1c432f410a7c3/transformed/netcomm-2025.2.0-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/532f478c5d0adcce04633ee812c954ff/transformed/chipobject-2025.2.0-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/f953d77e42e4fb5916001e664ab2c979/transformed/visa-2025.2.0-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/61952a098268121ae9e783ff779156ad/transformed/cameraserver-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/8d7f9e2cf5e4129c5d0b855c1f76c333/transformed/cscore-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/c9b431ac15536dab7f814d1672577311/transformed/apriltag-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/ee11739d3e5d14fc9bc92832d2692037/transformed/opencv-cpp-4.10.0-3-headers/",
+      "/Users/jli28/Desktop/2025RobotCode/src/main/include/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/0326349d86d33f13043053322aa77f6b/transformed/wpilibNewCommands-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/70cf1ded88b5f139027f0967f09919fb/transformed/wpilibc-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/127f60dc5853b77a92fced9930f72dbd/transformed/ntcore-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/6ea991af3bd3dd2def6ab431ecd0f0fb/transformed/hal-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/6e343555cf358e1a74c6d7f8b39da803/transformed/wpimath-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/7b15ad55ce939ea63b5fa02456fba51e/transformed/wpinet-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/87b4d018931954d0527b9d3b9594d987/transformed/wpiutil-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/70b2b351f6ac5cb9b909ba00e82816e5/transformed/cameraserver-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/6240f0b190c5fa118395e1714cb78ee0/transformed/cscore-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/4837c0faad8a64f473e6a98459e4f011/transformed/apriltag-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/285635b155c84131e0a7f701202380fa/transformed/opencv-cpp-4.10.0-3-sources/"
+    ],
+    "allLibSources": [
+      "/Users/jli28/.gradle/caches/8.11/transforms/0326349d86d33f13043053322aa77f6b/transformed/wpilibNewCommands-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/70cf1ded88b5f139027f0967f09919fb/transformed/wpilibc-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/127f60dc5853b77a92fced9930f72dbd/transformed/ntcore-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/6ea991af3bd3dd2def6ab431ecd0f0fb/transformed/hal-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/6e343555cf358e1a74c6d7f8b39da803/transformed/wpimath-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/7b15ad55ce939ea63b5fa02456fba51e/transformed/wpinet-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/87b4d018931954d0527b9d3b9594d987/transformed/wpiutil-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/70b2b351f6ac5cb9b909ba00e82816e5/transformed/cameraserver-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/6240f0b190c5fa118395e1714cb78ee0/transformed/cscore-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/4837c0faad8a64f473e6a98459e4f011/transformed/apriltag-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/285635b155c84131e0a7f701202380fa/transformed/opencv-cpp-4.10.0-3-sources/"
+    ],
+    "allLibHeaders": [
+      "/Users/jli28/.gradle/caches/8.11/transforms/ef138e41b9d18e0744123140d242aebc/transformed/wpilibNewCommands-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/c338c23b0066fb00af7164beb903a6c4/transformed/wpilibc-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/f05ae85525b0e41b916e567748fad6d4/transformed/ntcore-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/1d22e43b14d10c4be725b76174afd090/transformed/hal-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/823fb1c98d10530a4a70be9be36195d8/transformed/wpimath-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/6094ab635e1f936ba0a0a7de0b09087f/transformed/wpinet-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/9fd388198931d3847e7f6e1ce19d3541/transformed/wpiutil-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/2db7d69274afe67a0da1c432f410a7c3/transformed/netcomm-2025.2.0-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/532f478c5d0adcce04633ee812c954ff/transformed/chipobject-2025.2.0-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/f953d77e42e4fb5916001e664ab2c979/transformed/visa-2025.2.0-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/61952a098268121ae9e783ff779156ad/transformed/cameraserver-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/8d7f9e2cf5e4129c5d0b855c1f76c333/transformed/cscore-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/c9b431ac15536dab7f814d1672577311/transformed/apriltag-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/ee11739d3e5d14fc9bc92832d2692037/transformed/opencv-cpp-4.10.0-3-headers/",
+      "/Users/jli28/Desktop/2025RobotCode/src/main/include/"
+    ],
+    "binaries": [
+      {
+        "componentName": "frcUserProgram",
+        "sourceSets": [
+          {
+            "source": {
+              "srcDirs": [
+                "/Users/jli28/Desktop/2025RobotCode/src/main/cpp/"
+              ],
+              "includes": [
+                "**/*.cpp",
+                "**/*.cc"
+              ],
+              "excludes": []
+            },
+            "exportedHeaders": {
+              "srcDirs": [
+                "/Users/jli28/Desktop/2025RobotCode/src/main/include/"
+              ],
+              "includes": [],
+              "excludes": []
+            },
+            "cpp": true,
+            "args": [
+              "-Wall",
+              "-Wextra",
+              "-std=c++20",
+              "-Wformat=2",
+              "-pedantic",
+              "-Wno-psabi",
+              "-Wno-unused-parameter",
+              "-Wno-error=deprecated-enum-enum-conversion",
+              "-fPIC",
+              "-pthread",
+              "-Og",
+              "-g"
+            ],
+            "macros": []
+          }
+        ],
+        "libHeaders": [
+          "/Users/jli28/.gradle/caches/8.11/transforms/ef138e41b9d18e0744123140d242aebc/transformed/wpilibNewCommands-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/c338c23b0066fb00af7164beb903a6c4/transformed/wpilibc-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/f05ae85525b0e41b916e567748fad6d4/transformed/ntcore-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/1d22e43b14d10c4be725b76174afd090/transformed/hal-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/823fb1c98d10530a4a70be9be36195d8/transformed/wpimath-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/6094ab635e1f936ba0a0a7de0b09087f/transformed/wpinet-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/9fd388198931d3847e7f6e1ce19d3541/transformed/wpiutil-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/2db7d69274afe67a0da1c432f410a7c3/transformed/netcomm-2025.2.0-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/532f478c5d0adcce04633ee812c954ff/transformed/chipobject-2025.2.0-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/f953d77e42e4fb5916001e664ab2c979/transformed/visa-2025.2.0-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/61952a098268121ae9e783ff779156ad/transformed/cameraserver-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/8d7f9e2cf5e4129c5d0b855c1f76c333/transformed/cscore-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/c9b431ac15536dab7f814d1672577311/transformed/apriltag-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/ee11739d3e5d14fc9bc92832d2692037/transformed/opencv-cpp-4.10.0-3-headers/",
+          "/Users/jli28/Desktop/2025RobotCode/src/main/include/"
+        ],
+        "sharedLibrary": false,
+        "executable": true
+      }
+    ],
+    "sourceBinaries": [
+      {
+        "source": {
+          "srcDirs": [
+            "/Users/jli28/Desktop/2025RobotCode/src/main/cpp/"
+          ],
+          "includes": [
+            "**/*.cpp",
+            "**/*.cc"
+          ],
+          "excludes": []
+        },
+        "componentName": "frcUserProgram",
+        "cpp": true,
+        "args": [
+          "-Wall",
+          "-Wextra",
+          "-std=c++20",
+          "-Wformat=2",
+          "-pedantic",
+          "-Wno-psabi",
+          "-Wno-unused-parameter",
+          "-Wno-error=deprecated-enum-enum-conversion",
+          "-fPIC",
+          "-pthread",
+          "-Og",
+          "-g"
+        ],
+        "macros": [],
+        "sharedLibrary": false,
+        "executable": true
+      },
+      {
+        "source": {
+          "srcDirs": [
+            "/Users/jli28/Desktop/2025RobotCode/src/main/include/"
+          ],
+          "includes": [],
+          "excludes": []
+        },
+        "componentName": "frcUserProgram",
+        "cpp": true,
+        "args": [
+          "-Wall",
+          "-Wextra",
+          "-std=c++20",
+          "-Wformat=2",
+          "-pedantic",
+          "-Wno-psabi",
+          "-Wno-unused-parameter",
+          "-Wno-error=deprecated-enum-enum-conversion",
+          "-fPIC",
+          "-pthread",
+          "-Og",
+          "-g"
+        ],
+        "macros": [],
+        "sharedLibrary": false,
+        "executable": true
+      }
+    ],
+    "nameBinaryMap": {
+      "frcUserProgram": 0
+    }
+  },
+  {
+    "name": "linuxathena",
+    "architecture": "arm-v7",
+    "operatingSystem": "linux",
+    "flavor": "default",
+    "buildType": "release",
+    "cppPath": "/Users/jli28/wpilib/2025/roborio/bin/arm-frc2025-linux-gnueabi-g++",
+    "cPath": "/Users/jli28/wpilib/2025/roborio/bin/arm-frc2025-linux-gnueabi-gcc",
+    "msvc": false,
+    "gcc": true,
+    "systemCppMacros": [],
+    "systemCppArgs": [],
+    "systemCMacros": [],
+    "systemCArgs": [],
+    "allLibFiles": [
+      "/Users/jli28/.gradle/caches/8.11/transforms/ef138e41b9d18e0744123140d242aebc/transformed/wpilibNewCommands-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/c338c23b0066fb00af7164beb903a6c4/transformed/wpilibc-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/f05ae85525b0e41b916e567748fad6d4/transformed/ntcore-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/1d22e43b14d10c4be725b76174afd090/transformed/hal-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/823fb1c98d10530a4a70be9be36195d8/transformed/wpimath-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/6094ab635e1f936ba0a0a7de0b09087f/transformed/wpinet-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/9fd388198931d3847e7f6e1ce19d3541/transformed/wpiutil-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/2db7d69274afe67a0da1c432f410a7c3/transformed/netcomm-2025.2.0-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/532f478c5d0adcce04633ee812c954ff/transformed/chipobject-2025.2.0-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/f953d77e42e4fb5916001e664ab2c979/transformed/visa-2025.2.0-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/61952a098268121ae9e783ff779156ad/transformed/cameraserver-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/8d7f9e2cf5e4129c5d0b855c1f76c333/transformed/cscore-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/c9b431ac15536dab7f814d1672577311/transformed/apriltag-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/ee11739d3e5d14fc9bc92832d2692037/transformed/opencv-cpp-4.10.0-3-headers/",
+      "/Users/jli28/Desktop/2025RobotCode/src/main/include/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/0326349d86d33f13043053322aa77f6b/transformed/wpilibNewCommands-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/70cf1ded88b5f139027f0967f09919fb/transformed/wpilibc-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/127f60dc5853b77a92fced9930f72dbd/transformed/ntcore-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/6ea991af3bd3dd2def6ab431ecd0f0fb/transformed/hal-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/6e343555cf358e1a74c6d7f8b39da803/transformed/wpimath-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/7b15ad55ce939ea63b5fa02456fba51e/transformed/wpinet-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/87b4d018931954d0527b9d3b9594d987/transformed/wpiutil-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/70b2b351f6ac5cb9b909ba00e82816e5/transformed/cameraserver-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/6240f0b190c5fa118395e1714cb78ee0/transformed/cscore-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/4837c0faad8a64f473e6a98459e4f011/transformed/apriltag-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/285635b155c84131e0a7f701202380fa/transformed/opencv-cpp-4.10.0-3-sources/"
+    ],
+    "allLibSources": [
+      "/Users/jli28/.gradle/caches/8.11/transforms/0326349d86d33f13043053322aa77f6b/transformed/wpilibNewCommands-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/70cf1ded88b5f139027f0967f09919fb/transformed/wpilibc-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/127f60dc5853b77a92fced9930f72dbd/transformed/ntcore-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/6ea991af3bd3dd2def6ab431ecd0f0fb/transformed/hal-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/6e343555cf358e1a74c6d7f8b39da803/transformed/wpimath-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/7b15ad55ce939ea63b5fa02456fba51e/transformed/wpinet-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/87b4d018931954d0527b9d3b9594d987/transformed/wpiutil-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/70b2b351f6ac5cb9b909ba00e82816e5/transformed/cameraserver-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/6240f0b190c5fa118395e1714cb78ee0/transformed/cscore-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/4837c0faad8a64f473e6a98459e4f011/transformed/apriltag-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/285635b155c84131e0a7f701202380fa/transformed/opencv-cpp-4.10.0-3-sources/"
+    ],
+    "allLibHeaders": [
+      "/Users/jli28/.gradle/caches/8.11/transforms/ef138e41b9d18e0744123140d242aebc/transformed/wpilibNewCommands-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/c338c23b0066fb00af7164beb903a6c4/transformed/wpilibc-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/f05ae85525b0e41b916e567748fad6d4/transformed/ntcore-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/1d22e43b14d10c4be725b76174afd090/transformed/hal-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/823fb1c98d10530a4a70be9be36195d8/transformed/wpimath-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/6094ab635e1f936ba0a0a7de0b09087f/transformed/wpinet-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/9fd388198931d3847e7f6e1ce19d3541/transformed/wpiutil-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/2db7d69274afe67a0da1c432f410a7c3/transformed/netcomm-2025.2.0-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/532f478c5d0adcce04633ee812c954ff/transformed/chipobject-2025.2.0-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/f953d77e42e4fb5916001e664ab2c979/transformed/visa-2025.2.0-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/61952a098268121ae9e783ff779156ad/transformed/cameraserver-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/8d7f9e2cf5e4129c5d0b855c1f76c333/transformed/cscore-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/c9b431ac15536dab7f814d1672577311/transformed/apriltag-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/ee11739d3e5d14fc9bc92832d2692037/transformed/opencv-cpp-4.10.0-3-headers/",
+      "/Users/jli28/Desktop/2025RobotCode/src/main/include/"
+    ],
+    "binaries": [
+      {
+        "componentName": "frcUserProgram",
+        "sourceSets": [
+          {
+            "source": {
+              "srcDirs": [
+                "/Users/jli28/Desktop/2025RobotCode/src/main/cpp/"
+              ],
+              "includes": [
+                "**/*.cpp",
+                "**/*.cc"
+              ],
+              "excludes": []
+            },
+            "exportedHeaders": {
+              "srcDirs": [
+                "/Users/jli28/Desktop/2025RobotCode/src/main/include/"
+              ],
+              "includes": [],
+              "excludes": []
+            },
+            "cpp": true,
+            "args": [
+              "-Wall",
+              "-Wextra",
+              "-std=c++20",
+              "-Wformat=2",
+              "-pedantic",
+              "-Wno-psabi",
+              "-Wno-unused-parameter",
+              "-Wno-error=deprecated-enum-enum-conversion",
+              "-fPIC",
+              "-pthread",
+              "-O2"
+            ],
+            "macros": []
+          }
+        ],
+        "libHeaders": [
+          "/Users/jli28/.gradle/caches/8.11/transforms/ef138e41b9d18e0744123140d242aebc/transformed/wpilibNewCommands-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/c338c23b0066fb00af7164beb903a6c4/transformed/wpilibc-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/f05ae85525b0e41b916e567748fad6d4/transformed/ntcore-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/1d22e43b14d10c4be725b76174afd090/transformed/hal-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/823fb1c98d10530a4a70be9be36195d8/transformed/wpimath-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/6094ab635e1f936ba0a0a7de0b09087f/transformed/wpinet-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/9fd388198931d3847e7f6e1ce19d3541/transformed/wpiutil-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/2db7d69274afe67a0da1c432f410a7c3/transformed/netcomm-2025.2.0-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/532f478c5d0adcce04633ee812c954ff/transformed/chipobject-2025.2.0-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/f953d77e42e4fb5916001e664ab2c979/transformed/visa-2025.2.0-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/61952a098268121ae9e783ff779156ad/transformed/cameraserver-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/8d7f9e2cf5e4129c5d0b855c1f76c333/transformed/cscore-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/c9b431ac15536dab7f814d1672577311/transformed/apriltag-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/ee11739d3e5d14fc9bc92832d2692037/transformed/opencv-cpp-4.10.0-3-headers/",
+          "/Users/jli28/Desktop/2025RobotCode/src/main/include/"
+        ],
+        "sharedLibrary": false,
+        "executable": true
+      }
+    ],
+    "sourceBinaries": [
+      {
+        "source": {
+          "srcDirs": [
+            "/Users/jli28/Desktop/2025RobotCode/src/main/cpp/"
+          ],
+          "includes": [
+            "**/*.cpp",
+            "**/*.cc"
+          ],
+          "excludes": []
+        },
+        "componentName": "frcUserProgram",
+        "cpp": true,
+        "args": [
+          "-Wall",
+          "-Wextra",
+          "-std=c++20",
+          "-Wformat=2",
+          "-pedantic",
+          "-Wno-psabi",
+          "-Wno-unused-parameter",
+          "-Wno-error=deprecated-enum-enum-conversion",
+          "-fPIC",
+          "-pthread",
+          "-O2"
+        ],
+        "macros": [],
+        "sharedLibrary": false,
+        "executable": true
+      },
+      {
+        "source": {
+          "srcDirs": [
+            "/Users/jli28/Desktop/2025RobotCode/src/main/include/"
+          ],
+          "includes": [],
+          "excludes": []
+        },
+        "componentName": "frcUserProgram",
+        "cpp": true,
+        "args": [
+          "-Wall",
+          "-Wextra",
+          "-std=c++20",
+          "-Wformat=2",
+          "-pedantic",
+          "-Wno-psabi",
+          "-Wno-unused-parameter",
+          "-Wno-error=deprecated-enum-enum-conversion",
+          "-fPIC",
+          "-pthread",
+          "-O2"
+        ],
+        "macros": [],
+        "sharedLibrary": false,
+        "executable": true
+      }
+    ],
+    "nameBinaryMap": {
+      "frcUserProgram": 0
+    }
+  },
+  {
+    "name": "osxuniversal",
+    "architecture": "universal",
+    "operatingSystem": "Mac OS X",
+    "flavor": "default",
+    "buildType": "debug",
+    "cppPath": "/usr/bin/clang++",
+    "cPath": "/usr/bin/clang",
+    "msvc": false,
+    "gcc": false,
+    "systemCppMacros": [],
+    "systemCppArgs": [
+      "-arch",
+      "arm64",
+      "x86_64"
+    ],
+    "systemCMacros": [],
+    "systemCArgs": [
+      "-arch",
+      "arm64",
+      "x86_64"
+    ],
+    "allLibFiles": [
+      "/Users/jli28/.gradle/caches/8.11/transforms/ef138e41b9d18e0744123140d242aebc/transformed/wpilibNewCommands-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/c338c23b0066fb00af7164beb903a6c4/transformed/wpilibc-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/f05ae85525b0e41b916e567748fad6d4/transformed/ntcore-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/1d22e43b14d10c4be725b76174afd090/transformed/hal-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/823fb1c98d10530a4a70be9be36195d8/transformed/wpimath-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/6094ab635e1f936ba0a0a7de0b09087f/transformed/wpinet-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/9fd388198931d3847e7f6e1ce19d3541/transformed/wpiutil-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/61952a098268121ae9e783ff779156ad/transformed/cameraserver-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/8d7f9e2cf5e4129c5d0b855c1f76c333/transformed/cscore-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/c9b431ac15536dab7f814d1672577311/transformed/apriltag-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/ee11739d3e5d14fc9bc92832d2692037/transformed/opencv-cpp-4.10.0-3-headers/",
+      "/Users/jli28/Desktop/2025RobotCode/src/main/include/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/0326349d86d33f13043053322aa77f6b/transformed/wpilibNewCommands-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/70cf1ded88b5f139027f0967f09919fb/transformed/wpilibc-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/127f60dc5853b77a92fced9930f72dbd/transformed/ntcore-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/6ea991af3bd3dd2def6ab431ecd0f0fb/transformed/hal-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/6e343555cf358e1a74c6d7f8b39da803/transformed/wpimath-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/7b15ad55ce939ea63b5fa02456fba51e/transformed/wpinet-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/87b4d018931954d0527b9d3b9594d987/transformed/wpiutil-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/70b2b351f6ac5cb9b909ba00e82816e5/transformed/cameraserver-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/6240f0b190c5fa118395e1714cb78ee0/transformed/cscore-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/4837c0faad8a64f473e6a98459e4f011/transformed/apriltag-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/285635b155c84131e0a7f701202380fa/transformed/opencv-cpp-4.10.0-3-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/22fccc44af11b78447d112d60387f315/transformed/googletest-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/44a0220b5ba069fef3821f2341767143/transformed/googletest-cpp-2025.2.1-sources/"
+    ],
+    "allLibSources": [
+      "/Users/jli28/.gradle/caches/8.11/transforms/0326349d86d33f13043053322aa77f6b/transformed/wpilibNewCommands-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/70cf1ded88b5f139027f0967f09919fb/transformed/wpilibc-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/127f60dc5853b77a92fced9930f72dbd/transformed/ntcore-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/6ea991af3bd3dd2def6ab431ecd0f0fb/transformed/hal-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/6e343555cf358e1a74c6d7f8b39da803/transformed/wpimath-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/7b15ad55ce939ea63b5fa02456fba51e/transformed/wpinet-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/87b4d018931954d0527b9d3b9594d987/transformed/wpiutil-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/70b2b351f6ac5cb9b909ba00e82816e5/transformed/cameraserver-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/6240f0b190c5fa118395e1714cb78ee0/transformed/cscore-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/4837c0faad8a64f473e6a98459e4f011/transformed/apriltag-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/285635b155c84131e0a7f701202380fa/transformed/opencv-cpp-4.10.0-3-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/44a0220b5ba069fef3821f2341767143/transformed/googletest-cpp-2025.2.1-sources/"
+    ],
+    "allLibHeaders": [
+      "/Users/jli28/.gradle/caches/8.11/transforms/ef138e41b9d18e0744123140d242aebc/transformed/wpilibNewCommands-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/c338c23b0066fb00af7164beb903a6c4/transformed/wpilibc-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/f05ae85525b0e41b916e567748fad6d4/transformed/ntcore-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/1d22e43b14d10c4be725b76174afd090/transformed/hal-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/823fb1c98d10530a4a70be9be36195d8/transformed/wpimath-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/6094ab635e1f936ba0a0a7de0b09087f/transformed/wpinet-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/9fd388198931d3847e7f6e1ce19d3541/transformed/wpiutil-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/61952a098268121ae9e783ff779156ad/transformed/cameraserver-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/8d7f9e2cf5e4129c5d0b855c1f76c333/transformed/cscore-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/c9b431ac15536dab7f814d1672577311/transformed/apriltag-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/ee11739d3e5d14fc9bc92832d2692037/transformed/opencv-cpp-4.10.0-3-headers/",
+      "/Users/jli28/Desktop/2025RobotCode/src/main/include/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/22fccc44af11b78447d112d60387f315/transformed/googletest-cpp-2025.2.1-headers/"
+    ],
+    "binaries": [
+      {
+        "componentName": "frcUserProgram",
+        "sourceSets": [
+          {
+            "source": {
+              "srcDirs": [
+                "/Users/jli28/Desktop/2025RobotCode/src/main/cpp/"
+              ],
+              "includes": [
+                "**/*.cpp",
+                "**/*.cc"
+              ],
+              "excludes": []
+            },
+            "exportedHeaders": {
+              "srcDirs": [
+                "/Users/jli28/Desktop/2025RobotCode/src/main/include/"
+              ],
+              "includes": [],
+              "excludes": []
+            },
+            "cpp": true,
+            "args": [
+              "-Wall",
+              "-Wextra",
+              "-std=c++20",
+              "-pedantic",
+              "-fPIC",
+              "-Wno-unused-parameter",
+              "-Wno-error=deprecated-enum-enum-conversion",
+              "-Wno-missing-field-initializers",
+              "-Wno-unused-private-field",
+              "-Wno-unused-const-variable",
+              "-Wno-error=c11-extensions",
+              "-pthread",
+              "-Wno-deprecated-anon-enum-enum-conversion",
+              "-O0",
+              "-g"
+            ],
+            "macros": []
+          }
+        ],
+        "libHeaders": [
+          "/Users/jli28/.gradle/caches/8.11/transforms/ef138e41b9d18e0744123140d242aebc/transformed/wpilibNewCommands-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/c338c23b0066fb00af7164beb903a6c4/transformed/wpilibc-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/f05ae85525b0e41b916e567748fad6d4/transformed/ntcore-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/1d22e43b14d10c4be725b76174afd090/transformed/hal-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/823fb1c98d10530a4a70be9be36195d8/transformed/wpimath-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/6094ab635e1f936ba0a0a7de0b09087f/transformed/wpinet-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/9fd388198931d3847e7f6e1ce19d3541/transformed/wpiutil-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/61952a098268121ae9e783ff779156ad/transformed/cameraserver-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/8d7f9e2cf5e4129c5d0b855c1f76c333/transformed/cscore-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/c9b431ac15536dab7f814d1672577311/transformed/apriltag-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/ee11739d3e5d14fc9bc92832d2692037/transformed/opencv-cpp-4.10.0-3-headers/",
+          "/Users/jli28/Desktop/2025RobotCode/src/main/include/"
+        ],
+        "sharedLibrary": false,
+        "executable": true
+      },
+      {
+        "componentName": "frcUserProgramTest",
+        "sourceSets": [
+          {
+            "source": {
+              "srcDirs": [
+                "/Users/jli28/Desktop/2025RobotCode/src/test/cpp/"
+              ],
+              "includes": [
+                "**/*.cpp"
+              ],
+              "excludes": []
+            },
+            "exportedHeaders": {
+              "srcDirs": [
+                "/Users/jli28/Desktop/2025RobotCode/src/frcUserProgramTest/headers/"
+              ],
+              "includes": [],
+              "excludes": []
+            },
+            "cpp": true,
+            "args": [
+              "-Wall",
+              "-Wextra",
+              "-std=c++20",
+              "-pedantic",
+              "-fPIC",
+              "-Wno-unused-parameter",
+              "-Wno-error=deprecated-enum-enum-conversion",
+              "-Wno-missing-field-initializers",
+              "-Wno-unused-private-field",
+              "-Wno-unused-const-variable",
+              "-Wno-error=c11-extensions",
+              "-pthread",
+              "-Wno-deprecated-anon-enum-enum-conversion",
+              "-O0",
+              "-g"
+            ],
+            "macros": [
+              "RUNNING_FRC_TESTS"
+            ]
+          },
+          {
+            "source": {
+              "srcDirs": [
+                "/Users/jli28/Desktop/2025RobotCode/src/main/cpp/"
+              ],
+              "includes": [
+                "**/*.cpp",
+                "**/*.cc"
+              ],
+              "excludes": []
+            },
+            "exportedHeaders": {
+              "srcDirs": [
+                "/Users/jli28/Desktop/2025RobotCode/src/main/include/"
+              ],
+              "includes": [],
+              "excludes": []
+            },
+            "cpp": true,
+            "args": [
+              "-Wall",
+              "-Wextra",
+              "-std=c++20",
+              "-pedantic",
+              "-fPIC",
+              "-Wno-unused-parameter",
+              "-Wno-error=deprecated-enum-enum-conversion",
+              "-Wno-missing-field-initializers",
+              "-Wno-unused-private-field",
+              "-Wno-unused-const-variable",
+              "-Wno-error=c11-extensions",
+              "-pthread",
+              "-Wno-deprecated-anon-enum-enum-conversion",
+              "-O0",
+              "-g"
+            ],
+            "macros": [
+              "RUNNING_FRC_TESTS"
+            ]
+          }
+        ],
+        "libHeaders": [
+          "/Users/jli28/.gradle/caches/8.11/transforms/ef138e41b9d18e0744123140d242aebc/transformed/wpilibNewCommands-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/c338c23b0066fb00af7164beb903a6c4/transformed/wpilibc-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/f05ae85525b0e41b916e567748fad6d4/transformed/ntcore-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/1d22e43b14d10c4be725b76174afd090/transformed/hal-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/823fb1c98d10530a4a70be9be36195d8/transformed/wpimath-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/6094ab635e1f936ba0a0a7de0b09087f/transformed/wpinet-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/9fd388198931d3847e7f6e1ce19d3541/transformed/wpiutil-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/61952a098268121ae9e783ff779156ad/transformed/cameraserver-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/8d7f9e2cf5e4129c5d0b855c1f76c333/transformed/cscore-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/c9b431ac15536dab7f814d1672577311/transformed/apriltag-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/ee11739d3e5d14fc9bc92832d2692037/transformed/opencv-cpp-4.10.0-3-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/22fccc44af11b78447d112d60387f315/transformed/googletest-cpp-2025.2.1-headers/",
+          "/Users/jli28/Desktop/2025RobotCode/src/main/include/"
+        ],
+        "sharedLibrary": false,
+        "executable": false
+      }
+    ],
+    "sourceBinaries": [
+      {
+        "source": {
+          "srcDirs": [
+            "/Users/jli28/Desktop/2025RobotCode/src/main/cpp/"
+          ],
+          "includes": [
+            "**/*.cpp",
+            "**/*.cc"
+          ],
+          "excludes": []
+        },
+        "componentName": "frcUserProgram",
+        "cpp": true,
+        "args": [
+          "-Wall",
+          "-Wextra",
+          "-std=c++20",
+          "-pedantic",
+          "-fPIC",
+          "-Wno-unused-parameter",
+          "-Wno-error=deprecated-enum-enum-conversion",
+          "-Wno-missing-field-initializers",
+          "-Wno-unused-private-field",
+          "-Wno-unused-const-variable",
+          "-Wno-error=c11-extensions",
+          "-pthread",
+          "-Wno-deprecated-anon-enum-enum-conversion",
+          "-O0",
+          "-g"
+        ],
+        "macros": [],
+        "sharedLibrary": false,
+        "executable": true
+      },
+      {
+        "source": {
+          "srcDirs": [
+            "/Users/jli28/Desktop/2025RobotCode/src/main/include/"
+          ],
+          "includes": [],
+          "excludes": []
+        },
+        "componentName": "frcUserProgram",
+        "cpp": true,
+        "args": [
+          "-Wall",
+          "-Wextra",
+          "-std=c++20",
+          "-pedantic",
+          "-fPIC",
+          "-Wno-unused-parameter",
+          "-Wno-error=deprecated-enum-enum-conversion",
+          "-Wno-missing-field-initializers",
+          "-Wno-unused-private-field",
+          "-Wno-unused-const-variable",
+          "-Wno-error=c11-extensions",
+          "-pthread",
+          "-Wno-deprecated-anon-enum-enum-conversion",
+          "-O0",
+          "-g"
+        ],
+        "macros": [],
+        "sharedLibrary": false,
+        "executable": true
+      },
+      {
+        "source": {
+          "srcDirs": [
+            "/Users/jli28/Desktop/2025RobotCode/src/test/cpp/"
+          ],
+          "includes": [
+            "**/*.cpp"
+          ],
+          "excludes": []
+        },
+        "componentName": "frcUserProgramTest",
+        "cpp": true,
+        "args": [
+          "-Wall",
+          "-Wextra",
+          "-std=c++20",
+          "-pedantic",
+          "-fPIC",
+          "-Wno-unused-parameter",
+          "-Wno-error=deprecated-enum-enum-conversion",
+          "-Wno-missing-field-initializers",
+          "-Wno-unused-private-field",
+          "-Wno-unused-const-variable",
+          "-Wno-error=c11-extensions",
+          "-pthread",
+          "-Wno-deprecated-anon-enum-enum-conversion",
+          "-O0",
+          "-g"
+        ],
+        "macros": [
+          "RUNNING_FRC_TESTS"
+        ],
+        "sharedLibrary": false,
+        "executable": false
+      },
+      {
+        "source": {
+          "srcDirs": [
+            "/Users/jli28/Desktop/2025RobotCode/src/frcUserProgramTest/headers/"
+          ],
+          "includes": [],
+          "excludes": []
+        },
+        "componentName": "frcUserProgramTest",
+        "cpp": true,
+        "args": [
+          "-Wall",
+          "-Wextra",
+          "-std=c++20",
+          "-pedantic",
+          "-fPIC",
+          "-Wno-unused-parameter",
+          "-Wno-error=deprecated-enum-enum-conversion",
+          "-Wno-missing-field-initializers",
+          "-Wno-unused-private-field",
+          "-Wno-unused-const-variable",
+          "-Wno-error=c11-extensions",
+          "-pthread",
+          "-Wno-deprecated-anon-enum-enum-conversion",
+          "-O0",
+          "-g"
+        ],
+        "macros": [
+          "RUNNING_FRC_TESTS"
+        ],
+        "sharedLibrary": false,
+        "executable": false
+      }
+    ],
+    "nameBinaryMap": {
+      "frcUserProgram": 0,
+      "frcUserProgramTest": 1
+    }
+  },
+  {
+    "name": "osxuniversal",
+    "architecture": "universal",
+    "operatingSystem": "Mac OS X",
+    "flavor": "default",
+    "buildType": "release",
+    "cppPath": "/usr/bin/clang++",
+    "cPath": "/usr/bin/clang",
+    "msvc": false,
+    "gcc": false,
+    "systemCppMacros": [],
+    "systemCppArgs": [
+      "-arch",
+      "arm64",
+      "x86_64"
+    ],
+    "systemCMacros": [],
+    "systemCArgs": [
+      "-arch",
+      "arm64",
+      "x86_64"
+    ],
+    "allLibFiles": [
+      "/Users/jli28/.gradle/caches/8.11/transforms/ef138e41b9d18e0744123140d242aebc/transformed/wpilibNewCommands-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/c338c23b0066fb00af7164beb903a6c4/transformed/wpilibc-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/f05ae85525b0e41b916e567748fad6d4/transformed/ntcore-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/1d22e43b14d10c4be725b76174afd090/transformed/hal-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/823fb1c98d10530a4a70be9be36195d8/transformed/wpimath-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/6094ab635e1f936ba0a0a7de0b09087f/transformed/wpinet-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/9fd388198931d3847e7f6e1ce19d3541/transformed/wpiutil-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/61952a098268121ae9e783ff779156ad/transformed/cameraserver-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/8d7f9e2cf5e4129c5d0b855c1f76c333/transformed/cscore-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/c9b431ac15536dab7f814d1672577311/transformed/apriltag-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/ee11739d3e5d14fc9bc92832d2692037/transformed/opencv-cpp-4.10.0-3-headers/",
+      "/Users/jli28/Desktop/2025RobotCode/src/main/include/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/0326349d86d33f13043053322aa77f6b/transformed/wpilibNewCommands-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/70cf1ded88b5f139027f0967f09919fb/transformed/wpilibc-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/127f60dc5853b77a92fced9930f72dbd/transformed/ntcore-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/6ea991af3bd3dd2def6ab431ecd0f0fb/transformed/hal-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/6e343555cf358e1a74c6d7f8b39da803/transformed/wpimath-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/7b15ad55ce939ea63b5fa02456fba51e/transformed/wpinet-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/87b4d018931954d0527b9d3b9594d987/transformed/wpiutil-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/70b2b351f6ac5cb9b909ba00e82816e5/transformed/cameraserver-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/6240f0b190c5fa118395e1714cb78ee0/transformed/cscore-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/4837c0faad8a64f473e6a98459e4f011/transformed/apriltag-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/285635b155c84131e0a7f701202380fa/transformed/opencv-cpp-4.10.0-3-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/22fccc44af11b78447d112d60387f315/transformed/googletest-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/44a0220b5ba069fef3821f2341767143/transformed/googletest-cpp-2025.2.1-sources/"
+    ],
+    "allLibSources": [
+      "/Users/jli28/.gradle/caches/8.11/transforms/0326349d86d33f13043053322aa77f6b/transformed/wpilibNewCommands-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/70cf1ded88b5f139027f0967f09919fb/transformed/wpilibc-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/127f60dc5853b77a92fced9930f72dbd/transformed/ntcore-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/6ea991af3bd3dd2def6ab431ecd0f0fb/transformed/hal-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/6e343555cf358e1a74c6d7f8b39da803/transformed/wpimath-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/7b15ad55ce939ea63b5fa02456fba51e/transformed/wpinet-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/87b4d018931954d0527b9d3b9594d987/transformed/wpiutil-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/70b2b351f6ac5cb9b909ba00e82816e5/transformed/cameraserver-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/6240f0b190c5fa118395e1714cb78ee0/transformed/cscore-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/4837c0faad8a64f473e6a98459e4f011/transformed/apriltag-cpp-2025.2.1-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/285635b155c84131e0a7f701202380fa/transformed/opencv-cpp-4.10.0-3-sources/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/44a0220b5ba069fef3821f2341767143/transformed/googletest-cpp-2025.2.1-sources/"
+    ],
+    "allLibHeaders": [
+      "/Users/jli28/.gradle/caches/8.11/transforms/ef138e41b9d18e0744123140d242aebc/transformed/wpilibNewCommands-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/c338c23b0066fb00af7164beb903a6c4/transformed/wpilibc-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/f05ae85525b0e41b916e567748fad6d4/transformed/ntcore-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/1d22e43b14d10c4be725b76174afd090/transformed/hal-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/823fb1c98d10530a4a70be9be36195d8/transformed/wpimath-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/6094ab635e1f936ba0a0a7de0b09087f/transformed/wpinet-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/9fd388198931d3847e7f6e1ce19d3541/transformed/wpiutil-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/61952a098268121ae9e783ff779156ad/transformed/cameraserver-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/8d7f9e2cf5e4129c5d0b855c1f76c333/transformed/cscore-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/c9b431ac15536dab7f814d1672577311/transformed/apriltag-cpp-2025.2.1-headers/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/ee11739d3e5d14fc9bc92832d2692037/transformed/opencv-cpp-4.10.0-3-headers/",
+      "/Users/jli28/Desktop/2025RobotCode/src/main/include/",
+      "/Users/jli28/.gradle/caches/8.11/transforms/22fccc44af11b78447d112d60387f315/transformed/googletest-cpp-2025.2.1-headers/"
+    ],
+    "binaries": [
+      {
+        "componentName": "frcUserProgram",
+        "sourceSets": [
+          {
+            "source": {
+              "srcDirs": [
+                "/Users/jli28/Desktop/2025RobotCode/src/main/cpp/"
+              ],
+              "includes": [
+                "**/*.cpp",
+                "**/*.cc"
+              ],
+              "excludes": []
+            },
+            "exportedHeaders": {
+              "srcDirs": [
+                "/Users/jli28/Desktop/2025RobotCode/src/main/include/"
+              ],
+              "includes": [],
+              "excludes": []
+            },
+            "cpp": true,
+            "args": [
+              "-Wall",
+              "-Wextra",
+              "-std=c++20",
+              "-pedantic",
+              "-fPIC",
+              "-Wno-unused-parameter",
+              "-Wno-error=deprecated-enum-enum-conversion",
+              "-Wno-missing-field-initializers",
+              "-Wno-unused-private-field",
+              "-Wno-unused-const-variable",
+              "-Wno-error=c11-extensions",
+              "-pthread",
+              "-Wno-deprecated-anon-enum-enum-conversion",
+              "-O2"
+            ],
+            "macros": []
+          }
+        ],
+        "libHeaders": [
+          "/Users/jli28/.gradle/caches/8.11/transforms/ef138e41b9d18e0744123140d242aebc/transformed/wpilibNewCommands-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/c338c23b0066fb00af7164beb903a6c4/transformed/wpilibc-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/f05ae85525b0e41b916e567748fad6d4/transformed/ntcore-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/1d22e43b14d10c4be725b76174afd090/transformed/hal-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/823fb1c98d10530a4a70be9be36195d8/transformed/wpimath-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/6094ab635e1f936ba0a0a7de0b09087f/transformed/wpinet-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/9fd388198931d3847e7f6e1ce19d3541/transformed/wpiutil-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/61952a098268121ae9e783ff779156ad/transformed/cameraserver-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/8d7f9e2cf5e4129c5d0b855c1f76c333/transformed/cscore-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/c9b431ac15536dab7f814d1672577311/transformed/apriltag-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/ee11739d3e5d14fc9bc92832d2692037/transformed/opencv-cpp-4.10.0-3-headers/",
+          "/Users/jli28/Desktop/2025RobotCode/src/main/include/"
+        ],
+        "sharedLibrary": false,
+        "executable": true
+      },
+      {
+        "componentName": "frcUserProgramTest",
+        "sourceSets": [
+          {
+            "source": {
+              "srcDirs": [
+                "/Users/jli28/Desktop/2025RobotCode/src/test/cpp/"
+              ],
+              "includes": [
+                "**/*.cpp"
+              ],
+              "excludes": []
+            },
+            "exportedHeaders": {
+              "srcDirs": [
+                "/Users/jli28/Desktop/2025RobotCode/src/frcUserProgramTest/headers/"
+              ],
+              "includes": [],
+              "excludes": []
+            },
+            "cpp": true,
+            "args": [
+              "-Wall",
+              "-Wextra",
+              "-std=c++20",
+              "-pedantic",
+              "-fPIC",
+              "-Wno-unused-parameter",
+              "-Wno-error=deprecated-enum-enum-conversion",
+              "-Wno-missing-field-initializers",
+              "-Wno-unused-private-field",
+              "-Wno-unused-const-variable",
+              "-Wno-error=c11-extensions",
+              "-pthread",
+              "-Wno-deprecated-anon-enum-enum-conversion",
+              "-O2"
+            ],
+            "macros": [
+              "RUNNING_FRC_TESTS"
+            ]
+          },
+          {
+            "source": {
+              "srcDirs": [
+                "/Users/jli28/Desktop/2025RobotCode/src/main/cpp/"
+              ],
+              "includes": [
+                "**/*.cpp",
+                "**/*.cc"
+              ],
+              "excludes": []
+            },
+            "exportedHeaders": {
+              "srcDirs": [
+                "/Users/jli28/Desktop/2025RobotCode/src/main/include/"
+              ],
+              "includes": [],
+              "excludes": []
+            },
+            "cpp": true,
+            "args": [
+              "-Wall",
+              "-Wextra",
+              "-std=c++20",
+              "-pedantic",
+              "-fPIC",
+              "-Wno-unused-parameter",
+              "-Wno-error=deprecated-enum-enum-conversion",
+              "-Wno-missing-field-initializers",
+              "-Wno-unused-private-field",
+              "-Wno-unused-const-variable",
+              "-Wno-error=c11-extensions",
+              "-pthread",
+              "-Wno-deprecated-anon-enum-enum-conversion",
+              "-O2"
+            ],
+            "macros": [
+              "RUNNING_FRC_TESTS"
+            ]
+          }
+        ],
+        "libHeaders": [
+          "/Users/jli28/.gradle/caches/8.11/transforms/ef138e41b9d18e0744123140d242aebc/transformed/wpilibNewCommands-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/c338c23b0066fb00af7164beb903a6c4/transformed/wpilibc-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/f05ae85525b0e41b916e567748fad6d4/transformed/ntcore-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/1d22e43b14d10c4be725b76174afd090/transformed/hal-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/823fb1c98d10530a4a70be9be36195d8/transformed/wpimath-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/6094ab635e1f936ba0a0a7de0b09087f/transformed/wpinet-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/9fd388198931d3847e7f6e1ce19d3541/transformed/wpiutil-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/61952a098268121ae9e783ff779156ad/transformed/cameraserver-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/8d7f9e2cf5e4129c5d0b855c1f76c333/transformed/cscore-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/c9b431ac15536dab7f814d1672577311/transformed/apriltag-cpp-2025.2.1-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/ee11739d3e5d14fc9bc92832d2692037/transformed/opencv-cpp-4.10.0-3-headers/",
+          "/Users/jli28/.gradle/caches/8.11/transforms/22fccc44af11b78447d112d60387f315/transformed/googletest-cpp-2025.2.1-headers/",
+          "/Users/jli28/Desktop/2025RobotCode/src/main/include/"
+        ],
+        "sharedLibrary": false,
+        "executable": false
+      }
+    ],
+    "sourceBinaries": [
+      {
+        "source": {
+          "srcDirs": [
+            "/Users/jli28/Desktop/2025RobotCode/src/main/cpp/"
+          ],
+          "includes": [
+            "**/*.cpp",
+            "**/*.cc"
+          ],
+          "excludes": []
+        },
+        "componentName": "frcUserProgram",
+        "cpp": true,
+        "args": [
+          "-Wall",
+          "-Wextra",
+          "-std=c++20",
+          "-pedantic",
+          "-fPIC",
+          "-Wno-unused-parameter",
+          "-Wno-error=deprecated-enum-enum-conversion",
+          "-Wno-missing-field-initializers",
+          "-Wno-unused-private-field",
+          "-Wno-unused-const-variable",
+          "-Wno-error=c11-extensions",
+          "-pthread",
+          "-Wno-deprecated-anon-enum-enum-conversion",
+          "-O2"
+        ],
+        "macros": [],
+        "sharedLibrary": false,
+        "executable": true
+      },
+      {
+        "source": {
+          "srcDirs": [
+            "/Users/jli28/Desktop/2025RobotCode/src/main/include/"
+          ],
+          "includes": [],
+          "excludes": []
+        },
+        "componentName": "frcUserProgram",
+        "cpp": true,
+        "args": [
+          "-Wall",
+          "-Wextra",
+          "-std=c++20",
+          "-pedantic",
+          "-fPIC",
+          "-Wno-unused-parameter",
+          "-Wno-error=deprecated-enum-enum-conversion",
+          "-Wno-missing-field-initializers",
+          "-Wno-unused-private-field",
+          "-Wno-unused-const-variable",
+          "-Wno-error=c11-extensions",
+          "-pthread",
+          "-Wno-deprecated-anon-enum-enum-conversion",
+          "-O2"
+        ],
+        "macros": [],
+        "sharedLibrary": false,
+        "executable": true
+      },
+      {
+        "source": {
+          "srcDirs": [
+            "/Users/jli28/Desktop/2025RobotCode/src/test/cpp/"
+          ],
+          "includes": [
+            "**/*.cpp"
+          ],
+          "excludes": []
+        },
+        "componentName": "frcUserProgramTest",
+        "cpp": true,
+        "args": [
+          "-Wall",
+          "-Wextra",
+          "-std=c++20",
+          "-pedantic",
+          "-fPIC",
+          "-Wno-unused-parameter",
+          "-Wno-error=deprecated-enum-enum-conversion",
+          "-Wno-missing-field-initializers",
+          "-Wno-unused-private-field",
+          "-Wno-unused-const-variable",
+          "-Wno-error=c11-extensions",
+          "-pthread",
+          "-Wno-deprecated-anon-enum-enum-conversion",
+          "-O2"
+        ],
+        "macros": [
+          "RUNNING_FRC_TESTS"
+        ],
+        "sharedLibrary": false,
+        "executable": false
+      },
+      {
+        "source": {
+          "srcDirs": [
+            "/Users/jli28/Desktop/2025RobotCode/src/frcUserProgramTest/headers/"
+          ],
+          "includes": [],
+          "excludes": []
+        },
+        "componentName": "frcUserProgramTest",
+        "cpp": true,
+        "args": [
+          "-Wall",
+          "-Wextra",
+          "-std=c++20",
+          "-pedantic",
+          "-fPIC",
+          "-Wno-unused-parameter",
+          "-Wno-error=deprecated-enum-enum-conversion",
+          "-Wno-missing-field-initializers",
+          "-Wno-unused-private-field",
+          "-Wno-unused-const-variable",
+          "-Wno-error=c11-extensions",
+          "-pthread",
+          "-Wno-deprecated-anon-enum-enum-conversion",
+          "-O2"
+        ],
+        "macros": [
+          "RUNNING_FRC_TESTS"
+        ],
+        "sharedLibrary": false,
+        "executable": false
+      }
+    ],
+    "nameBinaryMap": {
+      "frcUserProgram": 0,
+      "frcUserProgramTest": 1
+    }
+  }
+]

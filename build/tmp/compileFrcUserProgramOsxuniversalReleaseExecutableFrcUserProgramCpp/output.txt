@@ -1,0 +1,12 @@
+See file:///Users/jli28/Desktop/2025RobotCode/build/tmp/compileFrcUserProgramOsxuniversalReleaseExecutableFrcUserProgramCpp/output.txt for all output for compileFrcUserProgramOsxuniversalReleaseExecutableFrcUserProgramCpp.
+compiling RobotContainer.cpp successful.
+
+compiling ExampleCommand.cpp successful.
+
+compiling Robot.cpp successful.
+
+compiling Autos.cpp successful.
+
+compiling ExampleSubsystem.cpp successful.
+
+Finished compileFrcUserProgramOsxuniversalReleaseExecutableFrcUserProgramCpp, see full log file:///Users/jli28/Desktop/2025RobotCode/build/tmp/compileFrcUserProgramOsxuniversalReleaseExecutableFrcUserProgramCpp/output.txt.

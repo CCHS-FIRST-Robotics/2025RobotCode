@@ -1,0 +1,4 @@
+See file:///Users/jli28/Desktop/2025RobotCode/build/tmp/linkFrcUserProgramTestOsxuniversalReleaseGoogleTestExe/output.txt for all output for linkFrcUserProgramTestOsxuniversalReleaseGoogleTestExe.
+linking frcUserProgramTest successful.
+
+Finished linkFrcUserProgramTestOsxuniversalReleaseGoogleTestExe, see full log file:///Users/jli28/Desktop/2025RobotCode/build/tmp/linkFrcUserProgramTestOsxuniversalReleaseGoogleTestExe/output.txt.
