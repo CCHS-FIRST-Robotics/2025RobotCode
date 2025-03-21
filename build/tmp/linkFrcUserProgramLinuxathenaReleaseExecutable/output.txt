@@ -1,4 +1,0 @@
-See file:///Users/jli28/Desktop/2025RobotCode/build/tmp/linkFrcUserProgramLinuxathenaReleaseExecutable/output.txt for all output for linkFrcUserProgramLinuxathenaReleaseExecutable.
-linking frcUserProgram successful.
-
-Finished linkFrcUserProgramLinuxathenaReleaseExecutable, see full log file:///Users/jli28/Desktop/2025RobotCode/build/tmp/linkFrcUserProgramLinuxathenaReleaseExecutable/output.txt.

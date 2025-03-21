@@ -1,4 +1,0 @@
-See file:///Users/jli28/Desktop/2025RobotCode/build/tmp/linkFrcUserProgramOsxuniversalReleaseExecutable/output.txt for all output for linkFrcUserProgramOsxuniversalReleaseExecutable.
-linking frcUserProgram successful.
-
-Finished linkFrcUserProgramOsxuniversalReleaseExecutable, see full log file:///Users/jli28/Desktop/2025RobotCode/build/tmp/linkFrcUserProgramOsxuniversalReleaseExecutable/output.txt.
