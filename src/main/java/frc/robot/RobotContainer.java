@@ -119,7 +119,7 @@ public class RobotContainer {
         // ————— drive ————— //
 
         // drive
-        drive.setDefaultCommand(
+        drive.setDefaultCommand(  // ! add a precise driving button that lowers all the accel and max velo
             new DriveWithVelocity(
                 drive,
                 poseEstimator,
@@ -182,7 +182,7 @@ public class RobotContainer {
         coralController.button(20).onTrue(coralCommandCompositer.runL4());
 
         // emergency stop
-        coralController.button(21).onTrue(
+        coralController.button(21).onTrue(  // ! maybe make this lower the arm using voltage control then swiching to position control once it gets to a cdertain part.
             coral.getSetElevatorVoltageCommand(Volts.of(0))
             .andThen(coral.getSetArmVoltageCommand(Volts.of(0)))
         );

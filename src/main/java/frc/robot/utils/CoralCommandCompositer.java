@@ -27,7 +27,7 @@ public class CoralCommandCompositer {
     }
 
     public Command runIntake() { 
-        // if(coral.troughSensesCoral()){ // ! 
+        // if(coral.troughSensesCoral()){ // ! need to attach or find other solution
         //     return null;
         // }
 
@@ -64,7 +64,7 @@ public class CoralCommandCompositer {
             Commands.waitSeconds(1)
             .andThen(new InstantCommand(() -> drive.runVelocity(
                 new ChassisSpeeds(
-                    -0.1, 
+                    -0.1, //! tune 
                     0, 
                     0
                 )   
@@ -83,19 +83,19 @@ public class CoralCommandCompositer {
     }
 
     public Command runL3() {
-        return coral.getLowerArmWithVoltageCommand(Volts.of(-0.3), Rotations.of(-0.1))
+        return coral.getLowerArmWithVoltageCommand(Volts.of(-0.3), Rotations.of(-0.1)) 
         .alongWith(
             Commands.waitSeconds(1)
             .andThen(new InstantCommand(() -> drive.runVelocity(
                 new ChassisSpeeds( 
-                    -0.1, 
+                    -0.1, //! tune 
                     0, 
                     0
                 )
             )).repeatedly().withTimeout(2))
         )
         .andThen(coral.getSetElevatorCommand(PhysicalConstants.CoralPositions.INTAKE_PREP[0]))
-        .andThen(Commands.waitSeconds(0.5))
+        .andThen(Commands.waitSeconds(0.8))
         .andThen(coral.getSetArmCommand(PhysicalConstants.CoralPositions.INTAKE_PREP[1]));
     }
 
@@ -113,7 +113,7 @@ public class CoralCommandCompositer {
         .andThen(coral.getSetArmVoltageCommand(Volts.of(0.25)))
         .andThen(new InstantCommand(() -> drive.runVelocity(
             new ChassisSpeeds(
-                -0.1, 
+                -0.1, //! tune 
                 0, 
                 0
             )
