@@ -119,7 +119,7 @@ public class RobotContainer {
         // ————— drive ————— //
 
         // drive
-        drive.setDefaultCommand(
+        drive.setDefaultCommand(  // ! add a precise driving button that lowers all the accel and max velo
             new DriveWithVelocity(
                 drive,
                 poseEstimator,

@@ -89,12 +89,12 @@ public class CoralIOReal implements CoralIO{
         elevatorPIDF.kV = kVElevator;
         elevatorPIDF.kA = kAElevator;
         elevatorPIDF.GravityType = GravityTypeValue.Elevator_Static;
-        elevatorMotionMagicConfig.MotionMagicCruiseVelocity = 1.5; // max is 1
-        elevatorMotionMagicConfig.MotionMagicAcceleration = 20;
+        elevatorMotionMagicConfig.MotionMagicCruiseVelocity = 1.5; // ! can make this bigger if we want (~2secconds for full bottom to max)
+        elevatorMotionMagicConfig.MotionMagicAcceleration = 20; // ! might want to lower this as 20 RPSPS is overkill
         elevatorMotionMagicConfig.MotionMagicJerk = 1;
         // misc
         elevatorConfig.MotorOutput.withInverted(InvertedValue.Clockwise_Positive);
-        elevatorConfig.CurrentLimits.StatorCurrentLimit = 30;
+        elevatorConfig.CurrentLimits.StatorCurrentLimit = 40; 
         elevatorMotor.getConfigurator().apply(elevatorConfig);
     
         // ————— arm ————— //
@@ -114,8 +114,8 @@ public class CoralIOReal implements CoralIO{
         armPIDF.kV = kVArm;
         armPIDF.kA = kAArm;
         armPIDF.GravityType = GravityTypeValue.Arm_Cosine;
-        armMotionMagicConfig.MotionMagicCruiseVelocity = 0.2;
-        armMotionMagicConfig.MotionMagicAcceleration = 1;
+        armMotionMagicConfig.MotionMagicCruiseVelocity = 0.2; 
+        armMotionMagicConfig.MotionMagicAcceleration = .4; // !lowered from 1 to .4
         armMotionMagicConfig.MotionMagicJerk = 1;
         // misc
         armConfig.MotorOutput.withInverted(InvertedValue.CounterClockwise_Positive);
@@ -156,7 +156,7 @@ public class CoralIOReal implements CoralIO{
 
     @Override
     public boolean elevatorAtSetpoint(Angle position) {
-        return Math.abs(position.in(Rotations) - inputs.elevatorEncoderPosition) < 0.1;
+        return Math.abs(position.in(Rotations) - inputs.elevatorEncoderPosition) < 0.1; // ! should figure out if it makes sense to retune these
     }
 
     // ————— arm ————— //
@@ -173,7 +173,7 @@ public class CoralIOReal implements CoralIO{
     
     @Override
     public boolean armAtSetpoint(Angle position) {
-        return Math.abs(position.in(Rotations) - inputs.armEncoderPosition) < 0.008;
+        return Math.abs(position.in(Rotations) - inputs.armEncoderPosition) < 0.008; // ! might be too exact
     }
 
     // ————— logging ————— //

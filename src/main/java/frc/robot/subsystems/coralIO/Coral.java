@@ -9,6 +9,8 @@ import java.util.function.Consumer;
 import edu.wpi.first.units.*;
 import edu.wpi.first.units.measure.*;
 import org.littletonrobotics.junction.Logger;
+
+//import frc.robot.constants.PhysicalConstants;
 import frc.robot.subsystems.coralIO.CoralIO.CoralIOInputs;
 
 public class Coral extends SubsystemBase {
@@ -67,6 +69,7 @@ public class Coral extends SubsystemBase {
     public Command getSetCoralPositionCommand(Angle[] position) {
         return runOnce(() -> io.setElevatorPosition(position[0]))
         .alongWith(new InstantCommand(() -> io.setArmPosition(position[1])));
+        //.andThen(getWaitUntilCoralInPositionCommand(PhysicalConstants.CoralPositions.L1)); ! // !wont have to do in command factory but needs coral position 
     }
 
     public Command getWaitUntilCoralInPositionCommand(Angle[] position) {
