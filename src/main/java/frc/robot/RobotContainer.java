@@ -158,14 +158,14 @@ public class RobotContainer {
         xboxController2.x().onTrue(new DriveWithApriltag(
             drive, 
             poseEstimator, 
-            1, 
+            4, 
             PhysicalConstants.DrivePositions.L4, 
             true
         ));
         xboxController2.b().onTrue(new DriveWithApriltag(
             drive, 
             poseEstimator, 
-            1, 
+            4, 
             PhysicalConstants.DrivePositions.L4, 
             false)
         );

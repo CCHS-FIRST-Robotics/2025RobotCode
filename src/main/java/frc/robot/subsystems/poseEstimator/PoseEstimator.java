@@ -83,6 +83,7 @@ public class PoseEstimator extends SubsystemBase {
         }
         int packetId = (int) cameraInputs.tagArray[0];
         int cameraId = (int) cameraInputs.tagArray[1];
+        // ! just base it off of the array
         switch (cameraId) { // if packet is stale
             case 0: // jetson
                 if (packetId == jetsonLastPacketId) {

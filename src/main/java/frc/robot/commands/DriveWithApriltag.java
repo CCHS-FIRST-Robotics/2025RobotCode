@@ -57,6 +57,7 @@ public class DriveWithApriltag extends Command {
         double yError = offsetArray[1] - drivePosition.getY() - 0.1651 * (left ? -1 : 1); // meters
         double targetAngle = PhysicalConstants.APRILTAG_LOCATIONS.get(targetTagId).getRotation().getRadians() - Math.PI; // radians
         double oError = targetAngle - MathUtil.angleModulus(poseEstimator.getRawYaw().getRadians()); // radians
+        // but what if gyro is pi and target is -pi
 
         ChassisSpeeds speeds = new ChassisSpeeds();
         switch (driveMode) {
@@ -109,6 +110,7 @@ public class DriveWithApriltag extends Command {
 
     @Override
     public void end(boolean interrupted) {
+        System.out.println("FINISHED\nFINISHED\nFINISHED\nFINISHED\nFINISHED\nFINISHED\nFINISHED\n");
         drive.stop();
     }
 }

@@ -26,7 +26,7 @@ public class AutoRoutineGenerator {
             poseEstimator::getPose,
             poseEstimator::resetPosition,
             drive::runAutoPosition,
-            DriverStation.getAlliance().isPresent() ? DriverStation.getAlliance().get() == DriverStation.Alliance.Blue : false,
+            false,
             drive
         );
 
@@ -74,7 +74,7 @@ public class AutoRoutineGenerator {
             new DriveWithPosition(drive, poseEstimator, trajectory0.getFinalPose().get())
             .alongWith(
                 // prep the coral
-                coralCommandCompositer.prepL4()
+                coralCommandCompositer.prepL4WithWait()
             )
             // align with the apriltag
             .andThen(new DriveWithApriltag(
