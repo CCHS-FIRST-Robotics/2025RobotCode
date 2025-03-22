@@ -107,7 +107,7 @@ public class RobotContainer {
         drive.setPoseEstimator(poseEstimator);
 
         coralCommandCompositer = new CoralCommandCompositer(drive, poseEstimator, coral);
-        autoGenerator = new AutoRoutineGenerator(drive, poseEstimator);
+        autoGenerator = new AutoRoutineGenerator(drive, poseEstimator, coralCommandCompositer);
         autoChooser = new AutoChooser();
         
         configureButtonBindings();
@@ -139,30 +139,35 @@ public class RobotContainer {
 
         // control precision // ! 
         xboxController1.leftTrigger().onTrue(
-            new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(2))
-            .andThen(new InstantCommand(
-                () -> PhysicalConstants.MAX_ALLOWED_ANGULAR_ACCEL = RotationsPerSecondPerSecond.of(2 / PhysicalConstants.TRACK_CIRCUMFERENCE.in(Meters)))
-            )
+            new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_LINEAR_SPEED = MetersPerSecond.of(2))
+            .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_ANGULAR_SPEED = RotationsPerSecond.of(0.5)))
+            .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(1)))
+            .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_ANGULAR_ACCEL = RotationsPerSecondPerSecond.of(1 / PhysicalConstants.TRACK_CIRCUMFERENCE.in(Meters))))
         );
         xboxController1.rightTrigger().onTrue(
-            new InstantCommand(
-                () -> PhysicalConstants.MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(20)
-            )
-            .andThen(new InstantCommand(
-                () -> PhysicalConstants.MAX_ALLOWED_ANGULAR_ACCEL = RotationsPerSecondPerSecond.of(20 / PhysicalConstants.TRACK_CIRCUMFERENCE.in(Meters)))
-            )
+            new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_LINEAR_SPEED = MetersPerSecond.of(4))
+            .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_ANGULAR_SPEED = RotationsPerSecond.of(1)))
+            .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(3))) // ! 20
+            .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_ANGULAR_ACCEL = RotationsPerSecondPerSecond.of(3 / PhysicalConstants.TRACK_CIRCUMFERENCE.in(Meters))))
         );
 
         // ————— coral ————— //
 
         // ! testing drivewithapriltag
-        xboxController2.x().onTrue(coral.getSetElevatorCommand(Rotations.of(3.5)));
-        xboxController2.y().onTrue(new DriveWithApriltag(
+        xboxController2.y().onTrue(coral.getSetElevatorCommand(Rotations.of(3.5)));
+        xboxController2.x().onTrue(new DriveWithApriltag(
             drive, 
             poseEstimator, 
-            18, 
+            1, 
             PhysicalConstants.DrivePositions.L4, 
-            true)
+            true
+        ));
+        xboxController2.b().onTrue(new DriveWithApriltag(
+            drive, 
+            poseEstimator, 
+            1, 
+            PhysicalConstants.DrivePositions.L4, 
+            false)
         );
 
         // reef positions
@@ -214,7 +219,7 @@ public class RobotContainer {
     private void configureAutos(){
         autoChooser.addCmd("Back Up", () -> autoGenerator.backUp());
         autoChooser.addRoutine("2Meter", () -> autoGenerator.twoMeter());
-        autoChooser.addRoutine("2Coral", () -> autoGenerator.twoCoralChoreo());
+        autoChooser.addRoutine("1CoralL4", () -> autoGenerator.oneCoralL4());
 
         SmartDashboard.putData("AutoChooser", autoChooser);
     }

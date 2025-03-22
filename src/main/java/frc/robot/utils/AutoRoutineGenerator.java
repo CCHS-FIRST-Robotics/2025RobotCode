@@ -5,18 +5,22 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.math.geometry.*;
 import frc.robot.commands.*;
+import frc.robot.constants.PhysicalConstants;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.poseEstimator.*;
+import frc.robot.subsystems.coralIO.*;
 
 public class AutoRoutineGenerator {
     private final AutoFactory autoFactory;
 
     private final Drive drive;
     private final PoseEstimator poseEstimator;
+    private final CoralCommandCompositer coralCommandCompositer;
 
     public AutoRoutineGenerator(
         Drive drive,
-        PoseEstimator poseEstimator
+        PoseEstimator poseEstimator,
+        CoralCommandCompositer coralCommandCompositer
     ) {
         autoFactory = new AutoFactory(
             poseEstimator::getPose,
@@ -28,6 +32,7 @@ public class AutoRoutineGenerator {
 
         this.drive = drive;
         this.poseEstimator = poseEstimator;
+        this.coralCommandCompositer = coralCommandCompositer;
     }
 
     public Command backUp() {
@@ -52,29 +57,35 @@ public class AutoRoutineGenerator {
         return routine;
     }
     
-    // ! in the future put preloaded coral on the reef, get another coral from the station, put that on the reef too
-    public AutoRoutine twoCoralChoreo() {
-        AutoRoutine routine = autoFactory.newRoutine("2Coral");
+    public AutoRoutine oneCoralL4() {
+        AutoRoutine routine = autoFactory.newRoutine("1CoralL4");
 
         // load trajectories
-        AutoTrajectory trajectory0 = routine.trajectory("2Coral", 0);
-        AutoTrajectory trajectory1 = routine.trajectory("2Coral", 1);
-        AutoTrajectory trajectory2 = routine.trajectory("2Coral", 2);
+        AutoTrajectory trajectory0 = routine.trajectory("1CoralL4", 0);
 
-        // when routine begins, reset odometry, start first trajectory, begin moving the elevator
+        // when routine begins, reset odometry, start first trajectory
         routine.active().onTrue(
             trajectory0.resetOdometry()
             .andThen(trajectory0.cmd())
         );
         
-        // start the next trajectory
         trajectory0.done().onTrue(
-            trajectory1.cmd()
-        );
-
-        // start the next trajectory
-        trajectory1.done().onTrue(
-            trajectory2.cmd()
+            // hold the position
+            new DriveWithPosition(drive, poseEstimator, trajectory0.getFinalPose().get())
+            .alongWith(
+                // prep the coral
+                coralCommandCompositer.prepL4()
+            )
+            // align with the apriltag
+            .andThen(new DriveWithApriltag(
+                drive, 
+                poseEstimator, 
+                17, 
+                PhysicalConstants.DrivePositions.L4, 
+                true
+            ))
+            // run coral
+            .andThen(coralCommandCompositer.runL4())
         );
 
         return routine;

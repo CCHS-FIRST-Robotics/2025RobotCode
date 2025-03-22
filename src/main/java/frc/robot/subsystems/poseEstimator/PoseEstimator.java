@@ -111,25 +111,25 @@ public class PoseEstimator extends SubsystemBase {
                 break;
         }
         visionEstimate = updateVision();
-        // for(int key : combinedMap.keySet()){
-        //     System.out.print(key + ", [");
-        //     for(double d : combinedMap.get(key)){
-        //         System.out.print(d + ", ");
-        //     }
-        //     System.out.println();
-        // }
-        // System.out.println("___________________________");
+        for(int key : combinedMap.keySet()){
+            System.out.print(key + ", [");
+            for(double d : combinedMap.get(key)){
+                System.out.print(d + ", ");
+            }
+            System.out.println();
+        }
+        System.out.println("___________________________");
         combinedEstimator.updateWithTime(
             Timer.getFPGATimestamp(),
             getRawYaw(),
             drive.getModulePositions()
         );
-        combinedEstimator.addVisionMeasurement(visionEstimate, Timer.getFPGATimestamp()); 
+        combinedEstimator.addVisionMeasurement(visionEstimate, Timer.getFPGATimestamp());
         Logger.recordOutput("outputs/poseEstimator/poses/visionPoses/visionPoseEstimate", visionEstimate);
         Logger.recordOutput("outputs/poseEstimator/poses/visionPoses/combinedPoseEstimate", combinedEstimator.getEstimatedPosition());
     }
 
-    public Pose2d updateVision() {
+    public Pose2d updateVision() { // ! sleder's code keeps a tag in the networktables, even when it stops being seen
         // update jetson and usb 1 maps
         HashMap<Integer, HashMap<Integer, double[]>> cameraPacketMap = getCameraPacketMap();
         for(int key : cameraPacketMap.keySet()){

@@ -42,8 +42,8 @@ public final class PhysicalConstants {
         MAX_POSSIBLE_LINEAR_SPEED.in(MetersPerSecond) // meters per second of the robot
         / TRACK_CIRCUMFERENCE.in(Meters) // rotations per second of the robot
     ); // = 1.5944299280
-    public static final LinearVelocity MAX_ALLOWED_LINEAR_SPEED = MetersPerSecond.of(4);
-    public static final AngularVelocity MAX_ALLOWED_ANGULAR_SPEED = RotationsPerSecond.of(1);
+    public static LinearVelocity MAX_ALLOWED_LINEAR_SPEED = MetersPerSecond.of(4);
+    public static AngularVelocity MAX_ALLOWED_ANGULAR_SPEED = RotationsPerSecond.of(1);
     public static LinearAcceleration MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(2);
     public static AngularAcceleration MAX_ALLOWED_ANGULAR_ACCEL = RotationsPerSecondPerSecond.of(2 / TRACK_CIRCUMFERENCE.in(Meters));
 
@@ -68,7 +68,7 @@ public final class PhysicalConstants {
 
     public static final HashMap<Integer, Pose2d> APRILTAG_LOCATIONS = new HashMap<Integer, Pose2d>();
     static {
-        APRILTAG_LOCATIONS.put(1, new Pose2d(16.697198, 0.65532, new Rotation2d(Degrees.of(126))));
+        APRILTAG_LOCATIONS.put(1, new Pose2d(16.697198, 0.65532, new Rotation2d(Degrees.of(0)))); // ! 
         APRILTAG_LOCATIONS.put(2, new Pose2d(16.697198, 7.39648, new Rotation2d(Degrees.of(234))));
         APRILTAG_LOCATIONS.put(3, new Pose2d(11.56081, 8.05561, new Rotation2d(Degrees.of(270))));
         APRILTAG_LOCATIONS.put(4, new Pose2d(9.27608, 6.137656, new Rotation2d(Degrees.of(0))));

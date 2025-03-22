@@ -56,9 +56,9 @@ public class Drive extends SubsystemBase {
     private Pose2d positionSetpoint = new Pose2d();
     private Twist2d twistSetpoint = new Twist2d();
     // manual
-    private final PIDController xController = new PIDController(3, 0, 0);
-    private final PIDController yController = new PIDController(3, 0, 0);
-    private final PIDController oController = new PIDController(3, 0, 0);
+    private final PIDController xPID = new PIDController(3, 0, 0);
+    private final PIDController yPID = new PIDController(3, 0, 0);
+    private final PIDController oPID = new PIDController(3, 0, 0);
     // choreo
     // private final PIDController xController = new PIDController(50, 0, 0);
     // private final PIDController yController = new PIDController(50, 0, 0);
@@ -78,7 +78,7 @@ public class Drive extends SubsystemBase {
         modules[2] = new Module(blModuleIO, 3);
         modules[3] = new Module(brModuleIO, 4);
 
-        oController.enableContinuousInput(-Math.PI, Math.PI);
+        oPID.enableContinuousInput(-Math.PI, Math.PI);
     }
 
     @Override
@@ -121,15 +121,15 @@ public class Drive extends SubsystemBase {
                 break;
             case POSITION:
                 // get PIDs
-                double xPID = xController.calculate(poseEstimator.getPose().getX(), positionSetpoint.getX());
-                double yPID = yController.calculate(poseEstimator.getPose().getY(), positionSetpoint.getY());
-                double oPID = oController.calculate(poseEstimator.getPose().getRotation().getRadians(), positionSetpoint.getRotation().getRadians());
+                double xOutput = xPID.calculate(poseEstimator.getPose().getX(), positionSetpoint.getX());
+                double yOutput = yPID.calculate(poseEstimator.getPose().getY(), positionSetpoint.getY());
+                double oOutput = oPID.calculate(poseEstimator.getPose().getRotation().getRadians(), positionSetpoint.getRotation().getRadians());
 
                 // create chassisspeeds object with FOC
                 speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                    twistSetpoint.dx + xPID,
-                    twistSetpoint.dy + yPID,
-                    twistSetpoint.dtheta + oPID,
+                    twistSetpoint.dx + xOutput,
+                    twistSetpoint.dy + yOutput,
+                    twistSetpoint.dtheta + oOutput,
                     poseEstimator.getRawYaw() // not getYawWithAllianceRotation(), because the setpoint is already generated with it in mind
                 );
                 // fallthrough to VELOCITY case; no break statement needed
