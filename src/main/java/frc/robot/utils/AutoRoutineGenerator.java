@@ -1,14 +1,12 @@
 package frc.robot.utils;
 
 import choreo.auto.*;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.math.geometry.*;
 import frc.robot.commands.*;
 import frc.robot.constants.PhysicalConstants;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.poseEstimator.*;
-import frc.robot.subsystems.coralIO.*;
 
 public class AutoRoutineGenerator {
     private final AutoFactory autoFactory;

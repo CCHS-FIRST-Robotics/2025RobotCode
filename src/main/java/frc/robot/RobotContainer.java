@@ -137,38 +137,41 @@ public class RobotContainer {
             )
         );
 
-        // control precision // ! 
+        // control precision
         xboxController1.leftTrigger().onTrue(
             new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_LINEAR_SPEED = MetersPerSecond.of(2))
             .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_ANGULAR_SPEED = RotationsPerSecond.of(0.5)))
-            .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(1)))
-            .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_ANGULAR_ACCEL = RotationsPerSecondPerSecond.of(1 / PhysicalConstants.TRACK_CIRCUMFERENCE.in(Meters))))
+            .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(3)))
+            .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_ANGULAR_ACCEL = RotationsPerSecondPerSecond.of(3 / PhysicalConstants.TRACK_CIRCUMFERENCE.in(Meters))))
         );
         xboxController1.rightTrigger().onTrue(
             new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_LINEAR_SPEED = MetersPerSecond.of(4))
             .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_ANGULAR_SPEED = RotationsPerSecond.of(1)))
-            .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(3))) // ! 20
-            .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_ANGULAR_ACCEL = RotationsPerSecondPerSecond.of(3 / PhysicalConstants.TRACK_CIRCUMFERENCE.in(Meters))))
+            .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(10))) // ! 20
+            .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_ANGULAR_ACCEL = RotationsPerSecondPerSecond.of(10 / PhysicalConstants.TRACK_CIRCUMFERENCE.in(Meters))))
         );
 
         // ————— coral ————— //
 
         // ! testing drivewithapriltag
-        xboxController2.y().onTrue(coral.getSetElevatorCommand(Rotations.of(3.5)));
-        xboxController2.x().onTrue(new DriveWithApriltag(
-            drive, 
-            poseEstimator, 
-            4, 
-            PhysicalConstants.DrivePositions.L4, 
-            true
-        ));
-        xboxController2.b().onTrue(new DriveWithApriltag(
-            drive, 
-            poseEstimator, 
-            4, 
-            PhysicalConstants.DrivePositions.L4, 
-            false)
-        );
+        // xboxController2.y().onTrue(coral.getSetElevatorCommand(Rotations.of(3.5)));
+        // xboxController2.x().onTrue(new DriveWithApriltag(
+        //     drive, 
+        //     poseEstimator, 
+        //     6, 
+        //     PhysicalConstants.DrivePositions.L4, 
+        //     true
+        // ));
+        // xboxController2.b().onTrue(new DriveWithApriltag(
+        //     drive, 
+        //     poseEstimator, 
+        //     6, 
+        //     PhysicalConstants.DrivePositions.L4, 
+        //     false)
+        // );
+
+        // ! increased speed
+        // ! with arm raised
 
         // reef positions
         if ((DriverStation.getAlliance().isPresent() ? DriverStation.getAlliance().get() : Alliance.Red).equals(Alliance.Red)) {
@@ -202,10 +205,10 @@ public class RobotContainer {
         // branch positions
         coralController.button(4).onTrue(coralCommandCompositer.prepIntake());
         coralController.button(5).onTrue(coralCommandCompositer.runIntake());
-        coralController.button(9).onTrue(coralCommandCompositer.prepL2());
-        coralController.button(10).onTrue(coralCommandCompositer.runL2());
+        // coralController.button(9).onTrue(coralCommandCompositer.prepL2());
+        // coralController.button(10).onTrue(coralCommandCompositer.runL2());
         coralController.button(17).onTrue(coralCommandCompositer.prepL3());
-        coralController.button(18).onTrue(coralCommandCompositer.runL3());
+        coralController.button(18).onTrue(coralCommandCompositer.runL3WithBackup());
         coralController.button(19).onTrue(coralCommandCompositer.prepL4());
         coralController.button(20).onTrue(coralCommandCompositer.runL4());
 

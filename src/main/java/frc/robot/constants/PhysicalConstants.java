@@ -71,9 +71,9 @@ public final class PhysicalConstants {
         APRILTAG_LOCATIONS.put(1, new Pose2d(16.697198, 0.65532, new Rotation2d(Degrees.of(126))));
         APRILTAG_LOCATIONS.put(2, new Pose2d(16.697198, 7.39648, new Rotation2d(Degrees.of(234))));
         APRILTAG_LOCATIONS.put(3, new Pose2d(11.56081, 8.05561, new Rotation2d(Degrees.of(270))));
-        APRILTAG_LOCATIONS.put(4, new Pose2d(9.27608, 6.137656, new Rotation2d(Degrees.of(180)))); //! 
+        APRILTAG_LOCATIONS.put(4, new Pose2d(9.27608, 6.137656, new Rotation2d(Degrees.of(0)))); //! 
         APRILTAG_LOCATIONS.put(5, new Pose2d(9.27608, 1.914906, new Rotation2d(Degrees.of(0))));
-        APRILTAG_LOCATIONS.put(6, new Pose2d(13.474446, 3.306318, new Rotation2d(Degrees.of(300))));
+        APRILTAG_LOCATIONS.put(6, new Pose2d(13.474446, 3.306318, new Rotation2d(Degrees.of(180)))); // !
         APRILTAG_LOCATIONS.put(7, new Pose2d(13.890498, 4.0259, new Rotation2d(Degrees.of(0))));
         APRILTAG_LOCATIONS.put(8, new Pose2d(13.474446, 4.745482, new Rotation2d(Degrees.of(60))));
         APRILTAG_LOCATIONS.put(9, new Pose2d(12.643358, 4.745482, new Rotation2d(Degrees.of(120))));
@@ -97,7 +97,7 @@ public final class PhysicalConstants {
         public static final Translation2d L1 = new Translation2d(0, 0);
         public static final Translation2d L2 = new Translation2d(0, 0); // ! 
         public static final Translation2d L3 = new Translation2d(0, 0); // ! 
-        public static final Translation2d L4 = new Translation2d(0.84, 0);
+        public static final Translation2d L4 = new Translation2d(0.63, 0);
 
     }
 

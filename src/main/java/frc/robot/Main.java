@@ -7,6 +7,9 @@ package frc.robot;
 import edu.wpi.first.wpilibj.RobotBase;
 
 /**
+ * ! make drive backwards to outtake faster
+ * ! make elevator faster
+ * ! test drive with apriltags
  * current goal is literally just be able to score L4 with apriltag
  * ! maybe ask colin how come you can't drivewithjoysticks out of a drivewithapriltag
  * ! gabe's controllers with just pressing the left or right trigger and it goes to whichever apriltag it sees

@@ -39,7 +39,7 @@ public class CoralIOReal implements CoralIO{
 
     private double kPArm = 40;
     private double kIArm = 0;
-    private double kDArm = 0; 
+    private double kDArm = 0.2; 
     private double kGArm = 0.65;
     private double kSArm = 0;
     private double kVArm = 0.1121914734;
@@ -89,7 +89,7 @@ public class CoralIOReal implements CoralIO{
         elevatorPIDF.kV = kVElevator;
         elevatorPIDF.kA = kAElevator;
         elevatorPIDF.GravityType = GravityTypeValue.Elevator_Static;
-        elevatorMotionMagicConfig.MotionMagicCruiseVelocity = 1.5;
+        elevatorMotionMagicConfig.MotionMagicCruiseVelocity = 2;
         elevatorMotionMagicConfig.MotionMagicAcceleration = 20;
         elevatorMotionMagicConfig.MotionMagicJerk = 1;
         // misc

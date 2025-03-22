@@ -1,6 +1,9 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -48,21 +51,26 @@ public class DriveWithApriltag extends Command {
 
         // finish if tag is not detected
         if (offsetArray == null) {
+            System.out.println("TAGNOTDETECTED\nTAGNOTDETECTED\nTAGNOTDETECTED\nTAGNOTDETECTED\nTAGNOTDETECTED\n");
             isFinished = true;
             return;
         }
 
         // calculate error
         double xError = offsetArray[0] - drivePosition.getX(); // meters
-        double yError = offsetArray[1] - drivePosition.getY() - 0.1651 * (left ? -1 : 1); // meters
-        double targetAngle = PhysicalConstants.APRILTAG_LOCATIONS.get(targetTagId).getRotation().getRadians() - Math.PI; // radians
-        double oError = targetAngle - MathUtil.angleModulus(poseEstimator.getRawYaw().getRadians()); // radians
-        // but what if gyro is pi and target is -pi
+        double yError = offsetArray[1] - drivePosition.getY() - 0.14 * (left ? -1 : 1); // meters
+        double oOffset = PhysicalConstants.APRILTAG_LOCATIONS.get(targetTagId).getRotation().getRadians() - Math.PI; // radians
+        double oError = oOffset - MathUtil.angleModulus(poseEstimator.getRawYaw().getRadians()); // radians
+        // ! but what if gyro is pi and target is -pi
+
+        Logger.recordOutput("0Offset", oOffset);
+        Logger.recordOutput("yOffset", offsetArray[1]);
+        Logger.recordOutput("xOffset", offsetArray[0]);
 
         ChassisSpeeds speeds = new ChassisSpeeds();
         switch (driveMode) {
             case ROTATE: 
-            System.out.println("ROTATING, " + oError);
+            Logger.recordOutput("oError", oError);
                 speeds = new ChassisSpeeds(
                     0,
                     0,
@@ -73,10 +81,10 @@ public class DriveWithApriltag extends Command {
                 }
                 break;
             case Y: 
-            System.out.println("Y");
+            Logger.recordOutput("yError", yError);
                 speeds = new ChassisSpeeds(
                     0,
-                    Math.abs(yError) > 0.005 ? Math.signum(yError) * 0.1 : 0,
+                    Math.abs(yError) > 0.005 ? Math.signum(yError) * 0.2 : 0,
                     0
                 );
                 if (speeds.vyMetersPerSecond == 0) {
@@ -85,9 +93,9 @@ public class DriveWithApriltag extends Command {
                 }
                 break;
             case X: 
-            System.out.println("X");
+            Logger.recordOutput("xError", xError);
                 speeds = new ChassisSpeeds(
-                    Math.abs(xError) > 0.005 ? Math.signum(xError) * 0.1 : 0,
+                    Math.abs(xError) > 0.005 ? Math.signum(xError) * 0.2 : 0,
                     0,
                     0
                 );
