@@ -9,10 +9,10 @@ import edu.wpi.first.wpilibj.RobotBase;
 /**
  * ! make drive backwards to outtake faster
  * ! make elevator faster
- * ! test drive with apriltags
- * current goal is literally just be able to score L4 with apriltag
- * ! maybe ask colin how come you can't drivewithjoysticks out of a drivewithapriltag
- * ! gabe's controllers with just pressing the left or right trigger and it goes to whichever apriltag it sees
+ * ! tune arm without motionmagic
+ * 
+ * ! check hitting 6, driving, and then hitting 6 again
+ * ! after that's fixed, try hitting 6 until it doesn't see the tag and then driving and then hitting 6 again
  * 
  * to do: 
  * * things to keep in mind: 
@@ -24,7 +24,6 @@ import edu.wpi.first.wpilibj.RobotBase;
  *     all {}
  * 
  * * daily at robotics: 
- * ! we need an easy way to convert from autos on blue team to red team
  * 
  * * longer term: 
  *    knock out algae

@@ -46,12 +46,16 @@ public class DriveWithApriltag extends Command {
 
     @Override
     public void execute() {
-        System.out.println("RUNNING");
+        for (int i = 0; i < 5; i++){
+            System.out.println("RUNNING");
+        }
         offsetArray = poseEstimator.getArrayFromSpecificTag(targetTagId);
 
         // finish if tag is not detected
         if (offsetArray == null) {
-            System.out.println("TAGNOTDETECTED\nTAGNOTDETECTED\nTAGNOTDETECTED\nTAGNOTDETECTED\nTAGNOTDETECTED\n");
+            for (int i = 0; i < 5; i++){
+                System.out.println("TAGNOTDETECTED");
+            }
             isFinished = true;
             return;
         }
@@ -72,45 +76,51 @@ public class DriveWithApriltag extends Command {
         Logger.recordOutput("xError", xError);
 
         ChassisSpeeds speeds = new ChassisSpeeds();
-        switch (driveMode) {
-            case ROTATE: 
-                speeds = new ChassisSpeeds(
-                    0,
-                    0,
-                    Math.abs(oError) > 0.001 ? Math.signum(oError) * 0.3 : 0
-                );
-                if (speeds.omegaRadiansPerSecond == 0) {
-                    driveMode = DriveMode.Y;
-                }
-                break;
-            case Y: 
-                speeds = new ChassisSpeeds(
-                    0,
-                    Math.abs(yError) > 0.001 ? Math.signum(yError) * 0.1 : 0,
-                    0
-                );
-                if (speeds.vyMetersPerSecond == 0) {
-                    driveMode = DriveMode.X;
-                    return;
-                }
-                break;
-            case X: 
-                speeds = new ChassisSpeeds(
-                    Math.abs(xError) > 0.001 ? Math.signum(xError) * 0.1 : 0,
-                    0,
-                    0
-                );
-                if (speeds.vxMetersPerSecond == 0) {
-                    isFinished = true;
-                    return; 
-                }
-                break;
-        }
+        // switch (driveMode) {
+        //     case ROTATE: 
+        //         speeds = new ChassisSpeeds(
+        //             0,
+        //             0,
+        //             Math.abs(oError) > 0.001 ? Math.signum(oError) * 0.3 : 0
+        //         );
+        //         if (speeds.omegaRadiansPerSecond == 0) {
+        //             driveMode = DriveMode.Y;
+        //         }
+        //         break;
+        //     case Y: 
+        //         speeds = new ChassisSpeeds(
+        //             0,
+        //             Math.abs(yError) > 0.001 ? Math.signum(yError) * 0.1 : 0,
+        //             0
+        //         );
+        //         if (speeds.vyMetersPerSecond == 0) {
+        //             driveMode = DriveMode.X;
+        //             return;
+        //         }
+        //         break;
+        //     case X: 
+        //         speeds = new ChassisSpeeds(
+        //             Math.abs(xError) > 0.001 ? Math.signum(xError) * 0.1 : 0,
+        //             0,
+        //             0
+        //         );
+        //         if (speeds.vxMetersPerSecond == 0) {
+        //             isFinished = true;
+        //             return; 
+        //         }
+        //         break;
+        // }
 
         speeds = new ChassisSpeeds(
             Math.abs(xError) > 0.005 ? Math.signum(xError) * 0.2 : 0,
             Math.abs(yError) > 0.005 ? Math.signum(yError) * 0.2 : 0,
             Math.abs(oError) > 0.005 ? Math.signum(oError) * 0.4 : 0
+        );
+
+        speeds = new ChassisSpeeds ( // PID
+            Math.abs(xError) > 0.005 ? xError * 1 : 0,
+            Math.abs(yError) > 0.005 ? yError * 1 : 0,
+            Math.abs(oError) > 0.005 ? oError * 0.5 : 0
         );
 
         if (speeds.vxMetersPerSecond == 0
@@ -121,8 +131,9 @@ public class DriveWithApriltag extends Command {
             return; 
         }
 
-        System.out.println("running velocity");
-
+        for (int i = 0; i < 5; i++){
+            System.out.println("RUNNINGVELOCITY");
+        }
         drive.runVelocity(speeds);
     }
 
@@ -133,7 +144,9 @@ public class DriveWithApriltag extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        System.out.println("FINISHED\nFINISHED\nFINISHED\nFINISHED\nFINISHED\nFINISHED\nFINISHED\n");
+        for (int i = 0; i < 5; i++){
+            System.out.println("FINISHED");
+        }
         drive.stop();
     }
 }

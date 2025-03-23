@@ -85,15 +85,17 @@ public class PoseEstimator extends SubsystemBase {
 
         // vision
         combinedMap = new HashMap<Integer, double[]>();
+        for(int i = 1; i <= 22; i++) {
+            Logger.recordOutput("outputs/poseEstimator/maps/combinedMap/" + Integer.toString(i), combinedMap.get(i));
+        }
         if (cameraInputs.tagArray.length == 0) { // if packet is empty
             return;
         }
-
         int packetId = (int) cameraInputs.tagArray[0];
         int cameraId = (int) cameraInputs.tagArray[1];
         if (packetId == cameraLastPacketIds[cameraId]) {
             timesLastCameraPacketWasStale[cameraId]++;
-            System.out.println(timesLastCameraPacketWasStale[cameraId]); // !
+            Logger.recordOutput("stale", timesLastCameraPacketWasStale[cameraId]);
         } else {
             timesLastCameraPacketWasStale[cameraId] = 0;
         }
@@ -118,9 +120,6 @@ public class PoseEstimator extends SubsystemBase {
         for (int i = 0; i < numCameras; i++) { // iterate through all camera maps
             HashMap<Integer, double[]> cameraMap = cameraMaps.get(i);
             for (int key : cameraMap.keySet()) { // iterate through tags in the camera map
-                // log the camera map
-                Logger.recordOutput("outputs/poseEstimator/maps/camera" + Integer.toString(i) +"Map/" + Integer.toString(key), cameraMap.get(key));
-
                 // increment the tick values
                 cameraMap.put(key, new double[]{
                     cameraMap.get(key)[0],
@@ -147,18 +146,21 @@ public class PoseEstimator extends SubsystemBase {
             }
         }
 
+        for(int i = 1; i <= 22; i++) {
+            Logger.recordOutput("outputs/poseEstimator/maps/combinedMap/" + Integer.toString(i), combinedMap.get(i));
+        }
+
         // calculate robot pose
         double accumulatedX = 0;
         double accumulatedY = 0; // numtags = size
-        System.out.println("SIZE SIZE SIZE SIZE SIZE, " + combinedMap.size());
-        for(int key : combinedMap.keySet()){
-            System.out.print(key + ", [");
-            for (double d : combinedMap.get(key)) {
-                System.out.print(d + ", ");
-            }
-            System.out.println();
-        }
-        System.out.println("___________________________");
+        // for(int key : combinedMap.keySet()){
+        //     System.out.print(key + ", [");
+        //     for (double d : combinedMap.get(key)) {
+        //         System.out.print(d + ", ");
+        //     }
+        //     System.out.println();
+        // }
+        // System.out.println("___________________________");
         for(int key : combinedMap.keySet()){
             Pose2d apriltagLocation = PhysicalConstants.APRILTAG_LOCATIONS.get(key);
             accumulatedX += apriltagLocation.getX() - combinedMap.get(key)[2];
@@ -177,16 +179,7 @@ public class PoseEstimator extends SubsystemBase {
         int cameraId = (int) cameraInputs.tagArray[1];
         Pose2d cameraOffsetFromCenter = new Pose2d();
         switch (cameraId) {
-            case 0: 
-                cameraOffsetFromCenter = PhysicalConstants.JETSON_OFFSET;
-                break;
-            case 1: 
-                cameraOffsetFromCenter = PhysicalConstants.JETSON_OFFSET;
-                break;
-            case 2: 
-                cameraOffsetFromCenter = PhysicalConstants.JETSON_OFFSET;
-                break;
-            case 3: 
+            case 0, 1, 2, 3: 
                 cameraOffsetFromCenter = PhysicalConstants.JETSON_OFFSET;
                 break;
             case 4: 
@@ -199,7 +192,7 @@ public class PoseEstimator extends SubsystemBase {
         for (int i = 2; i < cameraInputs.tagArray.length; i += 4) {
             // get networktables values
             int tagId = (int) cameraInputs.tagArray[i];
-            double tagYaw = -cameraInputs.tagArray[i+1]; // radians, sleder's code does clockwise positive
+            double tagYaw = -cameraInputs.tagArray[i+1]; // radians; sleder's code does clockwise positive
             double tagPitch = cameraInputs.tagArray[i+2]; // radians
             double tagDistance = cameraInputs.tagArray[i+3]; // meters
             double robotYaw = getRawYaw().getRadians();
@@ -228,20 +221,20 @@ public class PoseEstimator extends SubsystemBase {
         }
         
         // update camera map
-        HashMap<Integer, double[]> tempCameraMap = new HashMap<Integer, double[]>();
+        HashMap<Integer, double[]> cameraMap = new HashMap<Integer, double[]>();
         for (int tagId : packetMap.keySet()) { // add all the new values from packetMap
-            tempCameraMap.put(tagId, packetMap.get(tagId));
+            cameraMap.put(tagId, packetMap.get(tagId));
         }
         for (int key : cameraMaps.get(cameraId).keySet()) { // transferring the old cameraMap values
-            if (tempCameraMap.containsKey(key)) { // if that tag was already updated
+            if (cameraMap.containsKey(key)) { // if that tag was already updated
                 continue;
             }
             if (cameraMaps.get(cameraId).get(key)[4] <= 0) {// if the old value is stale
                 continue;
             }
-            tempCameraMap.put(key, cameraMaps.get(cameraId).get(key));
+            cameraMap.put(key, cameraMaps.get(cameraId).get(key));
         }
-        cameraMaps.set(cameraId, tempCameraMap);
+        cameraMaps.set(cameraId, cameraMap);
     }    
 
     public void resetPosition(Pose2d pose) {

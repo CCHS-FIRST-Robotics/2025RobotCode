@@ -21,9 +21,8 @@ import frc.robot.subsystems.coralIO.*;
 import frc.robot.utils.*;
 
 public class RobotContainer {
-    private final CommandXboxController xboxController1 = new CommandXboxController(VirtualConstants.CONTROLLER_PORT_1);
-    private final CommandXboxController xboxController2 = new CommandXboxController(VirtualConstants.CONTROLLER_PORT_2);
-    private final CommandGenericHID coralController = new CommandGenericHID(VirtualConstants.CONTROLLER_PORT_3);
+    private final CommandXboxController xboxController = new CommandXboxController(VirtualConstants.XBOX_CONTROLLER_PORT_1);
+    private final CommandGenericHID coralController = new CommandGenericHID(VirtualConstants.CORAL_CONTROLLER_PORT_3);
 
     private final Drive drive;
     private final PoseEstimator poseEstimator;
@@ -119,18 +118,18 @@ public class RobotContainer {
         // ————— drive ————— //
 
         // drive
-        drive.setDefaultCommand(  // ! add a precise driving button that lowers all the accel and max velo
+        drive.setDefaultCommand(
             new DriveWithVelocity(
                 drive,
                 poseEstimator,
-                () -> -xboxController1.getLeftY(), // xboxcontroller is flipped
-                () -> xboxController1.getLeftX(), 
-                () -> xboxController1.getRightX()
+                () -> -xboxController.getLeftY(), // xboxcontroller is flipped
+                () -> xboxController.getLeftX(), 
+                () -> xboxController.getRightX()
             )
         );
 
         // x-lock
-        xboxController1.x().whileTrue(
+        xboxController.x().whileTrue(
             Commands.run(() -> drive.runCharacterization(
                 new Voltage[] {Volts.of(0), Volts.of(0), Volts.of(0), Volts.of(0)}, 
                 new Angle[] {Rotations.of(0.125), Rotations.of(0.325), Rotations.of(0.325), Rotations.of(0.125)})
@@ -152,11 +151,6 @@ public class RobotContainer {
         // );
 
         // ————— coral ————— //
-
-        // xboxController2.y().onTrue(coral.getSetElevatorCommand(Rotations.of(3.5)));
-
-        // ! increased speed
-        // ! with arm raised
 
         // reef positions
         if ((DriverStation.getAlliance().isPresent() ? DriverStation.getAlliance().get() : Alliance.Red).equals(Alliance.Red)) {
@@ -204,7 +198,10 @@ public class RobotContainer {
         );
 
         coralController.button(22).onTrue(
-            coral.getSetCoralPositionCommand(new Angle[]{PhysicalConstants.CoralPositions.L4[0], PhysicalConstants.CoralPositions.INTAKE_PREP[1]})
+            coral.getSetCoralPositionCommand(new Angle[] {
+                PhysicalConstants.CoralPositions.L4[0], 
+                PhysicalConstants.CoralPositions.INTAKE_PREP[1]
+            })
         );
     }
 
