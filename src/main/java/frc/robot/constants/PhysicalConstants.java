@@ -44,8 +44,8 @@ public final class PhysicalConstants {
     ); // = 1.5944299280
     public static LinearVelocity MAX_ALLOWED_LINEAR_SPEED = MetersPerSecond.of(4);
     public static AngularVelocity MAX_ALLOWED_ANGULAR_SPEED = RotationsPerSecond.of(1);
-    public static LinearAcceleration MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(2);
-    public static AngularAcceleration MAX_ALLOWED_ANGULAR_ACCEL = RotationsPerSecondPerSecond.of(2 / TRACK_CIRCUMFERENCE.in(Meters));
+    public static LinearAcceleration MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(20);
+    public static AngularAcceleration MAX_ALLOWED_ANGULAR_ACCEL = RotationsPerSecondPerSecond.of(20 / TRACK_CIRCUMFERENCE.in(Meters));
 
     // ————— poseEstimator constants ————— //
 
@@ -73,7 +73,7 @@ public final class PhysicalConstants {
         APRILTAG_LOCATIONS.put(3, new Pose2d(11.56081, 8.05561, new Rotation2d(Degrees.of(270))));
         APRILTAG_LOCATIONS.put(4, new Pose2d(9.27608, 6.137656, new Rotation2d(Degrees.of(0)))); //! 
         APRILTAG_LOCATIONS.put(5, new Pose2d(9.27608, 1.914906, new Rotation2d(Degrees.of(0))));
-        APRILTAG_LOCATIONS.put(6, new Pose2d(13.474446, 3.306318, new Rotation2d(Degrees.of(180)))); // !
+        APRILTAG_LOCATIONS.put(6, new Pose2d(13.474446, 3.306318, new Rotation2d(Degrees.of(300)))); // !
         APRILTAG_LOCATIONS.put(7, new Pose2d(13.890498, 4.0259, new Rotation2d(Degrees.of(0))));
         APRILTAG_LOCATIONS.put(8, new Pose2d(13.474446, 4.745482, new Rotation2d(Degrees.of(60))));
         APRILTAG_LOCATIONS.put(9, new Pose2d(12.643358, 4.745482, new Rotation2d(Degrees.of(120))));

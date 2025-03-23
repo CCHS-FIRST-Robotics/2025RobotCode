@@ -37,9 +37,9 @@ public class CoralIOReal implements CoralIO{
     private final MotionMagicConfigs armMotionMagicConfig = armConfig.MotionMagic;
     private final MotionMagicVoltage armMotionMagicVoltage = new MotionMagicVoltage(0);
 
-    private double kPArm = 40;
+    private double kPArm = 30;
     private double kIArm = 0;
-    private double kDArm = 0.2; 
+    private double kDArm = 0;
     private double kGArm = 0.65;
     private double kSArm = 0;
     private double kVArm = 0.1121914734;

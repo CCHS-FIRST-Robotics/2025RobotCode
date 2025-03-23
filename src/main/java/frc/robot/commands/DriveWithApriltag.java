@@ -63,28 +63,30 @@ public class DriveWithApriltag extends Command {
         double oError = oOffset - MathUtil.angleModulus(poseEstimator.getRawYaw().getRadians()); // radians
         // ! but what if gyro is pi and target is -pi
 
-        Logger.recordOutput("0Offset", oOffset);
+        Logger.recordOutput("oOffset", oOffset);
         Logger.recordOutput("yOffset", offsetArray[1]);
         Logger.recordOutput("xOffset", offsetArray[0]);
+
+        Logger.recordOutput("oError", oError);
+        Logger.recordOutput("yError", yError);
+        Logger.recordOutput("xError", xError);
 
         ChassisSpeeds speeds = new ChassisSpeeds();
         switch (driveMode) {
             case ROTATE: 
-            Logger.recordOutput("oError", oError);
                 speeds = new ChassisSpeeds(
                     0,
                     0,
-                    Math.abs(oError) > 0.005 ? Math.signum(oError) * 0.4 : 0
+                    Math.abs(oError) > 0.001 ? Math.signum(oError) * 0.3 : 0
                 );
                 if (speeds.omegaRadiansPerSecond == 0) {
                     driveMode = DriveMode.Y;
                 }
                 break;
             case Y: 
-            Logger.recordOutput("yError", yError);
                 speeds = new ChassisSpeeds(
                     0,
-                    Math.abs(yError) > 0.005 ? Math.signum(yError) * 0.2 : 0,
+                    Math.abs(yError) > 0.001 ? Math.signum(yError) * 0.1 : 0,
                     0
                 );
                 if (speeds.vyMetersPerSecond == 0) {
@@ -93,9 +95,8 @@ public class DriveWithApriltag extends Command {
                 }
                 break;
             case X: 
-            Logger.recordOutput("xError", xError);
                 speeds = new ChassisSpeeds(
-                    Math.abs(xError) > 0.005 ? Math.signum(xError) * 0.2 : 0,
+                    Math.abs(xError) > 0.001 ? Math.signum(xError) * 0.1 : 0,
                     0,
                     0
                 );
@@ -104,6 +105,20 @@ public class DriveWithApriltag extends Command {
                     return; 
                 }
                 break;
+        }
+
+        speeds = new ChassisSpeeds(
+            Math.abs(xError) > 0.005 ? Math.signum(xError) * 0.2 : 0,
+            Math.abs(yError) > 0.005 ? Math.signum(yError) * 0.2 : 0,
+            Math.abs(oError) > 0.005 ? Math.signum(oError) * 0.4 : 0
+        );
+
+        if (speeds.vxMetersPerSecond == 0
+        &&  speeds.vyMetersPerSecond == 0
+        &&  speeds.omegaRadiansPerSecond == 0
+        ) {
+            isFinished = true;
+            return; 
         }
 
         System.out.println("running velocity");

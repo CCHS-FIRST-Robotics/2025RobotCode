@@ -17,9 +17,9 @@ public final class VirtualConstants {
     public static final int CONTROLLER_PORT_1 = 0;
     public static final int CONTROLLER_PORT_2 = 1;
     public static final int CONTROLLER_PORT_3 = 2;
-    public static final double JOYSTICK_DEADZONE = 0.1;
-    public static final double LINEAR_SPEED_EXPONENT = 3;
-    public static final double ANGULAR_SPEED_EXPONENT = 2;
+    public static final double JOYSTICK_DEADZONE = 0.05;
+    public static final double LINEAR_SPEED_EXPONENT = 4;
+    public static final double ANGULAR_SPEED_EXPONENT = 3;
 
     // ids
     public static final int ROBORIO_ID = 0;
