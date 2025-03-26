@@ -9,6 +9,7 @@ import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonPipelineResult;
 
+
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
@@ -35,7 +36,6 @@ public class PoseEstimator extends SubsystemBase {
     private PhotonCamera FrontLeftCam, FrontRightCam, BackLeftCam, BackRightCam;
     private PhotonPoseEstimator FrontLeftEstimator, FrontRightEstimator, BackLeftEstimator, BackRightEstimator;
     Optional<EstimatedRobotPose> FrontLeftUpdate, FrontRightUpdate, BackLeftUpdate, BackRightUpdate;
-    private AprilTagFieldLayout FieldLayout;
     PhotonPipelineResult FrontLeftEstimatorResult, FrontRightEstimatorResult ,BackLeftEstimatorResult ,BackRightEstimatorResult;
 
 
@@ -125,7 +125,6 @@ public class PoseEstimator extends SubsystemBase {
         );
         Logger.recordOutput("outputs/poseEstimator/poses/odometryPoses/fieldPosition", fieldPosition);
         Logger.recordOutput("outputs/poseEstimator/poses/odometryPoses/odometryPoseEstimate", odometryEstimator.getEstimatedPosition());
-
         
         updateVision();
         combinedEstimator.updateWithTime(
@@ -136,45 +135,39 @@ public class PoseEstimator extends SubsystemBase {
         Logger.recordOutput("outputs/poseEstimator/poses/visionPoses/visionPoseEstimate", visionEstimate);
         Logger.recordOutput("outputs/poseEstimator/poses/visionPoses/combinedPoseEstimate", combinedEstimator.getEstimatedPosition());
 
-        //! ask alex
-        try{
-            if(FrontLeftUpdate.isPresent()){
-                Logger.recordOutput("poseEstimator/FrontLeftCameraUpdate", EstimatedRobotPose.struct ,FrontLeftUpdate.get());
-                
-            }
-        }
-        catch(NoSuchElementException e){
-            //System.out.println("Vision.java: Front left estimator had no update to get");
-        }
-
-        try{
-            if(FrontRightUpdate.isPresent()){
-                Logger.recordOutput("poseEstimator/FrontrightCameraUpdate", FrontRightUpdate.get());
-                
-            }
-        }
-        catch(NoSuchElementException e){
-            //System.out.println("Vision.java: Front right estimator had no update to get");
+        if (FrontLeftUpdate.isPresent()) {
+            EstimatedRobotPose pose = FrontLeftUpdate.get();
+            Logger.recordOutput("poseEstimator/FrontLeftPose", pose.estimatedPose);
+            Logger.recordOutput("poseEstimator/FrontLeftTimestamp", pose.timestampSeconds);
+            Logger.recordOutput("poseEstimator/FrontLeftTargets", pose.targetsUsed.toString()); // Or log targets individually
+            Logger.recordOutput("poseEstimator/FrontLeftStrategy", pose.strategy.toString());
         }
         
-         try{
-            if(BackRightUpdate.isPresent()){
-                Logger.recordOutput("poseEstimator/FrontLeftCameraUpdate", BackLeftUpdate.get());
-                
-            }
+        if (FrontRightUpdate.isPresent()) {
+            EstimatedRobotPose pose = FrontRightUpdate.get();
+            Logger.recordOutput("poseEstimator/FrontRightPose", pose.estimatedPose);
+            Logger.recordOutput("poseEstimator/FrontRightTimestamp", pose.timestampSeconds);
+            Logger.recordOutput("poseEstimator/FrontRightTargets", pose.targetsUsed.toString());
+            Logger.recordOutput("poseEstimator/FrontRightStrategy", pose.strategy.toString());
         }
-        catch(NoSuchElementException e){
-            //System.out.println("Vision.java: Back left estimator had no update to get");
+        
+        if (BackLeftUpdate.isPresent()) {
+            EstimatedRobotPose pose = BackLeftUpdate.get();
+            Logger.recordOutput("poseEstimator/BackLeftPose", pose.estimatedPose);
+            Logger.recordOutput("poseEstimator/BackLeftTimestamp", pose.timestampSeconds);
+            Logger.recordOutput("poseEstimator/BackLeftTargets", pose.targetsUsed.toString());
+            Logger.recordOutput("poseEstimator/BackLeftStrategy", pose.strategy.toString());
         }
-         try{
-            if(BackRightUpdate.isPresent()){
-                Logger.recordOutput("poseEstimator/FrontLeftCameraUpdate", BackRightUpdate.get());
-                
-            }
+        
+        if (BackRightUpdate.isPresent()) {
+            EstimatedRobotPose pose = BackRightUpdate.get();
+            Logger.recordOutput("poseEstimator/BackRightPose", pose.estimatedPose);
+            Logger.recordOutput("poseEstimator/BackRightTimestamp", pose.timestampSeconds);
+            Logger.recordOutput("poseEstimator/BackRightTargets", pose.targetsUsed.toString());
+            Logger.recordOutput("poseEstimator/BackRightStrategy", pose.strategy.toString());
         }
-        catch(NoSuchElementException e){
-            //System.out.println("Vision.java: Back right estimator had no update to get");
-    }
+        
+        
 
     }
 
