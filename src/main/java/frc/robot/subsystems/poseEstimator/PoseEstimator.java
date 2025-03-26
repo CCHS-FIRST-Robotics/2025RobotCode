@@ -12,6 +12,8 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.Timer;
@@ -20,6 +22,7 @@ import java.util.*;
 
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.constants.PhysicalConstants;
+import frc.robot.constants.VirtualConstants;
 
 public class PoseEstimator extends SubsystemBase {
     private final GyroIO gyroIO;
@@ -91,10 +94,12 @@ public class PoseEstimator extends SubsystemBase {
             new Pose2d()
         );
         combinedEstimator = new SwerveDrivePoseEstimator(
-            PhysicalConstants.KINEMATICS, 
-            new Rotation2d(), 
-            drive.getModulePositions(), 
-            new Pose2d()
+            PhysicalConstants.KINEMATICS,
+            new Rotation2d(),
+            drive.getModulePositions(),
+            new Pose2d(),
+            VecBuilder.fill(0.1, 0.1, 0.1), //State standard deviations (x, y, heading)  tune
+            VecBuilder.fill(0.1, 0.1, 0.1)  // Vision measurement standard deviations (x, y, heading)
         );
 
         this.drive = drive;
@@ -103,18 +108,13 @@ public class PoseEstimator extends SubsystemBase {
     @Override
     public void periodic() {
         gyroIO.updateInputs(gyroInputs);
+        
     
         Logger.processInputs("poseEstimator/gyro", gyroInputs);
         FrontLeftUpdate = FrontLeftEstimator.update(LastFrontLeftEstimatorResult);
         FrontRightUpdate = FrontRightEstimator.update(LastFrontRightEstimatorResult);
         BackLeftUpdate = BackLeftEstimator.update(LastBackLeftEstimatorResult);
         BackRightUpdate = BackRightEstimator.update(LastBackRightEstimatorResult);
-
-        LastFrontLeftEstimatorResult =  FrontLeftCam.getLatestResult();
-        LastFrontRightEstimatorResult = FrontRightCam.getLatestResult();
-        LastBackLeftEstimatorResult = BackLeftCam.getLatestResult();
-        LastBackRightEstimatorResult = BackRightCam.getLatestResult();
-    
         
         // odometry
         fieldPosition = fieldPosition.exp(PhysicalConstants.KINEMATICS.toTwist2d(drive.getModuleDeltas()));
@@ -185,26 +185,26 @@ public class PoseEstimator extends SubsystemBase {
             final Optional<EstimatedRobotPose> optionalFREstimatedPoseRight = FrontLeftEstimator.update(FrontLeftEstimatorResult);
     if (optionalFREstimatedPoseRight.isPresent()) {
         final EstimatedRobotPose estimatedPose = optionalFREstimatedPoseRight.get();          
-        combinedEstimator.addVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds);
+        combinedEstimator.addVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds, VirtualConstants.VISION_STDS);
     }
     final Optional<EstimatedRobotPose> optionalFLEstimatedPoseRight = FrontRightEstimator.update(FrontRightEstimatorResult);
     if (optionalFLEstimatedPoseRight.isPresent()) {
         final EstimatedRobotPose estimatedPose = optionalFLEstimatedPoseRight.get();       
-        combinedEstimator.addVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds);   
+        combinedEstimator.addVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds, VirtualConstants.VISION_STDS);   
         //combinedEstimator.updateVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds);
     }
 
     final Optional<EstimatedRobotPose> optionalBREstimatedPoseRight = BackLeftEstimator.update(BackLeftEstimatorResult);
     if (optionalBREstimatedPoseRight.isPresent()) {
         final EstimatedRobotPose estimatedPose = optionalBREstimatedPoseRight.get(); 
-        combinedEstimator.addVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds);         
+        combinedEstimator.addVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds, VirtualConstants.VISION_STDS);         
         //combinedEstimator.updateVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds);
     }
 
     final Optional<EstimatedRobotPose> optionalBLEstimatedPoseRight = BackRightEstimator.update(BackRightEstimatorResult);
     if (optionalBLEstimatedPoseRight.isPresent()) {
         final EstimatedRobotPose estimatedPose = optionalBLEstimatedPoseRight.get();   
-        combinedEstimator.addVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds);       
+        combinedEstimator.addVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds, VirtualConstants.VISION_STDS);       
         //combinedEstimator.updateVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds);
     }
 
@@ -215,7 +215,7 @@ public class PoseEstimator extends SubsystemBase {
 
     public void resetPosition(Pose2d pose) {
         odometryEstimator.resetPosition(pose.getRotation(), drive.getModulePositions(), pose);
-        combinedEstimator.resetPosition(pose.getRotation(), drive.getModulePositions(), pose); // ! doesn't have stddevs of anything
+        combinedEstimator.resetPosition(pose.getRotation(), drive.getModulePositions(), pose); 
     }
 
     // @SuppressWarnings("unused")

@@ -45,7 +45,6 @@ public class RobotContainer {
 
                 poseEstimator = new PoseEstimator(
                     new GyroIOReal(),
-                    new CameraIOReal(),
                     drive
                 );
 
@@ -69,7 +68,6 @@ public class RobotContainer {
 
                 poseEstimator = new PoseEstimator(
                     new GyroIO() {},
-                    new CameraIO() {},
                     drive
                 );
 
@@ -88,7 +86,6 @@ public class RobotContainer {
 
                 poseEstimator = new PoseEstimator(
                     new GyroIOReal(),
-                    new CameraIOReal(),
                     drive
                 );
 
