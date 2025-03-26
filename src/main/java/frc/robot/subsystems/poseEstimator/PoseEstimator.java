@@ -1,45 +1,34 @@
 package frc.robot.subsystems.poseEstimator;
 
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.Vector;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.*;
-import frc.robot.RobotContainer;
-import frc.robot.constants.PhysicalConstants;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import static edu.wpi.first.units.Units.*;
 
 import org.littletonrobotics.junction.Logger;
-import org.opencv.photo.Photo;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
-import org.photonvision.proto.Photon;
 import org.photonvision.targeting.PhotonPipelineResult;
-import org.photonvision.targeting.PhotonTrackedTarget;
 
-import com.google.flatbuffers.Constants;
+import edu.wpi.first.wpilibj2.command.*;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.wpilibj.Timer;
+
+import java.util.*;
+
+import frc.robot.subsystems.drive.Drive;
+import frc.robot.constants.PhysicalConstants;
 
 public class PoseEstimator extends SubsystemBase {
+    private final GyroIO gyroIO;
+    private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
     AprilTagFieldLayout aprilTagFieldLayout;
     PhotonCamera cam;
     Transform3d robotToCam;
     PhotonPoseEstimator photonPoseEstimator;
-    PhotonPipelineResult lastResult;
+    PhotonPipelineResult LastFrontLeftEstimatorResult, LastFrontRightEstimatorResult , LastBackLeftEstimatorResult ,LastBackRightEstimatorResult;
     private PhotonCamera FrontLeftCam, FrontRightCam, BackLeftCam, BackRightCam;
     private PhotonPoseEstimator FrontLeftEstimator, FrontRightEstimator, BackLeftEstimator, BackRightEstimator;
     Optional<EstimatedRobotPose> FrontLeftUpdate, FrontRightUpdate, BackLeftUpdate, BackRightUpdate;
@@ -48,9 +37,19 @@ public class PoseEstimator extends SubsystemBase {
 
 
 
-    public PoseEstimator() {
+    private Pose2d fieldPosition = new Pose2d();
+    private final SwerveDrivePoseEstimator odometryEstimator;
+    private Pose2d visionEstimate;
+    private final SwerveDrivePoseEstimator combinedEstimator;
 
-        FieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
+    private final Drive drive;
+
+
+    public PoseEstimator(
+        GyroIO gyroIO, 
+        Drive drive
+    ) {
+        this.gyroIO = gyroIO;
 
         FrontLeftCam = new PhotonCamera("LeftFront");
         FrontRightCam = new PhotonCamera("RightFront");
@@ -75,31 +74,69 @@ public class PoseEstimator extends SubsystemBase {
         BackRightEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 
 
-
-        FieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
-
-        FrontLeftEstimator.setFieldTags(FieldLayout);
-        FrontRightEstimator.setFieldTags(FieldLayout);
-        BackLeftEstimator.setFieldTags(FieldLayout);
-        BackRightEstimator.setFieldTags(FieldLayout);
-
         FrontLeftEstimatorResult = new PhotonPipelineResult();
         FrontRightEstimatorResult = new PhotonPipelineResult();
         BackLeftEstimatorResult = new PhotonPipelineResult();
         BackRightEstimatorResult = new PhotonPipelineResult();
 
+
+       
+
+
+
+        odometryEstimator = new SwerveDrivePoseEstimator(
+            PhysicalConstants.KINEMATICS, 
+            new Rotation2d(), 
+            drive.getModulePositions(), 
+            new Pose2d()
+        );
+        combinedEstimator = new SwerveDrivePoseEstimator(
+            PhysicalConstants.KINEMATICS, 
+            new Rotation2d(), 
+            drive.getModulePositions(), 
+            new Pose2d()
+        );
+
+        this.drive = drive;
     }
 
-
-     @Override
+    @Override
     public void periodic() {
+        gyroIO.updateInputs(gyroInputs);
+    
+        Logger.processInputs("poseEstimator/gyro", gyroInputs);
+        FrontLeftUpdate = FrontLeftEstimator.update(LastFrontLeftEstimatorResult);
+        FrontRightUpdate = FrontRightEstimator.update(LastFrontRightEstimatorResult);
+        BackLeftUpdate = BackLeftEstimator.update(LastBackLeftEstimatorResult);
+        BackRightUpdate = BackRightEstimator.update(LastBackRightEstimatorResult);
 
-        FrontLeftUpdate = FrontLeftEstimator.update(FrontLeftEstimatorResult);
-        FrontRightUpdate = FrontRightEstimator.update(FrontRightEstimatorResult);
-        BackLeftUpdate = BackLeftEstimator.update(BackLeftEstimatorResult);
-        BackRightUpdate = BackRightEstimator.update(BackRightEstimatorResult);
+        LastFrontLeftEstimatorResult =  FrontLeftCam.getLatestResult();
+        LastFrontRightEstimatorResult = FrontRightCam.getLatestResult();
+        LastBackLeftEstimatorResult = BackLeftCam.getLatestResult();
+        LastBackRightEstimatorResult = BackRightCam.getLatestResult();
+    
+        
+        // odometry
+        fieldPosition = fieldPosition.exp(PhysicalConstants.KINEMATICS.toTwist2d(drive.getModuleDeltas()));
+        odometryEstimator.updateWithTime(
+            Timer.getFPGATimestamp(),
+            getRawYaw(),
+            drive.getModulePositions()
+        );
+        Logger.recordOutput("outputs/poseEstimator/poses/odometryPoses/fieldPosition", fieldPosition);
+        Logger.recordOutput("outputs/poseEstimator/poses/odometryPoses/odometryPoseEstimate", odometryEstimator.getEstimatedPosition());
 
-//! ask alex how to do these
+        
+        updateVision();
+        combinedEstimator.updateWithTime(
+            Timer.getFPGATimestamp(),
+            getRawYaw(),
+            drive.getModulePositions()
+        );
+        Logger.recordOutput("outputs/poseEstimator/poses/visionPoses/visionPoseEstimate", visionEstimate);
+        Logger.recordOutput("outputs/poseEstimator/poses/visionPoses/combinedPoseEstimate", combinedEstimator.getEstimatedPosition());
+
+        //! ask alex
         try{
             if(FrontLeftUpdate.isPresent()){
                 Logger.recordOutput("poseEstimator/FrontLeftCameraUpdate", EstimatedRobotPose.struct ,FrontLeftUpdate.get());
@@ -137,9 +174,71 @@ public class PoseEstimator extends SubsystemBase {
         }
         catch(NoSuchElementException e){
             //System.out.println("Vision.java: Back right estimator had no update to get");
+    }
 
+    }
+
+
+
+    public void updateVision() {
         
-    }   
+            final Optional<EstimatedRobotPose> optionalFREstimatedPoseRight = FrontLeftEstimator.update(FrontLeftEstimatorResult);
+    if (optionalFREstimatedPoseRight.isPresent()) {
+        final EstimatedRobotPose estimatedPose = optionalFREstimatedPoseRight.get();          
+        combinedEstimator.addVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds);
+    }
+    final Optional<EstimatedRobotPose> optionalFLEstimatedPoseRight = FrontRightEstimator.update(FrontRightEstimatorResult);
+    if (optionalFLEstimatedPoseRight.isPresent()) {
+        final EstimatedRobotPose estimatedPose = optionalFLEstimatedPoseRight.get();       
+        combinedEstimator.addVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds);   
+        //combinedEstimator.updateVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds);
+    }
+
+    final Optional<EstimatedRobotPose> optionalBREstimatedPoseRight = BackLeftEstimator.update(BackLeftEstimatorResult);
+    if (optionalBREstimatedPoseRight.isPresent()) {
+        final EstimatedRobotPose estimatedPose = optionalBREstimatedPoseRight.get(); 
+        combinedEstimator.addVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds);         
+        //combinedEstimator.updateVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds);
+    }
+
+    final Optional<EstimatedRobotPose> optionalBLEstimatedPoseRight = BackRightEstimator.update(BackRightEstimatorResult);
+    if (optionalBLEstimatedPoseRight.isPresent()) {
+        final EstimatedRobotPose estimatedPose = optionalBLEstimatedPoseRight.get();   
+        combinedEstimator.addVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds);       
+        //combinedEstimator.updateVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds);
+    }
+
+
+}
+        
+        
+
+    public void resetPosition(Pose2d pose) {
+        odometryEstimator.resetPosition(pose.getRotation(), drive.getModulePositions(), pose);
+        combinedEstimator.resetPosition(pose.getRotation(), drive.getModulePositions(), pose); // ! doesn't have stddevs of anything
+    }
+
+    // @SuppressWarnings("unused")
+    private Pose2d getOdometryPose() {
+        return odometryEstimator.getEstimatedPosition();
+    }
+
+    @SuppressWarnings("unused")
+    private Pose2d getVisionPose() {
+        return visionEstimate;
+    }
+
+    @SuppressWarnings("unused")
+    private Pose2d getCombinedPose() {
+        return combinedEstimator.getEstimatedPosition();
+    }
+
+    public Pose2d getPose() {
+        return getOdometryPose();
+    }
+
+    public Rotation2d getRawYaw() {
+        return gyroInputs.connected ? new Rotation2d(Rotations.of(gyroInputs.yaw).in(Radians)) : fieldPosition.getRotation();
     }
 
 }
