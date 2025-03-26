@@ -54,38 +54,39 @@ public class AutoRoutineGenerator {
 
         return routine;
     }
-    
-    public AutoRoutine oneCoralL4() {
-        AutoRoutine routine = autoFactory.newRoutine("1CoralL4");
-
-        // load trajectories
-        AutoTrajectory trajectory0 = routine.trajectory("1CoralL4", 0);
-
-        // when routine begins, reset odometry, start first trajectory
-        routine.active().onTrue(
-            trajectory0.resetOdometry()
-            .andThen(trajectory0.cmd())
-        );
-        
-        trajectory0.done().onTrue(
-            // hold the position
-            new DriveWithPosition(drive, poseEstimator, trajectory0.getFinalPose().get())
-            .alongWith(
-                // prep the coral
-                coralCommandCompositer.prepL4WithWait()
-            )
-            // align with the apriltag
-            .andThen(new DriveWithApriltag(
-                drive, 
-                poseEstimator, 
-                17, 
-                PhysicalConstants.DrivePositions.L4, 
-                true
-            ))
-            // run coral
-            .andThen(coralCommandCompositer.runL4())
-        );
-
-        return routine;
-    }
 }
+    
+//     public AutoRoutine oneCoralL4() {
+//         AutoRoutine routine = autoFactory.newRoutine("1CoralL4");
+
+//         // load trajectories
+//         AutoTrajectory trajectory0 = routine.trajectory("1CoralL4", 0);
+
+//         // when routine begins, reset odometry, start first trajectory
+//         routine.active().onTrue(
+//             trajectory0.resetOdometry()
+//             .andThen(trajectory0.cmd())
+//         );
+        
+//         trajectory0.done().onTrue(
+//             // hold the position
+//             new DriveWithPosition(drive, poseEstimator, trajectory0.getFinalPose().get())
+//             .alongWith(
+//                 // prep the coral
+//                 coralCommandCompositer.prepL4WithWait()
+//             )
+//             // align with the apriltag
+//             .andThen(new DriveWithApriltag( // !drive to that posit no relying on single ariltag data
+//                 drive, 
+//                 poseEstimator, 
+//                 17, 
+//                 PhysicalConstants.DrivePositions.L4, 
+//                 true
+//             ))
+//             // run coral
+//             .andThen(coralCommandCompositer.runL4())
+//         );
+
+//         return routine;
+//     }
+// }

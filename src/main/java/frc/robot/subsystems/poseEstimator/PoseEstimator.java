@@ -12,8 +12,6 @@ import org.photonvision.targeting.PhotonPipelineResult;
 
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.*;
@@ -139,8 +137,7 @@ public class PoseEstimator extends SubsystemBase {
             EstimatedRobotPose pose = FrontLeftUpdate.get();
             Logger.recordOutput("poseEstimator/FrontLeftPose", pose.estimatedPose);
             Logger.recordOutput("poseEstimator/FrontLeftTimestamp", pose.timestampSeconds);
-            Logger.recordOutput("poseEstimator/FrontLeftTargets", pose.targetsUsed.toString()); // Or log targets individually
-            Logger.recordOutput("poseEstimator/FrontLeftStrategy", pose.strategy.toString());
+            Logger.recordOutput("poseEstimator/FrontLeftTargets", pose.targetsUsed.toString());
         }
         
         if (FrontRightUpdate.isPresent()) {
@@ -148,7 +145,6 @@ public class PoseEstimator extends SubsystemBase {
             Logger.recordOutput("poseEstimator/FrontRightPose", pose.estimatedPose);
             Logger.recordOutput("poseEstimator/FrontRightTimestamp", pose.timestampSeconds);
             Logger.recordOutput("poseEstimator/FrontRightTargets", pose.targetsUsed.toString());
-            Logger.recordOutput("poseEstimator/FrontRightStrategy", pose.strategy.toString());
         }
         
         if (BackLeftUpdate.isPresent()) {
@@ -156,7 +152,6 @@ public class PoseEstimator extends SubsystemBase {
             Logger.recordOutput("poseEstimator/BackLeftPose", pose.estimatedPose);
             Logger.recordOutput("poseEstimator/BackLeftTimestamp", pose.timestampSeconds);
             Logger.recordOutput("poseEstimator/BackLeftTargets", pose.targetsUsed.toString());
-            Logger.recordOutput("poseEstimator/BackLeftStrategy", pose.strategy.toString());
         }
         
         if (BackRightUpdate.isPresent()) {
@@ -164,7 +159,6 @@ public class PoseEstimator extends SubsystemBase {
             Logger.recordOutput("poseEstimator/BackRightPose", pose.estimatedPose);
             Logger.recordOutput("poseEstimator/BackRightTimestamp", pose.timestampSeconds);
             Logger.recordOutput("poseEstimator/BackRightTargets", pose.targetsUsed.toString());
-            Logger.recordOutput("poseEstimator/BackRightStrategy", pose.strategy.toString());
         }
         
         
@@ -174,33 +168,49 @@ public class PoseEstimator extends SubsystemBase {
 
 
     public void updateVision() {
-        
-            final Optional<EstimatedRobotPose> optionalFREstimatedPoseRight = FrontLeftEstimator.update(FrontLeftEstimatorResult);
-    if (optionalFREstimatedPoseRight.isPresent()) {
-        final EstimatedRobotPose estimatedPose = optionalFREstimatedPoseRight.get();          
-        combinedEstimator.addVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds, VirtualConstants.VISION_STDS);
+        List<Pose2d> poseList = new ArrayList<>(10);
+
+        final Optional<EstimatedRobotPose> optionalFREstimatedPoseRight = FrontLeftEstimator.update(FrontLeftEstimatorResult);
+            if (optionalFREstimatedPoseRight.isPresent()) {
+                final EstimatedRobotPose estimatedPose = optionalFREstimatedPoseRight.get();          
+                combinedEstimator.addVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds, VirtualConstants.VISION_STDS);
+                poseList.add(estimatedPose.estimatedPose.toPose2d());
     }
-    final Optional<EstimatedRobotPose> optionalFLEstimatedPoseRight = FrontRightEstimator.update(FrontRightEstimatorResult);
-    if (optionalFLEstimatedPoseRight.isPresent()) {
-        final EstimatedRobotPose estimatedPose = optionalFLEstimatedPoseRight.get();       
-        combinedEstimator.addVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds, VirtualConstants.VISION_STDS);   
-        //combinedEstimator.updateVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds);
+        final Optional<EstimatedRobotPose> optionalFLEstimatedPoseRight = FrontRightEstimator.update(FrontRightEstimatorResult);
+            if (optionalFLEstimatedPoseRight.isPresent()) {
+                final EstimatedRobotPose estimatedPose = optionalFLEstimatedPoseRight.get();       
+                combinedEstimator.addVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds, VirtualConstants.VISION_STDS);   
+                poseList.add(estimatedPose.estimatedPose.toPose2d());
     }
 
     final Optional<EstimatedRobotPose> optionalBREstimatedPoseRight = BackLeftEstimator.update(BackLeftEstimatorResult);
-    if (optionalBREstimatedPoseRight.isPresent()) {
-        final EstimatedRobotPose estimatedPose = optionalBREstimatedPoseRight.get(); 
-        combinedEstimator.addVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds, VirtualConstants.VISION_STDS);         
-        //combinedEstimator.updateVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds);
+        if (optionalBREstimatedPoseRight.isPresent()) {
+            final EstimatedRobotPose estimatedPose = optionalBREstimatedPoseRight.get(); 
+            combinedEstimator.addVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds, VirtualConstants.VISION_STDS);         
+            poseList.add(estimatedPose.estimatedPose.toPose2d());
     }
 
     final Optional<EstimatedRobotPose> optionalBLEstimatedPoseRight = BackRightEstimator.update(BackRightEstimatorResult);
-    if (optionalBLEstimatedPoseRight.isPresent()) {
-        final EstimatedRobotPose estimatedPose = optionalBLEstimatedPoseRight.get();   
-        combinedEstimator.addVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds, VirtualConstants.VISION_STDS);       
-        //combinedEstimator.updateVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds);
+        if (optionalBLEstimatedPoseRight.isPresent()) {
+            final EstimatedRobotPose estimatedPose = optionalBLEstimatedPoseRight.get();   
+            combinedEstimator.addVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds, VirtualConstants.VISION_STDS);       
+            poseList.add(estimatedPose.estimatedPose.toPose2d());
+    double sumX = 0; // Declare and initialize outside the loop
+    double sumY = 0;
+    double sumRotationRadians = 0;
+    
+    for (Pose2d pose : poseList) {
+        sumX += pose.getX(); // Use += inside the loop
+        sumY += pose.getY();
+        sumRotationRadians += pose.getRotation().getRadians();
     }
-
+    
+    double averageX = sumX / poseList.size();
+    double averageY = sumY / poseList.size();
+    double averageRotationRadians = sumRotationRadians / poseList.size();
+    visionEstimate = new Pose2d(averageX, averageY, new Rotation2d(averageRotationRadians));
+}
+    
 
 }
         
