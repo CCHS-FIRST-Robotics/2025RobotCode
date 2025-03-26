@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj.RobotBase;
     try to test at home wtih single camera
     incoperate trust in each pose/tag need to be able to test for that probaly
     tune std dev for drive and apriltags
+    make a sim
+    order code into io class format maybe idk
 
 
  
