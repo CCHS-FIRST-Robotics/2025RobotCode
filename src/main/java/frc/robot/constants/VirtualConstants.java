@@ -4,6 +4,11 @@
 
 package frc.robot.constants;
 
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.Vector;
+import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.util.Units;
+
 public final class VirtualConstants {
     public static final double PERIOD = 0.02;
     public static enum ROBOT_MODE {
@@ -33,4 +38,8 @@ public final class VirtualConstants {
 
     // DIO ports
     public static final int TROUGH_SWITCH_PORT = 0;
+
+
+    private static final Vector<N3> VISION_STDS = VecBuilder.fill(0.1, 0.1, Units.degreesToRadians(10));
+
 }

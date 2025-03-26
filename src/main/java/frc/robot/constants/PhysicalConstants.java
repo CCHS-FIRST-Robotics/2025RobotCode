@@ -3,6 +3,7 @@ package frc.robot.constants;
 import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.*;
 import edu.wpi.first.math.geometry.*;
 import java.util.*;
@@ -49,22 +50,24 @@ public final class PhysicalConstants {
 
     // ————— poseEstimator constants ————— //
 
-    public static final Angle[] ARDUCAM_PITCHES = {
-        Degrees.of(-25), // front
-        Degrees.of(-3), // left
-        Degrees.of(-3), // right
-        Degrees.of(30) // back
-    };
-    public static final Pose2d JETSON_OFFSET = new Pose2d(
-        Inches.of(0.75).in(Meters), 
-        Inches.of(0).in(Meters), 
-        new Rotation2d(Degrees.of(0))
+    public static final Transform3d FrontLeftCamToCenter = new Transform3d(
+        new Translation3d(Units.inchesToMeters(10), Units.inchesToMeters(4.25), Units.inchesToMeters(2)),
+        new Rotation3d(Units.degreesToRadians(5.5), Units.degreesToRadians(-20), Units.degreesToRadians(20))
     );
-    public static final Pose2d USB_CAMERA_1_OFFSET = new Pose2d(
-        Meters.of(0.1).in(Meters), 
-        Meters.of(0.27).in(Meters), 
-        new Rotation2d(Degrees.of(-29.3577535419))
+    public static final Transform3d FrontRightCamToCenter = new Transform3d(
+        new Translation3d(Units.inchesToMeters(10), Units.inchesToMeters(-4.25), Units.inchesToMeters(2)),
+        new Rotation3d(Units.degreesToRadians(5.5), Units.degreesToRadians(-20), Units.degreesToRadians(-20))
     );
+    public static final Transform3d BackLeftCamToCenter = new Transform3d(
+        new Translation3d(Units.inchesToMeters(-10), Units.inchesToMeters(4.25), Units.inchesToMeters(2)),
+        new Rotation3d(Units.degreesToRadians(5.5), Units.degreesToRadians(-20), Units.degreesToRadians(160))
+    );
+    public static final Transform3d BackRightCamToCenter = new Transform3d(
+        new Translation3d(Units.inchesToMeters(-10), Units.inchesToMeters(-4.25), Units.inchesToMeters(2)),
+        new Rotation3d(Units.degreesToRadians(5.5), Units.degreesToRadians(-20), Units.degreesToRadians(-160))
+    );
+
+
 
     public static final HashMap<Integer, Pose2d> APRILTAG_LOCATIONS = new HashMap<Integer, Pose2d>();
     static {
