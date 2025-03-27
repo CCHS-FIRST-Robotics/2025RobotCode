@@ -52,7 +52,7 @@ public class PoseEstimator extends SubsystemBase {
     ) {
         this.gyroIO = gyroIO;
 
-        FrontLeftCam = new PhotonCamera("LeftFront");
+        PhotonCamera FrontLeftCam = new PhotonCamera("LeftFront");
         FrontRightCam = new PhotonCamera("RightFront");
         BackLeftCam = new PhotonCamera("LeftRear");
         BackRightCam = new PhotonCamera("RightRear");
@@ -97,7 +97,8 @@ public class PoseEstimator extends SubsystemBase {
             drive.getModulePositions(),
             new Pose2d(),
             VecBuilder.fill(0.1, 0.1, 0.1), //State standard deviations (x, y, heading)  tune
-            VecBuilder.fill(0.1, 0.1, 0.1)  // Vision measurement standard deviations (x, y, heading)
+            VecBuilder.fill(0.1, 0.1, 0.1)  // multi tag Vision measurement standard deviations (x, y, heading)
+            
         );
 
         this.drive = drive;
@@ -171,27 +172,28 @@ public class PoseEstimator extends SubsystemBase {
         List<Pose2d> poseList = new ArrayList<>(10);
 
         final Optional<EstimatedRobotPose> optionalFREstimatedPoseRight = FrontLeftEstimator.update(FrontLeftEstimatorResult);
-            if (optionalFREstimatedPoseRight.isPresent()) {
+            if (UseData(optionalFREstimatedPoseRight)) {
                 final EstimatedRobotPose estimatedPose = optionalFREstimatedPoseRight.get();          
                 combinedEstimator.addVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds, VirtualConstants.VISION_STDS);
                 poseList.add(estimatedPose.estimatedPose.toPose2d());
+                
     }
         final Optional<EstimatedRobotPose> optionalFLEstimatedPoseRight = FrontRightEstimator.update(FrontRightEstimatorResult);
-            if (optionalFLEstimatedPoseRight.isPresent()) {
+            if (UseData(optionalFLEstimatedPoseRight)) {
                 final EstimatedRobotPose estimatedPose = optionalFLEstimatedPoseRight.get();       
                 combinedEstimator.addVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds, VirtualConstants.VISION_STDS);   
                 poseList.add(estimatedPose.estimatedPose.toPose2d());
     }
 
     final Optional<EstimatedRobotPose> optionalBREstimatedPoseRight = BackLeftEstimator.update(BackLeftEstimatorResult);
-        if (optionalBREstimatedPoseRight.isPresent()) {
+        if (UseData(optionalBREstimatedPoseRight)) {
             final EstimatedRobotPose estimatedPose = optionalBREstimatedPoseRight.get(); 
             combinedEstimator.addVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds, VirtualConstants.VISION_STDS);         
             poseList.add(estimatedPose.estimatedPose.toPose2d());
     }
 
     final Optional<EstimatedRobotPose> optionalBLEstimatedPoseRight = BackRightEstimator.update(BackRightEstimatorResult);
-        if (optionalBLEstimatedPoseRight.isPresent()) {
+        if (UseData(optionalBREstimatedPoseRight)) {
             final EstimatedRobotPose estimatedPose = optionalBLEstimatedPoseRight.get();   
             combinedEstimator.addVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds, VirtualConstants.VISION_STDS);       
             poseList.add(estimatedPose.estimatedPose.toPose2d());
@@ -216,6 +218,26 @@ public class PoseEstimator extends SubsystemBase {
         
         
 
+
+    public Boolean UseData(Optional<EstimatedRobotPose> robotpose){
+        Boolean use = true;
+        if(robotpose.isEmpty()){ // if empty
+            return false; // dont want to continue without any values
+        }
+        Pose3d estimatedPose = robotpose.get().estimatedPose;
+        
+        if (estimatedPose.getX() < 0.0 || estimatedPose.getX() >= aprilTagFieldLayout.getFieldLength() // if not in bounds of field
+        || estimatedPose.getY() < 0.0 || estimatedPose.getY() >= aprilTagFieldLayout.getFieldWidth()) {   
+            use = false;
+        }
+
+        if (Math.abs(Math.toDegrees(estimatedPose.getRotation().getZ()) - getRawYaw().getRadians()) > 4){
+            use = false;
+        }
+        
+        return use;
+    }
+    
     public void resetPosition(Pose2d pose) {
         odometryEstimator.resetPosition(pose.getRotation(), drive.getModulePositions(), pose);
         combinedEstimator.resetPosition(pose.getRotation(), drive.getModulePositions(), pose); 
