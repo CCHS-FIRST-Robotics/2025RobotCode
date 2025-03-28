@@ -7,6 +7,7 @@ import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonPipelineResult;
 
 
@@ -15,6 +16,7 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 
 import java.util.*;
@@ -96,8 +98,8 @@ public class PoseEstimator extends SubsystemBase {
             new Rotation2d(),
             drive.getModulePositions(),
             new Pose2d(),
-            VecBuilder.fill(0.1, 0.1, 0.1), //State standard deviations (x, y, heading)  tune
-            VecBuilder.fill(0.1, 0.1, 0.1)  // multi tag Vision measurement standard deviations (x, y, heading)
+            VecBuilder.fill(0.3, 0.3, 0.1), //State standard deviations (x, y, heading)  tune
+            VecBuilder.fill(0.5, 0.5, 0.5)  // multi tag Vision measurement standard deviations (x, y, heading)
             
         );
 
@@ -172,37 +174,38 @@ public class PoseEstimator extends SubsystemBase {
         List<Pose2d> poseList = new ArrayList<>(10);
 
         final Optional<EstimatedRobotPose> optionalFREstimatedPoseRight = FrontLeftEstimator.update(FrontLeftEstimatorResult);
-            if (UseData(optionalFREstimatedPoseRight)) {
+            if ((optionalFREstimatedPoseRight.isPresent())) {
                 final EstimatedRobotPose estimatedPose = optionalFREstimatedPoseRight.get();          
-                combinedEstimator.addVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds, VirtualConstants.VISION_STDS);
+                combinedEstimator.addVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds, VirtualConstants.MULTI_TAG_VISION_STDS);
                 poseList.add(estimatedPose.estimatedPose.toPose2d());
+            }
                 
-    }
+    
         final Optional<EstimatedRobotPose> optionalFLEstimatedPoseRight = FrontRightEstimator.update(FrontRightEstimatorResult);
-            if (UseData(optionalFLEstimatedPoseRight)) {
-                final EstimatedRobotPose estimatedPose = optionalFLEstimatedPoseRight.get();       
-                combinedEstimator.addVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds, VirtualConstants.VISION_STDS);   
+                if (optionalFLEstimatedPoseRight.isPresent()) {
+                        final EstimatedRobotPose estimatedPose = optionalFLEstimatedPoseRight.get();       
+                        combinedEstimator.addVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds, VirtualConstants.MULTI_TAG_VISION_STDS);   
+                        poseList.add(estimatedPose.estimatedPose.toPose2d());
+            }
+
+        final Optional<EstimatedRobotPose> optionalBREstimatedPoseRight = BackLeftEstimator.update(BackLeftEstimatorResult);
+            if (optionalBREstimatedPoseRight.isPresent()) {
+                final EstimatedRobotPose estimatedPose = optionalBREstimatedPoseRight.get(); 
+                combinedEstimator.addVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds, VirtualConstants.MULTI_TAG_VISION_STDS);         
                 poseList.add(estimatedPose.estimatedPose.toPose2d());
-    }
+        }
 
-    final Optional<EstimatedRobotPose> optionalBREstimatedPoseRight = BackLeftEstimator.update(BackLeftEstimatorResult);
-        if (UseData(optionalBREstimatedPoseRight)) {
-            final EstimatedRobotPose estimatedPose = optionalBREstimatedPoseRight.get(); 
-            combinedEstimator.addVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds, VirtualConstants.VISION_STDS);         
-            poseList.add(estimatedPose.estimatedPose.toPose2d());
-    }
-
-    final Optional<EstimatedRobotPose> optionalBLEstimatedPoseRight = BackRightEstimator.update(BackRightEstimatorResult);
-        if (UseData(optionalBREstimatedPoseRight)) {
-            final EstimatedRobotPose estimatedPose = optionalBLEstimatedPoseRight.get();   
-            combinedEstimator.addVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds, VirtualConstants.VISION_STDS);       
-            poseList.add(estimatedPose.estimatedPose.toPose2d());
-    double sumX = 0; // Declare and initialize outside the loop
+        final Optional<EstimatedRobotPose> optionalBLEstimatedPoseRight = BackRightEstimator.update(BackRightEstimatorResult);
+            if (optionalBREstimatedPoseRight.isPresent()) {
+                final EstimatedRobotPose estimatedPose = optionalBLEstimatedPoseRight.get();   
+                combinedEstimator.addVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds, VirtualConstants.MULTI_TAG_VISION_STDS);       
+                poseList.add(estimatedPose.estimatedPose.toPose2d());
+    double sumX = 0; 
     double sumY = 0;
     double sumRotationRadians = 0;
     
     for (Pose2d pose : poseList) {
-        sumX += pose.getX(); // Use += inside the loop
+        sumX += pose.getX(); 
         sumY += pose.getY();
         sumRotationRadians += pose.getRotation().getRadians();
     }
@@ -218,25 +221,45 @@ public class PoseEstimator extends SubsystemBase {
         
         
 
+public boolean useData(List<Pose2d> poseList) {
+    boolean use = true;
+    Transform2d maxAllowedErr = new Transform2d(Meters.of(0.5), Meters.of(0.5), new Rotation2d(Units.degreesToRadians(10)));
+    List<Pose2d> checkedPoseList = new ArrayList<>(4);
 
-    public Boolean UseData(Optional<EstimatedRobotPose> robotpose){
-        Boolean use = true;
-        if(robotpose.isEmpty()){ // if empty
-            return false; // dont want to continue without any values
-        }
-        Pose3d estimatedPose = robotpose.get().estimatedPose;
-        
-        if (estimatedPose.getX() < 0.0 || estimatedPose.getX() >= aprilTagFieldLayout.getFieldLength() // if not in bounds of field
-        || estimatedPose.getY() < 0.0 || estimatedPose.getY() >= aprilTagFieldLayout.getFieldWidth()) {   
+    for (Pose2d pose : poseList) {
+        if (pose.getX() < 0.0 || pose.getX() >= aprilTagFieldLayout.getFieldLength() ||
+            pose.getY() < 0.0 || pose.getY() >= aprilTagFieldLayout.getFieldWidth()) {
             use = false;
+            break; 
         }
 
-        if (Math.abs(Math.toDegrees(estimatedPose.getRotation().getZ()) - getRawYaw().getRadians()) > 4){
+        if (Math.abs(Math.toDegrees(pose.getRotation().getDegrees()) - Math.toDegrees(getRawYaw().getDegrees())) >= 4) {
             use = false;
+            break; 
         }
-        
-        return use;
+
+        checkedPoseList.add(pose); // Add the pose to the checked list
     }
+
+    if (!use) {
+        return false; // If any pose failed the initial checks, reject all
+    }
+
+    // Check for pose discrepancies within the list
+    for (int i = 0; i < checkedPoseList.size(); i++) {
+        for (int j = i + 1; j < checkedPoseList.size(); j++) {
+            Transform2d err = checkedPoseList.get(i).minus(checkedPoseList.get(j));
+
+            if (Math.abs(err.getX()) > maxAllowedErr.getX() ||
+                Math.abs(err.getY()) > maxAllowedErr.getY() ||
+                Math.abs(Math.toDegrees(err.getRotation().getDegrees())) > Math.toDegrees(maxAllowedErr.getRotation().getDegrees())) {
+                return false; // Reject all poses if any discrepancy exceeds the threshold
+            }
+        }
+    }
+
+    return true;
+}
     
     public void resetPosition(Pose2d pose) {
         odometryEstimator.resetPosition(pose.getRotation(), drive.getModulePositions(), pose);
