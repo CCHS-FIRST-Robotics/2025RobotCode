@@ -141,29 +141,29 @@ public class PoseEstimator extends SubsystemBase {
         Logger.recordOutput("outputs/poseEstimator/poses/visionPoses/visionPoseEstimate", visionEstimate);
         Logger.recordOutput("outputs/poseEstimator/poses/visionPoses/combinedPoseEstimate", combinedEstimator.getEstimatedPosition());
 
-        if (FrontLeftUpdate.isPresent()) {
-            EstimatedRobotPose pose = FrontLeftUpdate.get();
+        if (FrontLeftPose.isPresent()) {
+            EstimatedRobotPose pose =  FrontLeftPose.get();
             Logger.recordOutput("poseEstimator/FrontLeftPose", pose.estimatedPose);
             Logger.recordOutput("poseEstimator/FrontLeftTimestamp", pose.timestampSeconds);
             Logger.recordOutput("poseEstimator/FrontLeftTargets", pose.targetsUsed.toString());
         }
         
-        if (FrontRightUpdate.isPresent()) {
-            EstimatedRobotPose pose = FrontRightUpdate.get();
+        if (FrontRightPose.isPresent()) {
+            EstimatedRobotPose pose =  FrontRightPose.get();
             Logger.recordOutput("poseEstimator/FrontRightPose", pose.estimatedPose);
             Logger.recordOutput("poseEstimator/FrontRightTimestamp", pose.timestampSeconds);
             Logger.recordOutput("poseEstimator/FrontRightTargets", pose.targetsUsed.toString());
         }
         
-        if (BackLeftUpdate.isPresent()) {
-            EstimatedRobotPose pose = BackLeftUpdate.get();
+        if (BackLeftPose.isPresent()) {
+            EstimatedRobotPose pose =  BackLeftPose.get();
             Logger.recordOutput("poseEstimator/BackLeftPose", pose.estimatedPose);
             Logger.recordOutput("poseEstimator/BackLeftTimestamp", pose.timestampSeconds);
             Logger.recordOutput("poseEstimator/BackLeftTargets", pose.targetsUsed.toString());
         }
         
-        if (BackRightUpdate.isPresent()) {
-            EstimatedRobotPose pose = BackRightUpdate.get();
+        if (BackRightPose.isPresent()) {
+            EstimatedRobotPose pose = BackRightPose.get();
             Logger.recordOutput("poseEstimator/BackRightPose", pose.estimatedPose);
             Logger.recordOutput("poseEstimator/BackRightTimestamp", pose.timestampSeconds);
             Logger.recordOutput("poseEstimator/BackRightTargets", pose.targetsUsed.toString());
