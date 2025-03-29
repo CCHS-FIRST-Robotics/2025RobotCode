@@ -35,7 +35,7 @@ public class PoseEstimator extends SubsystemBase {
     PhotonPipelineResult LastFrontLeftEstimatorResult, LastFrontRightEstimatorResult , LastBackLeftEstimatorResult ,LastBackRightEstimatorResult;
     private PhotonCamera FrontLeftCam, FrontRightCam, BackLeftCam, BackRightCam;
     private PhotonPoseEstimator FrontLeftEstimator, FrontRightEstimator, BackLeftEstimator, BackRightEstimator;
-    Optional<EstimatedRobotPose> FrontLeftUpdate, FrontRightUpdate, BackLeftUpdate, BackRightUpdate;
+    Optional<EstimatedRobotPose> FrontLeftPose, FrontRightPose, BackLeftPose, BackRightPose;
     PhotonPipelineResult FrontLeftEstimatorResult, FrontRightEstimatorResult ,BackLeftEstimatorResult ,BackRightEstimatorResult;
 
 
@@ -54,15 +54,15 @@ public class PoseEstimator extends SubsystemBase {
     ) {
         this.gyroIO = gyroIO;
 
-        PhotonCamera FrontLeftCam = new PhotonCamera("LeftFront");
+        FrontLeftCam = new PhotonCamera("LeftFront");
         FrontRightCam = new PhotonCamera("RightFront");
         BackLeftCam = new PhotonCamera("LeftRear");
         BackRightCam = new PhotonCamera("RightRear");
 
-        FrontLeftUpdate = Optional.empty();
-        FrontRightUpdate = Optional.empty();
-        BackLeftUpdate = Optional.empty();
-        BackRightUpdate = Optional.empty();
+        FrontLeftPose = Optional.empty();
+        FrontRightPose = Optional.empty();
+        BackLeftPose = Optional.empty();
+        BackRightPose = Optional.empty();
 
 
         FrontLeftEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, PhysicalConstants.FrontLeftCamToCenter);
@@ -81,6 +81,7 @@ public class PoseEstimator extends SubsystemBase {
         FrontRightEstimatorResult = new PhotonPipelineResult();
         BackLeftEstimatorResult = new PhotonPipelineResult();
         BackRightEstimatorResult = new PhotonPipelineResult();
+       
 
 
        
@@ -109,13 +110,17 @@ public class PoseEstimator extends SubsystemBase {
     @Override
     public void periodic() {
         gyroIO.updateInputs(gyroInputs);
-        
-    
         Logger.processInputs("poseEstimator/gyro", gyroInputs);
-        FrontLeftUpdate = FrontLeftEstimator.update(LastFrontLeftEstimatorResult);
-        FrontRightUpdate = FrontRightEstimator.update(LastFrontRightEstimatorResult);
-        BackLeftUpdate = BackLeftEstimator.update(LastBackLeftEstimatorResult);
-        BackRightUpdate = BackRightEstimator.update(LastBackRightEstimatorResult);
+
+        FrontLeftEstimatorResult = FrontLeftCam.getLatestResult();
+        FrontRightEstimatorResult = FrontRightCam.getLatestResult();
+        BackLeftEstimatorResult = BackLeftCam.getLatestResult();
+        BackRightEstimatorResult = BackRightCam.getLatestResult();
+
+        FrontLeftPose = FrontLeftEstimator.update(LastFrontLeftEstimatorResult);
+        FrontRightPose = FrontRightEstimator.update(LastFrontRightEstimatorResult);
+        BackLeftPose = BackLeftEstimator.update(LastBackLeftEstimatorResult);
+        BackRightPose = BackRightEstimator.update(LastBackRightEstimatorResult);
         
         // odometry
         fieldPosition = fieldPosition.exp(PhysicalConstants.KINEMATICS.toTwist2d(drive.getModuleDeltas()));
