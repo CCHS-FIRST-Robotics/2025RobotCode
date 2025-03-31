@@ -54,7 +54,7 @@ public class PoseEstimator extends SubsystemBase {
         FrontRightCam = new PhotonCamera("RightFront");
         BackLeftCam = new PhotonCamera("LeftRear");
         BackRightCam = new PhotonCamera("RightRear");
-        
+    
         FrontLeftEstimator = new CameraIOPhotonVision(FrontLeftCam, FrontLeftCam.getName(), PhysicalConstants.FrontLeftCamToCenter);
         FrontRightEstimator = new CameraIOPhotonVision(FrontRightCam, FrontRightCam.getName(), PhysicalConstants.FrontRightCamToCenter);
         BackLeftEstimator = new CameraIOPhotonVision(BackLeftCam, BackLeftCam.getName(), PhysicalConstants.BackLeftCamToCenter);
@@ -106,6 +106,9 @@ public class PoseEstimator extends SubsystemBase {
         if (BackRightPose != null) {
             poseList.add(BackRightPose);
           }
+
+        
+
         
         
 

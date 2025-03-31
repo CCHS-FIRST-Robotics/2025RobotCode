@@ -16,8 +16,6 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
@@ -40,12 +38,14 @@ public class CameraIOPhotonVision implements Subsystem{
         Transform3d CameraTransform
     ){
         this.camera = camera;
+        
         this.CameraName = CameraName;
         this.EstimatedRobotPose =  Optional.empty();
         this.EstimatorResult = new PhotonPipelineResult();
         this.PoseEstimator = new PhotonPoseEstimator(AprilTagFields.kDefaultField.loadAprilTagLayoutField(), PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, CameraTransform);
         PoseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
         cameraPrefix = "Vision/" + CameraName + "/";
+        System.out.println(CameraName + " Camera Innitilized");
         
         
 
