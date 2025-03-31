@@ -109,7 +109,7 @@ public class CameraIOPhotonVision implements Subsystem{
         if(Pose != null){
             return Pose;
         }
-        return new Pose3d(0,0,0, new Rotation3d(new Rotation2d()));
+        return null;
         
         
     }
