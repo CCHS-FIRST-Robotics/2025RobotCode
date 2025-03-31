@@ -18,15 +18,15 @@ import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.constants.PhysicalConstants;
 
 
 
-public class CameraIOPhotonVision implements Subsystem{
+public class CameraIOPhotonVision {
     PhotonCamera camera;
     PhotonPoseEstimator PoseEstimator;
     String CameraName;
     Optional<EstimatedRobotPose> EstimatedRobotPose;
-    AprilTagFieldLayout aprilTagFieldLayout;
     PhotonPipelineResult EstimatorResult;
     String cameraPrefix;
     
@@ -42,7 +42,7 @@ public class CameraIOPhotonVision implements Subsystem{
         this.CameraName = CameraName;
         this.EstimatedRobotPose =  Optional.empty();
         this.EstimatorResult = new PhotonPipelineResult();
-        this.PoseEstimator = new PhotonPoseEstimator(AprilTagFields.kDefaultField.loadAprilTagLayoutField(), PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, CameraTransform);
+        this.PoseEstimator = new PhotonPoseEstimator(PhysicalConstants.TagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, new Transform3d());
         PoseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
         cameraPrefix = "Vision/" + CameraName + "/";
         System.out.println(CameraName + " Camera Innitilized");
@@ -53,9 +53,9 @@ public class CameraIOPhotonVision implements Subsystem{
 
 
 
-    @Override
     public void periodic(){
         EstimatorResult = camera.getLatestResult();
+        System.out.println(EstimatorResult);
         EstimatedRobotPose = PoseEstimator.update(EstimatorResult);
         ArrayList<PhotonTrackedTarget> Tags = new ArrayList<PhotonTrackedTarget>();
         Pose3d Pose = UpdateVision();
@@ -87,14 +87,15 @@ public class CameraIOPhotonVision implements Subsystem{
 
     public Pose3d UpdateVision(){
         if (EstimatedRobotPose.isEmpty()){
+            System.out.println("EstimatedRobotPose is empty");
             return null;
         }
 
         Pose3d pose = EstimatedRobotPose.get().estimatedPose;
 
-        if (pose.getX() < 0.0 || pose.getX() >= aprilTagFieldLayout.getFieldLength() ||
-            pose.getY() < 0.0 || pose.getY() >= aprilTagFieldLayout.getFieldWidth()) {
-            
+        if (pose.getX() < 0.0 || pose.getX() >= PhysicalConstants.TagLayout.getFieldLength() ||
+            pose.getY() < 0.0 || pose.getY() >= PhysicalConstants.TagLayout.getFieldWidth()) {
+            System.out.println("Not in field");
             return null;
         }
 

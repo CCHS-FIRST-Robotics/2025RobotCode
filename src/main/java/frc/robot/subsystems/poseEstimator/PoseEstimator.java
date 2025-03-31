@@ -50,15 +50,15 @@ public class PoseEstimator extends SubsystemBase {
     ) {
         this.gyroIO = gyroIO;
 
-        FrontLeftCam = new PhotonCamera("LeftFront");
-        FrontRightCam = new PhotonCamera("RightFront");
-        BackLeftCam = new PhotonCamera("LeftRear");
-        BackRightCam = new PhotonCamera("RightRear");
+        FrontLeftCam = new PhotonCamera("Cam");
+        //FrontRightCam = new PhotonCamera("RightFront");
+        //BackLeftCam = new PhotonCamera("LeftRear");
+        //BackRightCam = new PhotonCamera("RightRear");
     
         FrontLeftEstimator = new CameraIOPhotonVision(FrontLeftCam, FrontLeftCam.getName(), PhysicalConstants.FrontLeftCamToCenter);
-        FrontRightEstimator = new CameraIOPhotonVision(FrontRightCam, FrontRightCam.getName(), PhysicalConstants.FrontRightCamToCenter);
-        BackLeftEstimator = new CameraIOPhotonVision(BackLeftCam, BackLeftCam.getName(), PhysicalConstants.BackLeftCamToCenter);
-        BackRightEstimator = new CameraIOPhotonVision(BackRightCam, BackRightCam.getName(), PhysicalConstants.BackRightCamToCenter);
+        //FrontRightEstimator = new CameraIOPhotonVision(FrontRightCam, FrontRightCam.getName(), PhysicalConstants.FrontRightCamToCenter);
+        //BackLeftEstimator = new CameraIOPhotonVision(BackLeftCam, BackLeftCam.getName(), PhysicalConstants.BackLeftCamToCenter);
+        //BackRightEstimator = new CameraIOPhotonVision(BackRightCam, BackRightCam.getName(), PhysicalConstants.BackRightCamToCenter);
         
         poseList = new ArrayList<>(4);
 
@@ -83,29 +83,30 @@ public class PoseEstimator extends SubsystemBase {
 
     @Override
     public void periodic() {
+        FrontLeftEstimator.periodic();
         poseList.clear();
         gyroIO.updateInputs(gyroInputs);
         Logger.processInputs("poseEstimator/gyro", gyroInputs);
         FrontLeftPose = FrontLeftEstimator.GetPoseEstimation();
-        FrontRightPose = FrontRightEstimator.GetPoseEstimation();
-        BackLeftPose = BackLeftEstimator.GetPoseEstimation();
-        BackRightPose = BackRightEstimator.GetPoseEstimation();
+        //FrontRightPose = FrontRightEstimator.GetPoseEstimation();
+        //BackLeftPose = BackLeftEstimator.GetPoseEstimation();
+        //BackRightPose = BackRightEstimator.GetPoseEstimation();
 
         if (FrontLeftPose != null) {
             poseList.add(FrontLeftPose);
           }
 
-        if (FrontRightPose != null) {
-            poseList.add(FrontRightPose);
-          }
+        // if (FrontRightPose != null) {
+        //     poseList.add(FrontRightPose);
+        //   }
         
-        if (BackLeftPose != null) {
-            poseList.add(BackLeftPose);
-          }
+        // if (BackLeftPose != null) {
+        //     poseList.add(BackLeftPose);
+        //   }
 
-        if (BackRightPose != null) {
-            poseList.add(BackRightPose);
-          }
+        // if (BackRightPose != null) {
+        //     poseList.add(BackRightPose);
+        //   }
 
         
 

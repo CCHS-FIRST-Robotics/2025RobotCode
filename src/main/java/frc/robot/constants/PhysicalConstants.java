@@ -5,6 +5,8 @@ import static edu.wpi.first.units.Units.*;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.*;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.*;
 import java.util.*;
 
@@ -66,7 +68,8 @@ public final class PhysicalConstants {
         new Translation3d(Units.inchesToMeters(-10), Units.inchesToMeters(-4.25), Units.inchesToMeters(2)),
         new Rotation3d(Units.degreesToRadians(5.5), Units.degreesToRadians(-20), Units.degreesToRadians(-160))
     );
-
+    public static final AprilTagFieldLayout TagLayout =
+                AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
 
 
     public static final HashMap<Integer, Pose2d> APRILTAG_LOCATIONS = new HashMap<Integer, Pose2d>();
