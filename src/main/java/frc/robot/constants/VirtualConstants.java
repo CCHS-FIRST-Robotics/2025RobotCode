@@ -39,7 +39,7 @@ public final class VirtualConstants {
     // DIO ports
     public static final int TROUGH_SWITCH_PORT = 0;
 
-    public static final Vector<N3> SINGLE_TAG_VISION_STDS = VecBuilder.fill(1, 1, Units.degreesToRadians(50)) //! tune
+    public static final Vector<N3> SINGLE_TAG_VISION_STDS = VecBuilder.fill(1, 1, Units.degreesToRadians(50)); //! tune
     public static final Vector<N3> MULTI_TAG_VISION_STDS = VecBuilder.fill(0.1, 0.1, Units.degreesToRadians(10)); //! tune
     public static final Vector<N3> DRIVE_STDS = VecBuilder.fill(0.1, 0.1, Units.degreesToRadians(10)); //! tune
 
