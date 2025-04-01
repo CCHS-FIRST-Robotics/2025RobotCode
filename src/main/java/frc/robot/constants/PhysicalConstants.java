@@ -69,7 +69,7 @@ public final class PhysicalConstants {
         new Rotation3d(Units.degreesToRadians(5.5), Units.degreesToRadians(-20), Units.degreesToRadians(-160))
     );
     public static final AprilTagFieldLayout TagLayout =
-                AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
+                AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
 
 
     public static final HashMap<Integer, Pose2d> APRILTAG_LOCATIONS = new HashMap<Integer, Pose2d>();

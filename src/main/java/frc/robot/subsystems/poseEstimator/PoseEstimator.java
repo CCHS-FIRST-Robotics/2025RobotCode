@@ -26,7 +26,7 @@ import frc.robot.constants.PhysicalConstants;
 
 public class PoseEstimator extends SubsystemBase {
     private final GyroIO gyroIO;
-    private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
+    //private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
 
  
     PhotonCamera FrontLeftCam, FrontRightCam, BackLeftCam, BackRightCam;
@@ -85,8 +85,8 @@ public class PoseEstimator extends SubsystemBase {
     public void periodic() {
         FrontLeftEstimator.periodic();
         poseList.clear();
-        gyroIO.updateInputs(gyroInputs);
-        Logger.processInputs("poseEstimator/gyro", gyroInputs);
+        // gyroIO.updateInputs(gyroInputs);
+        // Logger.processInputs("poseEstimator/gyro", gyroInputs);
         FrontLeftPose = FrontLeftEstimator.GetPoseEstimation();
         //FrontRightPose = FrontRightEstimator.GetPoseEstimation();
         //BackLeftPose = BackLeftEstimator.GetPoseEstimation();
@@ -154,6 +154,7 @@ public class PoseEstimator extends SubsystemBase {
         double averageY = sumY / poseList.size();
         double averageRotationRadians = sumRotationRadians / poseList.size();
         visionEstimate = new Pose2d(averageX, averageY, new Rotation2d(averageRotationRadians));
+        combinedEstimator.addVisionMeasurement(visionEstimate, FrontLeftEstimator.GetTimestamp());
 }
     
     public void resetPosition(Pose2d pose) {
@@ -181,7 +182,7 @@ public class PoseEstimator extends SubsystemBase {
     }
 
     public Rotation2d getRawYaw() {
-        return gyroInputs.connected ? new Rotation2d(Rotations.of(gyroInputs.yaw).in(Radians)) : fieldPosition.getRotation();
+        return fieldPosition.getRotation();
     }
 
 }

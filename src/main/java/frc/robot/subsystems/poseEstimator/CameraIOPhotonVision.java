@@ -17,6 +17,7 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj2.command.Subsystem;
@@ -52,29 +53,25 @@ public class CameraIOPhotonVision {
     public void periodic(){
         EstimatorResult.clear();
         EstimatorResult = camera.getAllUnreadResults();
+        Logger.recordOutput(cameraPrefix + "connected", camera.isConnected());
+
         if(EstimatorResult.size() > 0){
             EstimatedRobotPose = PoseEstimator.update(EstimatorResult.get(0));
             ArrayList<PhotonTrackedTarget> Tags = new ArrayList<PhotonTrackedTarget>();
             Pose3d Pose = UpdateVision();
-    
-
 
             for (PhotonTrackedTarget tag : EstimatorResult.get(0).getTargets()) {
                 Tags.add(tag);
             }
-
-
-            Logger.recordOutput(cameraPrefix + "connected", camera.isConnected());
+           
             Logger.recordOutput(cameraPrefix + "timestamp", EstimatorResult.get(0).getTimestampSeconds());
                 
             if (Pose != null) {
-                System.out.println("NOT NULLLLLLLL" + Pose);
                 Logger.recordOutput(cameraPrefix + "VisionPose2d", Pose.toPose2d());
                 Logger.recordOutput(cameraPrefix + "VisionPose3d", Pose);
             } else {
-                System.out.println("NULLLLLLLL");
-                Logger.recordOutput(cameraPrefix + "VisionPose2d", "null");
-                Logger.recordOutput(cameraPrefix + "VisionPose3d", "null");
+                Logger.recordOutput(cameraPrefix + "VisionPose2d", new Pose2d());
+                Logger.recordOutput(cameraPrefix + "VisionPose3d", new Pose3d());
             }
                 
 
@@ -90,7 +87,6 @@ public class CameraIOPhotonVision {
 
     public Pose3d UpdateVision(){
         if (EstimatedRobotPose.isEmpty()){
-            System.out.println("EstimatedRobotPose is empty");
             return null;
         }
 
@@ -116,6 +112,10 @@ public class CameraIOPhotonVision {
         return null;
         
         
+    }
+
+    public double GetTimestamp(){
+        return EstimatorResult.get(0).getTimestampSeconds();
     }
 
     
