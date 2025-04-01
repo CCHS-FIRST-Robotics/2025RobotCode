@@ -129,7 +129,7 @@ public class RobotContainer {
         );
 
         // x-lock
-        xboxController.x().whileTrue(
+        xboxController.rightTrigger().whileTrue(
             Commands.run(() -> drive.runCharacterization(
                 new Voltage[] {Volts.of(0), Volts.of(0), Volts.of(0), Volts.of(0)}, 
                 new Angle[] {Rotations.of(0.125), Rotations.of(0.325), Rotations.of(0.325), Rotations.of(0.125)})
@@ -137,13 +137,13 @@ public class RobotContainer {
         );
 
         // // control precision
-        // xboxController1.leftTrigger().onTrue(
+        // xboxController.leftTrigger().onTrue(
         //     new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_LINEAR_SPEED = MetersPerSecond.of(2))
         //     .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_ANGULAR_SPEED = RotationsPerSecond.of(0.5)))
         //     .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(10)))
         //     .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_ANGULAR_ACCEL = RotationsPerSecondPerSecond.of(10 / PhysicalConstants.TRACK_CIRCUMFERENCE.in(Meters))))
         // );
-        // xboxController1.rightTrigger().onTrue(
+        // xboxController.rightTrigger().onTrue(
         //     new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_LINEAR_SPEED = MetersPerSecond.of(4))
         //     .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_ANGULAR_SPEED = RotationsPerSecond.of(1)))
         //     .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(20))) // ! 20
@@ -154,8 +154,8 @@ public class RobotContainer {
 
         // reef positions
         if ((DriverStation.getAlliance().isPresent() ? DriverStation.getAlliance().get() : Alliance.Red).equals(Alliance.Red)) {
-            coralController.button(1).whileTrue(new DriveWithApriltag(drive, poseEstimator, 6, PhysicalConstants.DrivePositions.L4, true));
-            coralController.button(6).whileTrue(new DriveWithApriltag(drive, poseEstimator, 6, PhysicalConstants.DrivePositions.L4, false));
+            coralController.button(1).whileTrue(new DriveWithApriltag(drive, poseEstimator, 4, PhysicalConstants.DrivePositions.L4, true));
+            coralController.button(6).whileTrue(new DriveWithApriltag(drive, poseEstimator, 4, PhysicalConstants.DrivePositions.L4, false));
             coralController.button(2).whileTrue(new DriveWithApriltag(drive, poseEstimator, 7, PhysicalConstants.DrivePositions.L4, true));
             coralController.button(7).whileTrue(new DriveWithApriltag(drive, poseEstimator, 7, PhysicalConstants.DrivePositions.L4, false));
             coralController.button(3).whileTrue(new DriveWithApriltag(drive, poseEstimator, 8, PhysicalConstants.DrivePositions.L4, true));

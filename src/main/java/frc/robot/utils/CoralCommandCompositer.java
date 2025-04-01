@@ -27,7 +27,7 @@ public class CoralCommandCompositer {
     }
 
     public Command runIntake() { 
-        // if(coral.troughSensesCoral()){ // ! need to attach or find other solution
+        // if (coral.troughSensesCoral()) { // ! need to attach or find other solution
         //     return null;
         // }
 

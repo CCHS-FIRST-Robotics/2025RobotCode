@@ -42,6 +42,9 @@ public class DriveWithApriltag extends Command {
         this.drivePosition = drivePosition;
         this.left = left;
         offsetArray = poseEstimator.getArrayFromSpecificTag(targetTagId);
+        for(int i = 0; i<5; i++){
+            System.out.println("NEW THING, " + isFinished);
+        }
     }
 
     @Override
@@ -76,40 +79,40 @@ public class DriveWithApriltag extends Command {
         Logger.recordOutput("xError", xError);
 
         ChassisSpeeds speeds = new ChassisSpeeds();
-        // switch (driveMode) {
-        //     case ROTATE: 
-        //         speeds = new ChassisSpeeds(
-        //             0,
-        //             0,
-        //             Math.abs(oError) > 0.001 ? Math.signum(oError) * 0.3 : 0
-        //         );
-        //         if (speeds.omegaRadiansPerSecond == 0) {
-        //             driveMode = DriveMode.Y;
-        //         }
-        //         break;
-        //     case Y: 
-        //         speeds = new ChassisSpeeds(
-        //             0,
-        //             Math.abs(yError) > 0.001 ? Math.signum(yError) * 0.1 : 0,
-        //             0
-        //         );
-        //         if (speeds.vyMetersPerSecond == 0) {
-        //             driveMode = DriveMode.X;
-        //             return;
-        //         }
-        //         break;
-        //     case X: 
-        //         speeds = new ChassisSpeeds(
-        //             Math.abs(xError) > 0.001 ? Math.signum(xError) * 0.1 : 0,
-        //             0,
-        //             0
-        //         );
-        //         if (speeds.vxMetersPerSecond == 0) {
-        //             isFinished = true;
-        //             return; 
-        //         }
-        //         break;
-        // }
+        switch (driveMode) {
+            case ROTATE: 
+                speeds = new ChassisSpeeds(
+                    0,
+                    0,
+                    Math.abs(oError) > 0.001 ? Math.signum(oError) * 0.3 : 0
+                );
+                if (speeds.omegaRadiansPerSecond == 0) {
+                    driveMode = DriveMode.Y;
+                }
+                break;
+            case Y: 
+                speeds = new ChassisSpeeds(
+                    0,
+                    Math.abs(yError) > 0.001 ? Math.signum(yError) * 0.1 : 0,
+                    0
+                );
+                if (speeds.vyMetersPerSecond == 0) {
+                    driveMode = DriveMode.X;
+                    return;
+                }
+                break;
+            case X: 
+                speeds = new ChassisSpeeds(
+                    Math.abs(xError) > 0.001 ? Math.signum(xError) * 0.1 : 0,
+                    0,
+                    0
+                );
+                if (speeds.vxMetersPerSecond == 0) {
+                    isFinished = true;
+                    return; 
+                }
+                break;
+        }
 
         speeds = new ChassisSpeeds(
             Math.abs(xError) > 0.005 ? Math.signum(xError) * 0.2 : 0,
@@ -118,15 +121,18 @@ public class DriveWithApriltag extends Command {
         );
 
         speeds = new ChassisSpeeds ( // PID
-            Math.abs(xError) > 0.005 ? xError * 1 : 0,
-            Math.abs(yError) > 0.005 ? yError * 1 : 0,
+            Math.abs(xError) > 0.005 ? xError * 2 : 0,
+            Math.abs(yError) > 0.005 ? yError * 2 : 0,
             Math.abs(oError) > 0.005 ? oError * 0.5 : 0
         );
 
         if (speeds.vxMetersPerSecond == 0
-        &&  speeds.vyMetersPerSecond == 0
-        &&  speeds.omegaRadiansPerSecond == 0
+         && speeds.vyMetersPerSecond == 0
+         && speeds.omegaRadiansPerSecond == 0
         ) {
+            for (int i = 0; i < 5; i++){
+                System.out.println("SPEEDIS0");
+            }
             isFinished = true;
             return; 
         }
@@ -147,6 +153,7 @@ public class DriveWithApriltag extends Command {
         for (int i = 0; i < 5; i++){
             System.out.println("FINISHED");
         }
+        isFinished = false; // ! sigh I wish this didn't have to exist
         drive.stop();
     }
 }

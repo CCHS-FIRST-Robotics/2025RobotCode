@@ -89,9 +89,9 @@ public class CoralIOReal implements CoralIO{
         elevatorPIDF.kV = kVElevator;
         elevatorPIDF.kA = kAElevator;
         elevatorPIDF.GravityType = GravityTypeValue.Elevator_Static;
-        elevatorMotionMagicConfig.MotionMagicCruiseVelocity = 2;
-        elevatorMotionMagicConfig.MotionMagicAcceleration = 20;
-        elevatorMotionMagicConfig.MotionMagicJerk = 1;
+        elevatorMotionMagicConfig.MotionMagicCruiseVelocity = 3;
+        elevatorMotionMagicConfig.MotionMagicAcceleration = 30;
+        elevatorMotionMagicConfig.MotionMagicJerk = 10;
         // misc
         elevatorConfig.MotorOutput.withInverted(InvertedValue.Clockwise_Positive);
         elevatorConfig.CurrentLimits.StatorCurrentLimit = 40;

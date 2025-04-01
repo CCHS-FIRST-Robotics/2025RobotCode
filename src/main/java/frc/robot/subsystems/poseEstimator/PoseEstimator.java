@@ -99,7 +99,7 @@ public class PoseEstimator extends SubsystemBase {
         } else {
             timesLastCameraPacketWasStale[cameraId] = 0;
         }
-        if(timesLastCameraPacketWasStale[cameraId] > 10){
+        if (timesLastCameraPacketWasStale[cameraId] > 10) {
             return;
         }
         cameraLastPacketIds[cameraId] = packetId;
@@ -130,7 +130,7 @@ public class PoseEstimator extends SubsystemBase {
                 });
                 
                 // add to combinedMap
-                if(combinedMap.containsKey(key)){ // average the values
+                if (combinedMap.containsKey(key)) { // average the values
                     combinedMap.put(
                         key,
                         new double[] {
