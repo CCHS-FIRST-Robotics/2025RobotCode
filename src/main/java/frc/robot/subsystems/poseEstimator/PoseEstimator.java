@@ -89,7 +89,7 @@ public class PoseEstimator extends SubsystemBase {
         // BackRightPose = BackRightEstimator.getEstimatedRobotPose().get();
         
 
-        if (FrontLeftPose != null) {
+        if (FrontLeftPose != null && FrontLeftPose.estimatedPose != new Pose3d()) {
             combinedEstimator.addVisionMeasurement(FrontLeftPose.estimatedPose.toPose2d(), FrontLeftPose.timestampSeconds, FrontLeftEstimator.getEstimationStdDevs());
           }
 
