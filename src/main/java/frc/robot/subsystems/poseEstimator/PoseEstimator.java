@@ -3,7 +3,7 @@ package frc.robot.subsystems.poseEstimator;
 import static edu.wpi.first.units.Units.*;
 
 import org.littletonrobotics.junction.Logger;
-
+import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 
 
@@ -31,7 +31,7 @@ public class PoseEstimator extends SubsystemBase {
  
     PhotonCamera FrontLeftCam, FrontRightCam, BackLeftCam, BackRightCam;
     
-    Pose3d FrontLeftPose, FrontRightPose, BackLeftPose, BackRightPose;
+    EstimatedRobotPose FrontLeftPose, FrontRightPose, BackLeftPose, BackRightPose;
     PhotonPipelineResult FrontLeftEstimatorResult, FrontRightEstimatorResult ,BackLeftEstimatorResult ,BackRightEstimatorResult;
     CameraIOPhotonVision FrontLeftEstimator, FrontRightEstimator,BackLeftEstimator ,BackRightEstimator;
     List<Pose3d> poseList;
@@ -72,10 +72,7 @@ public class PoseEstimator extends SubsystemBase {
             PhysicalConstants.KINEMATICS,
             new Rotation2d(),
             drive.getModulePositions(),
-            new Pose2d(),
-            VecBuilder.fill(0.3, 0.3, 0.1), //State standard deviations (x, y, heading)  tune
-            VecBuilder.fill(0.5, 0.5, 0.5)  // multi tag Vision measurement standard deviations (x, y, heading)
-            
+            new Pose2d()
         );
             
         this.drive = drive;
@@ -84,16 +81,16 @@ public class PoseEstimator extends SubsystemBase {
     @Override
     public void periodic() {
         FrontLeftEstimator.periodic();
-        poseList.clear();
         // gyroIO.updateInputs(gyroInputs);
         // Logger.processInputs("poseEstimator/gyro", gyroInputs);
-        FrontLeftPose = FrontLeftEstimator.GetPoseEstimation();
-        //FrontRightPose = FrontRightEstimator.GetPoseEstimation();
-        //BackLeftPose = BackLeftEstimator.GetPoseEstimation();
-        //BackRightPose = BackRightEstimator.GetPoseEstimation();
+        FrontLeftPose = FrontLeftEstimator.getEstimatedRobotPose();
+        // FrontRightPose = FrontRightEstimator.getEstimatedRobotPose().get();
+        // BackLeftPose = BackLeftEstimator.getEstimatedRobotPose().get();
+        // BackRightPose = BackRightEstimator.getEstimatedRobotPose().get();
+        
 
         if (FrontLeftPose != null) {
-            poseList.add(FrontLeftPose);
+            combinedEstimator.addVisionMeasurement(FrontLeftPose.estimatedPose.toPose2d(), FrontLeftPose.timestampSeconds, FrontLeftEstimator.getEstimationStdDevs());
           }
 
         // if (FrontRightPose != null) {
@@ -123,8 +120,7 @@ public class PoseEstimator extends SubsystemBase {
         );
         Logger.recordOutput("outputs/poseEstimator/poses/odometryPoses/fieldPosition", fieldPosition);
         Logger.recordOutput("outputs/poseEstimator/poses/odometryPoses/odometryPoseEstimate", odometryEstimator.getEstimatedPosition());
-        
-        updateVision();
+       
         combinedEstimator.updateWithTime(
             Timer.getFPGATimestamp(),
             getRawYaw(),
@@ -138,24 +134,6 @@ public class PoseEstimator extends SubsystemBase {
     }
 
 
-
-    public void updateVision() {
-        double sumX = 0; 
-        double sumY = 0;
-        double sumRotationRadians = 0;
-        
-        for (Pose3d pose : poseList) {
-            sumX += pose.getX(); 
-            sumY += pose.getY();
-            sumRotationRadians += pose.getRotation().getZ();
-        }
-        
-        double averageX = sumX / poseList.size();
-        double averageY = sumY / poseList.size();
-        double averageRotationRadians = sumRotationRadians / poseList.size();
-        visionEstimate = new Pose2d(averageX, averageY, new Rotation2d(averageRotationRadians));
-        combinedEstimator.addVisionMeasurement(visionEstimate, FrontLeftEstimator.GetTimestamp());
-}
     
     public void resetPosition(Pose2d pose) {
         odometryEstimator.resetPosition(pose.getRotation(), drive.getModulePositions(), pose);

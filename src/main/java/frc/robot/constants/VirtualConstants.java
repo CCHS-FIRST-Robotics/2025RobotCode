@@ -4,8 +4,10 @@
 
 package frc.robot.constants;
 
+import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
+import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 
@@ -38,10 +40,9 @@ public final class VirtualConstants {
 
     // DIO ports
     public static final int TROUGH_SWITCH_PORT = 0;
-
-    public static final Vector<N3> SINGLE_TAG_VISION_STDS = VecBuilder.fill(1, 1, Units.degreesToRadians(50)); //! tune
-    public static final Vector<N3> MULTI_TAG_VISION_STDS = VecBuilder.fill(0.1, 0.1, Units.degreesToRadians(10)); //! tune
-    public static final Vector<N3> DRIVE_STDS = VecBuilder.fill(0.1, 0.1, Units.degreesToRadians(10)); //! tune
+    public static final Matrix<N3, N1> SingleTagStdDevs = VecBuilder.fill(2, 2, 4);
+    public static final Matrix<N3, N1> MultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
+    public static final Matrix<N3, N1> DriveStdDevs = VecBuilder.fill(0.5, 0.5, .5);
 
 
 }

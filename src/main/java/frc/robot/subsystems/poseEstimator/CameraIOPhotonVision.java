@@ -1,8 +1,5 @@
 package frc.robot.subsystems.poseEstimator;
 
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,109 +11,125 @@ import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
-
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import frc.robot.constants.PhysicalConstants;
-
-
+import frc.robot.constants.VirtualConstants;
 
 public class CameraIOPhotonVision {
-    PhotonCamera camera;
-    PhotonPoseEstimator PoseEstimator;
-    String CameraName;
-    Optional<EstimatedRobotPose> EstimatedRobotPose;
-    List<PhotonPipelineResult> EstimatorResult;
-    String cameraPrefix;
+    private final PhotonCamera camera;
+    private final PhotonPoseEstimator poseEstimator;
+    private final String cameraName;
+    private Optional<EstimatedRobotPose> latestEstimatedPose = Optional.empty();
+    private final String cameraPrefix;
+    private Matrix<N3, N1> currentEstimationStdDevs = VirtualConstants.SingleTagStdDevs; 
 
     public CameraIOPhotonVision(
             PhotonCamera camera,
-            String CameraName,
-            Transform3d CameraTransform) {
+            String cameraName,
+            Transform3d cameraTransform) {
         this.camera = camera;
-        this.CameraName = CameraName;
-        this.EstimatedRobotPose = Optional.empty();
-        this.PoseEstimator = new PhotonPoseEstimator(PhysicalConstants.TagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-                new Transform3d());
-        PoseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
-        cameraPrefix = "Vision/" + CameraName + "/";
-        System.out.println(CameraName + " Camera Innitilized");
-        EstimatorResult = new ArrayList<>(); 
-        EstimatorResult.add(new PhotonPipelineResult());
+        this.cameraName = cameraName;
+        this.poseEstimator = new PhotonPoseEstimator(
+                PhysicalConstants.TagLayout,
+                PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+                new Transform3d() 
+        );
+        this.poseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+        this.cameraPrefix = "Vision/" + cameraName + "/";
+        System.out.println(cameraName + " Camera Initialized");
     }
 
-
-    public void periodic(){
-        EstimatorResult.clear();
-        EstimatorResult = camera.getAllUnreadResults();
+    public void periodic() {
         Logger.recordOutput(cameraPrefix + "connected", camera.isConnected());
 
-        if(EstimatorResult.size() > 0){
-            EstimatedRobotPose = PoseEstimator.update(EstimatorResult.get(0));
-            ArrayList<PhotonTrackedTarget> Tags = new ArrayList<PhotonTrackedTarget>();
-            Pose3d Pose = UpdateVision();
+        PhotonPipelineResult latestResult = camera.getLatestResult();
+        latestEstimatedPose = poseEstimator.update(latestResult);
+        updateEstimationStdDevs(latestEstimatedPose, latestResult.getTargets());
 
-            for (PhotonTrackedTarget tag : EstimatorResult.get(0).getTargets()) {
-                Tags.add(tag);
-            }
-           
-            Logger.recordOutput(cameraPrefix + "timestamp", EstimatorResult.get(0).getTimestampSeconds());
-                
-            if (Pose != null) {
-                Logger.recordOutput(cameraPrefix + "VisionPose2d", Pose.toPose2d());
-                Logger.recordOutput(cameraPrefix + "VisionPose3d", Pose);
-            } else {
-                Logger.recordOutput(cameraPrefix + "VisionPose2d", new Pose2d());
-                Logger.recordOutput(cameraPrefix + "VisionPose3d", new Pose3d());
-            }
-                
-
-            Logger.recordOutput(cameraPrefix + "NumTags", Tags.size());
-
+        if (latestEstimatedPose.isPresent()) {
+            Logger.recordOutput(cameraPrefix + "VisionPose2d", latestEstimatedPose.get().estimatedPose.toPose2d());
+            Logger.recordOutput(cameraPrefix + "VisionPose3d", latestEstimatedPose.get().estimatedPose);
+        } else {
+            Logger.recordOutput(cameraPrefix + "VisionPose2d", new Pose2d());
+            Logger.recordOutput(cameraPrefix + "VisionPose3d", new Pose3d());
         }
 
-
+        Logger.recordOutput(cameraPrefix + "NumTags", latestResult.getTargets().size());
+        Logger.recordOutput(cameraPrefix + "Timestamp", latestResult.getTimestampSeconds());
+        System.out.println("StdDEV" + getEstimationStdDevs());
+        Logger.recordOutput(cameraPrefix + "StdDevx", getEstimationStdDevs().get(0, 0));
+        Logger.recordOutput(cameraPrefix + "StdDevy", getEstimationStdDevs().get(1, 0));
+        Logger.recordOutput(cameraPrefix + "StdDevz", getEstimationStdDevs().get(2, 0));
     }
 
-
-
-
-    public Pose3d UpdateVision(){
-        if (EstimatedRobotPose.isEmpty()){
-            return null;
-        }
-
-        Pose3d pose = EstimatedRobotPose.get().estimatedPose;
-
-        if (pose.getX() < 0.0 || pose.getX() >= PhysicalConstants.TagLayout.getFieldLength() ||
-            pose.getY() < 0.0 || pose.getY() >= PhysicalConstants.TagLayout.getFieldWidth()) {
-            System.out.println("Not in field");
-            return null;
-        }
-        
-        return pose;
-    }
-
-
-
-
-    public Pose3d GetPoseEstimation(){
-        Pose3d Pose = UpdateVision();
-        if(Pose != null){
-            return Pose;
+    public EstimatedRobotPose getEstimatedRobotPose() {
+        if (latestEstimatedPose.isPresent()){
+            return latestEstimatedPose.get();
         }
         return null;
-        
-        
     }
 
-    public double GetTimestamp(){
-        return EstimatorResult.get(0).getTimestampSeconds();
+    /**
+     * Calculates new standard deviations This algorithm is a heuristic that creates dynamic standard
+     * deviations based on number of tags, estimation strategy, and distance from the tags.
+     *
+     * @param estimatedPose The estimated pose to guess standard deviations for.
+     * @param targets All targets in this camera frame
+     */
+    private void updateEstimationStdDevs(
+            Optional<EstimatedRobotPose> estimatedPose, List<PhotonTrackedTarget> targets) {
+        if (estimatedPose.isEmpty()) {
+            // No pose input. Default to single-tag std devs
+            currentEstimationStdDevs = VirtualConstants.SingleTagStdDevs;
+
+        } else {
+            // Pose present. Start running Heuristic
+            var estStdDevs = VirtualConstants.SingleTagStdDevs;
+            int numTags = 0;
+            double avgDist = 0;
+
+            // Precalculation - see how many tags we found, and calculate an average-distance metric
+            for (var tgt : targets) {
+                var tagPose = poseEstimator.getFieldTags().getTagPose(tgt.getFiducialId());
+                if (tagPose.isEmpty()) continue;
+                numTags++;
+                avgDist +=
+                        tagPose
+                                .get()
+                                .toPose2d()
+                                .getTranslation()
+                                .getDistance(estimatedPose.get().estimatedPose.toPose2d().getTranslation());
+            }
+
+            if (numTags == 0) {
+                // No tags visible. Default to single-tag std devs
+                currentEstimationStdDevs = VirtualConstants.SingleTagStdDevs;
+            } else {
+                // One or more tags visible, run the full heuristic.
+                avgDist /= numTags;
+                // Decrease std devs if multiple targets are visible
+                if (numTags > 1) estStdDevs = VirtualConstants.MultiTagStdDevs;
+                // Increase std devs based on (average) distance
+                if (numTags == 1 && avgDist > 6)
+                    estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+                else estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
+                currentEstimationStdDevs = estStdDevs;
+            }
+        }
     }
 
-    
+    /**
+     * Returns the latest standard deviations of the estimated pose, for use with {@link
+     * edu.wpi.first.math.estimator.SwerveDrivePoseEstimator SwerveDrivePoseEstimator}. This should
+     * only be used when there are targets visible.
+     */
+    public Matrix<N3, N1> getEstimationStdDevs() {
+        return currentEstimationStdDevs;
+    }
 }
