@@ -1,20 +1,20 @@
 package frc.robot.subsystems.poseEstimator;
 
-import edu.wpi.first.networktables.*;
+// import edu.wpi.first.networktables.*;
 
 public class CameraIOJetson implements CameraIO {
-    private final NetworkTable tagsTable;
-    private final DoubleArraySubscriber tagSubscriber;
+    // private final NetworkTable tagsTable;
+    // private final DoubleArraySubscriber tagSubscriber;
 
-    public CameraIOJetson() {
-        tagsTable = NetworkTableInstance.getDefault().getTable("tags");
-        tagSubscriber = tagsTable.getDoubleArrayTopic("tags").subscribe(new double[] {});
-    }
+    // public CameraIOJetson() {
+    //     tagsTable = NetworkTableInstance.getDefault().getTable("tags");
+    //     tagSubscriber = tagsTable.getDoubleArrayTopic("tags").subscribe(new double[] {});
+    // }
 
-    @Override
-    public void updateInputs(CameraIOInputs inputs) {
-        inputs.tagArray = tagSubscriber.get();
-    }
+    // @Override
+    // public void updateInputs(CameraIOInputs inputs) {
+    //     // inputs.tagArray = tagSubscriber.get();
+    // }
 
     // ! fuck you, figure this out later
             // cameraLastPacketIds = new int[numCameras];

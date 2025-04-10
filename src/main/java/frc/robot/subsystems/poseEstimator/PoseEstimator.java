@@ -8,9 +8,6 @@ import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.Timer;
-
-import java.util.*;
-
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.constants.PhysicalConstants;
 
@@ -25,6 +22,8 @@ public class PoseEstimator extends SubsystemBase {
     private final SwerveDrivePoseEstimator odometryEstimator;
     private Pose2d visionEstimate;
     private final SwerveDrivePoseEstimator combinedEstimator;
+
+    private Transform2d[] tagOffsets = new Transform2d[0];
 
     private final Drive drive;
 
@@ -72,18 +71,21 @@ public class PoseEstimator extends SubsystemBase {
         Logger.recordOutput("outputs/poseEstimator/poses/odometryPoses/odometryPoseEstimate", odometryEstimator.getEstimatedPosition());
 
         // vision
-        // visionEstimate = cameraInputs.poseEstimate;
-        // combinedEstimator.updateWithTime(
-        //     Timer.getFPGATimestamp(),
-        //     getRawYaw(),
-        //     drive.getModulePositions()
-        // );
-        // combinedEstimator.addVisionMeasurement(visionEstimate, Timer.getFPGATimestamp());
-        // Logger.recordOutput("outputs/poseEstimator/poses/visionPoses/visionPoseEstimate", visionEstimate);
-        // Logger.recordOutput("outputs/poseEstimator/poses/visionPoses/combinedPoseEstimate", combinedEstimator.getEstimatedPosition());
+        visionEstimate = cameraInputs.poseEstimate;
+        combinedEstimator.updateWithTime(
+            Timer.getFPGATimestamp(),
+            getRawYaw(),
+            drive.getModulePositions()
+        );
+        combinedEstimator.addVisionMeasurement(visionEstimate, Timer.getFPGATimestamp());
+        Logger.recordOutput("outputs/poseEstimator/poses/visionPoses/visionPoseEstimate", visionEstimate);
+        Logger.recordOutput("outputs/poseEstimator/poses/visionPoses/combinedPoseEstimate", combinedEstimator.getEstimatedPosition());
+    
+        tagOffsets = cameraInputs.tagOffsets;
     }
 
     public void resetPosition(Pose2d pose) {
+        fieldPosition = pose;
         odometryEstimator.resetPosition(pose.getRotation(), drive.getModulePositions(), pose);
         combinedEstimator.resetPosition(pose.getRotation(), drive.getModulePositions(), pose);
     }
@@ -109,5 +111,9 @@ public class PoseEstimator extends SubsystemBase {
 
     public Rotation2d getRawYaw() {
         return gyroInputs.connected ? new Rotation2d(Rotations.of(gyroInputs.yaw).in(Radians)) : fieldPosition.getRotation();
+    }
+
+    public Transform2d getSpecificTagOffset(int id) {
+        return tagOffsets[id - 1];
     }
 }
