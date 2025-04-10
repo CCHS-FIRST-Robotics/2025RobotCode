@@ -156,7 +156,7 @@ public class CoralIOReal implements CoralIO{
 
     @Override
     public boolean elevatorAtSetpoint(Angle position) {
-        return Math.abs(position.in(Rotations) - inputs.elevatorEncoderPosition) < 0.1; // ! should figure out if it makes sense to retune these
+        return Math.abs(position.in(Rotations) - inputs.elevatorEncoderPosition) < 0.1;
     }
 
     // ————— arm ————— //
@@ -173,7 +173,7 @@ public class CoralIOReal implements CoralIO{
     
     @Override
     public boolean armAtSetpoint(Angle position) {
-        return Math.abs(position.in(Rotations) - inputs.armEncoderPosition) < 0.008; // ! might be too exact
+        return Math.abs(position.in(Rotations) - inputs.armEncoderPosition) < 0.008;
     }
 
     // ————— logging ————— //

@@ -136,6 +136,7 @@ public class Drive extends SubsystemBase {
             case VELOCITY: 
                 speeds = ChassisSpeeds.discretize(speeds, VirtualConstants.PERIOD); // explaination: https://www.chiefdelphi.com/t/whitepaper-swerve-drive-skew-and-second-order-kinematics/416964/30                
                 
+                // let the wheels go back to being straight when there is no input, instead of holding their last angle
                 if (speeds.vxMetersPerSecond == 0
                  && speeds.vxMetersPerSecond == 0
                  && speeds.vxMetersPerSecond == 0
@@ -144,12 +145,7 @@ public class Drive extends SubsystemBase {
                 }
                 
                 SwerveModuleState[] moduleStates = PhysicalConstants.KINEMATICS.toSwerveModuleStates(speeds); // convert speeds to module states
-                Logger.recordOutput("outputs/drive/thingything", moduleStates);
-                
                 SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates, PhysicalConstants.MAX_ALLOWED_LINEAR_SPEED); // renormalize wheel speeds
-                Logger.recordOutput("outputs/drive/thingythingything", moduleStates);
-
-
 
                 // run modules
                 for (int i = 0; i < 4; i++) {

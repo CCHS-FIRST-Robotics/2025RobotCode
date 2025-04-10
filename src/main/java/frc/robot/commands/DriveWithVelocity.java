@@ -7,7 +7,6 @@ import java.util.function.Supplier;
 import edu.wpi.first.math.*;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.*;
-import org.littletonrobotics.junction.Logger;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.poseEstimator.*;
 import frc.robot.constants.*;
@@ -100,7 +99,6 @@ public class DriveWithVelocity extends Command {
 
     private double applyPreferences(double input, double deadzone, double exponent) {
         if (Math.abs(input) < deadzone) {
-            System.out.println("HIHIHIHIHIHIHI");
             return 0; 
         }
         return Math.pow(Math.abs(input), exponent) * Math.signum(input);
