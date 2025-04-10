@@ -57,8 +57,6 @@ public class AutoRoutineGenerator {
         return new InstantCommand(() -> poseEstimator.resetPosition(new Pose2d()))
         .andThen(new DriveWithPosition(drive, poseEstimator, new Pose2d(-2, 0, new Rotation2d())));
     }
-
-    
     
     public AutoRoutine oneCoralL4() {
         AutoRoutine routine = autoFactory.newRoutine("1CoralL4");
