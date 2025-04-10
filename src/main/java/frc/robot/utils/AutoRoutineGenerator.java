@@ -4,7 +4,6 @@ import choreo.auto.*;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.math.geometry.*;
 import frc.robot.commands.*;
-import frc.robot.constants.PhysicalConstants;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.poseEstimator.*;
 
@@ -33,27 +32,32 @@ public class AutoRoutineGenerator {
         this.coralCommandCompositer = coralCommandCompositer;
     }
 
-    public Command backUp() {
-        return new InstantCommand(() -> poseEstimator.resetPosition(new Pose2d()))
-        .andThen(new DriveWithPosition(drive, poseEstimator, new Pose2d(-2, 0, new Rotation2d())));
-    }
+    // ————— testing routines ————— //
 
-    public AutoRoutine twoMeter() {
-        AutoRoutine routine = autoFactory.newRoutine("2Meter");
+    public AutoRoutine test() {
+        AutoRoutine routine = autoFactory.newRoutine("Test");
 
         // load trajectories
-        AutoTrajectory trajectory = routine.trajectory("2Meter");
+        AutoTrajectory trajectory = routine.trajectory("Test");
 
         // when routine begins, reset odometry, start trajectory
         routine.active().onTrue(
             trajectory.resetOdometry()
             .andThen(trajectory.cmd())
             .andThen(new DriveWithPosition(drive, poseEstimator, trajectory.getFinalPose().get()))
-            .andThen(new DriveWithPosition(drive, poseEstimator, new Pose2d(0, 0, new Rotation2d(Math.PI))))
         );
 
         return routine;
     }
+
+    // ————— competition routines ————— //
+
+    public Command backUp() {
+        return new InstantCommand(() -> poseEstimator.resetPosition(new Pose2d()))
+        .andThen(new DriveWithPosition(drive, poseEstimator, new Pose2d(-2, 0, new Rotation2d())));
+    }
+
+    
     
     public AutoRoutine oneCoralL4() {
         AutoRoutine routine = autoFactory.newRoutine("1CoralL4");
@@ -75,13 +79,13 @@ public class AutoRoutineGenerator {
                 coralCommandCompositer.prepL4WithWait()
             )
             // align with the apriltag
-            .andThen(new DriveWithApriltag(
-                drive, 
-                poseEstimator, 
-                17, 
-                PhysicalConstants.DrivePositions.L4, 
-                true
-            ))
+            // .andThen(new DriveWithApriltag(
+            //     drive, 
+            //     poseEstimator, 
+            //     17, 
+            //     PhysicalConstants.DrivePositions.L4, 
+            //     true
+            // ))
             // run coral
             .andThen(coralCommandCompositer.runL4())
         );

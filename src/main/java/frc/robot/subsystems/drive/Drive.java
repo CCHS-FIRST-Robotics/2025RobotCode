@@ -135,8 +135,21 @@ public class Drive extends SubsystemBase {
                 // fallthrough to VELOCITY case; no break statement needed
             case VELOCITY: 
                 speeds = ChassisSpeeds.discretize(speeds, VirtualConstants.PERIOD); // explaination: https://www.chiefdelphi.com/t/whitepaper-swerve-drive-skew-and-second-order-kinematics/416964/30                
+                
+                if (speeds.vxMetersPerSecond == 0
+                 && speeds.vxMetersPerSecond == 0
+                 && speeds.vxMetersPerSecond == 0
+                ) {
+                    PhysicalConstants.KINEMATICS.resetHeadings(new Rotation2d[] {new Rotation2d(0), new Rotation2d(0), new Rotation2d(0), new Rotation2d(0)});
+                }
+                
                 SwerveModuleState[] moduleStates = PhysicalConstants.KINEMATICS.toSwerveModuleStates(speeds); // convert speeds to module states
+                Logger.recordOutput("outputs/drive/thingything", moduleStates);
+                
                 SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates, PhysicalConstants.MAX_ALLOWED_LINEAR_SPEED); // renormalize wheel speeds
+                Logger.recordOutput("outputs/drive/thingythingything", moduleStates);
+
+
 
                 // run modules
                 for (int i = 0; i < 4; i++) {

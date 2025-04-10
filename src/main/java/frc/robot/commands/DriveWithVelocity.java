@@ -88,7 +88,6 @@ public class DriveWithVelocity extends Command {
             )
         );
 
-        Logger.recordOutput("outputs/drive/speedsInput", speedsInput);
         prevSpeeds = speedsInput;
         
         drive.runVelocity(speedsInput);
@@ -101,6 +100,7 @@ public class DriveWithVelocity extends Command {
 
     private double applyPreferences(double input, double deadzone, double exponent) {
         if (Math.abs(input) < deadzone) {
+            System.out.println("HIHIHIHIHIHIHI");
             return 0; 
         }
         return Math.pow(Math.abs(input), exponent) * Math.signum(input);

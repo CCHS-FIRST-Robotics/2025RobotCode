@@ -14,6 +14,13 @@ import edu.wpi.first.wpilibj.RobotBase;
  * ! check hitting 6, driving, and then hitting 6 again
  * ! after that's fixed, try hitting 6 until it doesn't see the tag and then driving and then hitting 6 again
  * 
+ * 
+ * 
+ * 
+ * 
+ * ! next, try changing alliance color and stuff and see if adding the lambda code will make it go backwards like at the comp
+ * ! bruh I could have totally done that in sim
+ * 
  * to do: 
  * * things to keep in mind: 
  * 

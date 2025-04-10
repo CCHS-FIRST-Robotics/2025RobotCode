@@ -44,7 +44,7 @@ public class RobotContainer {
 
                 poseEstimator = new PoseEstimator(
                     new GyroIOReal(),
-                    new CameraIOReal(),
+                    new CameraIOJetson(),
                     drive
                 );
 
@@ -87,7 +87,7 @@ public class RobotContainer {
 
                 poseEstimator = new PoseEstimator(
                     new GyroIOReal(),
-                    new CameraIOReal(),
+                    new CameraIOJetson(),
                     drive
                 );
 
@@ -152,34 +152,34 @@ public class RobotContainer {
 
         // ————— coral ————— //
 
-        // reef positions
-        if ((DriverStation.getAlliance().isPresent() ? DriverStation.getAlliance().get() : Alliance.Red).equals(Alliance.Red)) {
-            coralController.button(1).whileTrue(new DriveWithApriltag(drive, poseEstimator, 4, PhysicalConstants.DrivePositions.L4, true));
-            coralController.button(6).whileTrue(new DriveWithApriltag(drive, poseEstimator, 4, PhysicalConstants.DrivePositions.L4, false));
-            coralController.button(2).whileTrue(new DriveWithApriltag(drive, poseEstimator, 7, PhysicalConstants.DrivePositions.L4, true));
-            coralController.button(7).whileTrue(new DriveWithApriltag(drive, poseEstimator, 7, PhysicalConstants.DrivePositions.L4, false));
-            coralController.button(3).whileTrue(new DriveWithApriltag(drive, poseEstimator, 8, PhysicalConstants.DrivePositions.L4, true));
-            coralController.button(8).whileTrue(new DriveWithApriltag(drive, poseEstimator, 8, PhysicalConstants.DrivePositions.L4, false));
-            coralController.button(11).whileTrue(new DriveWithApriltag(drive, poseEstimator, 9, PhysicalConstants.DrivePositions.L4, true));
-            coralController.button(12).whileTrue(new DriveWithApriltag(drive, poseEstimator, 9, PhysicalConstants.DrivePositions.L4, false));
-            coralController.button(13).whileTrue(new DriveWithApriltag(drive, poseEstimator, 10, PhysicalConstants.DrivePositions.L4, true));
-            coralController.button(14).whileTrue(new DriveWithApriltag(drive, poseEstimator, 10, PhysicalConstants.DrivePositions.L4, false));
-            coralController.button(15).whileTrue(new DriveWithApriltag(drive, poseEstimator, 11, PhysicalConstants.DrivePositions.L4, true));
-            coralController.button(16).whileTrue(new DriveWithApriltag(drive, poseEstimator, 11, PhysicalConstants.DrivePositions.L4, false));
-        } else {
-            coralController.button(1).whileTrue(new DriveWithApriltag(drive, poseEstimator, 17, PhysicalConstants.DrivePositions.L4, true));
-            coralController.button(6).whileTrue(new DriveWithApriltag(drive, poseEstimator, 17, PhysicalConstants.DrivePositions.L4, false));
-            coralController.button(2).whileTrue(new DriveWithApriltag(drive, poseEstimator, 18, PhysicalConstants.DrivePositions.L4, true));
-            coralController.button(7).whileTrue(new DriveWithApriltag(drive, poseEstimator, 18, PhysicalConstants.DrivePositions.L4, false));
-            coralController.button(3).whileTrue(new DriveWithApriltag(drive, poseEstimator, 19, PhysicalConstants.DrivePositions.L4, true));
-            coralController.button(8).whileTrue(new DriveWithApriltag(drive, poseEstimator, 19, PhysicalConstants.DrivePositions.L4, false));
-            coralController.button(11).whileTrue(new DriveWithApriltag(drive, poseEstimator, 20, PhysicalConstants.DrivePositions.L4, true));
-            coralController.button(12).whileTrue(new DriveWithApriltag(drive, poseEstimator, 20, PhysicalConstants.DrivePositions.L4, false));
-            coralController.button(13).whileTrue(new DriveWithApriltag(drive, poseEstimator, 21, PhysicalConstants.DrivePositions.L4, true));
-            coralController.button(14).whileTrue(new DriveWithApriltag(drive, poseEstimator, 21, PhysicalConstants.DrivePositions.L4, false));
-            coralController.button(15).whileTrue(new DriveWithApriltag(drive, poseEstimator, 22, PhysicalConstants.DrivePositions.L4, true));
-            coralController.button(16).whileTrue(new DriveWithApriltag(drive, poseEstimator, 22, PhysicalConstants.DrivePositions.L4, false));
-        }
+        // // reef positions
+        // if ((DriverStation.getAlliance().isPresent() ? DriverStation.getAlliance().get() : Alliance.Red).equals(Alliance.Red)) {
+        //     coralController.button(1).whileTrue(new DriveWithApriltag(drive, poseEstimator, 4, PhysicalConstants.DrivePositions.L4, true));
+        //     coralController.button(6).whileTrue(new DriveWithApriltag(drive, poseEstimator, 4, PhysicalConstants.DrivePositions.L4, false));
+        //     coralController.button(2).whileTrue(new DriveWithApriltag(drive, poseEstimator, 7, PhysicalConstants.DrivePositions.L4, true));
+        //     coralController.button(7).whileTrue(new DriveWithApriltag(drive, poseEstimator, 7, PhysicalConstants.DrivePositions.L4, false));
+        //     coralController.button(3).whileTrue(new DriveWithApriltag(drive, poseEstimator, 8, PhysicalConstants.DrivePositions.L4, true));
+        //     coralController.button(8).whileTrue(new DriveWithApriltag(drive, poseEstimator, 8, PhysicalConstants.DrivePositions.L4, false));
+        //     coralController.button(11).whileTrue(new DriveWithApriltag(drive, poseEstimator, 9, PhysicalConstants.DrivePositions.L4, true));
+        //     coralController.button(12).whileTrue(new DriveWithApriltag(drive, poseEstimator, 9, PhysicalConstants.DrivePositions.L4, false));
+        //     coralController.button(13).whileTrue(new DriveWithApriltag(drive, poseEstimator, 10, PhysicalConstants.DrivePositions.L4, true));
+        //     coralController.button(14).whileTrue(new DriveWithApriltag(drive, poseEstimator, 10, PhysicalConstants.DrivePositions.L4, false));
+        //     coralController.button(15).whileTrue(new DriveWithApriltag(drive, poseEstimator, 11, PhysicalConstants.DrivePositions.L4, true));
+        //     coralController.button(16).whileTrue(new DriveWithApriltag(drive, poseEstimator, 11, PhysicalConstants.DrivePositions.L4, false));
+        // } else {
+        //     coralController.button(1).whileTrue(new DriveWithApriltag(drive, poseEstimator, 17, PhysicalConstants.DrivePositions.L4, true));
+        //     coralController.button(6).whileTrue(new DriveWithApriltag(drive, poseEstimator, 17, PhysicalConstants.DrivePositions.L4, false));
+        //     coralController.button(2).whileTrue(new DriveWithApriltag(drive, poseEstimator, 18, PhysicalConstants.DrivePositions.L4, true));
+        //     coralController.button(7).whileTrue(new DriveWithApriltag(drive, poseEstimator, 18, PhysicalConstants.DrivePositions.L4, false));
+        //     coralController.button(3).whileTrue(new DriveWithApriltag(drive, poseEstimator, 19, PhysicalConstants.DrivePositions.L4, true));
+        //     coralController.button(8).whileTrue(new DriveWithApriltag(drive, poseEstimator, 19, PhysicalConstants.DrivePositions.L4, false));
+        //     coralController.button(11).whileTrue(new DriveWithApriltag(drive, poseEstimator, 20, PhysicalConstants.DrivePositions.L4, true));
+        //     coralController.button(12).whileTrue(new DriveWithApriltag(drive, poseEstimator, 20, PhysicalConstants.DrivePositions.L4, false));
+        //     coralController.button(13).whileTrue(new DriveWithApriltag(drive, poseEstimator, 21, PhysicalConstants.DrivePositions.L4, true));
+        //     coralController.button(14).whileTrue(new DriveWithApriltag(drive, poseEstimator, 21, PhysicalConstants.DrivePositions.L4, false));
+        //     coralController.button(15).whileTrue(new DriveWithApriltag(drive, poseEstimator, 22, PhysicalConstants.DrivePositions.L4, true));
+        //     coralController.button(16).whileTrue(new DriveWithApriltag(drive, poseEstimator, 22, PhysicalConstants.DrivePositions.L4, false));
+        // }
 
         // branch positions
         coralController.button(4).onTrue(coralCommandCompositer.prepIntake());
@@ -207,7 +207,7 @@ public class RobotContainer {
 
     private void configureAutos(){
         autoChooser.addCmd("Back Up", () -> autoGenerator.backUp());
-        autoChooser.addRoutine("2Meter", () -> autoGenerator.twoMeter());
+        autoChooser.addRoutine("2Meter", () -> autoGenerator.test());
         autoChooser.addRoutine("1CoralL4", () -> autoGenerator.oneCoralL4());
 
         SmartDashboard.putData("AutoChooser", autoChooser);
