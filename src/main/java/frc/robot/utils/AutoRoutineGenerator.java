@@ -3,6 +3,7 @@ package frc.robot.utils;
 import choreo.auto.*;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.commands.*;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.poseEstimator.*;
@@ -23,7 +24,7 @@ public class AutoRoutineGenerator {
             poseEstimator::getPose,
             poseEstimator::resetPosition,
             drive::runAutoPosition,
-            false,
+            DriverStation.getAlliance().isPresent() ? DriverStation.getAlliance().get() == DriverStation.Alliance.Red : false,
             drive
         );
 
