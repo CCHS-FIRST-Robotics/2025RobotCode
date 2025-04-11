@@ -38,11 +38,16 @@ public final class VirtualConstants {
     public static final int ELEVATOR_CANCODER_ID = 50;
     public static final int ARM_CANCODER_ID = 51;
 
-    // DIO ports
+  
     public static final int TROUGH_SWITCH_PORT = 0;
-    public static final Matrix<N3, N1> SingleTagStdDevs = VecBuilder.fill(.5, .5, 1);
-    public static final Matrix<N3, N1> MultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
-    public static final Matrix<N3, N1> DriveStdDevs = VecBuilder.fill(0.5, 0.5, .5);
+    public static final Matrix<N3, N1> SingleTagStdDevs = VecBuilder.fill(.3, .3, 1);
+    public static final Matrix<N3, N1> MultiTagStdDevs = VecBuilder.fill(0.5, 0.5, .4);
+    public static final Matrix<N3, N1> DriveStdDevs = VecBuilder.fill(0.9, 0.9, .1);
+
+
+
+    public static final int DistanceWeight = 60; // higher means if tags are futher away they make a less difference on stddevs  30 is good starting point
+    public static final int ToFarAway = 6; // Meters at which tag distances to pose are thrown out
 
 
 }

@@ -160,17 +160,17 @@ public class CameraIOPhotonVision {
             }
 
             if (numTags == 0) {
-                // No tags visible. Default to single-tag std devs
+                // No tags visible use single-tag std devs
                 currentEstimationStdDevs = VirtualConstants.SingleTagStdDevs;
             } else {
                 // One or more tags visible, run the full heuristic.
                 avgDist /= numTags;
-                // Decrease std devs if multiple targets are visible
+                // MultiTag std devs if multiple targets are visible
                 if (numTags > 1) estStdDevs = VirtualConstants.MultiTagStdDevs;
                 // Increase std devs based on (average) distance
-                if (numTags == 1 && avgDist > 6)
+                if (numTags == 1 && avgDist > VirtualConstants.ToFarAway)
                     estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
-                else estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
+                else estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / VirtualConstants.DistanceWeight));
                 currentEstimationStdDevs = estStdDevs;
             }
         }
