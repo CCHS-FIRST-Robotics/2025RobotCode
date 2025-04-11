@@ -36,15 +36,18 @@ public class DriveWithPosition extends Command {
 
     @Override
     public void execute() {
+        System.out.println("RUNNING CHAT WE ARE RUNNING");
         drive.runPosition(targetPose);
     }
 
     @Override
     public boolean isFinished() {
+        System.out.println("FINISH TRUST FINISH");
+        // ! this doesn't seem to work correctly
         Pose2d robotPose = poseEstimator.getPose();
         return Math.abs(robotPose.getX() - targetPose.getX()) < 0.05
             && Math.abs(robotPose.getY() - targetPose.getY()) < 0.05
-            && Math.abs(robotPose.getRotation().getRotations() - targetPose.getRotation().getRotations()) < 0.05;
+            && Math.abs(robotPose.getRotation().getRotations() - targetPose.getRotation().getRotations()) < 0.01;
     }
 
     @Override
