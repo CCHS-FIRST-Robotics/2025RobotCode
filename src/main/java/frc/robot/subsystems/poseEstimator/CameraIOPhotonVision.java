@@ -82,11 +82,8 @@ public class CameraIOPhotonVision {
             Logger.recordOutput(cameraPrefix + "VisionPose2d", latestEstimatedPose.get().estimatedPose.toPose2d());
             Logger.recordOutput(cameraPrefix + "VisionPose3d", latestEstimatedPose.get().estimatedPose);
             
-            System.out.println(VisionPoses.size());
             
             for(int i=0; i <= VisionPoses.size() - 1; i++){
-                System.out.println(VisionPoses.toString());
-                System.out.println(VisionPoses.size() + "\n");
                 PoseDataEntry pose = VisionPoses.get(i);
                 Logger.recordOutput(cameraPrefix + "VisionPose" + i + "Pose2d", pose.robotPose.toPose2d());
                 Logger.recordOutput(cameraPrefix + "VisionPose" + i + "Std dev", pose.getStandardDeviation());

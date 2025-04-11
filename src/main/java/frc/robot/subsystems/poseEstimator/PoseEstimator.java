@@ -25,7 +25,7 @@ import frc.robot.constants.PhysicalConstants;
 
 public class PoseEstimator extends SubsystemBase {
     private final GyroIO gyroIO;
-    //private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
+    private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
 
  
     PhotonCamera FrontLeftCam, FrontRightCam, BackLeftCam, BackRightCam;
@@ -49,15 +49,15 @@ public class PoseEstimator extends SubsystemBase {
     ) {
         this.gyroIO = gyroIO;
 
-        FrontLeftCam = new PhotonCamera("Cam");
-        //FrontRightCam = new PhotonCamera("RightFront");
-        //BackLeftCam = new PhotonCamera("LeftRear");
-        //BackRightCam = new PhotonCamera("RightRear");
+        FrontLeftCam = new PhotonCamera("LeftFront");
+        FrontRightCam = new PhotonCamera("RightFront");
+        BackLeftCam = new PhotonCamera("LeftRear");
+        BackRightCam = new PhotonCamera("RightRear");
     
         FrontLeftEstimator = new CameraIOPhotonVision(FrontLeftCam, FrontLeftCam.getName(), PhysicalConstants.FrontLeftCamToCenter);
-        //FrontRightEstimator = new CameraIOPhotonVision(FrontRightCam, FrontRightCam.getName(), PhysicalConstants.FrontRightCamToCenter);
-        //BackLeftEstimator = new CameraIOPhotonVision(BackLeftCam, BackLeftCam.getName(), PhysicalConstants.BackLeftCamToCenter);
-        //BackRightEstimator = new CameraIOPhotonVision(BackRightCam, BackRightCam.getName(), PhysicalConstants.BackRightCamToCenter);
+        FrontRightEstimator = new CameraIOPhotonVision(FrontRightCam, FrontRightCam.getName(), PhysicalConstants.FrontRightCamToCenter);
+        BackLeftEstimator = new CameraIOPhotonVision(BackLeftCam, BackLeftCam.getName(), PhysicalConstants.BackLeftCamToCenter);
+        BackRightEstimator = new CameraIOPhotonVision(BackRightCam, BackRightCam.getName(), PhysicalConstants.BackRightCamToCenter);
         
         poseList = new ArrayList<>(4);
 
@@ -80,31 +80,37 @@ public class PoseEstimator extends SubsystemBase {
     @Override
     public void periodic() {
         FrontLeftEstimator.periodic();
-        // gyroIO.updateInputs(gyroInputs);
-        // Logger.processInputs("poseEstimator/gyro", gyroInputs);
+        gyroIO.updateInputs(gyroInputs);
+        Logger.processInputs("poseEstimator/gyro", gyroInputs);
         FrontLeftPoses = FrontLeftEstimator.getVisionPoses();
-        // FrontRightPose = FrontRightEstimator.getEstimatedRobotPose().get();
-        // BackLeftPose = BackLeftEstimator.getEstimatedRobotPose().get();
-        // BackRightPose = BackRightEstimator.getEstimatedRobotPose().get();
+        FrontRightPose = FrontRightEstimator.getVisionPoses();
+        BackLeftPose = BackLeftEstimator.getVisionPoses();
+        BackRightPose = BackRightEstimator.getVisionPoses();
         
 
         if (FrontLeftPoses != null) {
             for (PoseDataEntry pose : FrontLeftPoses){
             combinedEstimator.addVisionMeasurement(pose.getRobotPose().toPose2d(), pose.getTimestamp(), pose.getStandardDeviation());
             }
-          }
+        }
 
-        // if (FrontRightPose != null) {
-        //     poseList.add(FrontRightPose);
-        //   }
+        if (FrontRightPose != null) {
+            for (PoseDataEntry pose : FrontRightPose){
+                combinedEstimator.addVisionMeasurement(pose.getRobotPose().toPose2d(), pose.getTimestamp(), pose.getStandardDeviation());
+            }
+        }
         
-        // if (BackLeftPose != null) {
-        //     poseList.add(BackLeftPose);
-        //   }
+        if (BackLeftPose != null) {
+            for (PoseDataEntry pose : BackLeftPose){
+                combinedEstimator.addVisionMeasurement(pose.getRobotPose().toPose2d(), pose.getTimestamp(), pose.getStandardDeviation());
+            }
+        }
 
-        // if (BackRightPose != null) {
-        //     poseList.add(BackRightPose);
-        //   }
+        if (BackRightPose != null) {
+            for (PoseDataEntry pose : BackRightPose){
+                combinedEstimator.addVisionMeasurement(pose.getRobotPose().toPose2d(), pose.getTimestamp(), pose.getStandardDeviation());
+            }
+        }
 
         
 
