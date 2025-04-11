@@ -22,9 +22,9 @@ public class AutoRoutineGenerator {
     ) {
         autoFactory = new AutoFactory(
             poseEstimator::getPose,
-            poseEstimator::resetPosition, // ! might fuck up the rotation
+            poseEstimator::resetPosition,
             drive::runAutoPosition,
-            false,
+            DriverStation.getAlliance().isPresent() ? DriverStation.getAlliance().get() == DriverStation.Alliance.Red : false,
             drive
         );
 

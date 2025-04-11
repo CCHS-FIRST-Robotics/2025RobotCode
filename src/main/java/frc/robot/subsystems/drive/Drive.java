@@ -55,14 +55,9 @@ public class Drive extends SubsystemBase {
 
     private Pose2d positionSetpoint = new Pose2d();
     private Twist2d twistSetpoint = new Twist2d();
-    // manual
-    private final PIDController xPID = new PIDController(5, 0, 0);
-    private final PIDController yPID = new PIDController(5, 0, 0);
+    private final PIDController xPID = new PIDController(20, 0, 0);
+    private final PIDController yPID = new PIDController(20, 0, 0);
     private final PIDController oPID = new PIDController(5, 0, 0);
-    // choreo
-    // private final PIDController xController = new PIDController(50, 0, 0);
-    // private final PIDController yController = new PIDController(50, 0, 0);
-    // private final PIDController oController = new PIDController(30, 0, 0);
     
     // ————— velocity ————— //
     private ChassisSpeeds speeds = new ChassisSpeeds();
@@ -175,7 +170,6 @@ public class Drive extends SubsystemBase {
     }
 
     public void runAutoPosition(SwerveSample sample) {
-        System.out.println("RUNNING AUTO POSITION");
         controlMode = DRIVE_MODE.POSITION;
         positionSetpoint = sample.getPose();
         twistSetpoint = sample.getChassisSpeeds().toTwist2d(0.02);

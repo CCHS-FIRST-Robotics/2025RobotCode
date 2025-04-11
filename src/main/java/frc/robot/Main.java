@@ -11,15 +11,15 @@ import edu.wpi.first.wpilibj.RobotBase;
  * ! make elevator faster
  * ! tune arm without motionmagic
  * 
- * ! check hitting 6, driving, and then hitting 6 again
- * ! after that's fixed, try hitting 6 until it doesn't see the tag and then driving and then hitting 6 again
  * 
+ * ! alliance flipping will need to exist when vision is a thing
+ * ! maybe just add 180 to gyro output when red alliance?
  * 
+ * ! test using alliance flipping while the gyro reads 180
  * 
+ * ! it would be cool to do the alliance flipping / FOC in drivewithvelocity
  * 
- * 
- * ! next, try changing alliance color and stuff and see if adding the lambda code will make it go backwards like at the comp
- * ! bruh I could have totally done that in sim
+ * ! go through all uses of angles in code and see if it's -pi to pi
  * 
  * to do: 
  * * things to keep in mind: 
