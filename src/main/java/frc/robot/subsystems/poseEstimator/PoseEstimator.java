@@ -1,9 +1,8 @@
 package frc.robot.subsystems.poseEstimator;
 
-import static edu.wpi.first.units.Units.*;
+
 
 import org.littletonrobotics.junction.Logger;
-import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 
 
@@ -12,7 +11,6 @@ import org.photonvision.targeting.PhotonPipelineResult;
 
 import edu.wpi.first.wpilibj2.command.*;
 
-import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.*;
 
@@ -21,6 +19,7 @@ import edu.wpi.first.wpilibj.Timer;
 import java.util.*;
 
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.poseEstimator.CameraIOPhotonVision.PoseDataEntry;
 import frc.robot.constants.PhysicalConstants;
 
 
@@ -31,7 +30,7 @@ public class PoseEstimator extends SubsystemBase {
  
     PhotonCamera FrontLeftCam, FrontRightCam, BackLeftCam, BackRightCam;
     
-    EstimatedRobotPose FrontLeftPose, FrontRightPose, BackLeftPose, BackRightPose;
+    List<PoseDataEntry> FrontLeftPoses, FrontRightPose, BackLeftPose, BackRightPose;
     PhotonPipelineResult FrontLeftEstimatorResult, FrontRightEstimatorResult ,BackLeftEstimatorResult ,BackRightEstimatorResult;
     CameraIOPhotonVision FrontLeftEstimator, FrontRightEstimator,BackLeftEstimator ,BackRightEstimator;
     List<Pose3d> poseList;
@@ -83,14 +82,16 @@ public class PoseEstimator extends SubsystemBase {
         FrontLeftEstimator.periodic();
         // gyroIO.updateInputs(gyroInputs);
         // Logger.processInputs("poseEstimator/gyro", gyroInputs);
-        FrontLeftPose = FrontLeftEstimator.getEstimatedRobotPose();
+        FrontLeftPoses = FrontLeftEstimator.getVisionPoses();
         // FrontRightPose = FrontRightEstimator.getEstimatedRobotPose().get();
         // BackLeftPose = BackLeftEstimator.getEstimatedRobotPose().get();
         // BackRightPose = BackRightEstimator.getEstimatedRobotPose().get();
         
 
-        if (FrontLeftPose != null && FrontLeftPose.estimatedPose != new Pose3d()) {
-            combinedEstimator.addVisionMeasurement(FrontLeftPose.estimatedPose.toPose2d(), FrontLeftPose.timestampSeconds, FrontLeftEstimator.getEstimationStdDevs());
+        if (FrontLeftPoses != null) {
+            for (PoseDataEntry pose : FrontLeftPoses){
+            combinedEstimator.addVisionMeasurement(pose.getRobotPose().toPose2d(), pose.getTimestamp(), pose.getStandardDeviation());
+            }
           }
 
         // if (FrontRightPose != null) {

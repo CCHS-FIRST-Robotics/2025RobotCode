@@ -1,5 +1,6 @@
 package frc.robot.subsystems.poseEstimator;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,7 +9,6 @@ import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
-import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.Matrix;
@@ -27,7 +27,37 @@ public class CameraIOPhotonVision {
     private final String cameraName;
     private Optional<EstimatedRobotPose> latestEstimatedPose = Optional.empty();
     private final String cameraPrefix;
-    private Matrix<N3, N1> currentEstimationStdDevs = VirtualConstants.SingleTagStdDevs; 
+    private Matrix<N3, N1> currentEstimationStdDevs = VirtualConstants.SingleTagStdDevs;
+    private final List<PoseDataEntry> VisionPoses = new ArrayList<>();
+
+    public class PoseDataEntry {
+        private final Pose3d robotPose;
+        private final double timestamp;
+        private final Matrix<N3, N1> standardDeviation;
+
+        public PoseDataEntry(Pose3d robotPose, double timestamp, Matrix<N3, N1> standardDeviation) {
+            this.robotPose = robotPose;
+            this.timestamp = timestamp;
+            this.standardDeviation = standardDeviation;
+        }
+
+        public Pose3d getRobotPose() {
+            return robotPose;
+        }
+
+        public double getTimestamp() {
+            return timestamp;
+        }
+
+        public Matrix<N3, N1> getStandardDeviation() {
+            return standardDeviation;
+        }
+
+        @Override
+        public String toString() {
+            return "[" + robotPose + ", timestamp=" + timestamp + ", stddev=" + standardDeviation + "]";
+        }
+    }
 
     public CameraIOPhotonVision(
             PhotonCamera camera,
@@ -38,7 +68,7 @@ public class CameraIOPhotonVision {
         this.poseEstimator = new PhotonPoseEstimator(
                 PhysicalConstants.TagLayout,
                 PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-                new Transform3d() 
+                cameraTransform // Use the provided camera transform
         );
         this.poseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
         this.cameraPrefix = "Vision/" + cameraName + "/";
@@ -47,32 +77,57 @@ public class CameraIOPhotonVision {
 
     public void periodic() {
         Logger.recordOutput(cameraPrefix + "connected", camera.isConnected());
-
-        PhotonPipelineResult latestResult = camera.getLatestResult();
-        latestEstimatedPose = poseEstimator.update(latestResult);
-        updateEstimationStdDevs(latestEstimatedPose, latestResult.getTargets());
-
+        latestEstimatedPose = getEstimatedGlobalPose(); 
         if (latestEstimatedPose.isPresent()) {
             Logger.recordOutput(cameraPrefix + "VisionPose2d", latestEstimatedPose.get().estimatedPose.toPose2d());
             Logger.recordOutput(cameraPrefix + "VisionPose3d", latestEstimatedPose.get().estimatedPose);
+            
+            System.out.println(VisionPoses.size());
+            
+            for(int i=0; i <= VisionPoses.size() - 1; i++){
+                System.out.println(VisionPoses.toString());
+                System.out.println(VisionPoses.size() + "\n");
+                PoseDataEntry pose = VisionPoses.get(i);
+                Logger.recordOutput(cameraPrefix + "VisionPose" + i + "Pose2d", pose.robotPose.toPose2d());
+                Logger.recordOutput(cameraPrefix + "VisionPose" + i + "Std dev", pose.getStandardDeviation());
+                Logger.recordOutput(cameraPrefix + "VisionPose" + i + "time", pose.getTimestamp());
+                
+            }
         } else {
             Logger.recordOutput(cameraPrefix + "VisionPose2d", new Pose2d());
             Logger.recordOutput(cameraPrefix + "VisionPose3d", new Pose3d());
         }
 
-        Logger.recordOutput(cameraPrefix + "NumTags", latestResult.getTargets().size());
-        Logger.recordOutput(cameraPrefix + "Timestamp", latestResult.getTimestampSeconds());
-        System.out.println("StdDEV" + getEstimationStdDevs());
         Logger.recordOutput(cameraPrefix + "StdDevx", getEstimationStdDevs().get(0, 0));
         Logger.recordOutput(cameraPrefix + "StdDevy", getEstimationStdDevs().get(1, 0));
         Logger.recordOutput(cameraPrefix + "StdDevz", getEstimationStdDevs().get(2, 0));
     }
 
     public EstimatedRobotPose getEstimatedRobotPose() {
-        if (latestEstimatedPose.isPresent()){
+        if (latestEstimatedPose.isPresent()) {
             return latestEstimatedPose.get();
         }
         return null;
+    }
+
+   
+    private Optional<EstimatedRobotPose> getEstimatedGlobalPose() {
+        Optional<EstimatedRobotPose> visionEst = Optional.empty();
+        VisionPoses.clear();
+        for (var change : camera.getAllUnreadResults()) {
+            Optional<EstimatedRobotPose> currentEst = poseEstimator.update(change);
+            updateEstimationStdDevs(currentEst, change.getTargets());
+            if (currentEst.isPresent()) {
+                visionEst = currentEst; // Update the latest estimate
+                VisionPoses.add(new PoseDataEntry(currentEst.get().estimatedPose, change.getTimestampSeconds(), getEstimationStdDevs()));
+            }
+        }
+        return visionEst;
+    }
+
+    // Public method to get the history of vision pose data
+    public List<PoseDataEntry> getVisionPoses() {
+        return VisionPoses;
     }
 
     /**
