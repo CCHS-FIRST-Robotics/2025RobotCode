@@ -6,7 +6,6 @@ import org.littletonrobotics.junction.Logger;
 import org.photonvision.PhotonCamera;
 
 
-import org.photonvision.targeting.PhotonPipelineResult;
 
 
 import edu.wpi.first.wpilibj2.command.*;
@@ -29,15 +28,12 @@ public class PoseEstimator extends SubsystemBase {
 
  
     PhotonCamera FrontLeftCam, FrontRightCam, BackLeftCam, BackRightCam;
-    
     List<PoseDataEntry> FrontLeftPoses, FrontRightPose, BackLeftPose, BackRightPose;
-    PhotonPipelineResult FrontLeftEstimatorResult, FrontRightEstimatorResult ,BackLeftEstimatorResult ,BackRightEstimatorResult;
     CameraIOPhotonVision FrontLeftEstimator, FrontRightEstimator,BackLeftEstimator ,BackRightEstimator;
-    List<Pose3d> poseList;
+    
 
     private Pose2d fieldPosition = new Pose2d();
     private final SwerveDrivePoseEstimator odometryEstimator;
-    private Pose2d visionEstimate;
     private final SwerveDrivePoseEstimator combinedEstimator;
 
     private final Drive drive;
@@ -59,7 +55,7 @@ public class PoseEstimator extends SubsystemBase {
         BackLeftEstimator = new CameraIOPhotonVision(BackLeftCam, BackLeftCam.getName(), PhysicalConstants.BackLeftCamToCenter);
         BackRightEstimator = new CameraIOPhotonVision(BackRightCam, BackRightCam.getName(), PhysicalConstants.BackRightCamToCenter);
         
-        poseList = new ArrayList<>(4);
+        
 
         odometryEstimator = new SwerveDrivePoseEstimator(
             PhysicalConstants.KINEMATICS, 
@@ -80,6 +76,9 @@ public class PoseEstimator extends SubsystemBase {
     @Override
     public void periodic() {
         FrontLeftEstimator.periodic();
+        FrontRightEstimator.periodic();
+        BackLeftEstimator.periodic();
+        BackRightEstimator.periodic();
         gyroIO.updateInputs(gyroInputs);
         Logger.processInputs("poseEstimator/gyro", gyroInputs);
         FrontLeftPoses = FrontLeftEstimator.getVisionPoses();
@@ -133,7 +132,6 @@ public class PoseEstimator extends SubsystemBase {
             getRawYaw(),
             drive.getModulePositions()
         );
-        Logger.recordOutput("outputs/poseEstimator/poses/visionPoses/visionPoseEstimate", visionEstimate);
         Logger.recordOutput("outputs/poseEstimator/poses/visionPoses/combinedPoseEstimate", combinedEstimator.getEstimatedPosition());
 
         
@@ -152,10 +150,6 @@ public class PoseEstimator extends SubsystemBase {
         return odometryEstimator.getEstimatedPosition();
     }
 
-    @SuppressWarnings("unused")
-    private Pose2d getVisionPose() {
-        return visionEstimate;
-    }
 
     @SuppressWarnings("unused")
     private Pose2d getCombinedPose() {
