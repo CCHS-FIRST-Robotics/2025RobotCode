@@ -45,8 +45,8 @@ public class PoseEstimator extends SubsystemBase {
     ) {
         this.gyroIO = gyroIO;
 
-        FrontLeftCam = new PhotonCamera("LeftFront");
-        FrontRightCam = new PhotonCamera("RightFront");
+        FrontLeftCam = new PhotonCamera("Cam");
+        FrontRightCam = new PhotonCamera("Cam2");
         BackLeftCam = new PhotonCamera("LeftRear");
         BackRightCam = new PhotonCamera("RightRear");
     

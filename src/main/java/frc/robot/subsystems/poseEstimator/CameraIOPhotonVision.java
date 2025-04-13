@@ -79,27 +79,34 @@ public class CameraIOPhotonVision {
 
     public void periodic() {
         Logger.recordOutput(cameraPrefix + "connected", camera.isConnected());
-        latestEstimatedPose = getEstimatedGlobalPose(); 
+        latestEstimatedPose = getEstimatedGlobalPose();
+        
         if (latestEstimatedPose.isPresent()) {
+            List<PhotonTrackedTarget> targets = latestEstimatedPose.get().targetsUsed;
+            for(int j=0; j<= targets.size() -1; j++){
+                Logger.recordOutput(cameraPrefix + " " + j + " tag seen ID", targets.get(j).fiducialId);
+                Logger.recordOutput(cameraPrefix + " " + j + " tag seen Transform3d", targets.get(j).getBestCameraToTarget());
+            }
             Logger.recordOutput(cameraPrefix + "VisionPose2d", latestEstimatedPose.get().estimatedPose.toPose2d());
             Logger.recordOutput(cameraPrefix + "VisionPose3d", latestEstimatedPose.get().estimatedPose);
-            
-            
-            for(int i=0; i <= VisionPoses.size() - 1; i++){
-                PoseDataEntry pose = VisionPoses.get(i);
-                Logger.recordOutput(cameraPrefix + "VisionPose" + i + "Pose2d", pose.robotPose.toPose2d());
-                Logger.recordOutput(cameraPrefix + "VisionPose" + i + "Std dev", pose.getStandardDeviation());
-                Logger.recordOutput(cameraPrefix + "VisionPose" + i + "time", pose.getTimestamp());
-                
-            }
-        } else {
-            Logger.recordOutput(cameraPrefix + "VisionPose2d", new Pose2d());
-            Logger.recordOutput(cameraPrefix + "VisionPose3d", new Pose3d());
         }
+            
+         //! didnt need these for troubleshooting but will leave for now   
+        //     for(int i=0; i <= VisionPoses.size() - 1; i++){
+        //         PoseDataEntry pose = VisionPoses.get(i);
+        //         Logger.recordOutput(cameraPrefix + "VisionPose" + i + "Pose2d", pose.robotPose.toPose2d());
+        //         Logger.recordOutput(cameraPrefix + "VisionPose" + i + "Std dev", pose.getStandardDeviation());
+        //         Logger.recordOutput(cameraPrefix + "VisionPose" + i + "time", pose.getTimestamp());
+                
+        //     }
+        // } else {
+        //     Logger.recordOutput(cameraPrefix + "VisionPose2d", new Pose2d());
+        //     Logger.recordOutput(cameraPrefix + "VisionPose3d", new Pose3d());
+        // }
 
-        Logger.recordOutput(cameraPrefix + "StdDevx", getEstimationStdDevs().get(0, 0));
-        Logger.recordOutput(cameraPrefix + "StdDevy", getEstimationStdDevs().get(1, 0));
-        Logger.recordOutput(cameraPrefix + "StdDevz", getEstimationStdDevs().get(2, 0));
+        // Logger.recordOutput(cameraPrefix + "StdDevx", getEstimationStdDevs().get(0, 0));
+        // Logger.recordOutput(cameraPrefix + "StdDevy", getEstimationStdDevs().get(1, 0));
+        // Logger.recordOutput(cameraPrefix + "StdDevz", getEstimationStdDevs().get(2, 0));
     }
 
     public EstimatedRobotPose getEstimatedRobotPose() {
