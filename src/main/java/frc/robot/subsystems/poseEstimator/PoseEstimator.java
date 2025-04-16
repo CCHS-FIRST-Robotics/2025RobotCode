@@ -20,6 +20,7 @@ import java.util.*;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.poseEstimator.CameraIOPhotonVision.PoseDataEntry;
 import frc.robot.constants.PhysicalConstants;
+import frc.robot.constants.VirtualConstants;
 
 
 public class PoseEstimator extends SubsystemBase {
@@ -68,7 +69,9 @@ public class PoseEstimator extends SubsystemBase {
             PhysicalConstants.KINEMATICS,
             new Rotation2d(),
             drive.getModulePositions(),
-            new Pose2d()
+            new Pose2d(),
+             VirtualConstants.DriveStdDevs,
+            VirtualConstants.SingleTagStdDevs
         );
             
         this.drive = drive;

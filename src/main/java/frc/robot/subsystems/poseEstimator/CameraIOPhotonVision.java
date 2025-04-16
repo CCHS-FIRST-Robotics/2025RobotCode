@@ -15,14 +15,15 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
-
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
-
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
-
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.networktables.NetworkTable;
 import frc.robot.constants.PhysicalConstants;
 import frc.robot.constants.VirtualConstants;
 
@@ -32,6 +33,7 @@ public class CameraIOPhotonVision {
     private final String cameraName;
     private Optional<EstimatedRobotPose> latestEstimatedPose = Optional.empty();
     private final String cameraPrefix;
+    private final SwerveDrivePoseEstimator VisionEstimator;
     private Matrix<N3, N1> currentEstimationStdDevs = VirtualConstants.SingleTagStdDevs;
     private final List<PoseDataEntry> VisionPoses = new ArrayList<>();
 
@@ -73,26 +75,39 @@ public class CameraIOPhotonVision {
         this.poseEstimator = new PhotonPoseEstimator(
                 PhysicalConstants.TagLayout,
                 PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-                cameraTransform
+                new Transform3d()
         );
         this.poseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
-        this.cameraPrefix = "output/Vision/" + cameraName + "/";
+        this.VisionEstimator = new SwerveDrivePoseEstimator(
+            PhysicalConstants.KINEMATICS, 
+            new Rotation2d(), 
+            getModulePositions(), 
+            new Pose2d(),
+            VecBuilder.fill(99999, 99999, 99999),
+            VirtualConstants.SingleTagStdDevs
+        );
+        this.cameraPrefix = "outputs/Vision/" + cameraName + "/";
         System.out.println(cameraName + " Camera Initialized");
     }
-
+    
     public void periodic() {
+        VisionEstimator.update(new Rotation2d(), getModulePositions());
         Logger.recordOutput(cameraPrefix + "connected", camera.isConnected());
         UpdateVision();
         
+
+        for (PoseDataEntry pose : VisionPoses){
+            VisionEstimator.addVisionMeasurement(pose.getRobotPose().toPose2d(), pose.getTimestamp(), pose.getStandardDeviation());
+        }
         if (latestEstimatedPose.isPresent()) {
             List<PhotonTrackedTarget> targets = latestEstimatedPose.get().targetsUsed;
+        
             for(int j=0; j<= targets.size() -1; j++){
                 Logger.recordOutput(cameraPrefix + " " + j + " tag seen/ID", targets.get(j).fiducialId);
                 Logger.recordOutput(cameraPrefix + " " + j + " tag seen/Transform3d", targets.get(j).getBestCameraToTarget());
                 Logger.recordOutput(cameraPrefix + " " + j + " tag seen/Ambugity", targets.get(j).getPoseAmbiguity());
             }
-            Logger.recordOutput(cameraPrefix + "VisionPose2d", latestEstimatedPose.get().estimatedPose.toPose2d());
-            Logger.recordOutput(cameraPrefix + "VisionPose3d", latestEstimatedPose.get().estimatedPose);
+            Logger.recordOutput(cameraPrefix + "VisionPose2d", VisionEstimator.getEstimatedPosition());
         }
             
          //! didnt need these for troubleshooting but will leave for now   
@@ -127,12 +142,12 @@ public class CameraIOPhotonVision {
             Optional<EstimatedRobotPose> currentEst = poseEstimator.update(result);
             updateEstimationStdDevs(currentEst, result.getTargets());
             if (currentEst.isPresent()) {
+                latestEstimatedPose = currentEst; // Update the latest estimate
                 VisionPoses.add(new PoseDataEntry(currentEst.get().estimatedPose, result.getTimestampSeconds(), getEstimationStdDevs()));
-            
+            }
         }
-    
+
     }
-}
 
 
     public List<PoseDataEntry> getVisionPoses() {
@@ -199,6 +214,21 @@ public class CameraIOPhotonVision {
         Pose2d pose = robotpose.estimatedPose.toPose2d();
         return pose.getX() > 0 && pose.getY() > 0 && pose.getX() < PhysicalConstants.TagLayout.getFieldLength() && pose.getY() < PhysicalConstants.TagLayout.getFieldWidth();
     }
+
+
+    private SwerveModulePosition[] getModulePositions() {
+       SwerveModulePosition moduleposit = new SwerveModulePosition();
+       SwerveModulePosition[] ret = new SwerveModulePosition[4];
+       for(int i = 0; i < 4; i++){
+            ret[i] = moduleposit;
+       }
+       return ret;
+
+       
+    }
+
+
+
 
 
 
