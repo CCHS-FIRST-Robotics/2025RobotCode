@@ -38,8 +38,8 @@ public final class VirtualConstants {
 
   
     public static final int TROUGH_SWITCH_PORT = 0;
-    public static final Matrix<N3, N1> SingleTagStdDevs = VecBuilder.fill(.3, .3, 1);
-    public static final Matrix<N3, N1> MultiTagStdDevs = VecBuilder.fill(0.5, 0.5, .4);
+    public static final Matrix<N3, N1> SingleTagStdDevs = VecBuilder.fill(.8, .8, 2);
+    public static final Matrix<N3, N1> MultiTagStdDevs = VecBuilder.fill(0.2, 0.2, .4);
     public static final Matrix<N3, N1> DriveStdDevs = VecBuilder.fill(0.9, 0.9, .1);
 
 
