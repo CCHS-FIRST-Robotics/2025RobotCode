@@ -15,9 +15,12 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+
 import edu.wpi.first.math.geometry.Transform3d;
+
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import frc.robot.constants.PhysicalConstants;
@@ -73,19 +76,20 @@ public class CameraIOPhotonVision {
                 cameraTransform
         );
         this.poseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
-        this.cameraPrefix = "Vision/" + cameraName + "/";
+        this.cameraPrefix = "output/Vision/" + cameraName + "/";
         System.out.println(cameraName + " Camera Initialized");
     }
 
     public void periodic() {
         Logger.recordOutput(cameraPrefix + "connected", camera.isConnected());
-        latestEstimatedPose = getEstimatedGlobalPose();
+        UpdateVision();
         
         if (latestEstimatedPose.isPresent()) {
             List<PhotonTrackedTarget> targets = latestEstimatedPose.get().targetsUsed;
             for(int j=0; j<= targets.size() -1; j++){
-                Logger.recordOutput(cameraPrefix + " " + j + " tag seen ID", targets.get(j).fiducialId);
-                Logger.recordOutput(cameraPrefix + " " + j + " tag seen Transform3d", targets.get(j).getBestCameraToTarget());
+                Logger.recordOutput(cameraPrefix + " " + j + " tag seen/ID", targets.get(j).fiducialId);
+                Logger.recordOutput(cameraPrefix + " " + j + " tag seen/Transform3d", targets.get(j).getBestCameraToTarget());
+                Logger.recordOutput(cameraPrefix + " " + j + " tag seen/Ambugity", targets.get(j).getPoseAmbiguity());
             }
             Logger.recordOutput(cameraPrefix + "VisionPose2d", latestEstimatedPose.get().estimatedPose.toPose2d());
             Logger.recordOutput(cameraPrefix + "VisionPose3d", latestEstimatedPose.get().estimatedPose);
@@ -117,19 +121,18 @@ public class CameraIOPhotonVision {
     }
 
    
-    private Optional<EstimatedRobotPose> getEstimatedGlobalPose() {
-        Optional<EstimatedRobotPose> visionEst = Optional.empty();
+    private void UpdateVision() {
         VisionPoses.clear();
-        for (var change : camera.getAllUnreadResults()) {
-            Optional<EstimatedRobotPose> currentEst = poseEstimator.update(change);
-            updateEstimationStdDevs(currentEst, change.getTargets());
+        for (var result : camera.getAllUnreadResults()) {
+            Optional<EstimatedRobotPose> currentEst = poseEstimator.update(result);
+            updateEstimationStdDevs(currentEst, result.getTargets());
             if (currentEst.isPresent()) {
-                visionEst = currentEst; // Update the latest estimate
-                VisionPoses.add(new PoseDataEntry(currentEst.get().estimatedPose, change.getTimestampSeconds(), getEstimationStdDevs()));
-            }
+                VisionPoses.add(new PoseDataEntry(currentEst.get().estimatedPose, result.getTimestampSeconds(), getEstimationStdDevs()));
+            
         }
-        return visionEst;
+    
     }
+}
 
 
     public List<PoseDataEntry> getVisionPoses() {
@@ -196,4 +199,8 @@ public class CameraIOPhotonVision {
         Pose2d pose = robotpose.estimatedPose.toPose2d();
         return pose.getX() > 0 && pose.getY() > 0 && pose.getX() < PhysicalConstants.TagLayout.getFieldLength() && pose.getY() < PhysicalConstants.TagLayout.getFieldWidth();
     }
+
+
+
+
 }
