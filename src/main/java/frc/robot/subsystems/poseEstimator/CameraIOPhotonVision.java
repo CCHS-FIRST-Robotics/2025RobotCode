@@ -23,7 +23,6 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.networktables.NetworkTable;
 import frc.robot.constants.PhysicalConstants;
 import frc.robot.constants.VirtualConstants;
 
@@ -69,19 +68,20 @@ public class CameraIOPhotonVision {
     public CameraIOPhotonVision(
             PhotonCamera camera,
             String cameraName,
-            Transform3d cameraTransform) {
+            Transform3d cameraTransform) 
+        {
         this.camera = camera;
         this.cameraName = cameraName;
         this.poseEstimator = new PhotonPoseEstimator(
                 PhysicalConstants.TagLayout,
                 PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-                new Transform3d()
+                cameraTransform
         );
         this.poseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
-        this.VisionEstimator = new SwerveDrivePoseEstimator(
+        this.VisionEstimator = new SwerveDrivePoseEstimator( //! sketchy but doesnt use swerve drive data(stddevs to high) so its just a visionePoseEstimator
             PhysicalConstants.KINEMATICS, 
-            new Rotation2d(), 
-            getModulePositions(), 
+            new Rotation2d(),
+            getModulePositions(),
             new Pose2d(),
             VecBuilder.fill(99999, 99999, 99999),
             VirtualConstants.SingleTagStdDevs
@@ -128,12 +128,6 @@ public class CameraIOPhotonVision {
         // Logger.recordOutput(cameraPrefix + "StdDevz", getEstimationStdDevs().get(2, 0));
     }
 
-    public EstimatedRobotPose getEstimatedRobotPose() {
-        if (latestEstimatedPose.isPresent()) {
-            return latestEstimatedPose.get();
-        }
-        return null;
-    }
 
    
     private void UpdateVision() {
