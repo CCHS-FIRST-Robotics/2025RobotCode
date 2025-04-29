@@ -53,20 +53,20 @@ public final class PhysicalConstants {
     // ————— poseEstimator constants ————— //
 
     public static final Transform3d FrontLeftCamToCenter = new Transform3d(
-        new Translation3d(Units.inchesToMeters(0), Units.inchesToMeters(2.75), Units.inchesToMeters(.1)),
-        new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(-5), Units.degreesToRadians(0))
+        new Translation3d(Units.inchesToMeters(12), Units.inchesToMeters(-12), Units.inchesToMeters(0)),
+        new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(-5), Units.degreesToRadians(45))
     );
     public static final Transform3d FrontRightCamToCenter = new Transform3d(
-        new Translation3d(Units.inchesToMeters(0), Units.inchesToMeters(0), Units.inchesToMeters(0)),
-        new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(0))
+        new Translation3d(Units.inchesToMeters(12), Units.inchesToMeters(12), Units.inchesToMeters(0)),
+        new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(-45))
     );
     public static final Transform3d BackLeftCamToCenter = new Transform3d(
-        new Translation3d(Units.inchesToMeters(-10), Units.inchesToMeters(4.25), Units.inchesToMeters(2)),
-        new Rotation3d(Units.degreesToRadians(5.5), Units.degreesToRadians(-20), Units.degreesToRadians(160))
+        new Translation3d(Units.inchesToMeters(-12), Units.inchesToMeters(12), Units.inchesToMeters(0)),
+        new Rotation3d(Units.degreesToRadians(5.5), Units.degreesToRadians(-20), Units.degreesToRadians(45))
     );
     public static final Transform3d BackRightCamToCenter = new Transform3d(
-        new Translation3d(Units.inchesToMeters(-10), Units.inchesToMeters(-4.25), Units.inchesToMeters(2)),
-        new Rotation3d(Units.degreesToRadians(5.5), Units.degreesToRadians(-20), Units.degreesToRadians(-160))
+        new Translation3d(Units.inchesToMeters(-12), Units.inchesToMeters(-12), Units.inchesToMeters(0)),
+        new Rotation3d(Units.degreesToRadians(5.5), Units.degreesToRadians(-20), Units.degreesToRadians(-45))
     );
     public static final AprilTagFieldLayout TagLayout =
                 AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);

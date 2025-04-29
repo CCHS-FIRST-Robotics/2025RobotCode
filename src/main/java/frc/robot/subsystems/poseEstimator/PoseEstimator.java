@@ -47,10 +47,10 @@ public class PoseEstimator extends SubsystemBase {
     ) {
         this.gyroIO = gyroIO;
 
-        FrontLeftCam = new PhotonCamera("Cam");
-        FrontRightCam = new PhotonCamera("Cam2");
-        BackLeftCam = new PhotonCamera("LeftRear");
-        BackRightCam = new PhotonCamera("RightRear");
+        FrontLeftCam = new PhotonCamera("FrontLeft");
+        FrontRightCam = new PhotonCamera("FrontRight");
+        BackLeftCam = new PhotonCamera("BackLeft");
+        BackRightCam = new PhotonCamera("BackRight");
     
         FrontLeftEstimator = new CameraIOPhotonVision(FrontLeftCam, FrontLeftCam.getName(), PhysicalConstants.FrontLeftCamToCenter);
         FrontRightEstimator = new CameraIOPhotonVision(FrontRightCam, FrontRightCam.getName(), PhysicalConstants.FrontRightCamToCenter);
