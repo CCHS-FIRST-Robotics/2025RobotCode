@@ -4,9 +4,7 @@ package frc.robot.subsystems.poseEstimator;
 
 import org.littletonrobotics.junction.Logger;
 import org.photonvision.PhotonCamera;
-
-
-
+import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 
 import edu.wpi.first.wpilibj2.command.*;
 
@@ -162,6 +160,15 @@ public class PoseEstimator extends SubsystemBase {
 
     public Pose2d getPose() {
         return getOdometryPose();
+    }
+
+    public void SetFallbackStrategy(PoseStrategy posestrat) {
+        FrontLeftEstimator.FallbackStrategy(posestrat);
+        FrontRightEstimator.FallbackStrategy(posestrat);
+        BackLeftEstimator.FallbackStrategy(posestrat);
+        BackRightEstimator.FallbackStrategy(posestrat);
+
+
     }
 
     public Rotation2d getRawYaw() {

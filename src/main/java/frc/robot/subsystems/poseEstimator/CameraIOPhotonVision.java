@@ -23,6 +23,7 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.constants.PhysicalConstants;
 import frc.robot.constants.VirtualConstants;
 
@@ -41,6 +42,7 @@ public class CameraIOPhotonVision {
         private final double timestamp;
         private final Matrix<N3, N1> standardDeviation;
 
+        //! DIFFERENT CLASS
         public PoseDataEntry(Pose3d robotPose, double timestamp, Matrix<N3, N1> standardDeviation) {
             this.robotPose = robotPose;
             this.timestamp = timestamp;
@@ -64,6 +66,7 @@ public class CameraIOPhotonVision {
             return "[" + robotPose + ", timestamp=" + timestamp + ", stddev=" + standardDeviation + "]";
         }
     }
+    //! Class ends 
 
     public CameraIOPhotonVision(
             PhotonCamera camera,
@@ -77,15 +80,19 @@ public class CameraIOPhotonVision {
                 PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
                 cameraTransform
         );
-        this.poseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+        this.poseEstimator.setMultiTagFallbackStrategy(PoseStrategy.PNP_DISTANCE_TRIG_SOLVE); // play with this but start game with lowest ambugity for when disabled.
         this.VisionEstimator = new SwerveDrivePoseEstimator( //! sketchy but doesnt use swerve drive data(stddevs to high) so its just a visionePoseEstimator
             PhysicalConstants.KINEMATICS, 
             new Rotation2d(),
             getModulePositions(),
             new Pose2d(),
-            VecBuilder.fill(99999, 99999, 99999),
+            VecBuilder.fill(999999, 999999, 999999),
             VirtualConstants.SingleTagStdDevs
+        
         );
+        // Hit the undocumented Photon Turbo Button™
+        // https://github.com/PhotonVision/photonvision/pull/1662
+        NetworkTableInstance.getDefault().getBooleanTopic("/photonvision/use_new_cscore_frametime").publish().set(true);
         this.cameraPrefix = "outputs/Vision/" + cameraName + "/";
         System.out.println(cameraName + " Camera Initialized");
     }
@@ -141,6 +148,11 @@ public class CameraIOPhotonVision {
             }
         }
 
+    }
+
+
+    public void FallbackStrategy(PoseStrategy posestrat) {
+        poseEstimator.setMultiTagFallbackStrategy(posestrat);
     }
 
 

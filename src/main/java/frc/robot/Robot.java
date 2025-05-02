@@ -14,6 +14,7 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.constants.VirtualConstants; 
+import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 
 public class Robot extends LoggedRobot {
     private RobotContainer robotContainer;
@@ -87,7 +88,7 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void simulationInit() {}
-
+    
     @Override
     public void simulationPeriodic() {}
 }
