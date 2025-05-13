@@ -4,6 +4,11 @@
 
 package frc.robot.constants;
 
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
+
 public final class VirtualConstants {
     public static final double PERIOD = 0.02;
     public static enum ROBOT_MODE {

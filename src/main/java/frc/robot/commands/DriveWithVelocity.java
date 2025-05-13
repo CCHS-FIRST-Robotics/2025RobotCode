@@ -65,7 +65,7 @@ public class DriveWithVelocity extends Command {
             linearVelocity.getX() * PhysicalConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond),
             -linearVelocity.getY() * PhysicalConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond), // chassisspeeds is flipped
             -angularVelocity * PhysicalConstants.MAX_ALLOWED_ANGULAR_SPEED.in(RadiansPerSecond), // chassisspeeds is flipped
-            poseEstimator.getRawYaw()
+            poseEstimator.getPose().getRotation() // ! changed from rawYaw
         );
 
         // clamp everything between max and min possible accels

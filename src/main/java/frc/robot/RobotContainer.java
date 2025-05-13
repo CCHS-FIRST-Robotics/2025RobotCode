@@ -17,6 +17,10 @@ import frc.robot.commands.*;
 import frc.robot.constants.*;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.poseEstimator.*;
+import frc.robot.subsystems.poseEstimator.odometry.GyroIO;
+import frc.robot.subsystems.poseEstimator.odometry.GyroIOReal;
+import frc.robot.subsystems.poseEstimator.vision.CameraIO;
+import frc.robot.subsystems.poseEstimator.vision.CameraIOJetson;
 import frc.robot.subsystems.coralIO.*;
 import frc.robot.utils.*;
 
@@ -198,7 +202,7 @@ public class RobotContainer {
         );
     }
 
-    private void configureAutos(){
+    private void configureAutos() {
         autoChooser.addRoutine("Test", () -> autoGenerator.test());
         autoChooser.addCmd("Back Up", () -> autoGenerator.backUp());
         autoChooser.addRoutine("1CoralL4", () -> autoGenerator.oneCoralL4());
@@ -206,7 +210,7 @@ public class RobotContainer {
         SmartDashboard.putData("AutoChooser", autoChooser);
     }
 
-    public Command getAutonomousCommand(){
+    public Command getAutonomousCommand() {
         return autoChooser.selectedCommand();
     }
 }

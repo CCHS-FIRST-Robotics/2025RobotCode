@@ -1,4 +1,4 @@
-package frc.robot.subsystems.poseEstimator;
+package frc.robot.subsystems.poseEstimator.odometry;
 
 import static edu.wpi.first.units.Units.*;
 
