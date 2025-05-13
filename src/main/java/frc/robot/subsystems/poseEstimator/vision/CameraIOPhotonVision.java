@@ -97,8 +97,15 @@ public class CameraIOPhotonVision {
         return visionPoseData;
     }
 
-    /**
-     * Calculates new standard deviations This algorithm is a heuristic that creates dynamic standard
+    
+      
+    // TODO:  we scaled std devs up proportionally to the average distance to all seen tag (but made no change if that value fell within a certain “trusty” range. Further tags are less likely to be as accurate as tags closer to the camera.
+    // TODO: We scaled std devs up with higher ambiguity poses because they’re more likely to be wrong.
+    // TODO: We scaled std devs up proportionally to the distance between that pose estimate and the most recent known position). If we get a couple seemingly “accurate” pose estimates that come from across the field, they are effectively discarded because this has such a high proportionality constant.
+    // *We scaled std devs up proportionally to the latency that the result came in. We adjust timestamps for latency compensation before passing them to the Kalman Filter, but we magnify this effect by also increasing std devs. Probably isn’t necessary.
+    // *We scaled std devs inversely proportionally to the number of tags that we see. For example, a pose estimate that sees two reef tags is much more viable than an estimate that only sees one. This was for two reasons: not only does the multitag algorithm seem super accurate, but a single-tag result is subject to ambiguity to an extremely higher extent (don’t quote me on this, but I don’t think ambiguity is a thing when you have multiple tags in frame).
+     /**
+        * Calculates new standard deviations This algorithm is a heuristic that creates dynamic standard
      * deviations based on number of tags, estimation strategy, and distance from the tags.
      *
      * @param estimatedPose The estimated pose to guess standard deviations for.
