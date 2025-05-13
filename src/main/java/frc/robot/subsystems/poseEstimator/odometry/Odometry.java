@@ -8,7 +8,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.constants.PhysicalConstants;
 import frc.robot.subsystems.drive.Drive;
-import frc.robot.subsystems.poseEstimator.GyroIOInputsAutoLogged;
 
 public class Odometry {
     private final GyroIO gyroIO;
