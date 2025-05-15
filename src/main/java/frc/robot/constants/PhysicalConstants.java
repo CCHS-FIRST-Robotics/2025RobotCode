@@ -75,7 +75,7 @@ public final class PhysicalConstants {
     );
 
     // photonvision
-    public static final int numCameras = 4;
+    public static final int NUM_CAMERAS = 4;
     public static final String[] cameraNames = {"FrontLeft", "FrontRight", "BackLeft", "BackRight"};
     public static final Transform3d FRONT_LEFT_OFFSET = new Transform3d(
         new Translation3d(Units.inchesToMeters(12), Units.inchesToMeters(-12), Units.inchesToMeters(0)),
@@ -103,7 +103,6 @@ public final class PhysicalConstants {
     // ! look later
     public static final Matrix<N3, N1> SINGLE_TAG_STD_DEVS = VecBuilder.fill(.8, .8, 2);
     public static final Matrix<N3, N1> MULTI_TAG_STD_DEVS = VecBuilder.fill(0.2, 0.2, .4);
-    public static final Matrix<N3, N1> DRIVE_STD_DEVS = VecBuilder.fill(0.9, 0.9, .1);
     public static final int DISTANCE_WEIGHT = 60; // higher means if tags are futher away they make a less difference on stddevs  30 is good starting point
     public static final int TOO_FAR_AWAY = 6; // Meters at which tag distances to pose are thrown out
 

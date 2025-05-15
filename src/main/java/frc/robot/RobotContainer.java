@@ -17,10 +17,8 @@ import frc.robot.commands.*;
 import frc.robot.constants.*;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.poseEstimator.*;
-import frc.robot.subsystems.poseEstimator.odometry.GyroIO;
-import frc.robot.subsystems.poseEstimator.odometry.GyroIOReal;
-import frc.robot.subsystems.poseEstimator.vision.CameraIO;
-import frc.robot.subsystems.poseEstimator.vision.CameraIOJetson;
+import frc.robot.subsystems.poseEstimator.odometry.*;
+import frc.robot.subsystems.poseEstimator.vision.*;
 import frc.robot.subsystems.coralIO.*;
 import frc.robot.utils.*;
 
@@ -37,6 +35,7 @@ public class RobotContainer {
     private final AutoChooser autoChooser;
 
     public RobotContainer() {
+
         switch (VirtualConstants.CURRENT_MODE) {
             case REAL:
                 drive = new Drive(
@@ -48,7 +47,12 @@ public class RobotContainer {
 
                 poseEstimator = new PoseEstimator(
                     new GyroIOReal(),
-                    new CameraIOJetson(),
+                    new CameraIOPhotonVision[] {
+                        new CameraIOPhotonVision(0),
+                        new CameraIOPhotonVision(1),
+                        new CameraIOPhotonVision(2),
+                        new CameraIOPhotonVision(3),
+                    },
                     drive
                 );
 
@@ -72,7 +76,12 @@ public class RobotContainer {
 
                 poseEstimator = new PoseEstimator(
                     new GyroIO() {},
-                    new CameraIO() {},
+                    new CameraIOPhotonVision[] {
+                        new CameraIOPhotonVision(0),
+                        new CameraIOPhotonVision(1),
+                        new CameraIOPhotonVision(2),
+                        new CameraIOPhotonVision(3),
+                    },
                     drive
                 );
 
@@ -91,7 +100,12 @@ public class RobotContainer {
 
                 poseEstimator = new PoseEstimator(
                     new GyroIOReal(),
-                    new CameraIOJetson(),
+                    new CameraIOPhotonVision[] {
+                        new CameraIOPhotonVision(0),
+                        new CameraIOPhotonVision(1),
+                        new CameraIOPhotonVision(2),
+                        new CameraIOPhotonVision(3),
+                    },
                     drive
                 );
 

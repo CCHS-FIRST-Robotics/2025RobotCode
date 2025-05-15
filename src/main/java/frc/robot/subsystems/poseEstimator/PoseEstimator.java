@@ -22,11 +22,11 @@ public class PoseEstimator extends SubsystemBase {
 
     public PoseEstimator(
         GyroIO gyroIO, 
-        CameraIO cameraIO, 
+        CameraIO[] cameraIOs, 
         Drive drive
     ) {
         odometry = new Odometry(gyroIO, drive);
-        vision = new Vision(drive);
+        vision = new Vision(cameraIOs, drive);
 
         odometryEstimator = new SwerveDrivePoseEstimator(
             PhysicalConstants.KINEMATICS, 
@@ -90,9 +90,5 @@ public class PoseEstimator extends SubsystemBase {
     @SuppressWarnings("unused")
     private Pose2d getCombinedPose() {
         return combinedEstimator.getEstimatedPosition();
-    }
-
-    public void changePoseEstimatorFallbackStrategy() {
-        
     }
 }
