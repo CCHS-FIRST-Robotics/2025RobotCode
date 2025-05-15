@@ -1,5 +1,7 @@
 package frc.robot.subsystems.poseEstimator.vision;
 
+import static edu.wpi.first.units.Units.MetersPerSecond;
+
 import java.util.*;
 import org.photonvision.*;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
@@ -98,12 +100,7 @@ public class CameraIOPhotonVision {
     }
 
     
-      
-    // TODO:  we scaled std devs up proportionally to the average distance to all seen tag (but made no change if that value fell within a certain “trusty” range. Further tags are less likely to be as accurate as tags closer to the camera.
-    // TODO: We scaled std devs up with higher ambiguity poses because they’re more likely to be wrong.
-    // TODO: We scaled std devs up proportionally to the distance between that pose estimate and the most recent known position). If we get a couple seemingly “accurate” pose estimates that come from across the field, they are effectively discarded because this has such a high proportionality constant.
-    // *We scaled std devs up proportionally to the latency that the result came in. We adjust timestamps for latency compensation before passing them to the Kalman Filter, but we magnify this effect by also increasing std devs. Probably isn’t necessary.
-    // *We scaled std devs inversely proportionally to the number of tags that we see. For example, a pose estimate that sees two reef tags is much more viable than an estimate that only sees one. This was for two reasons: not only does the multitag algorithm seem super accurate, but a single-tag result is subject to ambiguity to an extremely higher extent (don’t quote me on this, but I don’t think ambiguity is a thing when you have multiple tags in frame).
+   
      /**
         * Calculates new standard deviations This algorithm is a heuristic that creates dynamic standard
      * deviations based on number of tags, estimation strategy, and distance from the tags.
@@ -122,6 +119,7 @@ public class CameraIOPhotonVision {
             var estStdDevs = PhysicalConstants.SINGLE_TAG_STD_DEVS;
             int numTags = 0;
             double avgDist = 0;
+            double avgAmbugity = 0;
 
             // Precalculation - see how many tags we found, and calculate an average-distance metric
             for (var PhotonTarget : targets) {
@@ -134,6 +132,7 @@ public class CameraIOPhotonVision {
                                 .toPose2d()
                                 .getTranslation()
                                 .getDistance(estimatedPose.get().estimatedPose.toPose2d().getTranslation());
+                avgAmbugity += PhotonTarget.getPoseAmbiguity();
             }
 
             if (numTags == 0) {
@@ -142,15 +141,22 @@ public class CameraIOPhotonVision {
             } else {
                 // One or more tags visible, run the full heuristic.
                 avgDist /= numTags;
+                avgAmbugity /= numTags;
                 // MultiTag std devs if multiple targets are visible
-                if (numTags > 1) estStdDevs = PhysicalConstants.SINGLE_TAG_STD_DEVS;
+                if (numTags > 1) estStdDevs = PhysicalConstants.MULTI_TAG_STD_DEVS;
                 // Increase std devs based on (average) distance
-                if (numTags == 1 && avgDist > PhysicalConstants.TOO_FAR_AWAY || !InField(estimatedPose.get()) )
+                if ((numTags == 1 && avgDist > PhysicalConstants.TOO_FAR_AWAY ) || !InField(estimatedPose.get()) || NoisyPose(estimatedPose.get()))
                     estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
-                else estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / PhysicalConstants.DISTANCE_WEIGHT));
+                else 
+                {
+                    estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / PhysicalConstants.DISTANCE_WEIGHT));
+                    if(avgAmbugity > .2){
+                    estStdDevs = estStdDevs.plus(avgAmbugity);
+                    }
                 currentEstimationStdDevs = estStdDevs;
             }
         }
+    }
     }
 
     
@@ -161,6 +167,30 @@ public class CameraIOPhotonVision {
     private boolean InField(EstimatedRobotPose robotpose){
         Pose2d pose = robotpose.estimatedPose.toPose2d();
         return pose.getX() > 0 && pose.getY() > 0 && pose.getX() < PhysicalConstants.APRILTAG_LAYOUT.getFieldLength() && pose.getY() < PhysicalConstants.APRILTAG_LAYOUT.getFieldWidth();
+    }
+
+
+    private boolean NoisyPose(EstimatedRobotPose robotpose){
+        EstimatedRobotPose lastRobotPose = latestEstimatedPose.get();
+        Pose2d currentPose = robotpose.estimatedPose.toPose2d();
+        Pose2d lastPose = lastRobotPose.estimatedPose.toPose2d();
+        if (lastPose == null){
+            return false;
+        }
+        else{
+            Transform2d movement = currentPose.minus(lastPose);
+            double time = robotpose.timestampSeconds - lastRobotPose.timestampSeconds;
+            double maxXY = PhysicalConstants.MAX_ALLOWED_LINEAR_SPEED.in(MetersPerSecond) * time;
+            if(movement.getX() > maxXY || movement.getY() > maxXY){
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+            
+
+        }
     }
 
     class PoseDataEntry {
