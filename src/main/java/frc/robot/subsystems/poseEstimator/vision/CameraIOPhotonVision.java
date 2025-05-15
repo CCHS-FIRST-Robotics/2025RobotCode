@@ -62,6 +62,19 @@ public class CameraIOPhotonVision implements CameraIO{
         double avgDist = 0;
         double avgAmbugity = 0;
 
+            // Precalculation - see how many tags we found, and calculate an average-distance metric
+            for (var PhotonTarget : targets) {
+                var tagPose = poseEstimator.getFieldTags().getTagPose(PhotonTarget.getFiducialId());
+                if (tagPose.isEmpty()) continue;
+                numTags++;
+                avgDist +=
+                        tagPose
+                                .get()
+                                .toPose2d()
+                                .getTranslation()
+                                .getDistance(estimatedPose.estimatedPose.toPose2d().getTranslation());
+                avgAmbugity += PhotonTarget.getPoseAmbiguity();
+            }
         // Precalculation - see how many tags we found, and calculate an average-distance metric
         for (var PhotonTarget : targets) {
             var tagPose = poseEstimator.getFieldTags().getTagPose(PhotonTarget.getFiducialId());
