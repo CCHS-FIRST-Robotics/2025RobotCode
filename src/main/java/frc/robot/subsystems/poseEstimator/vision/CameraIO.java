@@ -12,13 +12,8 @@ import edu.wpi.first.math.numbers.N3;
 public interface CameraIO {
     @AutoLog
     public static class CameraIOInputs {
-
         public boolean connected;
         public ArrayList<PoseDataEntry> visionPoseData;
-
-
-
-        
     }
 
     public default void updateInputs(CameraIOInputs inputs) {}

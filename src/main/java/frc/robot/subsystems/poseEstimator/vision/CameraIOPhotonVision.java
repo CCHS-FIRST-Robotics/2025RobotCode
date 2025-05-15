@@ -5,19 +5,20 @@ import static edu.wpi.first.units.Units.*;
 import java.util.*;
 import org.photonvision.*;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
-import org.photonvision.targeting.PhotonPipelineResult;
-import org.photonvision.targeting.PhotonTrackedTarget;
+import org.photonvision.targeting.*;
 import edu.wpi.first.math.*;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.numbers.*;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.constants.*;
 
+// ! naming
+
 public class CameraIOPhotonVision implements CameraIO{
     private final PhotonCamera camera;
     private final PhotonPoseEstimator poseEstimator;
     private Matrix<N3, N1> stdDevs = PhysicalConstants.SINGLE_TAG_STD_DEVS;
-    private Optional<EstimatedRobotPose> latestEstimatedPose = Optional.empty();
+    private EstimatedRobotPose latestEstimatedPose;
 
     public CameraIOPhotonVision(int index) {
         this.camera = new PhotonCamera(PhysicalConstants.cameraNames[index]);
@@ -40,13 +41,13 @@ public class CameraIOPhotonVision implements CameraIO{
     public void updateInputs(CameraIOInputs inputs) { // ! william used to have code that would show the estimate of each camera, you should put it back
         inputs.connected = camera.isConnected();
         
-        // update pose data array
+        // update pose data
         ArrayList<PoseDataEntry> visionPoseData = new ArrayList<PoseDataEntry>();
         for (PhotonPipelineResult result : camera.getAllUnreadResults()) {
             Optional<EstimatedRobotPose> currentEstimate = poseEstimator.update(result);
             if(currentEstimate.isPresent()){
                 updateStdDevs(currentEstimate.get(), result.getTargets());
-                latestEstimatedPose = currentEstimate; // Update the latest estimate
+                latestEstimatedPose = currentEstimate.get(); // Update the latest estimate
                 visionPoseData.add(new PoseDataEntry(currentEstimate.get().estimatedPose, result.getTimestampSeconds(), stdDevs));
             }
         }
@@ -54,66 +55,58 @@ public class CameraIOPhotonVision implements CameraIO{
     }
 
     private void updateStdDevs(
-        EstimatedRobotPose estimatedPose, 
+        EstimatedRobotPose currentEstimate, 
         List<PhotonTrackedTarget> targets
     ) {
-        var estStdDevs = PhysicalConstants.SINGLE_TAG_STD_DEVS;
+        Matrix<N3, N1> estStdDevs = PhysicalConstants.SINGLE_TAG_STD_DEVS;
         int numTags = 0;
-        double avgDist = 0;
-        double avgAmbugity = 0;
-
-            // Precalculation - see how many tags we found, and calculate an average-distance metric
-            for (var PhotonTarget : targets) {
-                var tagPose = poseEstimator.getFieldTags().getTagPose(PhotonTarget.getFiducialId());
-                if (tagPose.isEmpty()) continue;
-                numTags++;
-                avgDist +=
-                        tagPose
-                                .get()
-                                .toPose2d()
-                                .getTranslation()
-                                .getDistance(estimatedPose.estimatedPose.toPose2d().getTranslation());
-                avgAmbugity += PhotonTarget.getPoseAmbiguity();
-            }
-        // Precalculation - see how many tags we found, and calculate an average-distance metric
-        for (var PhotonTarget : targets) {
-            var tagPose = poseEstimator.getFieldTags().getTagPose(PhotonTarget.getFiducialId());
-            if (tagPose.isEmpty()) continue;
+        double averageDistance = 0;
+        double averageAmbiguity = 0;
+        for (PhotonTrackedTarget PhotonTarget : targets) {
             numTags++;
-            avgDist += tagPose.get().toPose2d().getTranslation().getDistance(estimatedPose.estimatedPose.toPose2d().getTranslation());
-            avgAmbugity += PhotonTarget.getPoseAmbiguity();
+
+            Optional<Pose3d> tagPose = poseEstimator.getFieldTags().getTagPose(PhotonTarget.getFiducialId());
+            if (tagPose.isEmpty()) {
+                continue;
+            }
+            averageDistance += tagPose.get().toPose2d().getTranslation().getDistance(
+                currentEstimate.estimatedPose.toPose2d().getTranslation()
+            );
+
+            averageAmbiguity += PhotonTarget.getPoseAmbiguity();
+        }
+        averageDistance /= numTags;
+        averageAmbiguity /= numTags;
+
+        switch(numTags){
+            case 0:
+                stdDevs = PhysicalConstants.SINGLE_TAG_STD_DEVS;
+                break;
+            case 1: 
+
+            default: // in this case, if numTags > 1
+                estStdDevs = PhysicalConstants.MULTI_TAG_STD_DEVS;
+
         }
 
-        // ! WALK THROUGH WILLIAM'S LOGIC WITH HIM
-        if (numTags == 0) {
-            // No tags visible use single-tag std devs
-            stdDevs = PhysicalConstants.SINGLE_TAG_STD_DEVS;
-            return;
-        } 
-        
-        // One or more tags visible, run the full heuristic.
-        avgDist /= numTags;
-        avgAmbugity /= numTags;
-        // MultiTag std devs if multiple targets are visible
-        if (numTags > 1) {
-            estStdDevs = PhysicalConstants.MULTI_TAG_STD_DEVS;
-        }
+        // ! go through this with william !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
         // Increase std devs based on (average) distance
-        if ((numTags == 1 && avgDist > PhysicalConstants.TOO_FAR_AWAY ) 
-            || !inField(estimatedPose) 
-            || noisyPose(estimatedPose)
+        if ((numTags == 1 && averageDistance > PhysicalConstants.TOO_FAR_AWAY ) 
+            || !inField(currentEstimate) 
+            || noisyPose(currentEstimate)
         ) {
-            estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+            estStdDevs = VecBuilder.fill(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
         }
         else {
-            estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / PhysicalConstants.DISTANCE_WEIGHT));
-            if (avgAmbugity > .2) {
-                estStdDevs = estStdDevs.plus(avgAmbugity);
+            // ! magic equation go brr
+            estStdDevs = estStdDevs.times(1 + (averageDistance * averageDistance / PhysicalConstants.DISTANCE_WEIGHT));
+            if (averageAmbiguity > .2) {
+                estStdDevs = estStdDevs.plus(averageAmbiguity);
             }
         }
 
         stdDevs = estStdDevs;
-
     }
 
     private boolean inField(EstimatedRobotPose robotpose){
@@ -125,7 +118,7 @@ public class CameraIOPhotonVision implements CameraIO{
     }
 
     private boolean noisyPose(EstimatedRobotPose robotpose){
-        EstimatedRobotPose lastRobotPose = latestEstimatedPose.get();
+        EstimatedRobotPose lastRobotPose = latestEstimatedPose;
         Pose2d currentPose = robotpose.estimatedPose.toPose2d();
         Pose2d lastPose = lastRobotPose.estimatedPose.toPose2d();
         if (lastPose == null){
