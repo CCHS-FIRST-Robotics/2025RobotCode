@@ -83,7 +83,7 @@ public class PoseEstimator extends SubsystemBase {
     }
 
     @SuppressWarnings("unused")
-    private Pose2d getVisionPose() {
+    public Pose2d getVisionPose() {
         return visionEstimate;
     }
 

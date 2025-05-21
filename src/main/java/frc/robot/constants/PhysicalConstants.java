@@ -49,10 +49,10 @@ public final class PhysicalConstants {
         MAX_POSSIBLE_LINEAR_SPEED.in(MetersPerSecond) // meters per second of the robot
         / TRACK_CIRCUMFERENCE.in(Meters) // rotations per second of the robot
     ); // = 1.5944299280
-    public static LinearVelocity MAX_ALLOWED_LINEAR_SPEED = MetersPerSecond.of(4);
-    public static AngularVelocity MAX_ALLOWED_ANGULAR_SPEED = RotationsPerSecond.of(1);
-    public static LinearAcceleration MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(20);
-    public static AngularAcceleration MAX_ALLOWED_ANGULAR_ACCEL = RotationsPerSecondPerSecond.of(20 / TRACK_CIRCUMFERENCE.in(Meters));
+    public static LinearVelocity MAX_ALLOWED_LINEAR_SPEED = MetersPerSecond.of(.1);
+    public static AngularVelocity MAX_ALLOWED_ANGULAR_SPEED = RotationsPerSecond.of(.1);
+    public static LinearAcceleration MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(1);
+    public static AngularAcceleration MAX_ALLOWED_ANGULAR_ACCEL = RotationsPerSecondPerSecond.of(1 / TRACK_CIRCUMFERENCE.in(Meters));
 
     // ————— poseEstimator constants ————— //
 
@@ -82,8 +82,8 @@ public final class PhysicalConstants {
         new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(-5), Units.degreesToRadians(45))
     );
     public static final Transform3d FRONT_RIGHT_OFFSET = new Transform3d(
-        new Translation3d(Units.inchesToMeters(12), Units.inchesToMeters(12), Units.inchesToMeters(0)),
-        new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(-45))
+        new Translation3d(Units.inchesToMeters(14), Units.inchesToMeters(0), Units.inchesToMeters(0)),
+        new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(0))
     );
     public static final Transform3d BACK_LEFT_OFFSET = new Transform3d(
         new Translation3d(Units.inchesToMeters(-12), Units.inchesToMeters(12), Units.inchesToMeters(0)),

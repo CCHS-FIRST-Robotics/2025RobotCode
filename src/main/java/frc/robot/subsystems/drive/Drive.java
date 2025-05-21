@@ -116,9 +116,9 @@ public class Drive extends SubsystemBase {
                 break;
             case POSITION:
                 // get PIDs
-                double xOutput = xPID.calculate(poseEstimator.getPose().getX(), positionSetpoint.getX());
-                double yOutput = yPID.calculate(poseEstimator.getPose().getY(), positionSetpoint.getY());
-                double oOutput = oPID.calculate(poseEstimator.getPose().getRotation().getRadians(), positionSetpoint.getRotation().getRadians());
+                double xOutput = xPID.calculate(poseEstimator.getVisionPose().getX(), positionSetpoint.getX());
+                double yOutput = yPID.calculate(poseEstimator.getVisionPose().getY(), positionSetpoint.getY());
+                double oOutput = oPID.calculate(poseEstimator.getVisionPose().getRotation().getRadians(), positionSetpoint.getRotation().getRadians());
 
                 // create chassisspeeds object with FOC
                 speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
