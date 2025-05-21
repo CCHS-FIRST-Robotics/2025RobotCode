@@ -11,7 +11,7 @@ public final class VirtualConstants {
         SIM,
         REPLAY
     }
-    public static final ROBOT_MODE CURRENT_MODE = ROBOT_MODE.SIM;
+    public static final ROBOT_MODE CURRENT_MODE = ROBOT_MODE.REAL;
     
     // controller
     public static final int XBOX_CONTROLLER_PORT_1 = 0;

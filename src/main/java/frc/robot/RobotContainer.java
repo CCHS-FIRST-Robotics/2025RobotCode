@@ -146,27 +146,30 @@ public class RobotContainer {
             )
         );
 
-        // x-lock
-        xboxController.x().whileTrue(
-            Commands.run(() -> drive.runCharacterization(
-                new Voltage[] {Volts.of(0), Volts.of(0), Volts.of(0), Volts.of(0)}, 
-                new Angle[] {Rotations.of(0.125), Rotations.of(0.325), Rotations.of(0.325), Rotations.of(0.125)})
-            )
-        );
 
-        // control precision
-        xboxController.leftTrigger().onTrue(
-            new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_LINEAR_SPEED = MetersPerSecond.of(2))
-            .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_ANGULAR_SPEED = RotationsPerSecond.of(0.5)))
-            .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(10)))
-            .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_ANGULAR_ACCEL = RotationsPerSecondPerSecond.of(10 / PhysicalConstants.TRACK_CIRCUMFERENCE.in(Meters))))
-        );
-        xboxController.rightTrigger().onTrue(
-            new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_LINEAR_SPEED = MetersPerSecond.of(4))
-            .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_ANGULAR_SPEED = RotationsPerSecond.of(1)))
-            .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(20))) // ! 20
-            .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_ANGULAR_ACCEL = RotationsPerSecondPerSecond.of(20 / PhysicalConstants.TRACK_CIRCUMFERENCE.in(Meters))))
-        );
+        xboxController.y().onTrue(coral.getSetArmCommand(Rotations.of(.1)));
+        xboxController.a().onTrue(coral.getSetArmCommand(Rotations.of(0)));
+        // // x-lock
+        // xboxController.x().whileTrue(
+        //     Commands.run(() -> drive.runCharacterization(
+        //         new Voltage[] {Volts.of(0), Volts.of(0), Volts.of(0), Volts.of(0)}, 
+        //         new Angle[] {Rotations.of(0.125), Rotations.of(0.325), Rotations.of(0.325), Rotations.of(0.125)})
+        //     )
+        // );
+
+        // // control precision
+        // xboxController.leftTrigger().onTrue(
+        //     new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_LINEAR_SPEED = MetersPerSecond.of(2))
+        //     .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_ANGULAR_SPEED = RotationsPerSecond.of(0.5)))
+        //     .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(10)))
+        //     .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_ANGULAR_ACCEL = RotationsPerSecondPerSecond.of(10 / PhysicalConstants.TRACK_CIRCUMFERENCE.in(Meters))))
+        // );
+        // xboxController.rightTrigger().onTrue(
+        //     new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_LINEAR_SPEED = MetersPerSecond.of(4))
+        //     .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_ANGULAR_SPEED = RotationsPerSecond.of(1)))
+        //     .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(20))) // ! 20
+        //     .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_ANGULAR_ACCEL = RotationsPerSecondPerSecond.of(20 / PhysicalConstants.TRACK_CIRCUMFERENCE.in(Meters))))
+        // );
 
         // ————— coral ————— //
 
@@ -207,7 +210,7 @@ public class RobotContainer {
         coralController.button(17).onTrue(coralCommandCompositer.prepL3());
         coralController.button(18).onTrue(coralCommandCompositer.runL3WithBackup());
         coralController.button(19).onTrue(coralCommandCompositer.prepL4());
-        coralController.button(20).onTrue(coralCommandCompositer.runL4());
+        coralController.button(20).onTrue(coralCommandCompositer.runL4WithBackup());
 
         // emergency stop
         coralController.button(21).onTrue(

@@ -91,16 +91,16 @@ public class CoralCommandCompositer {
     }
 
     public Command runL3WithBackup() {
-        return coral.getLowerArmWithVoltageCommand(Volts.of(-0.3), Rotations.of(-0.1)) 
+        return coral.getLowerArmWithVoltageCommand(Volts.of(-3), Rotations.of(-0.13)) 
         .alongWith(
             Commands.waitSeconds(1)
             .andThen(new InstantCommand(() -> drive.runVelocity(
                 new ChassisSpeeds( 
-                    -0.1, //! tune 
+                    -0.3, //! tune 
                     0, 
                     0
                 )
-            )).repeatedly().withTimeout(2))
+            )).repeatedly().withTimeout(1))
         )
         .andThen(coral.getSetElevatorCommand(PhysicalConstants.CoralPositions.INTAKE_PREP[0]))
         .andThen(Commands.waitSeconds(0.8))
@@ -122,8 +122,7 @@ public class CoralCommandCompositer {
     }
 
     public Command runL4WithBackup() {
-        return coral.getLowerArmWithVoltageCommand(Volts.of(-0.25), Rotations.of(0.0673828125))
-        .andThen(coral.getSetArmVoltageCommand(Volts.of(0.25)))
+        return coral.getLowerArmWithVoltageCommand(Volts.of(-1), Rotations.of(0.0815828125))
         .andThen(new InstantCommand(() -> drive.runVelocity(
             new ChassisSpeeds(
                 -0.2, //! tune 
