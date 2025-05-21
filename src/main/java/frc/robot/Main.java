@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj.RobotBase;
  * ! make elevator faster
  * ! tune arm without motionmagic
  * 
+ * ! make gyro relative
+ * 
  * 
  * ! alliance flipping will need to exist when vision is a thing
  * ! maybe just add 180 to gyro output when red alliance?

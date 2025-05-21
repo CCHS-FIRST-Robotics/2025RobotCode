@@ -46,7 +46,7 @@ public class CameraIOPhotonVision implements CameraIO{
                 visionPoseData.add(new PoseDataEntry(currentEstimate.get().estimatedPose, result.getTimestampSeconds(), stdDevs));
             }
         }
-        inputs.visionPoseData = visionPoseData;
+        // inputs.visionPoseData = visionPoseData;
     }
 
     private void updateStdDevs(

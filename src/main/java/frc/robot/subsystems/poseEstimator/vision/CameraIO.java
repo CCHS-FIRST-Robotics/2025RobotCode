@@ -13,7 +13,7 @@ public interface CameraIO {
     @AutoLog
     public static class CameraIOInputs {
         public boolean connected;
-        public ArrayList<PoseDataEntry> visionPoseData;
+        // public ArrayList<PoseDataEntry> visionPoseData;
     }
 
     public default void updateInputs(CameraIOInputs inputs) {}

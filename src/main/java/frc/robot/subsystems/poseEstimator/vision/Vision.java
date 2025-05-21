@@ -26,12 +26,12 @@ public class Vision {
     }
 
     public void periodic(){
-        for (int i = 0; i < PhysicalConstants.NUM_CAMERAS; i++) {
-            cameraIOs[i].updateInputs(cameraIOInputs[i]);
-            for (PoseDataEntry pose : cameraIOInputs[i].visionPoseData) {
-                visionEstimator.addVisionMeasurement(pose.getRobotPose().toPose2d(), pose.getTimestamp(), pose.getStandardDeviation());
-            }
-        }
+        // for (int i = 0; i < PhysicalConstants.NUM_CAMERAS; i++) {
+        //     cameraIOs[i].updateInputs(cameraIOInputs[i]);
+        //     for (PoseDataEntry pose : cameraIOInputs[i].visionPoseData) {
+        //         visionEstimator.addVisionMeasurement(pose.getRobotPose().toPose2d(), pose.getTimestamp(), pose.getStandardDeviation());
+        //     }
+        // }
     }
 
     public Pose2d getEstimatedPosition(){
