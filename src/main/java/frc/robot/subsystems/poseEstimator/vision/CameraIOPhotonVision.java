@@ -9,7 +9,6 @@ import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.numbers.*;
 import frc.robot.constants.*;
 
-// ! naming
 
 public class CameraIOPhotonVision implements CameraIO{
     private final PhotonCamera camera;
@@ -19,8 +18,8 @@ public class CameraIOPhotonVision implements CameraIO{
     public CameraIOPhotonVision(int index) {
         this.camera = new PhotonCamera(PhysicalConstants.cameraNames[index]);
         this.poseEstimator = new PhotonPoseEstimator(
-            PhysicalConstants.APRILTAG_LAYOUT, 
-            PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, 
+            PhysicalConstants.APRILTAG_LAYOUT,
+            PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
             PhysicalConstants.cameraTransforms[index]
         );
 
@@ -34,23 +33,26 @@ public class CameraIOPhotonVision implements CameraIO{
     }
 
     @Override
-    public void updateInputs(CameraIOInputs inputs) { // ! william used to have code that would show the estimate of each camera, you should put it back
+    public void updateInputs(CameraIOInputs inputs) { 
         inputs.connected = camera.isConnected();
+        inputs.pose = new Pose2d();
+
         
-        // update pose data
-        ArrayList<PoseDataEntry> visionPoseData = new ArrayList<PoseDataEntry>();
+        ArrayList<PoseDataEntry> collectedVisionPoses = new ArrayList<>();
         for (PhotonPipelineResult result : camera.getAllUnreadResults()) {
             Optional<EstimatedRobotPose> currentEstimate = poseEstimator.update(result);
             if(currentEstimate.isPresent()){
                 updateStdDevs(currentEstimate.get(), result.getTargets());
-                visionPoseData.add(new PoseDataEntry(currentEstimate.get().estimatedPose, result.getTimestampSeconds(), stdDevs));
+        
+                collectedVisionPoses.add(new PoseDataEntry(currentEstimate.get().estimatedPose, result.getTimestampSeconds(), stdDevs));
             }
         }
-        inputs.visionPoseData = visionPoseData;
+        // Convert the ArrayList to a PoseDataEntry[] array and assign it to inputs.visionPoseData
+        inputs.visionPoseData = collectedVisionPoses.toArray(new PoseDataEntry[0]);
     }
 
     private void updateStdDevs(
-        EstimatedRobotPose currentEstimate, 
+        EstimatedRobotPose currentEstimate,
         List<PhotonTrackedTarget> targets
     ) {
         int numTags = 0;
@@ -69,14 +71,19 @@ public class CameraIOPhotonVision implements CameraIO{
 
             averageAmbiguity += PhotonTarget.getPoseAmbiguity();
         }
-        averageDistance /= numTags;
-        averageAmbiguity /= numTags;
+        // Avoid division by zero if no tags are found
+        if (numTags > 0) {
+            averageDistance /= numTags;
+            averageAmbiguity /= numTags;
+        }
+
 
         switch(numTags) {
             case 0:
-                stdDevs = VecBuilder.fill(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
+                // Use Double.MAX_VALUE for "no estimate" or very high uncertainty
+                stdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
                 break;
-            case 1: 
+            case 1:
                 stdDevs = PhysicalConstants.SINGLE_TAG_STD_DEVS.times( // ! cough cough magic equation
                     1 + (averageDistance * averageDistance / PhysicalConstants.DISTANCE_WEIGHT)
                 );
@@ -86,6 +93,11 @@ public class CameraIOPhotonVision implements CameraIO{
                 break;
             default: // if numTags > 1
                 stdDevs = PhysicalConstants.MULTI_TAG_STD_DEVS;
+                // You might still want to scale multi-tag stdDevs based on ambiguity or distance if desired
+                // For example:
+                // if (averageAmbiguity > 0.1) {
+                //     stdDevs = stdDevs.plus(averageAmbiguity);
+                // }
                 break;
         }
     }
