@@ -22,6 +22,7 @@ public class CameraIOPhotonVision implements CameraIO{
             PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
             PhysicalConstants.cameraTransforms[index]
         );
+        System.out.println(camera.getName() + "Initilized");;
 
         // ! see if periodic only runs during enabled, and then just change it there instead of drilling a big hole through the code from robot.java
         // https://discord.com/channels/176186766946992128/528555967827148801/1367696455963381793
@@ -35,7 +36,6 @@ public class CameraIOPhotonVision implements CameraIO{
     @Override
     public void updateInputs(CameraIOInputs inputs) { 
         inputs.connected = camera.isConnected();
-        inputs.pose = new Pose2d();
 
         
         ArrayList<PoseDataEntry> collectedVisionPoses = new ArrayList<>();
