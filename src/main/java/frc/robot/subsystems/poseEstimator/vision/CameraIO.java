@@ -1,7 +1,5 @@
 package frc.robot.subsystems.poseEstimator.vision;
 
-import java.util.ArrayList;
-
 import org.littletonrobotics.junction.AutoLog;
 
 import edu.wpi.first.math.Matrix;
@@ -13,22 +11,12 @@ public interface CameraIO {
     @AutoLog
     public static class CameraIOInputs {
         public boolean connected;
-        // public ArrayList<PoseDataEntry> visionPoseData;
+        public PoseDataEntry[] visionPoseData;
     }
 
     public default void updateInputs(CameraIOInputs inputs) {}
 
-    public static class PoseDataEntry {
-        private final Pose3d robotPose;
-        private final double timestamp;
-        private final Matrix<N3, N1> standardDeviation;
-
-        public PoseDataEntry(Pose3d robotPose, double timestamp, Matrix<N3, N1> standardDeviation) {
-            this.robotPose = robotPose;
-            this.timestamp = timestamp;
-            this.standardDeviation = standardDeviation;
-        }
-
+    public static record PoseDataEntry(Pose3d robotPose, double timestamp, Matrix<N3, N1> standardDeviation) {
         public Pose3d getRobotPose() {
             return robotPose;
         }

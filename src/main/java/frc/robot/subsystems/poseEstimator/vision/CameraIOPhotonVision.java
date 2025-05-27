@@ -9,8 +9,6 @@ import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.numbers.*;
 import frc.robot.constants.*;
 
-// ! naming
-
 public class CameraIOPhotonVision implements CameraIO{
     private final PhotonCamera camera;
     private final PhotonPoseEstimator poseEstimator;
@@ -46,7 +44,7 @@ public class CameraIOPhotonVision implements CameraIO{
                 visionPoseData.add(new PoseDataEntry(currentEstimate.get().estimatedPose, result.getTimestampSeconds(), stdDevs));
             }
         }
-        // inputs.visionPoseData = visionPoseData;
+        inputs.visionPoseData = visionPoseData.toArray(new PoseDataEntry[0]);
     }
 
     private void updateStdDevs(
@@ -69,8 +67,6 @@ public class CameraIOPhotonVision implements CameraIO{
 
             averageAmbiguity += PhotonTarget.getPoseAmbiguity();
         }
-        averageDistance /= numTags;
-        averageAmbiguity /= numTags;
 
         switch(numTags) {
             case 0:
@@ -80,13 +76,16 @@ public class CameraIOPhotonVision implements CameraIO{
                 stdDevs = PhysicalConstants.SINGLE_TAG_STD_DEVS.times( // ! cough cough magic equation
                     1 + (averageDistance * averageDistance / PhysicalConstants.DISTANCE_WEIGHT)
                 );
-                if (averageAmbiguity > 0.2) { // "numbers above 0.2 are likely to be ambiguous"
-                    stdDevs = stdDevs.plus(averageAmbiguity);
-                }
                 break;
             default: // if numTags > 1
+                averageDistance /= numTags;
+                averageAmbiguity /= numTags;
                 stdDevs = PhysicalConstants.MULTI_TAG_STD_DEVS;
                 break;
+        }
+
+        if (averageAmbiguity > 0.2) { // "numbers above 0.2 are likely to be ambiguous"
+            stdDevs = stdDevs.plus(averageAmbiguity);
         }
     }
 }
