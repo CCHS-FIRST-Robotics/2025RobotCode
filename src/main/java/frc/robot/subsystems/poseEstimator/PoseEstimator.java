@@ -3,6 +3,7 @@ package frc.robot.subsystems.poseEstimator;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Timer;
 import org.littletonrobotics.junction.Logger;
 import frc.robot.subsystems.drive.Drive;
@@ -43,6 +44,8 @@ public class PoseEstimator extends SubsystemBase {
         );
 
         this.drive = drive;
+
+        NetworkTableInstance.getDefault().getBooleanTopic("/photonvision/use_new_cscore_frametime").publish().set(true); // https://github.com/PhotonVision/photonvision/pull/1662
     }
 
     @Override

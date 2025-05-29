@@ -25,10 +25,6 @@ public class CameraIOPhotonVision implements CameraIO{
         // ! see if periodic only runs during enabled, and then just change it there instead of drilling a big hole through the code from robot.java
         // https://discord.com/channels/176186766946992128/528555967827148801/1367696455963381793
         poseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY); // ! switch to PNP_DISTANCE_TRIG_SOLVE after enabled
-
-        // ! only needs to be called once, probably shouldn't be in this class
-        // https://github.com/PhotonVision/photonvision/pull/1662
-        // NetworkTableInstance.getDefault().getBooleanTopic("/photonvision/use_new_cscore_frametime").publish().set(true);
     }
 
     @Override
@@ -54,7 +50,7 @@ public class CameraIOPhotonVision implements CameraIO{
         int numTags = 0;
         double averageDistance = 0;
         double averageAmbiguity = 0;
-        for (PhotonTrackedTarget PhotonTarget : targets) {
+        for (PhotonTrackedTarget PhotonTarget : targets) { // get average distance and ambiguity
             numTags++;
 
             Optional<Pose3d> tagPose = poseEstimator.getFieldTags().getTagPose(PhotonTarget.getFiducialId());
@@ -71,18 +67,21 @@ public class CameraIOPhotonVision implements CameraIO{
         switch(numTags) {
             case 0:
                 stdDevs = VecBuilder.fill(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
-                break;
+                return;
             case 1: 
-                stdDevs = PhysicalConstants.SINGLE_TAG_STD_DEVS.times( // ! cough cough magic equation
-                    1 + (averageDistance * averageDistance / PhysicalConstants.DISTANCE_WEIGHT)
-                );
+                stdDevs = PhysicalConstants.SINGLE_TAG_STD_DEVS;
                 break;
             default: // if numTags > 1
-                averageDistance /= numTags;
-                averageAmbiguity /= numTags;
                 stdDevs = PhysicalConstants.MULTI_TAG_STD_DEVS;
                 break;
         }
+
+        averageDistance /= numTags;
+        averageAmbiguity /= numTags;
+
+        stdDevs = stdDevs.times( // ! cough cough magic equation
+            1 + (averageDistance * averageDistance / PhysicalConstants.DISTANCE_WEIGHT)
+        );
 
         if (averageAmbiguity > 0.2) { // "numbers above 0.2 are likely to be ambiguous"
             stdDevs = stdDevs.plus(averageAmbiguity);
