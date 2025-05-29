@@ -18,6 +18,8 @@ import edu.wpi.first.wpilibj.RobotBase;
  *    tune arm without motionmagic
  * 
  * * daily at robotics: 
+ *    check placing coral
+ *    check autos
  * 
  * * longer term: 
  *    see if double gyro works
