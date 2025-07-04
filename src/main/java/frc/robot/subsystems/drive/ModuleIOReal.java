@@ -41,6 +41,7 @@ public class ModuleIOReal implements ModuleIO {
     private AngularVelocity prevDriveVelocity = RadiansPerSecond.of(0.0);
 
     public ModuleIOReal(int index) {
+        // our drive and turn motor CAN IDs are set as 11, 12 for module 1; 21, 22 for module 2; and so on
         driveMotor = new SparkMax(10 * index + 1, MotorType.kBrushless);
         turnMotor = new SparkMax(10 * index + 2, MotorType.kBrushless);
 
