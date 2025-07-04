@@ -6,6 +6,7 @@ import org.littletonrobotics.junction.LogTable;
 import edu.wpi.first.units.measure.*;
 
 public interface CoralIO {
+    // doesn't use @Autolog in order to log elevator and arm in separate folders in advscope
     public static class CoralIOInputs implements LoggableInputs {
         public double elevatorVoltage;
         public double elevatorCurrent;

@@ -49,7 +49,10 @@ public class PoseEstimator extends SubsystemBase {
     }
 
     @Override
-    public void periodic() {        
+    public void periodic() {     
+        odometry.periodic();
+        vision.periodic();
+        
         // odometry
         odometryEstimator.updateWithTime(
             Timer.getFPGATimestamp(),
