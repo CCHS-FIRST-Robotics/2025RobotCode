@@ -24,7 +24,7 @@ public class Robot extends LoggedRobot {
         Logger.recordMetadata("ProjectName", "2025RobotCode");
         switch (VirtualConstants.CURRENT_MODE) {
             case REAL:
-                Logger.addDataReceiver(new WPILOGWriter()); // log to /U/logs
+                Logger.addDataReceiver(new WPILOGWriter()); // log to /U/logs on USB
                 Logger.addDataReceiver(new NT4Publisher());
                 break;
             case SIM:
