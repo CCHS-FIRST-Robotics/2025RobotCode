@@ -27,10 +27,6 @@ public class CoralCommandCompositer {
     }
 
     public Command runIntake() { 
-        // if (coral.troughSensesCoral()) { // ! need to attach or find other solution
-        //     return null;
-        // }
-
         return coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.INTAKE_RUN)
         .andThen(coral.getWaitUntilCoralInPositionCommand(PhysicalConstants.CoralPositions.INTAKE_RUN))
         .andThen(coral.getSetCoralPositionCommand(PhysicalConstants.CoralPositions.INTAKE_PREP));

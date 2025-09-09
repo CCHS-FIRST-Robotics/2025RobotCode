@@ -8,6 +8,12 @@ import edu.wpi.first.wpilibj.RobotBase;
 
 /**
  * to do: 
+ * ! use lowest ambiguity in Robot.java
+ * ! test the default auto
+ * 
+ * ! maybe can have a separate array of photonposeestimators 
+ * 
+ * 
  * * daily at home: 
  *    make gyro relative
  *    alliance flipping will need to exist when vision is a thing

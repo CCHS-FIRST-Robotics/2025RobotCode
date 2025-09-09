@@ -37,6 +37,7 @@ public class Module {
 
     public void runState(SwerveModuleState state) {
         state.optimize(getAngle());
+        state.speedMetersPerSecond *= state.angle.minus(getState().angle).getCos(); // cosine compensation
         io.setTurnPosition(Rotations.of(state.angle.getRotations()));
         io.setDriveVelocity(RadiansPerSecond.of(state.speedMetersPerSecond / PhysicalConstants.WHEEL_RADIUS.in(Meters)));
     }
