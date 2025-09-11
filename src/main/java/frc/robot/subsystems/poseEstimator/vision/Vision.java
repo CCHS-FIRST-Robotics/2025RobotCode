@@ -8,15 +8,17 @@ import edu.wpi.first.wpilibj.Timer;
 import org.littletonrobotics.junction.Logger;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.poseEstimator.vision.CameraIO.PoseDataEntry;
-import frc.robot.constants.PhysicalConstants;
+import frc.robot.constants.*;
+
+// go to 10.32.05.16:5800 for front opi5 dashboard
+// go to 10.32.05.17:5800 for back opi5 dashboard
 
 public class Vision {
     private final SwerveDrivePoseEstimator visionEstimator;
     private final CameraIO[] cameraIOs;
-    private final CameraIOInputsAutoLogged[] cameraIOInputs = new CameraIOInputsAutoLogged[PhysicalConstants.NUM_CAMERAS];
+    private final CameraIOInputsAutoLogged[] cameraIOInputs = new CameraIOInputsAutoLogged[VirtualConstants.NUM_CAMERAS];
 
     private final Drive drive;
-
 
     public Vision(
         CameraIO[] ios,
@@ -28,12 +30,12 @@ public class Vision {
             drive.getModulePositions(), 
             new Pose2d(),
             VecBuilder.fill(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE),
-            PhysicalConstants.SINGLE_TAG_STD_DEVS
+            VirtualConstants.SINGLE_TAG_STD_DEVS
         );
 
         this.cameraIOs = ios;
 
-        for(int i = 0; i < PhysicalConstants.NUM_CAMERAS; i++) {
+        for(int i = 0; i < VirtualConstants.NUM_CAMERAS; i++) {
             cameraIOInputs[i] = new CameraIOInputsAutoLogged();
         }
 
@@ -41,7 +43,7 @@ public class Vision {
     }
 
     public void periodic(){
-        for (int i = 0; i < PhysicalConstants.NUM_CAMERAS; i++) {
+        for (int i = 0; i < VirtualConstants.NUM_CAMERAS; i++) {
             cameraIOs[i].updateInputs(cameraIOInputs[i]);
             for (PoseDataEntry pose : cameraIOInputs[i].visionPoseData) {
                 visionEstimator.updateWithTime(
@@ -51,7 +53,7 @@ public class Vision {
                 );
                 visionEstimator.addVisionMeasurement(pose.getRobotPose().toPose2d(), pose.getTimestamp(), VecBuilder.fill(0, 0, 0));
             }
-            Logger.processInputs(PhysicalConstants.cameraNames[i], cameraIOInputs[i]);
+            Logger.processInputs("cameras/" + VirtualConstants.CAMERA_LOGGER_NAMES[i], cameraIOInputs[i]);
         }
     }
 

@@ -12,35 +12,19 @@ import frc.robot.constants.*;
 public class CameraIOPhotonVision implements CameraIO{
     private final PhotonCamera camera;
     private final PhotonPoseEstimator poseEstimator;
-    private Matrix<N3, N1> stdDevs = PhysicalConstants.SINGLE_TAG_STD_DEVS;
+    private Matrix<N3, N1> stdDevs = VirtualConstants.SINGLE_TAG_STD_DEVS;
 
     public CameraIOPhotonVision(int index) {
-        this.camera = new PhotonCamera(PhysicalConstants.cameraNames[index]);
+        this.camera = new PhotonCamera(VirtualConstants.CAMERA_PHOTONVISION_NAMES[index]);
         this.poseEstimator = new PhotonPoseEstimator(
-            PhysicalConstants.APRILTAG_LAYOUT, 
+            VirtualConstants.APRILTAG_LAYOUT, 
             PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, 
-            PhysicalConstants.cameraTransforms[index]
+            PhysicalConstants.CAMERA_TRANSFORMS[index]
         );
 
         // ! see if periodic only runs during enabled, and then just change it there instead of drilling a big hole through the code from robot.java
         // https://discord.com/channels/176186766946992128/528555967827148801/1367696455963381793
         poseEstimator.setMultiTagFallbackStrategy(PoseStrategy.PNP_DISTANCE_TRIG_SOLVE); // ! start on LOWEST_AMBIGUITY after enabled
-    }
-
-    @Override
-    public void updateInputs(CameraIOInputs inputs) { // ! william used to have code that would show the estimate of each camera, you should put it back
-        inputs.connected = camera.isConnected();
-        
-        // update pose data
-        ArrayList<PoseDataEntry> visionPoseData = new ArrayList<PoseDataEntry>();
-        for (PhotonPipelineResult result : camera.getAllUnreadResults()) {
-            Optional<EstimatedRobotPose> currentEstimate = poseEstimator.update(result);
-            if(currentEstimate.isPresent()){
-                updateStdDevs(currentEstimate.get(), result.getTargets());
-                visionPoseData.add(new PoseDataEntry(currentEstimate.get().estimatedPose, result.getTimestampSeconds(), stdDevs));
-            }
-        }
-        inputs.visionPoseData = visionPoseData.toArray(new PoseDataEntry[0]);
     }
 
     // ! filter out everything other than reef tags
@@ -70,10 +54,10 @@ public class CameraIOPhotonVision implements CameraIO{
                 stdDevs = VecBuilder.fill(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
                 return;
             case 1: 
-                stdDevs = PhysicalConstants.SINGLE_TAG_STD_DEVS;
+                stdDevs = VirtualConstants.SINGLE_TAG_STD_DEVS;
                 break;
             default: // if numTags > 1
-                stdDevs = PhysicalConstants.MULTI_TAG_STD_DEVS;
+                stdDevs = VirtualConstants.MULTI_TAG_STD_DEVS;
                 break;
         }
 
@@ -81,11 +65,27 @@ public class CameraIOPhotonVision implements CameraIO{
         averageAmbiguity /= numTags;
 
         stdDevs = stdDevs.times( // ! magic equation
-            1 + (averageDistance * averageDistance / PhysicalConstants.DISTANCE_WEIGHT)
+            1 + (averageDistance * averageDistance / VirtualConstants.DISTANCE_WEIGHT)
         );
 
         if (averageAmbiguity > 0.2) { // "numbers above 0.2 are likely to be ambiguous" - PhotonTarget.getPoseAmbiguity()
             stdDevs = stdDevs.plus(averageAmbiguity);
         }
+    }
+
+    @Override
+    public void updateInputs(CameraIOInputs inputs) {
+        inputs.connected = camera.isConnected();
+        
+        // update pose data
+        ArrayList<PoseDataEntry> visionPoseData = new ArrayList<PoseDataEntry>();
+        for (PhotonPipelineResult result : camera.getAllUnreadResults()) {
+            Optional<EstimatedRobotPose> currentEstimate = poseEstimator.update(result);
+            if(currentEstimate.isPresent()){
+                updateStdDevs(currentEstimate.get(), result.getTargets());
+                visionPoseData.add(new PoseDataEntry(currentEstimate.get().estimatedPose, result.getTimestampSeconds(), stdDevs));
+            }
+        }
+        inputs.visionPoseData = visionPoseData.toArray(new PoseDataEntry[0]);
     }
 }
