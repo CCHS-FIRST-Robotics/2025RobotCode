@@ -26,8 +26,6 @@ import edu.wpi.first.wpilibj.RobotBase;
  * * tuning
  *    tune arm without motionmagic
  *    figure out sysid
- *    
- * 
  * 
  * * daily at home: 
  * 
