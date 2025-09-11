@@ -3,14 +3,8 @@ package frc.robot.constants;
 import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.numbers.N1;
-import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.*;
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.*;
 
 public final class PhysicalConstants {
@@ -55,57 +49,29 @@ public final class PhysicalConstants {
 
     // ————— poseEstimator constants ————— //
 
-    // jetson
-    public static final Angle[] ARDUCAM_PITCHES = {
-        Degrees.of(-25), // front
-        Degrees.of(-3), // left
-        Degrees.of(-3), // right
-        Degrees.of(30) // back
-    };
-    public static final Pose2d JETSON_OFFSET = new Pose2d(
-        Inches.of(0.75).in(Meters), 
-        Inches.of(0).in(Meters), 
-        new Rotation2d(Degrees.of(0))
-    );
-    public static final Pose2d USB_CAMERA_1_OFFSET = new Pose2d(
-        Meters.of(0.1).in(Meters), 
-        Meters.of(0.27).in(Meters), 
-        new Rotation2d(Degrees.of(-29.3577535419))
-    );
-
-    // photonvision
-    public static final int NUM_CAMERAS = 4;
-    public static final String[] cameraNames = {"FrontLeft", "FrontRight", "BackLeft", "BackRight"};
-    public static final Transform3d FRONT_LEFT_OFFSET = new Transform3d(
+    // cameras
+    public static final Transform3d FRONT_LEFT_TRANSFORM = new Transform3d(
         new Translation3d(Units.inchesToMeters(12), Units.inchesToMeters(-12), Units.inchesToMeters(0)),
         new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(-5), Units.degreesToRadians(45))
     );
-    public static final Transform3d FRONT_RIGHT_OFFSET = new Transform3d(
+    public static final Transform3d FRONT_RIGHT_TRANSFORM = new Transform3d(
         new Translation3d(Units.inchesToMeters(12), Units.inchesToMeters(12), Units.inchesToMeters(0)),
         new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(-45))
     );
-    public static final Transform3d BACK_LEFT_OFFSET = new Transform3d(
+    public static final Transform3d BACK_LEFT_TRANSFORM = new Transform3d(
         new Translation3d(Units.inchesToMeters(-12), Units.inchesToMeters(12), Units.inchesToMeters(0)),
         new Rotation3d(Units.degreesToRadians(5.5), Units.degreesToRadians(-20), Units.degreesToRadians(45))
     );
-    public static final Transform3d BackRightCamToCenter = new Transform3d(
+    public static final Transform3d BACK_RIGHT_TRANSFORM = new Transform3d(
         new Translation3d(Units.inchesToMeters(-12), Units.inchesToMeters(-12), Units.inchesToMeters(0)),
         new Rotation3d(Units.degreesToRadians(5.5), Units.degreesToRadians(-20), Units.degreesToRadians(-45))
     );
-    public static final Transform3d[] cameraTransforms = {
-        FRONT_LEFT_OFFSET,
-        FRONT_RIGHT_OFFSET,
-        BACK_LEFT_OFFSET,
-        BackRightCamToCenter
+    public static final Transform3d[] CAMERA_TRANSFORMS = {
+        FRONT_LEFT_TRANSFORM,
+        FRONT_RIGHT_TRANSFORM,
+        BACK_LEFT_TRANSFORM,
+        BACK_RIGHT_TRANSFORM
     };
-
-    // ! look later, also check the docs
-    public static final Matrix<N3, N1> SINGLE_TAG_STD_DEVS = VecBuilder.fill(0.8, 0.8, 2);
-    public static final Matrix<N3, N1> MULTI_TAG_STD_DEVS = VecBuilder.fill(0.2, 0.2, 0.4);
-    public static final int DISTANCE_WEIGHT = 60; // higher means if tags are futher away they make a less difference on stddevs  30 is good starting point
-    public static final int TOO_FAR_AWAY = 6; // meters at which tag distances to pose are thrown out
-
-    public static final AprilTagFieldLayout APRILTAG_LAYOUT = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
 
     // ————— coral constants ————— //
 
