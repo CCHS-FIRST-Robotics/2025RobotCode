@@ -68,7 +68,7 @@ public class PoseEstimator extends SubsystemBase {
             odometry.getRawYaw(),
             drive.getModulePositions()
         );
-        combinedEstimator.addVisionMeasurement(visionEstimate, Timer.getFPGATimestamp()); // ! idk if this actually combines them properly
+        combinedEstimator.addVisionMeasurement(visionEstimate, Timer.getFPGATimestamp()); // ! think about whether this will work
         Logger.recordOutput("outputs/poseEstimator/poses/visionPoses/visionPoseEstimate", visionEstimate);
         Logger.recordOutput("outputs/poseEstimator/poses/visionPoses/combinedPoseEstimate", combinedEstimator.getEstimatedPosition());
     }

@@ -40,7 +40,7 @@ public class ModuleIOSim implements ModuleIO {
         turnSim = new DCMotorSim(
             LinearSystemId.createDCMotorSystem(
                 DCMotor.getNEO(1), 
-                0.00008, // ! uh, according to google ai, and I can't find the source
+                0.00008, // ! very magic number
                 1 / PhysicalConstants.TURN_AFTER_ENCODER_REDUCTION
             ),
             DCMotor.getNEO(1)

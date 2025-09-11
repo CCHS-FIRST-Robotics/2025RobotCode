@@ -33,7 +33,6 @@ public class ModuleIOReal implements ModuleIO {
     private double driveKv = 0.13259;
     private double driveKa = 0.025003;
 
-    // ! do sysid on these
     private double turnKp = 8 / (2 * Math.PI);
     private double turnKi = 0;
     private double turnKd = 1.5 / (2 * Math.PI);

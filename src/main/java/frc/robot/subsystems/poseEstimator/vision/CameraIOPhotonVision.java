@@ -24,7 +24,7 @@ public class CameraIOPhotonVision implements CameraIO{
 
         // ! see if periodic only runs during enabled, and then just change it there instead of drilling a big hole through the code from robot.java
         // https://discord.com/channels/176186766946992128/528555967827148801/1367696455963381793
-        poseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY); // ! switch to PNP_DISTANCE_TRIG_SOLVE after enabled
+        poseEstimator.setMultiTagFallbackStrategy(PoseStrategy.PNP_DISTANCE_TRIG_SOLVE); // ! start on LOWEST_AMBIGUITY after enabled
     }
 
     @Override
@@ -43,6 +43,7 @@ public class CameraIOPhotonVision implements CameraIO{
         inputs.visionPoseData = visionPoseData.toArray(new PoseDataEntry[0]);
     }
 
+    // ! filter out everything other than reef tags
     private void updateStdDevs(
         EstimatedRobotPose currentEstimate, 
         List<PhotonTrackedTarget> targets
@@ -79,11 +80,11 @@ public class CameraIOPhotonVision implements CameraIO{
         averageDistance /= numTags;
         averageAmbiguity /= numTags;
 
-        stdDevs = stdDevs.times( // ! cough cough magic equation
+        stdDevs = stdDevs.times( // ! magic equation
             1 + (averageDistance * averageDistance / PhysicalConstants.DISTANCE_WEIGHT)
         );
 
-        if (averageAmbiguity > 0.2) { // "numbers above 0.2 are likely to be ambiguous"
+        if (averageAmbiguity > 0.2) { // "numbers above 0.2 are likely to be ambiguous" - PhotonTarget.getPoseAmbiguity()
             stdDevs = stdDevs.plus(averageAmbiguity);
         }
     }

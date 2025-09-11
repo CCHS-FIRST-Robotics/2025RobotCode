@@ -60,8 +60,7 @@ public class RobotContainer {
                         VirtualConstants.ELEVATOR_CANCODER_ID, 
                         VirtualConstants.ARM_ID, 
                         VirtualConstants.ARM_CANCODER_ID
-                    ), 
-                    VirtualConstants.TROUGH_SWITCH_PORT
+                    )
                 );
                 break;
             case SIM:
@@ -84,8 +83,7 @@ public class RobotContainer {
                 );
 
                 coral = new Coral(
-                    new CoralIOSim(), 
-                    VirtualConstants.TROUGH_SWITCH_PORT
+                    new CoralIOSim()
                 );
                 break;
             default:
@@ -113,8 +111,7 @@ public class RobotContainer {
                         VirtualConstants.ELEVATOR_CANCODER_ID, 
                         VirtualConstants.ARM_ID, 
                         VirtualConstants.ARM_CANCODER_ID
-                    ), 
-                    VirtualConstants.TROUGH_SWITCH_PORT
+                    )
                 );
                 break;
         }
@@ -162,7 +159,7 @@ public class RobotContainer {
         xboxController.rightTrigger().onTrue(
             new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_LINEAR_SPEED = MetersPerSecond.of(4))
             .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_ANGULAR_SPEED = RotationsPerSecond.of(1)))
-            .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(20))) // ! 20
+            .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(20)))
             .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_ANGULAR_ACCEL = RotationsPerSecondPerSecond.of(20 / PhysicalConstants.TRACK_CIRCUMFERENCE.in(Meters))))
         );
 
@@ -175,8 +172,8 @@ public class RobotContainer {
         // branch positions
         // coralController.button(4).onTrue(coralCommandCompositer.prepIntake());
         // coralController.button(5).onTrue(coralCommandCompositer.runIntake());
-        // ! coralController.button(9).onTrue(coralCommandCompositer.prepL2());
-        // ! coralController.button(10).onTrue(coralCommandCompositer.runL2());
+        // // coralController.button(9).onTrue(coralCommandCompositer.prepL2());
+        // // coralController.button(10).onTrue(coralCommandCompositer.runL2());
         // coralController.button(17).onTrue(coralCommandCompositer.prepL3());
         // coralController.button(18).onTrue(coralCommandCompositer.runL3WithBackup());
         // coralController.button(19).onTrue(coralCommandCompositer.prepL4());

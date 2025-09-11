@@ -3,7 +3,6 @@ package frc.robot.subsystems.coralIO;
 import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.wpilibj2.command.*;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import java.util.function.Consumer;
 import edu.wpi.first.units.*;
@@ -15,16 +14,13 @@ import frc.robot.subsystems.coralIO.CoralIO.CoralIOInputs;
 
 public class Coral extends SubsystemBase {
     private final CoralIO io;
-    private final DigitalInput troughSensor;
     private final CoralIOInputs inputs = new CoralIOInputs();
 
     private final SysIdRoutine elevatorSysIdRoutine;
     private final SysIdRoutine armSysIdRoutine;
 
-    public Coral(CoralIO io, int troughPort) {
+    public Coral(CoralIO io) {
         this.io = io;
-
-        troughSensor = new DigitalInput(troughPort);
 
         elevatorSysIdRoutine = sysIdRoutineFactory(
             "elevator", 
@@ -42,8 +38,6 @@ public class Coral extends SubsystemBase {
     public void periodic() {
         io.updateInputs(inputs);
         Logger.processInputs("coralIO", inputs);
-
-        Logger.recordOutput("outputs/coral/troughSensor", troughSensor.get());
     }
 
     // ————— raw command factories ————— //
@@ -80,10 +74,6 @@ public class Coral extends SubsystemBase {
     public Command getLowerArmWithVoltageCommand(Voltage volts, Angle armPositionThreshold) {
         return runOnce(() -> io.setArmVoltage(volts))
         .andThen(Commands.waitUntil(() -> inputs.armEncoderPosition <= armPositionThreshold.in(Rotations)));
-    }
-
-    public boolean troughSensesCoral() {
-        return troughSensor.get(); // ! depends on how they wire it
     }
 
     // ————— sysid command factories ————— //

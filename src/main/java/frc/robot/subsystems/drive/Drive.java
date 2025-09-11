@@ -125,7 +125,7 @@ public class Drive extends SubsystemBase {
                     twistSetpoint.dx + xOutput,
                     twistSetpoint.dy + yOutput,
                     twistSetpoint.dtheta + oOutput,
-                    poseEstimator.getPose().getRotation() // not getYawWithAllianceRotation(), because the setpoint is already generated with it in mind // ! changed from rawYaw
+                    poseEstimator.getPose().getRotation() // not getYawWithAllianceRotation(), because the setpoint is already generated with it in mind
                 );
                 // fallthrough to VELOCITY case; no break statement needed
             case VELOCITY: 
