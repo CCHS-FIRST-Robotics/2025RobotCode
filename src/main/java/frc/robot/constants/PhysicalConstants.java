@@ -66,6 +66,24 @@ public final class PhysicalConstants {
         new Translation3d(Units.inchesToMeters(-12), Units.inchesToMeters(-12), Units.inchesToMeters(0)),
         new Rotation3d(Units.degreesToRadians(5.5), Units.degreesToRadians(-20), Units.degreesToRadians(-45))
     );
+
+    // public static final Transform3d FRONT_LEFT_TRANSFORM = new Transform3d(
+    //     new Translation3d(Units.inchesToMeters(11), Units.inchesToMeters(-14), Units.inchesToMeters(0)),
+    //     new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(-30))
+    // );
+    // public static final Transform3d FRONT_RIGHT_TRANSFORM = new Transform3d(
+    //     new Translation3d(Units.inchesToMeters(11), Units.inchesToMeters(14), Units.inchesToMeters(0)),
+    //     new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(-30))
+    // );
+    // public static final Transform3d BACK_LEFT_TRANSFORM = new Transform3d(
+    //     new Translation3d(Units.inchesToMeters(-11), Units.inchesToMeters(14), Units.inchesToMeters(0)),
+    //     new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(0))
+    // );
+    // public static final Transform3d BACK_RIGHT_TRANSFORM = new Transform3d(
+    //     new Translation3d(Units.inchesToMeters(-11), Units.inchesToMeters(-14), Units.inchesToMeters(0)),
+    //     new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(0))
+    // );
+
     public static final Transform3d[] CAMERA_TRANSFORMS = {
         FRONT_LEFT_TRANSFORM,
         FRONT_RIGHT_TRANSFORM,

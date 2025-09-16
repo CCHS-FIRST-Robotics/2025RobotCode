@@ -8,13 +8,8 @@ import edu.wpi.first.wpilibj.RobotBase;
 
 /**
  * to do: 
- * ! PhysicalConstants vision constants
- * 
- * 
- * ! use lowest ambiguity in Robot.java
- * ! test the default auto
- * ! maybe can have a separate array of photonposeestimators 
- * 
+ * ! see if combinedPoseEstimate is accurate
+ * !!!!!!!!!!!!! update the camera offsets in code because we changed the angles
  * 
  * * figure out the aliance flipping/gyro whatever
  *    alliance flipping will need to exist when vision is a thing
