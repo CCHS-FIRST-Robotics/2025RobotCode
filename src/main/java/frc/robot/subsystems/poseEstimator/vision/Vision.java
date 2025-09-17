@@ -7,6 +7,8 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.wpilibj.Timer;
 
 import org.littletonrobotics.junction.Logger;
+
+import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.poseEstimator.vision.CameraIO.PoseDataEntry;
 import frc.robot.constants.*;
 
@@ -17,13 +19,16 @@ public class Vision {
     private final CameraIO[] cameraIOs;
     private final CameraIOInputsAutoLogged[] cameraIOInputs = new CameraIOInputsAutoLogged[VirtualConstants.NUM_CAMERAS];
 
+    private Drive drive;
+
     public Vision(
-        CameraIO[] ios
+        CameraIO[] ios, 
+        Drive drive
     ) {
         visionEstimator = new SwerveDrivePoseEstimator(
             PhysicalConstants.KINEMATICS, 
             new Rotation2d(), 
-            new SwerveModulePosition[4],
+            drive.getModulePositions(),
             new Pose2d(),
             VecBuilder.fill(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE),
             VirtualConstants.SINGLE_TAG_STD_DEVS // doesn't really matter since it's always overridden below
@@ -43,7 +48,7 @@ public class Vision {
                 visionEstimator.updateWithTime( // this doesn't update anything since stateStdDevs is Integer.MAX_VALUE
                     Timer.getFPGATimestamp(),
                     new Rotation2d(), 
-                    new SwerveModulePosition[4] // ! changed; test if still works as intended
+                    drive.getModulePositions()
                 );
                 visionEstimator.addVisionMeasurement(pose.getRobotPose().toPose2d(), pose.getTimestamp(), pose.getStandardDeviation());
                 latestTimestamp = Math.max(pose.getTimestamp(), latestTimestamp);

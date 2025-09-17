@@ -8,6 +8,12 @@ import edu.wpi.first.wpilibj.RobotBase;
 
 /**
  * to do: 
+ * 
+ * clean up imports
+ * 
+ * goal for preseason: 
+ * get the oneCoralL4 auto to work when on both red and blue alliance
+ * 
  * * figure out the aliance flipping/gyro whatever
  *    alliance flipping will need to exist when vision is a thing
  *    maybe just add 180 to gyro output when red alliance?

@@ -42,8 +42,8 @@ public final class PhysicalConstants {
         MAX_POSSIBLE_LINEAR_SPEED.in(MetersPerSecond) // meters per second of the robot
         / TRACK_CIRCUMFERENCE.in(Meters) // rotations per second of the robot
     ); // = 1.5944299280
-    public static LinearVelocity MAX_ALLOWED_LINEAR_SPEED = MetersPerSecond.of(0.25);
-    public static AngularVelocity MAX_ALLOWED_ANGULAR_SPEED = RotationsPerSecond.of(0.25);
+    public static LinearVelocity MAX_ALLOWED_LINEAR_SPEED = MetersPerSecond.of(0.5);
+    public static AngularVelocity MAX_ALLOWED_ANGULAR_SPEED = RotationsPerSecond.of(0.5);
     public static LinearAcceleration MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(20);
     public static AngularAcceleration MAX_ALLOWED_ANGULAR_ACCEL = RotationsPerSecondPerSecond.of(20 / TRACK_CIRCUMFERENCE.in(Meters));
 

@@ -64,7 +64,7 @@ public class CoralCommandCompositer {
             Commands.waitSeconds(1)
             .andThen(new InstantCommand(() -> drive.runVelocity(
                 new ChassisSpeeds(
-                    -0.1, //! tune 
+                    -0.1, // ! tune 
                     0, 
                     0
                 )   
@@ -92,7 +92,7 @@ public class CoralCommandCompositer {
             Commands.waitSeconds(1)
             .andThen(new InstantCommand(() -> drive.runVelocity(
                 new ChassisSpeeds( 
-                    -0.1, //! tune 
+                    -0.1, // ! tune 
                     0, 
                     0
                 )
@@ -122,7 +122,7 @@ public class CoralCommandCompositer {
         .andThen(coral.getSetArmVoltageCommand(Volts.of(0.25)))
         .andThen(new InstantCommand(() -> drive.runVelocity(
             new ChassisSpeeds(
-                -0.2, //! tune 
+                -0.2, // ! tune 
                 0, 
                 0
             )

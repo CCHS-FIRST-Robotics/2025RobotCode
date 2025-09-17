@@ -50,7 +50,7 @@ public class Robot extends LoggedRobot {
     public void disabledInit() {}
 
     @Override
-    public void disabledPeriodic() {} // ! use lowest ambiguity for vision
+    public void disabledPeriodic() {}
 
     @Override
     public void autonomousInit() { // schedule auto

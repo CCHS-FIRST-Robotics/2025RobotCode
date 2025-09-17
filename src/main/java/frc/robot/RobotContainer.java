@@ -8,8 +8,7 @@ import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.units.measure.*;
 import choreo.auto.AutoChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -146,20 +145,20 @@ public class RobotContainer {
         );
 
         // control precision
-        xboxController.leftTrigger().onTrue(
-            new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_LINEAR_SPEED = MetersPerSecond.of(2))
-            .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_ANGULAR_SPEED = RotationsPerSecond.of(0.5)))
-            .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(10)))
-            .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_ANGULAR_ACCEL = RotationsPerSecondPerSecond.of(10 / PhysicalConstants.TRACK_CIRCUMFERENCE.in(Meters))))
-        );
-        xboxController.rightTrigger().onTrue(
-            new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_LINEAR_SPEED = MetersPerSecond.of(4))
-            .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_ANGULAR_SPEED = RotationsPerSecond.of(1)))
-            .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(20)))
-            .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_ANGULAR_ACCEL = RotationsPerSecondPerSecond.of(20 / PhysicalConstants.TRACK_CIRCUMFERENCE.in(Meters))))
-        );
+        // xboxController.leftTrigger().onTrue(
+        //     new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_LINEAR_SPEED = MetersPerSecond.of(2))
+        //     .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_ANGULAR_SPEED = RotationsPerSecond.of(0.5)))
+        //     .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(10)))
+        //     .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_ANGULAR_ACCEL = RotationsPerSecondPerSecond.of(10 / PhysicalConstants.TRACK_CIRCUMFERENCE.in(Meters))))
+        // );
+        // xboxController.rightTrigger().onTrue(
+        //     new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_LINEAR_SPEED = MetersPerSecond.of(4))
+        //     .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_ANGULAR_SPEED = RotationsPerSecond.of(1)))
+        //     .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(20)))
+        //     .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_ANGULAR_ACCEL = RotationsPerSecondPerSecond.of(20 / PhysicalConstants.TRACK_CIRCUMFERENCE.in(Meters))))
+        // );
 
-        xboxController.x().onTrue(coralCommandCompositer.prepL4());
+        // xboxController.x().onTrue(coralCommandCompositer.prepL4());
         xboxController.b().onTrue(coralCommandCompositer.prepIntake());
         xboxController.a().onTrue(coralCommandCompositer.runIntake());
 
@@ -190,7 +189,7 @@ public class RobotContainer {
         autoChooser.addCmd("Back Up", () -> autoGenerator.backUp());
         autoChooser.addRoutine("1CoralL4", () -> autoGenerator.oneCoralL4());
 
-        autoChooser.select("Back Up"); // ! test this default thing
+        autoChooser.select("Back Up");
 
         SmartDashboard.putData("AutoChooser", autoChooser);
     }
