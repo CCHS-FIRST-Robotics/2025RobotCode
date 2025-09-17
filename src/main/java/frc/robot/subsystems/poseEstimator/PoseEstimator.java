@@ -27,7 +27,7 @@ public class PoseEstimator extends SubsystemBase {
         Drive drive
     ) {
         odometry = new Odometry(gyroIO, drive);
-        vision = new Vision(cameraIOs, drive);
+        vision = new Vision(cameraIOs);
 
         odometryEstimator = new SwerveDrivePoseEstimator(
             PhysicalConstants.KINEMATICS, 
