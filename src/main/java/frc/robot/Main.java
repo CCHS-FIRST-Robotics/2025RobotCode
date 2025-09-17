@@ -8,9 +8,6 @@ import edu.wpi.first.wpilibj.RobotBase;
 
 /**
  * to do: 
- * ! see if combinedPoseEstimate is accurate
- * !!!!!!!!!!!!! update the camera offsets in code because we changed the angles
- * 
  * * figure out the aliance flipping/gyro whatever
  *    alliance flipping will need to exist when vision is a thing
  *    maybe just add 180 to gyro output when red alliance?

@@ -54,6 +54,5 @@ public class DriveWithPosition extends Command {
     @Override
     public void end(boolean interrupted) {
         drive.stop();
-        System.out.println("FINISH TRUST FINISH");
     }
 }

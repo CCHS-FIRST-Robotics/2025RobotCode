@@ -27,7 +27,7 @@ public class PoseEstimator extends SubsystemBase {
         Drive drive
     ) {
         odometry = new Odometry(gyroIO, drive);
-        vision = new Vision(cameraIOs, drive);
+        vision = new Vision(cameraIOs);
 
         odometryEstimator = new SwerveDrivePoseEstimator(
             PhysicalConstants.KINEMATICS, 
@@ -62,13 +62,13 @@ public class PoseEstimator extends SubsystemBase {
         Logger.recordOutput("outputs/poseEstimator/poses/odometryPoses/odometryPoseEstimate", odometryEstimator.getEstimatedPosition());
 
         // vision
-        visionEstimate = vision.getEstimatedPosition();
+        visionEstimate = vision.getVisionEstimate(); // based on the last time it saw an apriltag
         combinedEstimator.updateWithTime(
             Timer.getFPGATimestamp(),
             odometry.getRawYaw(),
             drive.getModulePositions()
         );
-        combinedEstimator.addVisionMeasurement(visionEstimate, Timer.getFPGATimestamp()); // ! think about whether this will work
+        combinedEstimator.addVisionMeasurement(visionEstimate, vision.getLatestTimeStamp());
         Logger.recordOutput("outputs/poseEstimator/poses/visionPoses/visionPoseEstimate", visionEstimate);
         Logger.recordOutput("outputs/poseEstimator/poses/visionPoses/combinedPoseEstimate", combinedEstimator.getEstimatedPosition());
     }
@@ -80,10 +80,10 @@ public class PoseEstimator extends SubsystemBase {
     }
 
     public Pose2d getPose() {
-        return getOdometryPose();
+        return getCombinedPose();
     }
 
-    // @SuppressWarnings("unused")
+    @SuppressWarnings("unused")
     private Pose2d getOdometryPose() {
         return odometryEstimator.getEstimatedPosition();
     }
@@ -93,7 +93,7 @@ public class PoseEstimator extends SubsystemBase {
         return visionEstimate;
     }
 
-    @SuppressWarnings("unused")
+    // @SuppressWarnings("unused")
     private Pose2d getCombinedPose() {
         return combinedEstimator.getEstimatedPosition();
     }

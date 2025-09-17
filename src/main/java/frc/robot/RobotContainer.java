@@ -8,6 +8,8 @@ import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.measure.*;
 import choreo.auto.AutoChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -47,9 +49,7 @@ public class RobotContainer {
                     new GyroIOReal(),
                     new CameraIOPhotonVision[] {
                         new CameraIOPhotonVision(0),
-                        new CameraIOPhotonVision(1),
-                        new CameraIOPhotonVision(2),
-                        new CameraIOPhotonVision(3),
+                        new CameraIOPhotonVision(1)
                     },
                     drive
                 );
@@ -75,9 +75,7 @@ public class RobotContainer {
                     new GyroIO() {},
                     new CameraIOPhotonVision[] {
                         new CameraIOPhotonVision(0),
-                        new CameraIOPhotonVision(1),
-                        new CameraIOPhotonVision(2),
-                        new CameraIOPhotonVision(3),
+                        new CameraIOPhotonVision(1)
                     },
                     drive
                 );
@@ -98,9 +96,7 @@ public class RobotContainer {
                     new GyroIOReal(),
                     new CameraIOPhotonVision[] {
                         new CameraIOPhotonVision(0),
-                        new CameraIOPhotonVision(1),
-                        new CameraIOPhotonVision(2),
-                        new CameraIOPhotonVision(3),
+                        new CameraIOPhotonVision(1)
                     },
                     drive
                 );
@@ -166,6 +162,9 @@ public class RobotContainer {
         xboxController.x().onTrue(coralCommandCompositer.prepL4());
         xboxController.b().onTrue(coralCommandCompositer.prepIntake());
         xboxController.a().onTrue(coralCommandCompositer.runIntake());
+
+        poseEstimator.resetPosition(new Pose2d(2.7076, 4.0259, new Rotation2d())); // just for testing with 50 cm away from the reef (tag 18)
+        xboxController.y().whileTrue(new DriveWithPosition(drive, poseEstimator, new Pose2d(3, 4.0259, new Rotation2d())));
 
         // ————— coral ————— //
 

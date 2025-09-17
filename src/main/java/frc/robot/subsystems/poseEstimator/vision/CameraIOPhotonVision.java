@@ -9,6 +9,9 @@ import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.numbers.*;
 import frc.robot.constants.*;
 
+// go to 10.32.05.16:5800 for front opi5 dashboard
+// go to 10.32.05.17:5800 for back opi5 dashboard
+
 public class CameraIOPhotonVision implements CameraIO{
     private final PhotonCamera camera;
     private final PhotonPoseEstimator poseEstimator;
@@ -18,16 +21,13 @@ public class CameraIOPhotonVision implements CameraIO{
         this.camera = new PhotonCamera(VirtualConstants.CAMERA_PHOTONVISION_NAMES[index]);
         this.poseEstimator = new PhotonPoseEstimator(
             VirtualConstants.APRILTAG_LAYOUT, 
-            PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, // ! start on LOWEST_AMBIGUITY after enabled
+            PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
             PhysicalConstants.CAMERA_TRANSFORMS[index]
         );
 
-        // ! see if periodic only runs during enabled, and then just change it there instead of drilling a big hole through the code from robot.java
-        // https://discord.com/channels/176186766946992128/528555967827148801/1367696455963381793
-        poseEstimator.setMultiTagFallbackStrategy(PoseStrategy.PNP_DISTANCE_TRIG_SOLVE);
+        poseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
     }
 
-    // ! filter out everything other than reef tags
     private void updateStdDevs(
         EstimatedRobotPose currentEstimate, 
         List<PhotonTrackedTarget> targets
@@ -80,7 +80,6 @@ public class CameraIOPhotonVision implements CameraIO{
         // update pose data
         ArrayList<PoseDataEntry> visionPoseData = new ArrayList<PoseDataEntry>();
         for (PhotonPipelineResult result : camera.getAllUnreadResults()) {
-            System.out.println(result);
             Optional<EstimatedRobotPose> currentEstimate = poseEstimator.update(result);
             if(currentEstimate.isPresent()){
                 updateStdDevs(currentEstimate.get(), result.getTargets());
