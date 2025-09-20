@@ -137,12 +137,12 @@ public class RobotContainer {
         );
 
         // x-lock
-        xboxController.x().whileTrue(
-            Commands.run(() -> drive.runCharacterization(
-                new Voltage[] {Volts.of(0), Volts.of(0), Volts.of(0), Volts.of(0)}, 
-                new Angle[] {Rotations.of(0.125), Rotations.of(0.325), Rotations.of(0.325), Rotations.of(0.125)})
-            )
-        );
+        // xboxController.x().whileTrue(
+        //     Commands.run(() -> drive.runCharacterization(
+        //         new Voltage[] {Volts.of(0), Volts.of(0), Volts.of(0), Volts.of(0)}, 
+        //         new Angle[] {Rotations.of(0.125), Rotations.of(0.325), Rotations.of(0.325), Rotations.of(0.125)})
+        //     )
+        // );
 
         // control precision
         // xboxController.leftTrigger().onTrue(
@@ -158,12 +158,18 @@ public class RobotContainer {
         //     .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_ANGULAR_ACCEL = RotationsPerSecondPerSecond.of(20 / PhysicalConstants.TRACK_CIRCUMFERENCE.in(Meters))))
         // );
 
-        // xboxController.x().onTrue(coralCommandCompositer.prepL4());
+
+        // ! set pose based on vision estimate at beginning
+
+        xboxController.y().onTrue(coralCommandCompositer.prepL4());
         xboxController.b().onTrue(coralCommandCompositer.prepIntake());
         xboxController.a().onTrue(coralCommandCompositer.runIntake());
 
-        poseEstimator.resetPosition(new Pose2d(2.7076, 4.0259, new Rotation2d())); // just for testing with 50 cm away from the reef (tag 18)
-        xboxController.y().whileTrue(new DriveWithPosition(drive, poseEstimator, new Pose2d(3, 4.0259, new Rotation2d())));
+        xboxController.leftBumper().onTrue(new InstantCommand(() -> poseEstimator.resetPosition(poseEstimator.getPose())));
+        xboxController.rightBumper().whileTrue(new DriveWithPosition(drive, poseEstimator, new Pose2d(3, 4.0259, new Rotation2d())));
+
+        // xboxController.leftTrigger().whileTrue(new DriveWithPosition(drive, poseEstimator, new Pose2d(3, 4.0259, new Rotation2d())));
+        xboxController.rightTrigger().whileTrue(new DriveWithPosition(drive, poseEstimator, new Pose2d(2.98, 3.84, new Rotation2d(Degrees.of(-2.74)))));
 
         // ————— coral ————— //
 

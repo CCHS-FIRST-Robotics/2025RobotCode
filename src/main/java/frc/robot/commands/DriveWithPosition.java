@@ -43,8 +43,8 @@ public class DriveWithPosition extends Command {
     @Override
     public boolean isFinished() {
         Pose2d robotPose = poseEstimator.getPose();
-        return Math.abs(robotPose.getX() - targetPose.getX()) < 0.02
-            && Math.abs(robotPose.getY() - targetPose.getY()) < 0.02
+        return Math.abs(robotPose.getX() - targetPose.getX()) < 0.01
+            && Math.abs(robotPose.getY() - targetPose.getY()) < 0.01
             && Math.abs(
                 MathUtil.inputModulus(robotPose.getRotation().getRotations(), 0, 1)
                 - MathUtil.inputModulus(targetPose.getRotation().getRotations(), 0, 1)
