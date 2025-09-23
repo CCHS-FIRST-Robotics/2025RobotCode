@@ -9,7 +9,6 @@ import static edu.wpi.first.units.Units.*;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
 import edu.wpi.first.math.geometry.*;
-import edu.wpi.first.units.measure.*;
 import choreo.auto.AutoChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
@@ -112,6 +111,7 @@ public class RobotContainer {
         }
 
         drive.setPoseEstimator(poseEstimator);
+        poseEstimator.resetPosition(new Pose2d());
 
         coralCommandCompositer = new CoralCommandCompositer(drive, poseEstimator, coral);
         autoGenerator = new AutoRoutineGenerator(drive, poseEstimator, coralCommandCompositer);
@@ -144,32 +144,21 @@ public class RobotContainer {
         //     )
         // );
 
-        // control precision
-        // xboxController.leftTrigger().onTrue(
-        //     new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_LINEAR_SPEED = MetersPerSecond.of(2))
-        //     .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_ANGULAR_SPEED = RotationsPerSecond.of(0.5)))
-        //     .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(10)))
-        //     .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_ANGULAR_ACCEL = RotationsPerSecondPerSecond.of(10 / PhysicalConstants.TRACK_CIRCUMFERENCE.in(Meters))))
-        // );
-        // xboxController.rightTrigger().onTrue(
-        //     new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_LINEAR_SPEED = MetersPerSecond.of(4))
-        //     .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_ANGULAR_SPEED = RotationsPerSecond.of(1)))
-        //     .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(20)))
-        //     .andThen(new InstantCommand(() -> PhysicalConstants.MAX_ALLOWED_ANGULAR_ACCEL = RotationsPerSecondPerSecond.of(20 / PhysicalConstants.TRACK_CIRCUMFERENCE.in(Meters))))
-        // );
+        // ! also testing with multiple apriltags to see if multitagpnp is working
 
+        // ! try resetting pose to 0 and 180 degrees, see if the gyro rotation is really taken care of without even rezeroing the gyro. if so, I don't need to worry about relative gyro whatever
+        xboxController.leftTrigger().onTrue(new InstantCommand(() -> poseEstimator.resetPosition(new Pose2d(0, 0, new Rotation2d()))));
+        xboxController.rightTrigger().onTrue(new InstantCommand(() -> poseEstimator.resetPosition(new Pose2d(0, 0, new Rotation2d(Degrees.of(180))))));
 
-        // ! set pose based on vision estimate at beginning
+        // xboxController.y().onTrue(coralCommandCompositer.prepL4());
+        // xboxController.b().onTrue(coralCommandCompositer.prepIntake());
+        // xboxController.a().onTrue(coralCommandCompositer.runIntake());
 
-        xboxController.y().onTrue(coralCommandCompositer.prepL4());
-        xboxController.b().onTrue(coralCommandCompositer.prepIntake());
-        xboxController.a().onTrue(coralCommandCompositer.runIntake());
-
-        xboxController.leftBumper().onTrue(new InstantCommand(() -> poseEstimator.resetPosition(poseEstimator.getPose())));
-        xboxController.rightBumper().whileTrue(new DriveWithPosition(drive, poseEstimator, new Pose2d(3, 4.0259, new Rotation2d())));
-
-        // xboxController.leftTrigger().whileTrue(new DriveWithPosition(drive, poseEstimator, new Pose2d(3, 4.0259, new Rotation2d())));
-        xboxController.rightTrigger().whileTrue(new DriveWithPosition(drive, poseEstimator, new Pose2d(2.98, 3.84, new Rotation2d(Degrees.of(-2.74)))));
+        // // reset pose based on vision
+        // xboxController.rightBumper().onTrue(new InstantCommand(() -> poseEstimator.resetPosition(poseEstimator.getPose())));
+        
+        // // drive to L4 // ! current position is not theoretically correct
+        // xboxController.rightTrigger().whileTrue(new DriveWithPosition(drive, poseEstimator, new Pose2d(3, 4.0259, new Rotation2d())));
 
         // ————— coral ————— //
 

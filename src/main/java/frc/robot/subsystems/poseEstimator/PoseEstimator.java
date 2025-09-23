@@ -56,7 +56,7 @@ public class PoseEstimator extends SubsystemBase {
         // odometry
         odometryEstimator.updateWithTime(
             Timer.getFPGATimestamp(),
-            odometry.getYaw(),
+            odometry.getRawYaw(),
             drive.getModulePositions()
         );
         Logger.recordOutput("outputs/poseEstimator/poses/odometryPoses/odometryPoseEstimate", odometryEstimator.getEstimatedPosition());
@@ -65,7 +65,7 @@ public class PoseEstimator extends SubsystemBase {
         visionEstimate = vision.getVisionEstimate(); // based on the last time it saw an apriltag
         combinedEstimator.updateWithTime(
             Timer.getFPGATimestamp(),
-            odometry.getYaw(),
+            odometry.getRawYaw(),
             drive.getModulePositions()
         );
         combinedEstimator.addVisionMeasurement(visionEstimate, vision.getLatestTimeStamp());
@@ -74,6 +74,7 @@ public class PoseEstimator extends SubsystemBase {
     }
 
     public void resetPosition(Pose2d pose) {
+        // "the library automatically takes care of offsetting the gyro angle" - SwerveDrivePoseEstimator.resetPosition
         odometryEstimator.resetPosition(pose.getRotation(), drive.getModulePositions(), pose);
         visionEstimate = new Pose2d();
         combinedEstimator.resetPosition(pose.getRotation(), drive.getModulePositions(), pose);

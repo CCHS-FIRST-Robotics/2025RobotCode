@@ -25,7 +25,7 @@ public class CameraIOPhotonVision implements CameraIO{
             PhysicalConstants.CAMERA_TRANSFORMS[index]
         );
 
-        poseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+        poseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY); // if it only sees one tag
     }
 
     private void updateStdDevs(
@@ -66,13 +66,15 @@ public class CameraIOPhotonVision implements CameraIO{
         averageDistance /= numTags;
         averageAmbiguity /= numTags;
 
-        stdDevs = stdDevs.times( // increase stdevs with the square of distance, scaling by a constant
+        if (averageAmbiguity > 0.2) { // "numbers above 0.2 are likely to be ambiguous" - PhotonTarget.getPoseAmbiguity()
+            stdDevs = VecBuilder.fill(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE); 
+            return;
+        }
+
+        // scale stdDevs with distance^2. 1 + ensures that in the best case, if averageDistancce = 0, stdDevs don't change.
+        stdDevs = stdDevs.times(
             1 + (averageDistance * averageDistance / 60)
         );
-
-        if (averageAmbiguity > 0.2) { // "numbers above 0.2 are likely to be ambiguous" - PhotonTarget.getPoseAmbiguity()
-            stdDevs = stdDevs.plus(averageAmbiguity);
-        }
     }
 
     @Override

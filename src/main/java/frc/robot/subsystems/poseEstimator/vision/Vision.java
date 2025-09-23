@@ -12,8 +12,8 @@ public class Vision {
     private final SwerveDrivePoseEstimator visionEstimator;
     private double latestTimestamp = 0;
 
-    private final CameraIO[] cameraIOs;
-    private final CameraIOInputsAutoLogged[] cameraIOInputs = new CameraIOInputsAutoLogged[VirtualConstants.NUM_CAMERAS];
+    private final CameraIO[] ios;
+    private final CameraIOInputsAutoLogged[] inputs = new CameraIOInputsAutoLogged[VirtualConstants.NUM_CAMERAS];
 
     public Vision(
         CameraIO[] ios
@@ -27,20 +27,20 @@ public class Vision {
             VirtualConstants.SINGLE_TAG_STD_DEVS // not sure why this param exists because it's always overridden
         );
 
-        this.cameraIOs = ios;
+        this.ios = ios;
 
         for(int i = 0; i < VirtualConstants.NUM_CAMERAS; i++) {
-            cameraIOInputs[i] = new CameraIOInputsAutoLogged();
+            inputs[i] = new CameraIOInputsAutoLogged();
         }
     }
 
     public void periodic(){
         for (int i = 0; i < VirtualConstants.NUM_CAMERAS; i++) {
-            cameraIOs[i].updateInputs(cameraIOInputs[i]);
-            Logger.processInputs("cameras/" + VirtualConstants.CAMERA_LOGGER_NAMES[i], cameraIOInputs[i]);
+            ios[i].updateInputs(inputs[i]);
+            Logger.processInputs("cameras/" + VirtualConstants.CAMERA_LOGGER_NAMES[i], inputs[i]);
             
             // update visionEstimator based on new measurements
-            for (PoseDataEntry pose : cameraIOInputs[i].visionPoseData) {
+            for (PoseDataEntry pose : inputs[i].visionPoseData) {
                 visionEstimator.updateWithTime( // this doesn't impact the pose estimate since stateStdDevs is Integer.MAX_VALUE
                     Timer.getFPGATimestamp(),
                     new Rotation2d(),

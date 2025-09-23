@@ -14,15 +14,16 @@ import edu.wpi.first.wpilibj.RobotBase;
  * exceptions are in comments
  * 
  * 
- * 
+ * confine all numbers to constants, and move them there. subsystem files should not have any numbers
  * 
  * ! is it okay for the robot to assume you're at the 0 angle when you start
  * 
- * 
+ * use record for structs
  * 
  * 
  * 
  * clean up imports
+ * fix spelling of stdevs
  * 
  * goal for preseason: 
  * get the oneCoralL4 auto to work when on both red and blue alliance
