@@ -69,8 +69,8 @@ public class CoralIOReal implements CoralIO{
         int armId, 
         int armCancoderId
     ) {
-        elevatorMotor = new TalonFX(elevatorId); // Falcon500
-        armMotor = new TalonFX(armId); // Falcon500
+        elevatorMotor = new TalonFX(elevatorId);
+        armMotor = new TalonFX(armId);
 
         // ————— elevator ————— //
 
@@ -173,7 +173,7 @@ public class CoralIOReal implements CoralIO{
     
     @Override
     public boolean armAtSetpoint(Angle position) {
-        return Math.abs(position.in(Rotations) - inputs.armEncoderPosition) < 0.008;
+        return Math.abs(position.in(Rotations) - inputs.armEncoderPosition) < 0.01;
     }
 
     // ————— logging ————— //

@@ -14,8 +14,8 @@ import edu.wpi.first.units.measure.*;
 import frc.robot.constants.PhysicalConstants;
 
 public class ModuleIOReal implements ModuleIO {
-    private final SparkMax driveMotor; // NEO
-    private final SparkMax turnMotor; // NEO
+    private final SparkMax driveMotor;
+    private final SparkMax turnMotor;
 
     private final SparkMaxConfig driveConfig = new SparkMaxConfig();
     private final SparkMaxConfig turnConfig = new SparkMaxConfig();

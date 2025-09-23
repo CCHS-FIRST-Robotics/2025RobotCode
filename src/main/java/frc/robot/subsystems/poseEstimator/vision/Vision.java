@@ -46,8 +46,8 @@ public class Vision {
                     new Rotation2d(),
                     PhysicalConstants.BLANK_MODULE_POSITIONS
                 );
-                visionEstimator.addVisionMeasurement(pose.getRobotPose().toPose2d(), pose.getTimestamp(), pose.getStandardDeviation());
-                latestTimestamp = Math.max(pose.getTimestamp(), latestTimestamp);
+                visionEstimator.addVisionMeasurement(pose.robotPose().toPose2d(), pose.timestamp(), pose.standardDeviation());
+                latestTimestamp = Math.max(pose.timestamp(), latestTimestamp);
             }
         }
     }

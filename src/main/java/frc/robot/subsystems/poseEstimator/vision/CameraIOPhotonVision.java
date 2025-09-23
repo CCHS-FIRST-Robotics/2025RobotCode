@@ -15,7 +15,6 @@ import frc.robot.constants.*;
 public class CameraIOPhotonVision implements CameraIO{
     private final PhotonCamera camera;
     private final PhotonPoseEstimator poseEstimator;
-    private Matrix<N3, N1> stdDevs = VirtualConstants.SINGLE_TAG_STD_DEVS;
 
     public CameraIOPhotonVision(int index) {
         this.camera = new PhotonCamera(VirtualConstants.CAMERA_PHOTONVISION_NAMES[index]);
@@ -28,17 +27,19 @@ public class CameraIOPhotonVision implements CameraIO{
         poseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY); // if it only sees one tag
     }
 
-    private void updateStdDevs(
+    private Matrix<N3, N1> updateStdDevs(
         EstimatedRobotPose currentEstimate, 
         List<PhotonTrackedTarget> targets
     ) {
+        Matrix<N3, N1> stdDevs;
+        
         int numTags = 0;
         double averageDistance = 0;
         double averageAmbiguity = 0;
-        for (PhotonTrackedTarget PhotonTarget : targets) { // get average distance and ambiguity
+        for (PhotonTrackedTarget target : targets) { // get average distance and ambiguity
             numTags++;
 
-            Optional<Pose3d> tagPose = poseEstimator.getFieldTags().getTagPose(PhotonTarget.getFiducialId());
+            Optional<Pose3d> tagPose = poseEstimator.getFieldTags().getTagPose(target.getFiducialId());
             if (tagPose.isEmpty()) {
                 continue;
             }
@@ -46,15 +47,14 @@ public class CameraIOPhotonVision implements CameraIO{
                 currentEstimate.estimatedPose.toPose2d().getTranslation()
             );
 
-            averageAmbiguity += PhotonTarget.getPoseAmbiguity();
+            averageAmbiguity += target.getPoseAmbiguity();
         }
 
         switch(numTags) {
             case 0:
-                stdDevs = VecBuilder.fill(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE); 
                 // ! pretty sure this will literally never run
                 System.err.println("HIHIHIHIHIHIHI IT RECORDED 0 TAGS HAHAHAHAHAHAHA");
-                return;
+                return VecBuilder.fill(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
             case 1: 
                 stdDevs = VirtualConstants.SINGLE_TAG_STD_DEVS;
                 break;
@@ -66,15 +66,15 @@ public class CameraIOPhotonVision implements CameraIO{
         averageDistance /= numTags;
         averageAmbiguity /= numTags;
 
-        if (averageAmbiguity > 0.2) { // "numbers above 0.2 are likely to be ambiguous" - PhotonTarget.getPoseAmbiguity()
-            stdDevs = VecBuilder.fill(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE); 
-            return;
+        if (averageAmbiguity > VirtualConstants.AMBIGUITY_THRESHOLD) { // filters out ambiguous estimates
+            return VecBuilder.fill(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
         }
 
-        // scale stdDevs with distance^2. 1 + ensures that in the best case, if averageDistancce = 0, stdDevs don't change.
-        stdDevs = stdDevs.times(
-            1 + (averageDistance * averageDistance / 60)
+        stdDevs = stdDevs.times( // scales stdDevs with distance^2. 1 + ensures that in the best case, if averageDistancce = 0, stdDevs don't change.
+            1 + (averageDistance * averageDistance / VirtualConstants.DISTANCE_SCALAR)
         );
+
+        return stdDevs;
     }
 
     @Override
@@ -86,8 +86,11 @@ public class CameraIOPhotonVision implements CameraIO{
         for (PhotonPipelineResult result : camera.getAllUnreadResults()) {
             Optional<EstimatedRobotPose> currentEstimate = poseEstimator.update(result);
             if(currentEstimate.isPresent()){
-                updateStdDevs(currentEstimate.get(), result.getTargets());
-                visionPoseData.add(new PoseDataEntry(currentEstimate.get().estimatedPose, result.getTimestampSeconds(), stdDevs));
+                visionPoseData.add(new PoseDataEntry(
+                    currentEstimate.get().estimatedPose, 
+                    result.getTimestampSeconds(), 
+                    updateStdDevs(currentEstimate.get(), result.getTargets()))
+                );
             }
         }
         inputs.visionPoseData = visionPoseData.toArray(new PoseDataEntry[0]);

@@ -14,7 +14,8 @@ import edu.wpi.first.wpilibj.RobotBase;
  * exceptions are in comments
  * 
  * 
- * confine all numbers to constants, and move them there. subsystem files should not have any numbers
+ * ! confine all numbers to constants, and move them there. subsystem files should not have any numbers unless in the constructor for config purposes
+ * ! whenever we use robot rotation, confine to between 0 and 1 rotation using inputmodulus
  * 
  * ! is it okay for the robot to assume you're at the 0 angle when you start
  * 

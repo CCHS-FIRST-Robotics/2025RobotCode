@@ -16,22 +16,5 @@ public interface CameraIO {
 
     public default void updateInputs(CameraIOInputs inputs) {}
 
-    public static record PoseDataEntry(Pose3d robotPose, double timestamp, Matrix<N3, N1> standardDeviation) {
-        public Pose3d getRobotPose() {
-            return robotPose;
-        }
-
-        public double getTimestamp() {
-            return timestamp;
-        }
-
-        public Matrix<N3, N1> getStandardDeviation() {
-            return standardDeviation;
-        }
-
-        @Override
-        public String toString() {
-            return "[" + robotPose + ", timestamp=" + timestamp + ", stddev=" + standardDeviation + "]";
-        }
-    }
+    public static record PoseDataEntry(Pose3d robotPose, double timestamp, Matrix<N3, N1> standardDeviation) {}
 }

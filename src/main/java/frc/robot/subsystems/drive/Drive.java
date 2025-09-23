@@ -28,7 +28,7 @@ public class Drive extends SubsystemBase {
     // ————— odometry ————— //
     private PoseEstimator poseEstimator;
     private SwerveModulePosition[] moduleDeltas = new SwerveModulePosition[4];
-    private double[] lastModulePositionsMeters = new double[] {0.0, 0.0, 0.0, 0.0};
+    private double[] lastModulePositionsMeters = new double[4];
 
     // ————— charactarization ————— //
 

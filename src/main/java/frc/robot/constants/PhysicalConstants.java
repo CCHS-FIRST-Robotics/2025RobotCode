@@ -8,16 +8,16 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.*;
 import edu.wpi.first.math.geometry.*;
 
-public final class PhysicalConstants {
+public final class PhysicalConstants { // * indicates physical measurement
 
     // ————— drive constants ————— //
 
     // kinematics
-    public static final Mass ROBOT_WEIGHT = Pounds.of(98.568); // battery is 13.324lbs extra
-    public static final Distance WHEEL_RADIUS = Inches.of(2);
+    public static final Mass ROBOT_WEIGHT = Pounds.of(98.568); // battery is 13.324lbs extra // * 
+    public static final Distance WHEEL_RADIUS = Inches.of(2); // * 
     public static final Distance WHEEL_CIRCUMFERENCE = WHEEL_RADIUS.times(2 * Math.PI);
-    public static final Distance TRACK_WIDTH_X = Inches.of(22.5);
-    public static final Distance TRACK_WIDTH_Y = Inches.of(26.5);
+    public static final Distance TRACK_WIDTH_X = Inches.of(22.5); // * 
+    public static final Distance TRACK_WIDTH_Y = Inches.of(26.5); // * 
     public static final Distance TRACK_RADIUS = Inches.of(Math.hypot(TRACK_WIDTH_X.in(Inches) / 2.0, TRACK_WIDTH_Y.in(Inches) / 2.0));
     public static final Distance TRACK_CIRCUMFERENCE = TRACK_RADIUS.times(2 * Math.PI);
     public static final Translation2d[] MODULE_TRANSLATIONS = new Translation2d[] { // using the chassisspeeds coordinate plane
@@ -33,7 +33,6 @@ public final class PhysicalConstants {
         new SwerveModulePosition(), 
         new SwerveModulePosition()
     };
-
 
     // gears
     public static final double DRIVE_AFTER_ENCODER_REDUCTION = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0); // 6.7460317460
@@ -53,33 +52,23 @@ public final class PhysicalConstants {
     public static LinearVelocity MAX_ALLOWED_LINEAR_SPEED = MetersPerSecond.of(0.5);
     public static AngularVelocity MAX_ALLOWED_ANGULAR_SPEED = RotationsPerSecond.of(0.5);
     public static LinearAcceleration MAX_ALLOWED_LINEAR_ACCEL = MetersPerSecondPerSecond.of(20);
-    public static AngularAcceleration MAX_ALLOWED_ANGULAR_ACCEL = RotationsPerSecondPerSecond.of(20 / TRACK_CIRCUMFERENCE.in(Meters));
+    public static AngularAcceleration MAX_ALLOWED_ANGULAR_ACCEL = RotationsPerSecondPerSecond.of(20);
 
     // ————— poseEstimator constants ————— //
 
     // cameras
-    public static final Transform3d FRONT_LEFT_TRANSFORM = new Transform3d(
+    public static final Transform3d FRONT_LEFT_TRANSFORM = new Transform3d( // * 
         new Translation3d(Units.inchesToMeters(14), Units.inchesToMeters(11), Units.inchesToMeters(0)),
         new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(-30))
     );
-    public static final Transform3d FRONT_RIGHT_TRANSFORM = new Transform3d(
+    public static final Transform3d FRONT_RIGHT_TRANSFORM = new Transform3d( // * 
         new Translation3d(Units.inchesToMeters(14), Units.inchesToMeters(-11), Units.inchesToMeters(0)),
         new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(30))
     );
-    // public static final Transform3d BACK_LEFT_TRANSFORM = new Transform3d(
-    //     new Translation3d(Units.inchesToMeters(-11), Units.inchesToMeters(14), Units.inchesToMeters(0)),
-    //     new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(0))
-    // );
-    // public static final Transform3d BACK_RIGHT_TRANSFORM = new Transform3d(
-    //     new Translation3d(Units.inchesToMeters(-11), Units.inchesToMeters(-14), Units.inchesToMeters(0)),
-    //     new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(0))
-    // );
 
     public static final Transform3d[] CAMERA_TRANSFORMS = {
         FRONT_LEFT_TRANSFORM,
         FRONT_RIGHT_TRANSFORM
-        // BACK_LEFT_TRANSFORM,
-        // BACK_RIGHT_TRANSFORM
     };
 
     // ————— coral constants ————— //
