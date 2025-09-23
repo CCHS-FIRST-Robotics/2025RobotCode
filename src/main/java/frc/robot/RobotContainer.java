@@ -144,9 +144,6 @@ public class RobotContainer {
         //     )
         // );
 
-        // ! also testing with multiple apriltags to see if multitagpnp is working
-
-        // ! try resetting pose to 0 and 180 degrees, see if the gyro rotation is really taken care of without even rezeroing the gyro. if so, I don't need to worry about relative gyro whatever
         xboxController.leftTrigger().onTrue(new InstantCommand(() -> poseEstimator.resetPosition(new Pose2d(0, 0, new Rotation2d()))));
         xboxController.rightTrigger().onTrue(new InstantCommand(() -> poseEstimator.resetPosition(new Pose2d(0, 0, new Rotation2d(Degrees.of(180))))));
 

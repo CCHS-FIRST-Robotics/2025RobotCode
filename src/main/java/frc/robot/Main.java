@@ -8,41 +8,24 @@ import edu.wpi.first.wpilibj.RobotBase;
 
 /**
  * to do: 
+ * ! try resetting pose to 0 and 180 degrees, see if the gyro rotation is really taken care of without even rezeroing the gyro. if so, I don't need to worry about relative gyro whatever
  * 
- * advantagescope units
- * volts, amps, celcius, rotations, rotationspersecond
- * exceptions are in comments
- * 
- * 
- * ! confine all numbers to constants, and move them there. subsystem files should not have any numbers unless in the constructor for config purposes
  * ! whenever we use robot rotation, confine to between 0 and 1 rotation using inputmodulus
+ * ! check if the poseestimate angle is confined between two values, and if not, if setposition does what I think it should. 
+ * !    remember to commenting out isFinished in drivewithposition.java
  * 
- * ! is it okay for the robot to assume you're at the 0 angle when you start
- * 
- * use record for structs
+ * ! also testing with multiple apriltags to see if multitagpnp is working
  * 
  * 
  * 
  * clean up imports
- * fix spelling of stdevs
  * 
  * goal for preseason: 
  * get the oneCoralL4 auto to work when on both red and blue alliance
  * 
- * * figure out the aliance flipping/gyro whatever
- *    alliance flipping will need to exist when vision is a thing
- *    maybe just add 180 to gyro output when red alliance?
- *    it would be cool to do the alliance flipping / FOC in drivewithvelocity
- *    go through all uses of angles in code and see if it's -pi to pi
- *    make gyro relative
- * 
  * * tuning
  *    tune arm without motionmagic
  *    figure out sysid
- * 
- * * daily at home: 
- * 
- * * daily at robotics: 
  * 
  * * longer term: 
  *    pid tunable constants
