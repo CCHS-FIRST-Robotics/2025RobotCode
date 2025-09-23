@@ -9,6 +9,8 @@ import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.numbers.*;
 import frc.robot.constants.*;
 
+import org.littletonrobotics.junction.Logger;
+
 // go to 10.32.05.16:5800 for front opi5 dashboard
 // go to 10.32.05.17:5800 for back opi5 dashboard
 
@@ -74,6 +76,10 @@ public class CameraIOPhotonVision implements CameraIO{
             1 + (averageDistance * averageDistance / VirtualConstants.DISTANCE_SCALAR)
         );
 
+        Logger.recordOutput("Matrix1", stdDevs.get(0, 0));
+        Logger.recordOutput("Matrix2", stdDevs.get(1, 0));
+        Logger.recordOutput("Matrix3", stdDevs.get(2, 0));
+        
         return stdDevs;
     }
 

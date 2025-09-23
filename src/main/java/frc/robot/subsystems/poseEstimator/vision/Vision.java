@@ -8,6 +8,8 @@ import org.littletonrobotics.junction.Logger;
 import frc.robot.subsystems.poseEstimator.vision.CameraIO.PoseDataEntry;
 import frc.robot.constants.*;
 
+import org.littletonrobotics.junction.Logger;
+
 public class Vision {
     private final SwerveDrivePoseEstimator visionEstimator;
     private double latestTimestamp = 0;
@@ -47,7 +49,8 @@ public class Vision {
                     PhysicalConstants.BLANK_MODULE_POSITIONS
                 );
                 visionEstimator.addVisionMeasurement(pose.robotPose().toPose2d(), pose.timestamp(), pose.standardDeviation());
-                latestTimestamp = Math.max(pose.timestamp(), latestTimestamp);
+                latestTimestamp = Math.max(Timer.getFPGATimestamp(), latestTimestamp);
+                Logger.recordOutput("latest", latestTimestamp);
             }
         }
     }

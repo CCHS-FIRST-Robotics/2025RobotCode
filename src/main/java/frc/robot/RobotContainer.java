@@ -144,7 +144,7 @@ public class RobotContainer {
         //     )
         // );
 
-        xboxController.leftTrigger().onTrue(new InstantCommand(() -> poseEstimator.resetPosition(new Pose2d(0, 0, new Rotation2d()))));
+        xboxController.leftTrigger().onTrue(new InstantCommand(() -> poseEstimator.resetPosition(new Pose2d(0, 0, new Rotation2d(Degrees.of(0))))));
         xboxController.rightTrigger().onTrue(new InstantCommand(() -> poseEstimator.resetPosition(new Pose2d(0, 0, new Rotation2d(Degrees.of(180))))));
 
         // xboxController.y().onTrue(coralCommandCompositer.prepL4());

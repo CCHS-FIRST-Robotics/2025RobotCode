@@ -56,7 +56,7 @@ public class PoseEstimator extends SubsystemBase {
         // odometry
         odometryEstimator.updateWithTime(
             Timer.getFPGATimestamp(),
-            odometry.getRawYaw(),
+            odometry.getYaw(),
             drive.getModulePositions()
         );
         Logger.recordOutput("outputs/poseEstimator/poses/odometryPoses/odometryPoseEstimate", odometryEstimator.getEstimatedPosition());
@@ -65,7 +65,7 @@ public class PoseEstimator extends SubsystemBase {
         visionEstimate = vision.getVisionEstimate(); // based on the last time it saw an apriltag
         combinedEstimator.updateWithTime(
             Timer.getFPGATimestamp(),
-            odometry.getRawYaw(),
+            odometry.getYaw(),
             drive.getModulePositions()
         );
         combinedEstimator.addVisionMeasurement(visionEstimate, vision.getLatestTimeStamp());
@@ -75,10 +75,15 @@ public class PoseEstimator extends SubsystemBase {
 
     public void resetPosition(Pose2d pose) {
         // "the library automatically takes care of offsetting the gyro angle" - SwerveDrivePoseEstimator.resetPosition
-        odometryEstimator.resetPosition(pose.getRotation(), drive.getModulePositions(), pose);
+        odometryEstimator.resetPosition(odometry.getYaw(), drive.getModulePositions(), pose);
         visionEstimate = new Pose2d();
-        combinedEstimator.resetPosition(pose.getRotation(), drive.getModulePositions(), pose);
+        combinedEstimator.resetPosition(odometry.getYaw(), drive.getModulePositions(), pose);
+
+        odometry.resetStartAngle();
     }
+
+    // when starts without seeing apriltags, when it sees an apriltag next the combined estimate will be correct
+    // 
 
     public Pose2d getPose() {
         return getCombinedPose();

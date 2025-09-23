@@ -37,7 +37,7 @@ public final class VirtualConstants {
 
     // cameras
     public static final AprilTagFieldLayout APRILTAG_LAYOUT = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
-    public static final int NUM_CAMERAS = 4;
+    public static final int NUM_CAMERAS = 2;
     public static final String[] CAMERA_PHOTONVISION_NAMES = {"FrontLeft", "FrontRight"};
     public static final String[] CAMERA_LOGGER_NAMES = {"frontLeft", "frontRight"};
     public static final Matrix<N3, N1> SINGLE_TAG_STD_DEVS = VecBuilder.fill(0.8, 0.8, 2); // ! magic numbers
