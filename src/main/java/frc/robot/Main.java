@@ -9,6 +9,19 @@ import edu.wpi.first.wpilibj.RobotBase;
 /**
  * to do: 
  * 
+ * advantagescope units
+ * volts, amps, celcius, rotations, rotationspersecond
+ * exceptions are in comments
+ * 
+ * 
+ * 
+ * 
+ * ! is it okay for the robot to assume you're at the 0 angle when you start
+ * 
+ * 
+ * 
+ * 
+ * 
  * clean up imports
  * 
  * goal for preseason: 

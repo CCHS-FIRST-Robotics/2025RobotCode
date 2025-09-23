@@ -3,7 +3,7 @@ package frc.robot.subsystems.poseEstimator.odometry;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface GyroIO {
-    @AutoLog
+    @AutoLog // uses doubles so that units are clear in advantagescope
     public static class GyroIOInputs {
         public boolean connected;
 

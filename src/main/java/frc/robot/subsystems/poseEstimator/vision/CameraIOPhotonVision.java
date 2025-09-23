@@ -51,7 +51,9 @@ public class CameraIOPhotonVision implements CameraIO{
 
         switch(numTags) {
             case 0:
-                stdDevs = VecBuilder.fill(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
+                stdDevs = VecBuilder.fill(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE); 
+                // ! pretty sure this will literally never run
+                System.err.println("HIHIHIHIHIHIHI IT RECORDED 0 TAGS HAHAHAHAHAHAHA");
                 return;
             case 1: 
                 stdDevs = VirtualConstants.SINGLE_TAG_STD_DEVS;
@@ -64,8 +66,8 @@ public class CameraIOPhotonVision implements CameraIO{
         averageDistance /= numTags;
         averageAmbiguity /= numTags;
 
-        stdDevs = stdDevs.times( // ! magic equation
-            1 + (averageDistance * averageDistance / VirtualConstants.DISTANCE_WEIGHT)
+        stdDevs = stdDevs.times( // increase stdevs with the square of distance, scaling by a constant
+            1 + (averageDistance * averageDistance / 60)
         );
 
         if (averageAmbiguity > 0.2) { // "numbers above 0.2 are likely to be ambiguous" - PhotonTarget.getPoseAmbiguity()

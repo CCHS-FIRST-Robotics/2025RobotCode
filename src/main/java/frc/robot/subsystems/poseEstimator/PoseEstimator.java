@@ -49,14 +49,14 @@ public class PoseEstimator extends SubsystemBase {
     }
 
     @Override
-    public void periodic() {     
+    public void periodic() {  
         odometry.periodic();
         vision.periodic();
         
         // odometry
         odometryEstimator.updateWithTime(
             Timer.getFPGATimestamp(),
-            odometry.getRawYaw(),
+            odometry.getYaw(),
             drive.getModulePositions()
         );
         Logger.recordOutput("outputs/poseEstimator/poses/odometryPoses/odometryPoseEstimate", odometryEstimator.getEstimatedPosition());
@@ -65,7 +65,7 @@ public class PoseEstimator extends SubsystemBase {
         visionEstimate = vision.getVisionEstimate(); // based on the last time it saw an apriltag
         combinedEstimator.updateWithTime(
             Timer.getFPGATimestamp(),
-            odometry.getRawYaw(),
+            odometry.getYaw(),
             drive.getModulePositions()
         );
         combinedEstimator.addVisionMeasurement(visionEstimate, vision.getLatestTimeStamp());

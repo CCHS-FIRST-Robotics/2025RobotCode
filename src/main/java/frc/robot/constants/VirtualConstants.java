@@ -36,14 +36,10 @@ public final class VirtualConstants {
     public static final int ARM_CANCODER_ID = 51;
 
     // cameras
+    public static final AprilTagFieldLayout APRILTAG_LAYOUT = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
     public static final int NUM_CAMERAS = 2;
     public static final String[] CAMERA_PHOTONVISION_NAMES = {"FrontLeft", "FrontRight", "BackLeft", "BackRight"};
     public static final String[] CAMERA_LOGGER_NAMES = {"frontLeft", "frontRight", "backLeft", "backRight"};
-    // ! as far as I know, these numbers aren't based on much
-    public static final Matrix<N3, N1> SINGLE_TAG_STD_DEVS = VecBuilder.fill(0.8, 0.8, 2);
-    public static final Matrix<N3, N1> MULTI_TAG_STD_DEVS = VecBuilder.fill(0.2, 0.2, 0.4);
-    public static final int DISTANCE_WEIGHT = 60; // higher means if tags are futher away they aren't accounted for as much
-    public static final int TOO_FAR_AWAY = 6; // meters at which tag estimates are thrown out
-
-    public static final AprilTagFieldLayout APRILTAG_LAYOUT = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
+    public static final Matrix<N3, N1> SINGLE_TAG_STD_DEVS = VecBuilder.fill(0.8, 0.8, 2); // ! magic numbers
+    public static final Matrix<N3, N1> MULTI_TAG_STD_DEVS = VecBuilder.fill(0.2, 0.2, 0.4); // ! magic numbers
 }

@@ -4,7 +4,7 @@ import edu.wpi.first.units.measure.*;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface ModuleIO {
-    @AutoLog
+    @AutoLog // uses doubles so that units are clear in advantagescope
     public static class ModuleIOInputs {
         public double driveVoltage;
         public double driveCurrent;

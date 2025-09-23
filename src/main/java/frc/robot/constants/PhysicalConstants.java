@@ -3,6 +3,7 @@ package frc.robot.constants;
 import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.*;
 import edu.wpi.first.math.geometry.*;
@@ -26,6 +27,13 @@ public final class PhysicalConstants {
         new Translation2d(-TRACK_WIDTH_X.in(Meters) / 2.0, -TRACK_WIDTH_Y.in(Meters) / 2.0) // BR
     };
     public static final SwerveDriveKinematics KINEMATICS = new SwerveDriveKinematics(MODULE_TRANSLATIONS);
+    public static final SwerveModulePosition[] BLANK_MODULE_POSITIONS = {
+        new SwerveModulePosition(), 
+        new SwerveModulePosition(), 
+        new SwerveModulePosition(), 
+        new SwerveModulePosition()
+    };
+
 
     // gears
     public static final double DRIVE_AFTER_ENCODER_REDUCTION = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0); // 6.7460317460
