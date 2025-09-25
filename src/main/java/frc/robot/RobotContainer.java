@@ -144,21 +144,15 @@ public class RobotContainer {
         //     )
         // );
 
-        xboxController.leftTrigger().onTrue(new InstantCommand(() -> poseEstimator.resetPosition(new Pose2d(0, 0, new Rotation2d(Degrees.of(0))))));
-        xboxController.rightTrigger().onTrue(new InstantCommand(() -> poseEstimator.resetPosition(new Pose2d(0, 0, new Rotation2d(Degrees.of(180))))));
+        xboxController.y().onTrue(coralCommandCompositer.prepL4());
+        xboxController.b().onTrue(coralCommandCompositer.prepIntake());
+        xboxController.a().onTrue(coralCommandCompositer.runIntake());
 
-        // xboxController.y().onTrue(coralCommandCompositer.prepL4());
-        // xboxController.b().onTrue(coralCommandCompositer.prepIntake());
-        // xboxController.a().onTrue(coralCommandCompositer.runIntake());
-
-        // // reset pose based on vision
-        // xboxController.rightBumper().onTrue(new InstantCommand(() -> poseEstimator.resetPosition(poseEstimator.getPose())));
-        
-        // // drive to L4 // ! current position is not theoretically correct
-        // xboxController.rightTrigger().whileTrue(new DriveWithPosition(drive, poseEstimator, new Pose2d(3, 4.0259, new Rotation2d())));
+        // drive to L4 // ! current position is not theoretically correct
+        xboxController.rightTrigger().whileTrue(new DriveWithPosition(drive, poseEstimator, new Pose2d(3.02, 3.93, new Rotation2d(Degrees.of(-1.49)))));
 
         // ————— coral ————— //
-
+       
         // branch positions
         // coralController.button(4).onTrue(coralCommandCompositer.prepIntake());
         // coralController.button(5).onTrue(coralCommandCompositer.runIntake());
