@@ -9,6 +9,21 @@ import edu.wpi.first.wpilibj.RobotBase;
 /**
  * to do: 
  * 
+ * re-get robot measurements
+ * 
+ * figure out sysid
+ * 
+ * retune pid
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * rotating around a swerve module
+ * 
+ * 
  * clean up imports
  * 
  * goal for preseason: 
@@ -16,7 +31,6 @@ import edu.wpi.first.wpilibj.RobotBase;
  * 
  * * tuning
  *    tune arm without motionmagic
- *    figure out sysid
  * 
  * * longer term: 
  *    pid tunable constants

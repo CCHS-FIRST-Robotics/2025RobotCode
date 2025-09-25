@@ -78,12 +78,7 @@ public class PoseEstimator extends SubsystemBase {
         odometryEstimator.resetPosition(odometry.getYaw(), drive.getModulePositions(), pose);
         visionEstimate = new Pose2d();
         combinedEstimator.resetPosition(odometry.getYaw(), drive.getModulePositions(), pose);
-
-        odometry.resetStartAngle();
     }
-
-    // when starts without seeing apriltags, when it sees an apriltag next the combined estimate will be correct
-    // 
 
     public Pose2d getPose() {
         return getCombinedPose();
