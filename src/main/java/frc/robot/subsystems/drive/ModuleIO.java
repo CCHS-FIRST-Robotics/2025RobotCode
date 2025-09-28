@@ -15,6 +15,7 @@ public interface ModuleIO {
         public double turnVoltage;
         public double turnCurrent;
         public double turnPosition;
+        public double turnVelocity;
         public double turnTemperature;
     }
 

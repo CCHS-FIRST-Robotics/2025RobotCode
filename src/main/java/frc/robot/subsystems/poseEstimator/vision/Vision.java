@@ -37,7 +37,7 @@ public class Vision {
     public void periodic(){
         for (int i = 0; i < VirtualConstants.NUM_CAMERAS; i++) {
             ios[i].updateInputs(inputs[i]);
-            Logger.processInputs("cameras/" + VirtualConstants.CAMERA_LOGGER_NAMES[i], inputs[i]);
+            Logger.processInputs("poseEstimator/cameras/" + VirtualConstants.CAMERA_LOGGER_NAMES[i], inputs[i]);
             
             // update visionEstimator based on new measurements
             for (PoseDataEntry pose : inputs[i].visionPoseData) {

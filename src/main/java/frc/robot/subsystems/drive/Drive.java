@@ -37,8 +37,8 @@ public class Drive extends SubsystemBase {
     private final SysIdRoutine driveSysIdRoutine = new SysIdRoutine(
         new SysIdRoutine.Config(
             Volts.per(Second).of(1), // ramp rate
-            Volts.of(2), // step voltage
-            Seconds.of(5), // timeout
+            Volts.of(1.75), // step voltage
+            Seconds.of(4), // timeout
             (state) -> Logger.recordOutput("drive/sysIdState", state.toString()) // send the data to advantagekit
         ),
         new SysIdRoutine.Mechanism(
@@ -131,18 +131,18 @@ public class Drive extends SubsystemBase {
             case VELOCITY: 
                 speeds = ChassisSpeeds.discretize(speeds, VirtualConstants.PERIOD); // explaination: https://www.chiefdelphi.com/t/whitepaper-swerve-drive-skew-and-second-order-kinematics/416964/30                
                 
-                // // let the wheels go back to being straight when there is no input, instead of holding their last set angle
-                // if (speeds.vxMetersPerSecond == 0
-                //  && speeds.vxMetersPerSecond == 0
-                //  && speeds.vxMetersPerSecond == 0
-                // ) {
-                //     PhysicalConstants.KINEMATICS.resetHeadings(new Rotation2d[] {
-                //         new Rotation2d(0), 
-                //         new Rotation2d(0), 
-                //         new Rotation2d(0), 
-                //         new Rotation2d(0)
-                //     });
-                // }
+                // let the wheels go back to being straight when there is no input, instead of holding their last set angle
+                if (speeds.vxMetersPerSecond == 0
+                 && speeds.vxMetersPerSecond == 0
+                 && speeds.vxMetersPerSecond == 0
+                ) {
+                    PhysicalConstants.KINEMATICS.resetHeadings(new Rotation2d[] {
+                        new Rotation2d(0), 
+                        new Rotation2d(0), 
+                        new Rotation2d(0), 
+                        new Rotation2d(0)
+                    });
+                }
                 
                 SwerveModuleState[] moduleStates = PhysicalConstants.KINEMATICS.toSwerveModuleStates(speeds); // convert speeds to module states
                 SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates, PhysicalConstants.MAX_ALLOWED_LINEAR_SPEED); // renormalize wheel speeds

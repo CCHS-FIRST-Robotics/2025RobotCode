@@ -96,5 +96,6 @@ public class ModuleIOSim implements ModuleIO {
         inputs.turnVoltage = turnAppliedVolts;
         inputs.turnCurrent = turnSim.getCurrentDrawAmps();
         inputs.turnPosition = turnSim.getAngularPositionRotations();
+        inputs.turnVelocity = RadiansPerSecond.of(turnSim.getAngularVelocityRadPerSec()).in(RotationsPerSecond);
     }
 }

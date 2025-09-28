@@ -111,7 +111,6 @@ public class RobotContainer {
         }
 
         drive.setPoseEstimator(poseEstimator);
-        poseEstimator.resetPosition(new Pose2d());
 
         coralCommandCompositer = new CoralCommandCompositer(drive, poseEstimator, coral);
         autoGenerator = new AutoRoutineGenerator(drive, poseEstimator, coralCommandCompositer);
@@ -143,6 +142,12 @@ public class RobotContainer {
         //         new Angle[] {Rotations.of(0.125), Rotations.of(0.325), Rotations.of(0.325), Rotations.of(0.125)})
         //     )
         // );
+
+
+        xboxController.x().whileTrue(drive.sysIdFull());
+
+
+
 
         xboxController.y().onTrue(coralCommandCompositer.prepL4());
         xboxController.b().onTrue(coralCommandCompositer.prepIntake());

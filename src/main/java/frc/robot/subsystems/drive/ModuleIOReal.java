@@ -136,6 +136,7 @@ public class ModuleIOReal implements ModuleIO {
         inputs.turnVoltage = turnMotor.getAppliedOutput() * turnMotor.getBusVoltage();
         inputs.turnCurrent = turnMotor.getOutputCurrent();
         inputs.turnPosition = turnAbsoluteEncoder.getPosition();
+        inputs.turnVelocity = turnAbsoluteEncoder.getVelocity();
         inputs.turnTemperature = turnMotor.getMotorTemperature();
     }
 }
