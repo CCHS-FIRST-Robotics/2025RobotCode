@@ -40,7 +40,7 @@ public final class VirtualConstants {
     public static final int NUM_CAMERAS = 2;
     public static final String[] CAMERA_PHOTONVISION_NAMES = {"FrontLeft", "FrontRight"};
     public static final String[] CAMERA_LOGGER_NAMES = {"frontLeft", "frontRight"};
-    public static final Matrix<N3, N1> SINGLE_TAG_STD_DEVS = VecBuilder.fill(0.01, 0.01, 0.01); // ! magic numbers
+    public static final Matrix<N3, N1> SINGLE_TAG_STD_DEVS = VecBuilder.fill(0.4, 0.4, 0.2); // ! magic numbers
     public static final Matrix<N3, N1> MULTI_TAG_STD_DEVS = VecBuilder.fill(0.2, 0.2, 0.4); // ! magic numbers
     public static final double AMBIGUITY_THRESHOLD = 0.2; // "numbers above 0.2 are likely to be ambiguous" - PhotonTarget.getPoseAmbiguity()
     public static final double DISTANCE_SCALAR = 60; // ! magic number
