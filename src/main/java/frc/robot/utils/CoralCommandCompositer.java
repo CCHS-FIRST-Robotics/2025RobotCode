@@ -114,11 +114,11 @@ public class CoralCommandCompositer {
 
     public Command runL4() {
         return coral.getLowerArmWithVoltageCommand(Volts.of(-0.25), Rotations.of(0.0673828125))
-        .andThen(coral.getSetArmVoltageCommand(Volts.of(0.25)));
+        .andThen(coral.getSetArmVoltageCommand(Volts.of(0.25))); // holding voltage
     }
 
     public Command runL4WithBackup() {
-        return coral.getLowerArmWithVoltageCommand(Volts.of(-0.25), Rotations.of(0.0673828125))
+        return coral.getLowerArmWithVoltageCommand(Volts.of(-0.25), Rotations.of(0.075))
         .andThen(coral.getSetArmVoltageCommand(Volts.of(0.25)))
         .andThen(new InstantCommand(() -> drive.runVelocity(
             new ChassisSpeeds(

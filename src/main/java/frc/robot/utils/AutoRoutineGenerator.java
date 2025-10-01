@@ -1,5 +1,7 @@
 package frc.robot.utils;
 
+import static edu.wpi.first.units.Units.Degrees;
+
 import choreo.auto.*;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.math.geometry.*;
@@ -67,26 +69,16 @@ public class AutoRoutineGenerator {
         // when routine begins, reset odometry, start first trajectory
         routine.active().onTrue(
             trajectory0.resetOdometry()
+            .andThen(coralCommandCompositer.prepL4WithWait())
             .andThen(trajectory0.cmd())
         );
         
         trajectory0.done().onTrue(
             // hold the position
-            new DriveWithPosition(drive, poseEstimator, trajectory0.getFinalPose().get())
-            .alongWith(
-                // prep the coral
-                coralCommandCompositer.prepL4WithWait()
-            )
-            // align with the apriltag
-            // .andThen(new DriveWithApriltag(
-            //     drive, 
-            //     poseEstimator, 
-            //     17, 
-            //     PhysicalConstants.DrivePositions.L4, 
-            //     true
-            // ))
-            // run coral
-            .andThen(coralCommandCompositer.runL4())
+            new DriveWithPosition(drive, poseEstimator, new Pose2d(
+                2.99, 3.95, new Rotation2d(Degrees.of(-2.82))
+            ))
+            .andThen(coralCommandCompositer.runL4WithBackup())
         );
 
         return routine;

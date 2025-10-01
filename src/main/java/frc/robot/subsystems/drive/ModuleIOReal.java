@@ -33,9 +33,9 @@ public class ModuleIOReal implements ModuleIO {
     private double driveKv = 0.13259;
     private double driveKa = 0.025003;
 
-    private double turnKp = 8 / (2 * Math.PI);
+    private double turnKp = 15;
     private double turnKi = 0;
-    private double turnKd = 1.5 / (2 * Math.PI);
+    private double turnKd = 0;
 
     private AngularVelocity prevDriveVelocity = RadiansPerSecond.of(0.0);
 

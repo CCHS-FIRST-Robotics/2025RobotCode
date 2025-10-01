@@ -59,7 +59,7 @@ public class PoseEstimator extends SubsystemBase {
             odometry.getYaw(),
             drive.getModulePositions()
         );
-        Logger.recordOutput("outputs/poseEstimator/poses/odometryPoseEstimate", odometryEstimator.getEstimatedPosition());
+        Logger.recordOutput("outputs/poseEstimator/odometryPoseEstimate", odometryEstimator.getEstimatedPosition());
 
         // vision
         visionEstimate = vision.getVisionEstimate(); // based on the last time it saw an apriltag
@@ -69,8 +69,8 @@ public class PoseEstimator extends SubsystemBase {
             drive.getModulePositions()
         );
         combinedEstimator.addVisionMeasurement(visionEstimate, vision.getLatestTimeStamp());
-        Logger.recordOutput("outputs/poseEstimator/poses/visionPoseEstimate", visionEstimate);
-        Logger.recordOutput("outputs/poseEstimator/poses/combinedPoseEstimate", combinedEstimator.getEstimatedPosition());
+        Logger.recordOutput("outputs/poseEstimator/visionPoseEstimate", visionEstimate);
+        Logger.recordOutput("outputs/poseEstimator/combinedPoseEstimate", combinedEstimator.getEstimatedPosition());
     }
 
     public void resetPosition(Pose2d pose) {

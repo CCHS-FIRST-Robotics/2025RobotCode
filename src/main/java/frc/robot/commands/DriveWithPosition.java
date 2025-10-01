@@ -48,7 +48,7 @@ public class DriveWithPosition extends Command {
             && Math.abs(
                 MathUtil.inputModulus(robotPose.getRotation().getRotations(), 0, 1)
                 - MathUtil.inputModulus(targetPose.getRotation().getRotations(), 0, 1)
-            ) < 0.01;
+            ) < 0.005;
     }
 
     @Override

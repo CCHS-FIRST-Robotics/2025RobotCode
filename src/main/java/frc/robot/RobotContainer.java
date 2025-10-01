@@ -9,6 +9,7 @@ import static edu.wpi.first.units.Units.*;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
 import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.units.measure.*;
 import choreo.auto.AutoChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
@@ -144,17 +145,41 @@ public class RobotContainer {
         // );
 
 
-        xboxController.x().whileTrue(drive.sysIdFull());
+        // xboxController.x().whileTrue(drive.sysIdFull());
 
+        // xboxController.x().whileTrue(new StartEndCommand(
+        //     () -> drive.runCharacterization(
+        //         new Voltage[]{Volts.of(0), Volts.of(0), Volts.of(0), Volts.of(0)}, 
+        //         new Angle[]{Rotations.of(0), Rotations.of(0), Rotations.of(0), Rotations.of(0)}
+        //     ), 
+        //     () -> drive.runCharacterization(
+        //         new Voltage[]{Volts.of(0), Volts.of(0), Volts.of(0), Volts.of(0)}, 
+        //         new Angle[]{Rotations.of(0), Rotations.of(0), Rotations.of(0), Rotations.of(0)}
+        //     ),
+        //     drive
+        // ));
 
-
+        // xboxController.b().whileTrue(new StartEndCommand(
+        //     () -> drive.runCharacterization(
+        //         new Voltage[]{Volts.of(0), Volts.of(0), Volts.of(0), Volts.of(0)}, 
+        //         new Angle[]{Rotations.of(0.25), Rotations.of(0.25), Rotations.of(0.25), Rotations.of(0.25)}
+        //     ), 
+        //     () -> drive.runCharacterization(
+        //         new Voltage[]{Volts.of(0), Volts.of(0), Volts.of(0), Volts.of(0)}, 
+        //         new Angle[]{Rotations.of(0), Rotations.of(0), Rotations.of(0), Rotations.of(0)}
+        //     ),
+        //     drive
+        // ));
 
         xboxController.y().onTrue(coralCommandCompositer.prepL4());
+        xboxController.x().onTrue(coralCommandCompositer.runL4WithBackup());
         xboxController.b().onTrue(coralCommandCompositer.prepIntake());
         xboxController.a().onTrue(coralCommandCompositer.runIntake());
 
         // drive to L4 // ! current position is not theoretically correct
-        xboxController.rightTrigger().whileTrue(new DriveWithPosition(drive, poseEstimator, new Pose2d(3.02, 3.93, new Rotation2d(Degrees.of(-1.49)))));
+        xboxController.rightTrigger().whileTrue(new DriveWithPosition(drive, poseEstimator, new Pose2d(
+            2.99, 3.95, new Rotation2d(Degrees.of(-2.82))
+        )));
 
         // ————— coral ————— //
        
