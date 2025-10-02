@@ -11,7 +11,7 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.constants.VirtualConstants; 
+import frc.robot.constants.*; 
 
 public class Robot extends LoggedRobot {
     private RobotContainer robotContainer;
@@ -55,7 +55,6 @@ public class Robot extends LoggedRobot {
     @Override
     public void autonomousInit() { // schedule auto
         autonomousCommand = robotContainer.getAutonomousCommand();
-
         if (autonomousCommand != null) {
             autonomousCommand.schedule();
         }

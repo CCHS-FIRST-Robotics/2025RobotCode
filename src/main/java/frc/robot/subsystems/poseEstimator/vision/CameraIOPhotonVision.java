@@ -19,7 +19,7 @@ public class CameraIOPhotonVision implements CameraIO{
     public CameraIOPhotonVision(int index) {
         this.camera = new PhotonCamera(VirtualConstants.CAMERA_PHOTONVISION_NAMES[index]);
         this.poseEstimator = new PhotonPoseEstimator(
-            VirtualConstants.APRILTAG_LAYOUT, 
+            VirtualConstants.FIELD_LAYOUT, 
             PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
             PhysicalConstants.CAMERA_TRANSFORMS[index]
         );

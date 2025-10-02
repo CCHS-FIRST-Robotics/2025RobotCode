@@ -2,8 +2,9 @@ package frc.robot.constants;
 
 import static edu.wpi.first.units.Units.*;
 
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import java.util.HashMap;
+
+import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.*;
 import edu.wpi.first.math.geometry.*;
@@ -83,12 +84,58 @@ public final class PhysicalConstants { // * indicates physical measurement
     public static final Angle ARM_MIN_ROTATIONS = Rotations.of(0);
     public static final double ARM_GEAR_REDUCTION = 100;
 
-    public static class CoralPositions { // elevator rotations, arm rotations
+    // ————— reef constants ————— //
+
+    public static class CoralPositions { // elevator rotations, arm rotations // * 
         public static final Angle[] INTAKE_PREP = {Rotations.of(1), Rotations.of(-0.2191816406)};
         public static final Angle[] INTAKE_RUN = {Rotations.of(0.195556640625), Rotations.of(-0.2131816406)};
-        public static final Angle[] L1 = {Rotations.of(0), Rotations.of(0)};
         public static final Angle[] L2 = {Rotations.of(0), Rotations.of(0.014892578125)};
         public static final Angle[] L3 = {Rotations.of(0.263427734375), Rotations.of(0.0986328125)};
         public static final Angle[] L4 = {Rotations.of(3.6831054687499996), Rotations.of(0.13830078125)};
+    }
+
+    public static final Pose2d[] ROBOT_POSITIONS_AT_18_R = new Pose2d[]{ // *
+        new Pose2d( // L2
+            0, 
+            0, 
+            new Rotation2d()
+        ),
+        new Pose2d( // L3
+            0, 
+            0, 
+            new Rotation2d()
+        ),
+        new Pose2d( // L4
+            2.99, 
+            3.95, 
+            new Rotation2d(Degrees.of(-2.82))
+        )
+    };
+
+    public static final HashMap<Integer, Transform2d[]> ROBOT_TRANSFORM_MAP = new HashMap<Integer, Transform2d[]>();
+
+    /**
+     * 2, (L2_left, L2_right)
+     * 3, (L3_left, L3_right)
+     * 4, (L4_left, L4_right)
+     */
+
+    static{
+        for(int i = 2; i < 5; i++){
+            ROBOT_TRANSFORM_MAP.put(i, getLevelTransforms(i));
+        }
+    }
+
+    public static Transform2d[] getLevelTransforms(int i){
+        Transform2d rTransform = new Transform2d(
+            VirtualConstants.FIELD_LAYOUT.getTagPose(18).get().toPose2d(), 
+            ROBOT_POSITIONS_AT_18_R[i - 2]
+        );
+        Transform2d lTransform = new Transform2d(
+            rTransform.getX(), 
+            -rTransform.getY(), 
+            rTransform.getRotation().times(-1)
+        );
+        return new Transform2d[]{lTransform, rTransform};
     }
 }

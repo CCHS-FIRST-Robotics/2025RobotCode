@@ -4,12 +4,8 @@
 
 package frc.robot;
 
-import static edu.wpi.first.units.Units.*;
-
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
-import edu.wpi.first.math.geometry.*;
-import edu.wpi.first.units.measure.*;
 import choreo.auto.AutoChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
@@ -136,7 +132,7 @@ public class RobotContainer {
             )
         );
 
-        // x-lock
+        // x-lock // ! see if x-locked wheels stay there after released
         // xboxController.x().whileTrue(
         //     Commands.run(() -> drive.runCharacterization(
         //         new Voltage[] {Volts.of(0), Volts.of(0), Volts.of(0), Volts.of(0)}, 
@@ -144,46 +140,48 @@ public class RobotContainer {
         //     )
         // );
 
-
-        // xboxController.x().whileTrue(drive.sysIdFull());
-
-        // xboxController.x().whileTrue(new StartEndCommand(
-        //     () -> drive.runCharacterization(
-        //         new Voltage[]{Volts.of(0), Volts.of(0), Volts.of(0), Volts.of(0)}, 
-        //         new Angle[]{Rotations.of(0), Rotations.of(0), Rotations.of(0), Rotations.of(0)}
-        //     ), 
-        //     () -> drive.runCharacterization(
-        //         new Voltage[]{Volts.of(0), Volts.of(0), Volts.of(0), Volts.of(0)}, 
-        //         new Angle[]{Rotations.of(0), Rotations.of(0), Rotations.of(0), Rotations.of(0)}
-        //     ),
-        //     drive
-        // ));
-
-        // xboxController.b().whileTrue(new StartEndCommand(
-        //     () -> drive.runCharacterization(
-        //         new Voltage[]{Volts.of(0), Volts.of(0), Volts.of(0), Volts.of(0)}, 
-        //         new Angle[]{Rotations.of(0.25), Rotations.of(0.25), Rotations.of(0.25), Rotations.of(0.25)}
-        //     ), 
-        //     () -> drive.runCharacterization(
-        //         new Voltage[]{Volts.of(0), Volts.of(0), Volts.of(0), Volts.of(0)}, 
-        //         new Angle[]{Rotations.of(0), Rotations.of(0), Rotations.of(0), Rotations.of(0)}
-        //     ),
-        //     drive
-        // ));
-
         xboxController.y().onTrue(coralCommandCompositer.prepL4());
         xboxController.x().onTrue(coralCommandCompositer.runL4WithBackup());
         xboxController.b().onTrue(coralCommandCompositer.prepIntake());
         xboxController.a().onTrue(coralCommandCompositer.runIntake());
 
-        // drive to L4 // ! current position is not theoretically correct
-        xboxController.rightTrigger().whileTrue(new DriveWithPosition(drive, poseEstimator, new Pose2d(
-            2.99, 3.95, new Rotation2d(Degrees.of(-2.82))
-        )));
+        xboxController.leftBumper().whileTrue(new DriveWithPosition(drive, poseEstimator, 17, 4, false));
+        xboxController.rightBumper().whileTrue(new DriveWithPosition(drive, poseEstimator, 17, 4, true));
+        xboxController.leftTrigger().whileTrue(new DriveWithPosition(drive, poseEstimator, 18, 4, false));
+        xboxController.rightTrigger().whileTrue(new DriveWithPosition(drive, poseEstimator, 18, 4, true));
 
         // ————— coral ————— //
+
+        // // reef positions
+        // if ((DriverStation.getAlliance().isPresent() ? DriverStation.getAlliance().get() : Alliance.Red).equals(Alliance.Red)) {
+        //     coralController.button(1).onTrue(new DriveWithApriltag(drive, poseEstimator, 6, true));
+        //     coralController.button(2).onTrue(new DriveWithApriltag(drive, poseEstimator, 6, false));
+        //     coralController.button(3).onTrue(new DriveWithApriltag(drive, poseEstimator, 7, true));
+        //     coralController.button(6).onTrue(new DriveWithApriltag(drive, poseEstimator, 7, false));
+        //     coralController.button(7).onTrue(new DriveWithApriltag(drive, poseEstimator, 8, true));
+        //     coralController.button(8).onTrue(new DriveWithApriltag(drive, poseEstimator, 8, false));
+        //     coralController.button(11).onTrue(new DriveWithApriltag(drive, poseEstimator, 9, true));
+        //     coralController.button(13).onTrue(new DriveWithApriltag(drive, poseEstimator, 9, false));
+        //     coralController.button(15).onTrue(new DriveWithApriltag(drive, poseEstimator, 10, true));
+        //     coralController.button(12).onTrue(new DriveWithApriltag(drive, poseEstimator, 10, false));
+        //     coralController.button(14).onTrue(new DriveWithApriltag(drive, poseEstimator, 11, true));
+        //     coralController.button(16).onTrue(new DriveWithApriltag(drive, poseEstimator, 11, false));
+        // } else {
+        //     coralController.button(1).onTrue(new DriveWithApriltag(drive, poseEstimator, 17, true));
+        //     coralController.button(2).onTrue(new DriveWithApriltag(drive, poseEstimator, 17, false));
+        //     coralController.button(3).onTrue(new DriveWithApriltag(drive, poseEstimator, 18, true));
+        //     coralController.button(6).onTrue(new DriveWithApriltag(drive, poseEstimator, 18, false));
+        //     coralController.button(7).onTrue(new DriveWithApriltag(drive, poseEstimator, 19, true));
+        //     coralController.button(8).onTrue(new DriveWithApriltag(drive, poseEstimator, 19, false));
+        //     coralController.button(11).onTrue(new DriveWithApriltag(drive, poseEstimator, 20, true));
+        //     coralController.button(13).onTrue(new DriveWithApriltag(drive, poseEstimator, 20, false));
+        //     coralController.button(15).onTrue(new DriveWithApriltag(drive, poseEstimator, 21, true));
+        //     coralController.button(12).onTrue(new DriveWithApriltag(drive, poseEstimator, 21, false));
+        //     coralController.button(14).onTrue(new DriveWithApriltag(drive, poseEstimator, 22, true));
+        //     coralController.button(16).onTrue(new DriveWithApriltag(drive, poseEstimator, 22, false));
+        // }
        
-        // branch positions
+        // // branch positions
         // coralController.button(4).onTrue(coralCommandCompositer.prepIntake());
         // coralController.button(5).onTrue(coralCommandCompositer.runIntake());
         // // coralController.button(9).onTrue(coralCommandCompositer.prepL2());
@@ -196,7 +194,7 @@ public class RobotContainer {
         // emergency stop
         // coralController.button(21).onTrue(
         //     coral.getSetElevatorVoltageCommand(Volts.of(0))
-        //     .andThen(coral.getSetArmVoltageCommand(Volts.of(0)))
+        //     .alongWith(coral.getSetArmVoltageCommand(Volts.of(0)))
         // );
     }
 

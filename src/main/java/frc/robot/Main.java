@@ -13,21 +13,14 @@ import edu.wpi.first.wpilibj.RobotBase;
  * 
  * figure out sysid
  * 
- * retune pid
- * 
- * 
- * 
- * 
- * ! maybe test colin's approach vs what we have currently
+ * goal for preseason: 
+ * get the oneCoralL4 auto to work when on both red and blue alliance
  * 
  * 
  * rotating around a swerve module
  * 
  * 
  * clean up imports
- * 
- * goal for preseason: 
- * get the oneCoralL4 auto to work when on both red and blue alliance
  * 
  * * tuning
  *    tune arm without motionmagic

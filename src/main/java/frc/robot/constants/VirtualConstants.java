@@ -36,7 +36,7 @@ public final class VirtualConstants {
     public static final int ARM_CANCODER_ID = 51;
 
     // cameras
-    public static final AprilTagFieldLayout APRILTAG_LAYOUT = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
+    public static final AprilTagFieldLayout FIELD_LAYOUT = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
     public static final int NUM_CAMERAS = 2;
     public static final String[] CAMERA_PHOTONVISION_NAMES = {"FrontLeft", "FrontRight"};
     public static final String[] CAMERA_LOGGER_NAMES = {"frontLeft", "frontRight"};
