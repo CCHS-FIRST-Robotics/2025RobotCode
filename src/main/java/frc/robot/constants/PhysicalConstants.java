@@ -101,14 +101,32 @@ public final class PhysicalConstants { // * indicates physical measurement
             new Rotation2d()
         ),
         new Pose2d( // L3
+            2.99, 
+            3.94, 
+            new Rotation2d(Degrees.of(-2.82))
+        ),
+        new Pose2d( // L4
+            2.99, 
+            3.94, 
+            new Rotation2d(Degrees.of(-2.82))
+        )
+    };
+
+    public static final Pose2d[] ROBOT_POSITIONS_AT_18_L = new Pose2d[]{ // *
+        new Pose2d( // L2
             0, 
             0, 
             new Rotation2d()
         ),
+        new Pose2d( // L3
+            2.99, 
+            4.24, 
+            new Rotation2d(Degrees.of(-0.25))
+        ),
         new Pose2d( // L4
             2.99, 
-            3.95, 
-            new Rotation2d(Degrees.of(-2.82))
+            4.24, 
+            new Rotation2d(Degrees.of(-0.25))
         )
     };
 
@@ -120,22 +138,26 @@ public final class PhysicalConstants { // * indicates physical measurement
      * 4, (L4_left, L4_right)
      */
 
-    static{
+    static {
         for(int i = 2; i < 5; i++){
             ROBOT_TRANSFORM_MAP.put(i, getLevelTransforms(i));
         }
     }
 
-    public static Transform2d[] getLevelTransforms(int i){
+    public static Transform2d[] getLevelTransforms(int i) {
         Transform2d rTransform = new Transform2d(
             VirtualConstants.FIELD_LAYOUT.getTagPose(18).get().toPose2d(), 
             ROBOT_POSITIONS_AT_18_R[i - 2]
         );
         Transform2d lTransform = new Transform2d(
-            rTransform.getX(), 
-            -rTransform.getY(), 
-            rTransform.getRotation().times(-1)
+            VirtualConstants.FIELD_LAYOUT.getTagPose(18).get().toPose2d(), 
+            ROBOT_POSITIONS_AT_18_L[i - 2]
         );
+        // Transform2d lTransform = new Transform2d(
+        //     rTransform.getX(), 
+        //     -rTransform.getY(), 
+        //     rTransform.getRotation().times(-1)
+        // );
         return new Transform2d[]{lTransform, rTransform};
     }
 }

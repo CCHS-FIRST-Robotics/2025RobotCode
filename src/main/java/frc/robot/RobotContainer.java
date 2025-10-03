@@ -140,8 +140,8 @@ public class RobotContainer {
         //     )
         // );
 
-        xboxController.y().onTrue(coralCommandCompositer.prepL4());
-        xboxController.x().onTrue(coralCommandCompositer.runL4WithBackup());
+        xboxController.y().onTrue(coralCommandCompositer.prepL3());
+        xboxController.x().onTrue(coralCommandCompositer.runL3WithBackup());
         xboxController.b().onTrue(coralCommandCompositer.prepIntake());
         xboxController.a().onTrue(coralCommandCompositer.runIntake());
 
@@ -201,7 +201,7 @@ public class RobotContainer {
     private void configureAutos() {
         autoChooser.addRoutine("Test", () -> autoGenerator.test());
         autoChooser.addCmd("Back Up", () -> autoGenerator.backUp());
-        autoChooser.addRoutine("1CoralL4", () -> autoGenerator.oneCoralL4());
+        autoChooser.addRoutine("2CoralL4L3", () -> autoGenerator.twoCoralL4L3());
 
         autoChooser.select("Back Up");
 

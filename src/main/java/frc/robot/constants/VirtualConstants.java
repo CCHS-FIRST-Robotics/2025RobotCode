@@ -15,9 +15,9 @@ public final class VirtualConstants {
         SIM,
         REPLAY
     }
-    public static final ROBOT_MODE CURRENT_MODE = ROBOT_MODE.REAL;
+    public static final ROBOT_MODE CURRENT_MODE = ROBOT_MODE.SIM;
     
-    // controller
+    // controllers
     public static final int XBOX_CONTROLLER_PORT_1 = 0;
     public static final int CONTROLLER_PORT_2 = 1;
     public static final int CORAL_CONTROLLER_PORT_3 = 2;
@@ -40,8 +40,8 @@ public final class VirtualConstants {
     public static final int NUM_CAMERAS = 2;
     public static final String[] CAMERA_PHOTONVISION_NAMES = {"FrontLeft", "FrontRight"};
     public static final String[] CAMERA_LOGGER_NAMES = {"frontLeft", "frontRight"};
-    public static final Matrix<N3, N1> SINGLE_TAG_STD_DEVS = VecBuilder.fill(0.4, 0.4, 0.2); // ! magic numbers
-    public static final Matrix<N3, N1> MULTI_TAG_STD_DEVS = VecBuilder.fill(0.2, 0.2, 0.4); // ! magic numbers
+    public static final Matrix<N3, N1> SINGLE_TAG_STD_DEVS = VecBuilder.fill(0.4, 0.4, 0.2);
+    public static final Matrix<N3, N1> MULTI_TAG_STD_DEVS = VecBuilder.fill(0.2, 0.2, 0.4);
     public static final double AMBIGUITY_THRESHOLD = 0.2; // "numbers above 0.2 are likely to be ambiguous" - PhotonTarget.getPoseAmbiguity()
-    public static final double DISTANCE_SCALAR = 60; // ! magic number
+    public static final double DISTANCE_SCALAR = 60;
 }

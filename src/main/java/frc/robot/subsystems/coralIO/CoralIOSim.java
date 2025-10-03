@@ -13,11 +13,20 @@ public class CoralIOSim implements CoralIO{
     public void setElevatorPosition(Angle position) {}
 
     @Override
+    public boolean elevatorAtSetpoint(Angle position) {
+        return true;
+    }
+
+    @Override
     public void setArmVoltage(Voltage volts) {}
 
     @Override
     public void setArmPosition(Angle position) {}
 
+    public boolean armAtSetpoint(Angle position) {
+        return true;
+    }
+
     @Override
     public void updateInputs(CoralIOInputs inputs) {}
-}
+    }

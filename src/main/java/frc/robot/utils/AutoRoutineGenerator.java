@@ -1,7 +1,5 @@
 package frc.robot.utils;
 
-import static edu.wpi.first.units.Units.Degrees;
-
 import choreo.auto.*;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.math.geometry.*;
@@ -56,8 +54,7 @@ public class AutoRoutineGenerator {
     // ————— competition routines ————— //
 
     public Command backUp() {
-        return new InstantCommand(() -> poseEstimator.resetPosition(new Pose2d()))
-        .andThen(new DriveWithPosition(drive, poseEstimator, new Pose2d(-2, 0, new Rotation2d())));
+        return new DriveWithPosition(drive, poseEstimator, new Transform2d(-2, 0, new Rotation2d()));
     }
 
     public AutoRoutine oneCoralL4() { 
@@ -74,11 +71,44 @@ public class AutoRoutineGenerator {
         );
         
         trajectory0.done().onTrue(
-            // hold the position
-            new DriveWithPosition(drive, poseEstimator, new Pose2d(
-                2.99, 3.95, new Rotation2d(Degrees.of(-2.82))
-            ))
+            new DriveWithPosition(drive, poseEstimator, 18, 4, true)
             .andThen(coralCommandCompositer.runL4WithBackup())
+        );
+
+        return routine;
+    }
+
+    public AutoRoutine twoCoralL4L3() { 
+        AutoRoutine routine = autoFactory.newRoutine("2CoralL4L3");
+
+        // load trajectories
+        AutoTrajectory trajectory0 = routine.trajectory("2CoralL4L3", 0);
+        AutoTrajectory trajectory1 = routine.trajectory("2CoralL4L3", 1);
+        AutoTrajectory trajectory2 = routine.trajectory("2CoralL4L3", 2);
+
+        // when routine begins, reset odometry, start first trajectory
+        routine.active().onTrue(
+            trajectory0.resetOdometry()
+            .andThen(coralCommandCompositer.prepL4WithWait())
+            .andThen(trajectory0.cmd())
+        );
+        
+        trajectory0.done().onTrue(
+            new DriveWithPosition(drive, poseEstimator, 18, 4, true)
+            .andThen(coralCommandCompositer.runL4WithBackup())
+            .andThen(trajectory1.cmd())
+        );
+
+        trajectory1.done().onTrue(
+            Commands.waitSeconds(2)
+            .andThen(coralCommandCompositer.runIntakeWithWait())
+            .andThen((coralCommandCompositer.prepL3())
+            .andThen(trajectory2.cmd()))
+        );
+
+        trajectory2.done().onTrue(
+            new DriveWithPosition(drive, poseEstimator, 18, 3, true)
+            .andThen(coralCommandCompositer.runL3WithBackup())
         );
 
         return routine;
