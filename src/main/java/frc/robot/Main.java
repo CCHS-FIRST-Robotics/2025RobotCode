@@ -10,16 +10,8 @@ import edu.wpi.first.wpilibj.RobotBase;
  * to do: 
  * 
  * re-get robot measurements
- * 
  * figure out sysid
- * 
- * goal for preseason: 
- * get the oneCoralL4 auto to work when on both red and blue alliance
- * 
- * 
  * rotating around a swerve module
- * 
- * 
  * clean up imports
  * 
  * * tuning
