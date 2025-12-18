@@ -67,6 +67,9 @@ public class DriveWithPosition extends Command {
                 MathUtil.inputModulus(robotPose.getRotation().getRotations(), 0, 1)
                 - MathUtil.inputModulus(targetPose.getRotation().getRotations(), 0, 1)
             ) < 0.005;
+            // && drive.getSpeeds().vxMetersPerSecond < 0.1
+            // && drive.getSpeeds().vyMetersPerSecond < 0.1
+            // && drive.getSpeeds().omegaRadiansPerSecond < 0.1;
     }
 
     @Override

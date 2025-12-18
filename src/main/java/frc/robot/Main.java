@@ -8,17 +8,14 @@ import edu.wpi.first.wpilibj.RobotBase;
 
 /**
  * to do: 
- * 
- * re-get robot measurements
- * figure out sysid
- * rotating around a swerve module
- * clean up imports
- * 
  * * tuning
  *    tune arm without motionmagic
  * 
  * * longer term: 
  *    pid tunable constants
+ *       https://discord.com/channels/176186766946992128/368993897495527424/1438631090578259968
+ *    figure out sysid
+ *    rotating around a swerve module
  */
 
 public final class Main {

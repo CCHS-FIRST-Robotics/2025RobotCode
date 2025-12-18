@@ -199,6 +199,10 @@ public class Drive extends SubsystemBase {
     public void setPoseEstimator(PoseEstimator poseEstimator) {
         this.poseEstimator = poseEstimator;
     }
+
+    public ChassisSpeeds getSpeeds() {
+        return speeds;
+    }
     
     public SwerveModulePosition[] getModulePositions() {
         SwerveModulePosition[] modulePositions = new SwerveModulePosition[4];

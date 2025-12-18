@@ -132,7 +132,7 @@ public class RobotContainer {
             )
         );
 
-        // x-lock // ! see if x-locked wheels stay there after released
+        // x-lock
         // xboxController.x().whileTrue(
         //     Commands.run(() -> drive.runCharacterization(
         //         new Voltage[] {Volts.of(0), Volts.of(0), Volts.of(0), Volts.of(0)}, 
