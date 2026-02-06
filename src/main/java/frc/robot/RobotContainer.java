@@ -26,8 +26,8 @@ public class RobotContainer {
     // private final Coral coral;
 
     // private final CoralCommandCompositer coralCommandCompositer;
-    private final AutoRoutineGenerator autoGenerator;
-    private final AutoChooser autoChooser;
+    // private final AutoRoutineGenerator autoGenerator;
+    // private final AutoChooser autoChooser;
 
     public RobotContainer() {
 
@@ -109,12 +109,12 @@ public class RobotContainer {
 
         drive.setPoseEstimator(poseEstimator);
 
-        coralCommandCompositer = new CoralCommandCompositer(drive, poseEstimator, coral);
-        autoGenerator = new AutoRoutineGenerator(drive, poseEstimator, coralCommandCompositer);
-        autoChooser = new AutoChooser();
+        // coralCommandCompositer = new CoralCommandCompositer(drive, poseEstimator, coral);
+        // autoGenerator = new AutoRoutineGenerator(drive, poseEstimator, coralCommandCompositer);
+        // autoChooser = new AutoChooser();
         
         configureButtonBindings();
-        configureAutos();
+        // configureAutos();
     }
 
     private void configureButtonBindings() {
@@ -198,17 +198,17 @@ public class RobotContainer {
         // );
     }
 
-    private void configureAutos() {
-        autoChooser.addRoutine("Test", () -> autoGenerator.test());
-        autoChooser.addCmd("Back Up", () -> autoGenerator.backUp());
-        autoChooser.addRoutine("2CoralL4L3", () -> autoGenerator.twoCoralL4L3());
+    // private void configureAutos() {
+    //     autoChooser.addRoutine("Test", () -> autoGenerator.test());
+    //     autoChooser.addCmd("Back Up", () -> autoGenerator.backUp());
+    //     autoChooser.addRoutine("2CoralL4L3", () -> autoGenerator.twoCoralL4L3());
 
-        autoChooser.select("Back Up");
+    //     autoChooser.select("Back Up");
 
-        SmartDashboard.putData("AutoChooser", autoChooser);
-    }
+    //     SmartDashboard.putData("AutoChooser", autoChooser);
+    // }
 
-    public Command getAutonomousCommand() {
-        return autoChooser.selectedCommand();
-    }
+    // public Command getAutonomousCommand() {
+    //     return autoChooser.selectedCommand();
+    // }
 }
