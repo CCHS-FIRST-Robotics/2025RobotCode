@@ -4,18 +4,18 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj2.command.*;
+// import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
-import choreo.auto.AutoChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+// import choreo.auto.AutoChooser;
+// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.*;
 import frc.robot.constants.*;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.poseEstimator.*;
 import frc.robot.subsystems.poseEstimator.odometry.*;
 import frc.robot.subsystems.poseEstimator.vision.*;
-import frc.robot.subsystems.coralIO.*;
-import frc.robot.utils.*;
+// import frc.robot.subsystems.coralIO.*;
+// import frc.robot.utils.*;
 
 public class RobotContainer {
     private final CommandXboxController xboxController = new CommandXboxController(VirtualConstants.XBOX_CONTROLLER_PORT);
