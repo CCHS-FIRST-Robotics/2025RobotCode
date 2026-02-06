@@ -18,8 +18,8 @@ import frc.robot.subsystems.coralIO.*;
 import frc.robot.utils.*;
 
 public class RobotContainer {
-    private final CommandXboxController xboxController = new CommandXboxController(VirtualConstants.XBOX_CONTROLLER_PORT_1);
-    // private final CommandGenericHID coralController = new CommandGenericHID(VirtualConstants.CORAL_CONTROLLER_PORT_3);
+    private final CommandXboxController xboxController = new CommandXboxController(VirtualConstants.XBOX_CONTROLLER_PORT);
+    // private final CommandGenericHID coralController = new CommandGenericHID(VirtualConstants.CORAL_CONTROLLER_PORT);
 
     private final Drive drive;
     private final PoseEstimator poseEstimator;

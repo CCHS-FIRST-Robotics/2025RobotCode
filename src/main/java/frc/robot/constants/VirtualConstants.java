@@ -18,9 +18,8 @@ public final class VirtualConstants {
     public static final ROBOT_MODE CURRENT_MODE = ROBOT_MODE.REAL;
     
     // controllers
-    public static final int XBOX_CONTROLLER_PORT_1 = 0;
-    public static final int CONTROLLER_PORT_2 = 1;
-    public static final int CORAL_CONTROLLER_PORT_3 = 2;
+    public static final int XBOX_CONTROLLER_PORT = 1;
+    public static final int CORAL_CONTROLLER_PORT = 2;
     public static final double JOYSTICK_DEADZONE = 0.15;
     public static final double LINEAR_SPEED_EXPONENT = 4;
     public static final double ANGULAR_SPEED_EXPONENT = 3;
